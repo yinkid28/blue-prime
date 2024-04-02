@@ -1,7 +1,14 @@
+"use client";
 import { Button } from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 
+const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
+  ssr: false, // Disable server-side rendering for this component
+});
+// import SwaggerUI from "swagger-ui-react";
+import "swagger-ui-react/swagger-ui.css";
 // logout function
 // auth config
 // http  & services config
@@ -19,6 +26,9 @@ export default function Home() {
           console.log("first");
         }}
       />
+      <div className="overflow-scroll h-[400px]">
+        {/* <SwaggerUI url="https://petstore.swagger.io/v2/swagger.json" /> */}
+      </div>
     </div>
   );
 }

@@ -1,4 +1,8 @@
-import OnboardingLayout from "@/components/onboarding/layout";
+import dynamic from "next/dynamic";
+const OnboardingLayout = dynamic(
+  () => import("../../components/onboarding/layout"),
+  { ssr: false }
+);
 
 import { Button } from "@/components/utils";
 

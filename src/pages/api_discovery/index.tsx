@@ -1,6 +1,10 @@
-import Navbar from "@/components/Nav/navbar";
+import Navbar from "@/components/Layout/Nav/navbar";
 import ApiHero from "@/components/apiDiscovery/hero";
-import DiscoveryLayout from "@/components/apiDiscovery/layout";
+import dynamic from "next/dynamic";
+const DiscoveryLayout = dynamic(() => import("@/components/Layout/layout"), {
+  ssr: false,
+});
+
 import { BreadCrumbs } from "@/components/utils";
 import icon1 from "../../../public/images/api_icons/icon1.jpg";
 import icon2 from "../../../public/images/api_icons/icon2.png";
@@ -12,8 +16,12 @@ import icon7 from "../../../public/images/api_icons/icon7.png";
 import icon8 from "../../../public/images/api_icons/icon8.png";
 import icon9 from "../../../public/images/api_icons/icon9.jpg";
 import ApiCard from "@/components/apiDiscovery/apiCard";
+import { useEffect } from "react";
+import { useOnboarding } from "@/context/OnboardingContext";
+import { Spinner } from "@chakra-ui/react";
 
 export default function ApiDiscoveryDashboard() {
+  const { setSidebar, loading, setLoading } = useOnboarding();
   const rec = [
     {
       img: icon1,
@@ -104,67 +112,78 @@ export default function ApiDiscoveryDashboard() {
       category: "Banking and finance",
     },
   ];
+  useEffect(() => {
+    setSidebar("");
+    setLoading(false);
+  }, []);
+
   return (
-    <DiscoveryLayout>
-      <Navbar title="Dashboard" />
-      <BreadCrumbs breadCrumbActiveItem="Dashboard" />
-      <ApiHero />
-      <div className="p-5">
-        <div className="my-3 flex justify-between flex-col gap-2 md:flex-row">
-          <p className=" font-semibold text-dark-grey">Recommended</p>
-          <button className="bg-transparent w-fit border-none text-mid-grey">
-            View all
-          </button>
-        </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {rec.map((item) => (
-            <ApiCard
-              img={item.img}
-              title={item.title}
-              category={item.category}
-              description={item.description}
-            />
-          ))}
-        </div>
-      </div>
-      <div className="p-5">
-        <div className="my-3 flex justify-between flex-col gap-2 md:flex-row">
-          <p className=" font-semibold text-dark-grey">Top Finance API’s</p>
-          <button className="bg-transparent w-fit border-none text-mid-grey">
-            View all
-          </button>
-        </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {tfa.map((item) => (
-            <ApiCard
-              img={item.img}
-              title={item.title}
-              category={item.category}
-              description={item.description}
-            />
-          ))}
-        </div>
-      </div>
-      <div className="p-5">
-        <div className="my-3 flex justify-between flex-col gap-2 md:flex-row">
-          <p className=" font-semibold text-dark-grey">
-            Top Speech Recognition
-          </p>
-          <button className="bg-transparent w-fit border-none text-mid-grey">
-            View all
-          </button>
-        </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {tsr.map((item) => (
-            <ApiCard
-              img={item.img}
-              title={item.title}
-              category={item.category}
-              description={item.description}
-            />
-          ))}
-        </div>
-      </div>
-    </DiscoveryLayout>
+    <>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <DiscoveryLayout>
+          <Navbar title="Dashboard" />
+          <BreadCrumbs breadCrumbActiveItem="Dashboard" />
+          <ApiHero />
+          <div className="p-5">
+            <div className="my-3 flex justify-between flex-col gap-2 md:flex-row">
+              <p className=" font-semibold text-dark-grey">Recommended</p>
+              <button className="bg-transparent w-fit border-none text-mid-grey">
+                View all
+              </button>
+            </div>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+              {rec.map((item) => (
+                <ApiCard
+                  img={item.img}
+                  title={item.title}
+                  category={item.category}
+                  description={item.description}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="p-5">
+            <div className="my-3 flex justify-between flex-col gap-2 md:flex-row">
+              <p className=" font-semibold text-dark-grey">Top Finance API’s</p>
+              <button className="bg-transparent w-fit border-none text-mid-grey">
+                View all
+              </button>
+            </div>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+              {tfa.map((item) => (
+                <ApiCard
+                  img={item.img}
+                  title={item.title}
+                  category={item.category}
+                  description={item.description}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="p-5">
+            <div className="my-3 flex justify-between flex-col gap-2 md:flex-row">
+              <p className=" font-semibold text-dark-grey">
+                Top Speech Recognition
+              </p>
+              <button className="bg-transparent w-fit border-none text-mid-grey">
+                View all
+              </button>
+            </div>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+              {tsr.map((item) => (
+                <ApiCard
+                  img={item.img}
+                  title={item.title}
+                  category={item.category}
+                  description={item.description}
+                />
+              ))}
+            </div>
+          </div>
+        </DiscoveryLayout>
+      )}
+    </>
   );
 }

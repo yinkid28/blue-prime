@@ -2,10 +2,14 @@ import { useEffect, useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
 
 export default function ApiHero() {
-  const [view, setView] = useState<number>();
-  const [bgGradient, setBgGradient] = useState<string>("");
-  const [bgGradientR, setBgGradientR] = useState<string>("");
-  const [content, setContent] = useState<string>("");
+  const [view, setView] = useState<number>(1);
+  const [bgGradient, setBgGradient] = useState<string>(
+    "bg-gradient-to-r from-purple-700 to-purple-200"
+  );
+  const [bgGradientR, setBgGradientR] = useState<string>(
+    "bg-gradient-to-l from-purple-500 to-purple-100"
+  );
+  const [content, setContent] = useState<string>("Top Finance APIs");
   const inds = [
     {
       view: 1,

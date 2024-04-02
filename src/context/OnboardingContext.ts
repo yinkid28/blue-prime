@@ -1,10 +1,13 @@
+import useLocalStorage from "@/hooks/useLocalStorage";
 import { OnboardingInitials } from "@/models/onboarding.model";
 import constate from "constate";
-import { useMemo, useReducer } from "react";
+import { useEffect, useMemo, useReducer } from "react";
 
 export const initialState: OnboardingInitials = {
-  progress: null,
+  progress: 0,
   stage: 0,
+  sidebar: "",
+  loading: true,
 };
 
 const reducer = (state: any, action: any) => {
@@ -19,12 +22,26 @@ const reducer = (state: any, action: any) => {
         ...state,
         stage: action.payload,
       };
+    case "SET_SIDEBAR":
+      return {
+        ...state,
+        sidebar: action.payload,
+      };
+    case "SET_LOADING":
+      return {
+        ...state,
+        loading: action.payload,
+      };
   }
 };
 
 const useOnboardingContext = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { progress, stage } = state as OnboardingInitials;
+  const [data, setData] = useLocalStorage("onb", initialState);
+  const [state, dispatch] = useReducer(reducer, data);
+  useEffect(() => {
+    setData(state);
+  }, [state, setData]);
+  const { progress, stage, sidebar, loading } = state as OnboardingInitials;
 
   const setProgress = (progress: number) => {
     dispatch({
@@ -38,14 +55,39 @@ const useOnboardingContext = () => {
       payload: stage,
     });
   };
+  const setLoading = (loading: boolean) => {
+    dispatch({
+      type: "SET_LOADING",
+      payload: loading,
+    });
+  };
+  const setSidebar = (sidebar: string) => {
+    dispatch({
+      type: "SET_SIDEBAR",
+      payload: sidebar,
+    });
+  };
   return useMemo(
     () => ({
       progress,
       stage,
+      sidebar,
+      loading,
       setProgress,
       setStage,
+      setSidebar,
+      setLoading,
     }),
-    [progress, setProgress]
+    [
+      progress,
+      setProgress,
+      stage,
+      setStage,
+      sidebar,
+      setSidebar,
+      setLoading,
+      loading,
+    ]
   );
 };
 

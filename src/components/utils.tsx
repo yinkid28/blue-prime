@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { FaChevronRight } from "react-icons/fa";
+import { MdSearch } from "react-icons/md";
 
 type ButtonProps = {
   type: string;
@@ -34,7 +35,7 @@ export function BreadCrumbs({
 }: BreadProps) {
   const router = useRouter();
   return (
-    <div className="flex mb-3 px-5 gap-2 items-center">
+    <div className="flex mb-3 border-b-[1px] border-light-grey px-5 gap-2 items-center">
       <p
         className="text-mid-grey font-semibold"
         onClick={() => {
@@ -56,6 +57,15 @@ export function BreadCrumbs({
       ))}
       <FaChevronRight className="text-sm" />
       <p className="text-black  font-semibold">{breadCrumbActiveItem}</p>
+    </div>
+  );
+}
+
+export function SearchBar() {
+  return (
+    <div className="w-full p-2 flex border-light-grey border-[1px] rounded-lg flex items-center gap-2">
+      <MdSearch />
+      <input className="border-none outline-none w-full" placeholder="search" />
     </div>
   );
 }

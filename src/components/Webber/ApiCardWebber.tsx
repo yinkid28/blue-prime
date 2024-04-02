@@ -13,7 +13,7 @@ type ApiCardProps = {
   description: string;
   category: string;
 };
-export default function ApiCard({
+export default function ApiCardWebber({
   img,
   title,
   description,
@@ -56,20 +56,6 @@ export default function ApiCard({
       </div>
       <div className="w-fit px-4 py-1 rounded-full bg-category-fade text-category">
         <p className="font-semibold text-sm">{category}</p>
-      </div>
-      <div className="flex items-center text-xs justify-between">
-        <div className="flex items-center gap-1">
-          <FaRegEye className=" text-mid-grey" />
-          <p className="font-thin text-mid-grey">10k</p>
-        </div>
-        <div className="flex items-center gap-1">
-          <FaRegStar className=" text-mid-grey" />
-          <p className="font-thin text-mid-grey">4.0/5</p>
-        </div>
-        <div className="flex items-center gap-1">
-          <FaRegClock className=" text-mid-grey" />
-          <p className="font-thin text-mid-grey">100ms</p>
-        </div>
       </div>
     </div>
   );

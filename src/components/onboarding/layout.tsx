@@ -3,6 +3,7 @@ import OnboardingNavbar from "./onboardingNavbar";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { FaChevronLeft } from "react-icons/fa";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 type LayoutProps = {
   children: React.ReactNode | React.ReactNode[];
@@ -17,6 +18,11 @@ export default function OnboardingLayout({
 }: LayoutProps) {
   const { progress, stage, setProgress, setStage } = useOnboarding();
   const router = useRouter();
+  const [prog, setProg] = useState<number>(progress);
+
+  useEffect(() => {
+    setProg(progress);
+  }, [progress]);
   const handleStyling = () => {
     switch (stage) {
       case 0:
@@ -31,6 +37,7 @@ export default function OnboardingLayout({
         return "";
     }
   };
+  console.log(typeof progress);
   return (
     <div className="w-full font-urban flex justify-center">
       <div className="w-[80%] md:w-[95%] flex flex-col gap-3 items-center">
@@ -41,7 +48,7 @@ export default function OnboardingLayout({
             <Progress
               size={"sm"}
               colorScheme="blue"
-              value={progress as number}
+              value={progress}
               borderRadius={8}
             />
             <div

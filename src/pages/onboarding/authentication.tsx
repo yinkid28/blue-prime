@@ -1,4 +1,4 @@
-import OnboardingLayout from "@/components/onboarding/layout";
+// import OnboardingLayout from "@/components/onboarding/layout";
 
 import { Button } from "@/components/utils";
 
@@ -11,7 +11,11 @@ import github from "../../../public/icons/githubIcon.svg";
 import OTPInput from "react-otp-input";
 import { BsDot } from "react-icons/bs";
 import { useOnboarding } from "@/context/OnboardingContext";
-
+import dynamic from "next/dynamic";
+const OnboardingLayout = dynamic(
+  () => import("../../components/onboarding/layout"),
+  { ssr: false }
+);
 export default function Authentication() {
   const [otp, setOtp] = useState("");
   const { progress, setProgress, setStage } = useOnboarding();

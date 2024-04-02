@@ -1,4 +1,6 @@
 export type OnboardingInitials = {
-  progress: number | null;
+  progress: number;
   stage: number;
+  sidebar: string;
+  loading: boolean;
 };

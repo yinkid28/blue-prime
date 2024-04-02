@@ -2,7 +2,11 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import org from "../../../public/icons/orgIconReg.svg";
 import ind from "../../../public/icons/indIconReg.svg";
-import OnboardingLayout from "@/components/onboarding/layout";
+import dynamic from "next/dynamic";
+const OnboardingLayout = dynamic(
+  () => import("../../components/onboarding/layout"),
+  { ssr: false }
+);
 import { Button } from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useRouter } from "next/router";
