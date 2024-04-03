@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { FaRegClock, FaRegEye, FaRegStar } from "react-icons/fa";
 // import { MdBookmarkBorder } from "react-icons/md";
 import { IoBookmarkOutline } from "react-icons/io5";
+import { toTitleCase } from "../utils";
 
 type ApiCardProps = {
   img: StaticImageData;
@@ -27,14 +28,16 @@ export default function ApiCardWebber({
       className="w-full border-[1px] border-light-grey hover:shadow-md cursor-pointer rounded-lg p-3 flex flex-col gap-3"
       onClick={() => {
         setLoading(true);
-        router.push(`/api_discovery/api_product/${title}`);
+        const path = `/webber/${toTitleCase(title, true)}/overview`;
+        console.log(path);
+        router.push(path);
         setApi({
           img,
           title,
           description,
           category,
         });
-        setSidebar("api");
+        setSidebar("apiProgress");
       }}
     >
       <div className="w-full flex justify-between">

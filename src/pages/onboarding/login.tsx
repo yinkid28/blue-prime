@@ -116,7 +116,7 @@ export default function Login() {
             </button>
           </div>
           <p className="text-center text-dark-grey">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <span
               className="text-primary cursor-pointer font-semibold"
               onClick={() => {

@@ -134,12 +134,13 @@ export default function ApiDiscoveryDashboard() {
               </button>
             </div>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-              {rec.map((item) => (
+              {rec.map((item, index) => (
                 <ApiCard
                   img={item.img}
                   title={item.title}
                   category={item.category}
                   description={item.description}
+                  key={index}
                 />
               ))}
             </div>
@@ -152,12 +153,13 @@ export default function ApiDiscoveryDashboard() {
               </button>
             </div>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-              {tfa.map((item) => (
+              {tfa.map((item, index) => (
                 <ApiCard
                   img={item.img}
                   title={item.title}
                   category={item.category}
                   description={item.description}
+                  key={index}
                 />
               ))}
             </div>
@@ -172,12 +174,13 @@ export default function ApiDiscoveryDashboard() {
               </button>
             </div>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-              {tsr.map((item) => (
+              {tsr.map((item, index) => (
                 <ApiCard
                   img={item.img}
                   title={item.title}
                   category={item.category}
                   description={item.description}
+                  key={index}
                 />
               ))}
             </div>

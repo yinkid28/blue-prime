@@ -44,12 +44,13 @@ export function BreadCrumbs({
       >
         Home
       </p>
-      {breadCrumbItems?.map((item) => (
+      {breadCrumbItems?.map((item, index) => (
         <div
           className="flex items-center gap-2 cursor-pointer"
           onClick={() => {
             router.push(item.breadCrumbPath);
           }}
+          key={index}
         >
           <FaChevronRight className="text-sm" />
           <p className="text-mid-grey font-semibold">{item.breadCrumbText}</p>
@@ -68,4 +69,22 @@ export function SearchBar() {
       <input className="border-none outline-none w-full" placeholder="search" />
     </div>
   );
+}
+
+export function toTitleCase(input: string, space?: boolean): string {
+  // Step 1: Remove underscores
+  const noUnderscores = input?.replace(/_/g, " ");
+
+  // Step 2: Convert to title case
+  const titleCase = noUnderscores
+    ?.toLowerCase()
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+  // Step 3: Remove spaces
+  if (space) {
+    const noSpaces = titleCase.replace(/ /g, "");
+    return noSpaces;
+  }
+  return titleCase;
 }

@@ -5,6 +5,7 @@ import ApiProductSidebar from "./sidebars/apiProductSidebar";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { IMockApi } from "@/models/apidiscovery.model";
 import WebberSidebar from "./sidebars/webberSidebar";
+import ApiProgressSidebar from "./sidebars/apiProgressSideBar";
 
 type LayoutProps = {
   children: React.ReactNode | React.ReactNode[];
@@ -16,14 +17,13 @@ export default function ApiLayout({ children }: LayoutProps) {
     case "":
       return (
         <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[20%_1fr]  gap-2 bg-light-grey p-2">
-          {/* Sidebar components */}
+        
           <div className="">
             <MainSidebar />
           </div>
-          {/* main component */}
+      
           <div className="bg-white rounded-t overflow-y-scroll">
-            {/* Navbar component */}
-            {/* children components */}
+           
             {children}
           </div>
         </div>
@@ -31,14 +31,27 @@ export default function ApiLayout({ children }: LayoutProps) {
     case "api":
       return (
         <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[25%_1fr]  gap-2 bg-light-grey p-2">
-          {/* Sidebar components */}
+   
           <div className="">
             <ApiProductSidebar api={api as IMockApi} />
           </div>
-          {/* main component */}
+         
           <div className="bg-white rounded-t overflow-y-scroll">
-            {/* Navbar component */}
-            {/* children components */}
+            
+            {children}
+          </div>
+        </div>
+      );
+    case "apiProgress":
+      return (
+        <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[20%_1fr]  gap-2 bg-light-grey p-2">
+        
+          <div className="">
+            <ApiProgressSidebar api={api as IMockApi} />
+          </div>
+          
+          <div className="bg-white rounded-t overflow-y-scroll">
+           
             {children}
           </div>
         </div>
@@ -46,14 +59,13 @@ export default function ApiLayout({ children }: LayoutProps) {
     case "webber":
       return (
         <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[20%_1fr]  gap-2 bg-light-grey p-2">
-          {/* Sidebar components */}
+      
           <div className="">
             <WebberSidebar />
           </div>
-          {/* main component */}
+       
           <div className="bg-white rounded-t overflow-y-scroll">
-            {/* Navbar component */}
-            {/* children components */}
+         
             {children}
           </div>
         </div>
