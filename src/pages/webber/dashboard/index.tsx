@@ -15,9 +15,10 @@ const WebberLayout = dynamic(() => import("@/components/Layout/layout"), {
 });
 export default function WebberDashboard() {
   const router = useRouter();
-  const { loading, setLoading } = useOnboarding();
+  const { loading, setLoading, setSidebar } = useOnboarding();
   useEffect(() => {
     setLoading(false);
+    setSidebar("webber");
   }, []);
   const tsr = [
     {
@@ -105,12 +106,13 @@ export default function WebberDashboard() {
               </div>
             </div>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-              {tsr.map((item) => (
+              {tsr.map((item, index) => (
                 <ApiCardWebber
                   img={item.img}
                   title={item.title}
                   category={item.category}
                   description={item.description}
+                  key={index}
                 />
               ))}
             </div>
