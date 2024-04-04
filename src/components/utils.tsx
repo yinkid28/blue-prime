@@ -3,16 +3,17 @@ import { FaChevronRight } from "react-icons/fa";
 import { MdSearch } from "react-icons/md";
 
 type ButtonProps = {
-  type: string;
+  type?: string;
   text: string;
   onClick: () => void;
+  className?: string;
 };
-export function Button({ type, text, onClick }: ButtonProps) {
+export function Button({ type, text, onClick, className }: ButtonProps) {
   return (
     <button
       className={`${
         type === "fit" ? "w-fit" : "w-full"
-      } px-4 py-2 text-center bg-primaryGradient hover:bg-secondaryGradient text-white rounded-lg`}
+      } px-4 py-2 text-center bg-primaryGradient hover:bg-secondaryGradient text-white rounded-lg ${className}`}
       onClick={onClick}
     >
       {text}
