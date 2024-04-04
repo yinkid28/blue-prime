@@ -16,7 +16,9 @@ export default function Navbar({ title }: NavbarProps) {
   const router = useRouter();
   return (
     <div className="w-full bg-transparent flex justify-between items-center p-5 ">
-      <p className="md:text-xl font-semibold">{title}</p>
+      <div>
+        <p className="md:text-xl font-semibold">{title}</p>
+      </div>
       <div className="flex items-center gap-3">
         <Button
           type="fit"
