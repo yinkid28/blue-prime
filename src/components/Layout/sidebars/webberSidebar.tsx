@@ -2,15 +2,72 @@ import { useRouter } from "next/router";
 import { BsFilePlay, BsSearch } from "react-icons/bs";
 import { MdHomeFilled } from "react-icons/md";
 import { FiFolder } from "react-icons/fi";
+import { IoMenu } from "react-icons/io5";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  useDisclosure,
+} from "@chakra-ui/react";
+
 export default function WebberSidebar() {
   const router = useRouter();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <div className="w-full  flex flex-col h-full gap-2">
+    <div className="w-full flex flex-col h-full gap-2">
       <div className="bg-white rounded p-5 h-full flex flex-col gap-4 ">
-        <p className="text-2xl">Logo</p>
+        <div className="flex justify-between">
+          <p className="text-2xl">Logo</p>
+          <IoMenu
+            size={23}
+            onClick={isOpen ? onClose : onOpen}
+            className="flex md:hidden cursor-pointer z-[1600]"
+          />
+        </div>
+
+        <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
+          <DrawerOverlay />
+          <DrawerContent>
+            {/* <DrawerHeader borderBottomWidth="1px"></DrawerHeader> */}
+            <DrawerBody className="space-y-4 mt-16">
+              <div
+                className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+                  router.asPath == "/webber/dashboard"
+                    ? "text-primary"
+                    : "text-dark-grey"
+                }`}
+              >
+                <MdHomeFilled />
+                <p className="font-semibold">Home</p>
+              </div>
+              <div
+                className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+                  router.asPath == "" ? "text-primary" : "text-dark-grey"
+                }`}
+              >
+                <BsSearch />
+                <p className="font-semibold">Search</p>
+              </div>
+
+              <div
+                className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+                  router.asPath == "" ? "text-primary" : "text-dark-grey"
+                }`}
+              >
+                <BsFilePlay />
+                <p className="font-semibold">How to Use</p>
+              </div>
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
+
         <div
-          className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+          className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
             router.asPath == "/webber/dashboard"
               ? "text-primary"
               : "text-dark-grey"
@@ -20,7 +77,7 @@ export default function WebberSidebar() {
           <p className="font-semibold">Home</p>
         </div>
         <div
-          className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+          className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
             router.asPath == "" ? "text-primary" : "text-dark-grey"
           }`}
         >
@@ -29,7 +86,7 @@ export default function WebberSidebar() {
         </div>
 
         <div
-          className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+          className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
             router.asPath == "" ? "text-primary" : "text-dark-grey"
           }`}
         >

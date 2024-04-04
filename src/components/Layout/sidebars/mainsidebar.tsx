@@ -31,7 +31,7 @@ export default function MainSidebar() {
   // const [placement, setPlacement] = React.useState("right");
   return (
     <>
-      <div className="w-full  flex flex-col h-full gap-2">
+      <div className="w-full  flex flex-col h-full">
         <div className="bg-white rounded p-5 h-fit flex flex-col gap-4 ">
           <div className="flex justify-between">
             <p className="text-2xl">Logo</p>
@@ -104,7 +104,7 @@ export default function MainSidebar() {
             <p className="font-semibold">Home</p>
           </div>
           <div
-            className={`md:md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+            className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
               router.asPath == "" ? "text-primary" : "text-dark-grey"
             }`}
           >
