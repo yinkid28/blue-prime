@@ -7,12 +7,10 @@ import { IoMenu } from "react-icons/io5";
 import {
   Drawer,
   DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
   DrawerOverlay,
   DrawerContent,
-  DrawerCloseButton,
   useDisclosure,
+  Show,
 } from "@chakra-ui/react";
 
 export default function MainSidebar() {
@@ -25,10 +23,8 @@ export default function MainSidebar() {
     { name: "E-Commerce" },
     { name: "Sports" },
   ];
-  // const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const [placement, setPlacement] = React.useState("right");
   return (
     <>
       <div className="w-full  flex flex-col h-full">
@@ -42,56 +38,60 @@ export default function MainSidebar() {
             />
           </div>
 
-          <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
-            <DrawerOverlay />
-            <DrawerContent>
-              {/* <DrawerHeader borderBottomWidth="1px"></DrawerHeader> */}
-              <DrawerBody className="space-y-4 mt-16">
-                <div
-                  className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                    router.asPath == "/api_discovery"
-                      ? "text-primary"
-                      : "text-dark-grey"
-                  }`}
-                >
-                  <MdHomeFilled />
-                  <p className="font-semibold">Home</p>
-                </div>
-                <div
-                  className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                    router.asPath == "" ? "text-primary" : "text-dark-grey"
-                  }`}
-                >
-                  <BsSearch />
-                  <p className="font-semibold">Search</p>
-                </div>
-                <div
-                  className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                    router.asPath == "" ? "text-primary" : "text-dark-grey"
-                  }`}
-                >
-                  <FiFolder />
-                  <p className="font-semibold">Library</p>
-                </div>
-                <div
-                  className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                    router.asPath == "" ? "text-primary" : "text-dark-grey"
-                  }`}
-                >
-                  <BsFilePlay />
-                  <p className="font-semibold">How to Use</p>
-                </div>
-                <div className="pt-6 h-full rounded flex flex-col gap-4">
-                  <p className="text-2xl text-mid-grey font-bold">Categories</p>
-                  {cats?.map((cat, index) => (
-                    <p className="text-dark-grey cursor-pointer" key={index}>
-                      {cat.name}
+          <Show breakpoint="(max-width: 768px)">
+            <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
+              <DrawerOverlay />
+              <DrawerContent>
+                {/* <DrawerHeader borderBottomWidth="1px"></DrawerHeader> */}
+                <DrawerBody className="space-y-4 mt-16">
+                  <div
+                    className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+                      router.asPath == "/api_discovery"
+                        ? "text-primary"
+                        : "text-dark-grey"
+                    }`}
+                  >
+                    <MdHomeFilled />
+                    <p className="font-semibold">Home</p>
+                  </div>
+                  <div
+                    className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+                      router.asPath == "" ? "text-primary" : "text-dark-grey"
+                    }`}
+                  >
+                    <BsSearch />
+                    <p className="font-semibold">Search</p>
+                  </div>
+                  <div
+                    className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+                      router.asPath == "" ? "text-primary" : "text-dark-grey"
+                    }`}
+                  >
+                    <FiFolder />
+                    <p className="font-semibold">Library</p>
+                  </div>
+                  <div
+                    className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+                      router.asPath == "" ? "text-primary" : "text-dark-grey"
+                    }`}
+                  >
+                    <BsFilePlay />
+                    <p className="font-semibold">How to Use</p>
+                  </div>
+                  <div className="pt-6 h-full rounded flex flex-col gap-4">
+                    <p className="text-2xl text-mid-grey font-bold">
+                      Categories
                     </p>
-                  ))}
-                </div>
-              </DrawerBody>
-            </DrawerContent>
-          </Drawer>
+                    {cats?.map((cat, index) => (
+                      <p className="text-dark-grey cursor-pointer" key={index}>
+                        {cat.name}
+                      </p>
+                    ))}
+                  </div>
+                </DrawerBody>
+              </DrawerContent>
+            </Drawer>
+          </Show>
 
           <div
             className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
