@@ -19,6 +19,7 @@
     "react-dom": "^18",
     "react-icons": "^5.0.1",
     "react-otp-input": "^3.1.1",
+    "recharts": "^2.12.4",
     "swagger-ui-react": "^5.12.0"
   },
   "devDependencies": {

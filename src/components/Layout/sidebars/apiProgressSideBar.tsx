@@ -4,6 +4,7 @@ import { IMockApi } from "@/models/apidiscovery.model";
 import { Badge } from "@chakra-ui/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { FaChevronLeft, FaRegClock, FaRegEye, FaRegStar } from "react-icons/fa";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { MdGridView, MdHomeFilled } from "react-icons/md";
@@ -14,6 +15,11 @@ type sideBarProps = {
 export default function ApiProgressSidebar({ api }: sideBarProps) {
   const router = useRouter();
   const { setSidebar } = useOnboarding();
+
+  useEffect(() => {
+    console.log(router.asPath);
+  }, [router]);
+
   return (
     <div className="w-full  flex flex-col h-full gap-2">
       <div className="bg-white rounded p-5 h-fit flex flex-col gap-4 ">
@@ -52,8 +58,9 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
               ? "text-primary"
               : "text-dark-grey"
           }`}
+          // I am going to hard code the route to be pushed to for a brief while!
           onClick={() => {
-            // router.push("/webber/dashboard");
+            router.push("/webber/TextTranslator/overview");
             // setSidebar("webber");
           }}
         >
@@ -168,12 +175,13 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
         </div>
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath == `/webber/${api.title}/overview`
+            router.asPath ==
+            `/webber/${toTitleCase(api.title, true)}/api_manager`
               ? "text-primary"
               : "text-dark-grey"
           }`}
           onClick={() => {
-            // router.push("/webber/dashboard");
+            router.push("/webber/TextTranslator/api_manager");
             // setSidebar("webber");
           }}
         >
