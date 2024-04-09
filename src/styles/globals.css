@@ -20,3 +20,50 @@
 .slideInRight {
   animation: slideInRight 1s ease-out;
 }
+.editor {
+  counter-reset: line;
+  /* border: 1px solid #ced4da; */
+  background-color: #002132;
+  color: white;
+  min-height: 400px;
+}
+
+.editor .editorLineNumber {
+  position: absolute;
+  left: 0px;
+  color: #cccccc;
+  text-align: right;
+  width: 40px;
+  font-weight: 100;
+}
+
+.editor #codeArea {
+  outline: none;
+  padding-left: 60px !important;
+}
+
+.editor pre {
+  padding-left: 60px !important;
+}
+
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #c5c8c6;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+  font-family: Inconsolata, Monaco, Consolas, "Courier New", Courier, monospace;
+  direction: ltr;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
