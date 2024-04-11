@@ -7,12 +7,12 @@ const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
 import yaml from "js-yaml";
 export default function EndpointView() {
   // const [jsonData, setJsonData] = useState<any>({});
-  useEffect(() => {
-    // This effect runs once on component mount
-    window.MonacoEnvironment = {
-      baseUrl: `${document.baseURI || window.location.href}dist/`,
-    };
-  }, []);
+  // useEffect(() => {
+  //   // This effect runs once on component mount
+  //   window.MonacoEnvironment = {
+  //     baseUrl: `${document.baseURI || window.location.href}dist/`,
+  //   };
+  // }, []);
 
   // useEffect(() => {
   //   fetch("/files/swagger.yaml") // Adjust the path if your YAML file is located elsewhere

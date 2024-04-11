@@ -22,6 +22,7 @@ export default function ApiDefinition() {
   const [code, setCode] = useState(`function add(a, b) {\n  return a + b;\n}`);
 
   const { loading, setLoading } = useOnboarding();
+
   useEffect(() => {
     setLoading(false);
   }, []);
@@ -41,33 +42,27 @@ export default function ApiDefinition() {
   }
   return (
     <>
-      {loading ? (
-        <Spinner />
-      ) : (
-        <WebberLayout>
-          <Navbar title={`${api?.title}`} />
-          <BreadCrumbs
-            // breadCrumbItems={breadCrumbs}
-            breadCrumbActiveItem={`${api?.title}-Endpoints`}
+      <WebberLayout>
+        <Navbar title={`${api?.title}`} />
+        <BreadCrumbs
+          // breadCrumbItems={breadCrumbs}
+          breadCrumbActiveItem={`${api?.title}-Endpoints`}
+        />
+        <div className="p-5">
+          <Editor
+            value={code}
+            onValueChange={(code) => setCode(code)}
+            highlight={(code) => hightlightWithLineNumbers(code, languages.js)}
+            padding={10}
+            textareaId="codeArea"
+            className="editor  bg-black h-[80vh] rounded-lg text-white"
+            style={{
+              fontFamily: '"Fira code", "Fira Mono", monospace',
+              fontSize: 12,
+            }}
           />
-          <div className="p-5">
-            <Editor
-              value={code}
-              onValueChange={(code) => setCode(code)}
-              highlight={(code) =>
-                hightlightWithLineNumbers(code, languages.js)
-              }
-              padding={10}
-              textareaId="codeArea"
-              className="editor  bg-black h-[80vh] rounded-lg text-white"
-              style={{
-                fontFamily: '"Fira code", "Fira Mono", monospace',
-                fontSize: 12,
-              }}
-            />
-          </div>
-        </WebberLayout>
-      )}
+        </div>
+      </WebberLayout>
     </>
   );
 }

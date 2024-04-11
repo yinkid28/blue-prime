@@ -26,6 +26,7 @@
   background-color: #002132;
   color: white;
   min-height: 400px;
+  overflow: scroll;
 }
 
 .editor .editorLineNumber {
