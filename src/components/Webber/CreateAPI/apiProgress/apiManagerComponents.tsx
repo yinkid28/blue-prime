@@ -1,6 +1,7 @@
 import React from "react";
 import { HiOutlineStar } from "react-icons/hi";
 import { CiMenuKebab } from "react-icons/ci";
+import { Icon } from "@iconify/react";
 import {
   Box,
   Menu,
@@ -24,6 +25,8 @@ import {
   BarChart,
   ResponsiveContainer,
 } from "recharts";
+import FeedbackView from "@/components/apiDiscovery/feedbackView";
+import { Button } from "@/components/utils";
 
 type TopCardsProps = {
   cardOneTitle: string;
@@ -133,10 +136,53 @@ export function SubHistoryView() {
 }
 
 export function FeedbackManagementView() {
-  return <div>This is the view for managing feedbacks.</div>;
+  return (
+    <div className="border rounded-xl p-4">
+      {/* FEEDBACK VIEW IS USED HERE SINCE THEY ARE SO SIMILAR. */}
+      <FeedbackView commentButtonDisplay={false} />
+    </div>
+  );
 }
 export function OwnershipManagementView() {
-  return <div>This view to manage ownership.</div>;
+  return (
+    <div className="border rounded-xl p-4">
+      <div className="w-full md:w-[58%] 2xl:w-[50%]">
+        <div className="space-y-4 text-sm leading-normal mb-32">
+          <h3 className="font-semibold text-mid-grey">Transfer Ownership</h3>
+          <p>Transfer ownership of API to a client on Anasee Marketplace.</p>
+          <form action="#" className="space-y-6">
+            <div className="flex items-center border rounded-lg w-full py-2 px-4 gap-1">
+              <Icon
+                icon="lets-icons:search-alt-light"
+                className="text-mid-grey text-2xl"
+              />
+              <input
+                type="search"
+                placeholder="Search Client"
+                className="text-base font-semibold focus:outline-none"
+              />
+            </div>
+            <button className="rounded-lg border border-primary py-2 px-4 text-primary hover:bg-primary hover:text-white duration-300 text-xs font-semibold">
+              Transfer Ownership
+            </button>
+          </form>
+        </div>
+
+        <div className="space-y-4 text-sm leading-normal mb-16">
+          <h3 className="font-semibold text-mid-grey">Delete API</h3>
+          <p>
+            This action will cause this API to be deleted permanently, It will
+            be removed from Anansee’s gateway and your projects data from
+            requests, testing and descriptions will be destroyed. This action is
+            not reversible.
+          </p>
+          <button className="rounded-lg border border-[rgba(255, 154, 158, 0.30)] py-2 px-4 text-error hover:bg-error hover:border-error hover:text-white duration-300 text-xs font-semibold">
+            Delete API
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 /* OVERVIEW VIEW SUB-COMPONENTS */
