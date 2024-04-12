@@ -5,13 +5,14 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3400",
     "lint": "next lint"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
+    "@chakra-ui/react-types": "^2.0.7",
     "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.0",
+    "@emotion/styled": "^11.11.5",
     "constate": "^3.3.2",
     "framer-motion": "^11.0.12",
     "js-yaml": "^4.1.0",
@@ -22,13 +23,15 @@
     "react-otp-input": "^3.1.1",
     "react-simple-code-editor": "^0.13.1",
     "swagger-editor": "^4.12.1",
+    "recharts": "^2.12.4",
     "swagger-ui-react": "^5.12.0"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
+    "@iconify/react": "^4.1.1",
     "@types/node": "^20",
     "@types/prismjs": "^1.26.3",
-    "@types/react": "^18",
+    "@types/react": "^18.2.75",
     "@types/react-dom": "^18",
     "@types/swagger-ui-react": "^4.18.3",
     "autoprefixer": "^10.0.1",

@@ -7,7 +7,13 @@ export type IMockFeedback = {
   comment: string;
   replies: number;
 };
-export default function FeedbackView() {
+
+type FeedbackViewProps = {
+  commentButtonDisplay: boolean;
+};
+export default function FeedbackView({
+  commentButtonDisplay,
+}: FeedbackViewProps) {
   const [view, setView] = useState<string>("all");
   const [currentItem, setCurrentItem] = useState<IMockFeedback>();
   const feedback: IMockFeedback[] = [
@@ -59,12 +65,14 @@ export default function FeedbackView() {
           />
         )}
       </div>
-      <div className="md:w-[35%] w-full flex justify-end">
-        <button className="flex gap-2 items-center rounded-lg text-primary w-fit h-fit border-2 border-light-grey px-3 py-1">
-          <MdAdd />
-          <p>Comment</p>
-        </button>
-      </div>
+      {commentButtonDisplay && (
+        <div className="md:w-[35%] w-full flex justify-end">
+          <button className="flex gap-2 items-center rounded-lg text-primary w-fit h-fit border-2 border-light-grey px-3 py-1">
+            <MdAdd />
+            <p>Comment</p>
+          </button>
+        </div>
+      )}
     </div>
   );
 }
