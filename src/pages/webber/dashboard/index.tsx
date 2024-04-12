@@ -80,45 +80,41 @@ export default function WebberDashboard() {
   ];
   return (
     <>
-      {loading ? (
-        <Spinner />
-      ) : (
-        <WebberLayout>
-          <Navbar title="Home" />
-          <BreadCrumbs
-            // breadCrumbItems={breadCrumbs}
-            breadCrumbActiveItem={"Home"}
-          />
-          <div className="p-5 flex flex-col gap-5">
-            <div className="flex flex-col-reverse md:flex-row w-full">
-              <div className="w-[60%] w-full ">
-                <SearchBar />
-              </div>
-              <div className="w-[40%] w-full flex items-center justify-end">
-                <button
-                  className="w-fit h-fit px-5 py-2 font-semibold border-primaryFade border-[1px] text-primary rounded-lg"
-                  onClick={() => {
-                    router.push("/webber/create_api");
-                  }}
-                >
-                  Create API
-                </button>
-              </div>
+      <WebberLayout>
+        <Navbar title="Home" />
+        <BreadCrumbs
+          // breadCrumbItems={breadCrumbs}
+          breadCrumbActiveItem={"Home"}
+        />
+        <div className="p-5 flex flex-col gap-5">
+          <div className="flex flex-col-reverse md:flex-row w-full">
+            <div className="w-[60%] w-full ">
+              <SearchBar />
             </div>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-              {tsr.map((item, index) => (
-                <ApiCardWebber
-                  img={item.img}
-                  title={item.title}
-                  category={item.category}
-                  description={item.description}
-                  key={index}
-                />
-              ))}
+            <div className="w-[40%] w-full flex items-center justify-end">
+              <button
+                className="w-fit h-fit px-5 py-2 font-semibold border-primaryFade border-[1px] text-primary rounded-lg"
+                onClick={() => {
+                  router.push("/webber/create_api");
+                }}
+              >
+                Create API
+              </button>
             </div>
           </div>
-        </WebberLayout>
-      )}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {tsr.map((item, index) => (
+              <ApiCardWebber
+                img={item.img}
+                title={item.title}
+                category={item.category}
+                description={item.description}
+                key={index}
+              />
+            ))}
+          </div>
+        </div>
+      </WebberLayout>
     </>
   );
 }

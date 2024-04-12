@@ -28,7 +28,7 @@ export default function ApiCardWebber({
       className="w-full border-[1px] border-light-grey hover:shadow-md cursor-pointer rounded-lg p-3 flex flex-col gap-3"
       onClick={() => {
         setLoading(true);
-        const path = `/webber/${toTitleCase(title, true)}/overview`;
+        const path = `/webber/api_details/${toTitleCase(title, true)}/overview`;
         console.log(path);
         router.push(path);
         setApi({

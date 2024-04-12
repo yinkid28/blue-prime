@@ -1,19 +1,13 @@
-import { MdAdd } from "react-icons/md";
-import FeedbackCard from "./feedbackCard";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import FeedBackCardDetails from "./feedbackDetails";
+import { useState } from "react";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-// @ts-ignore
-const SwaggerEditor = dynamic(() => import("swagger-editor"), {
-  ssr: false,
-});
-// import SwaggerEditor from "";
 
-import "swagger-editor/dist/swagger-editor.css";
 import yaml from "js-yaml";
-import SwaggerUI from "swagger-ui-react";
+import "swagger-ui-react/swagger-ui.css";
+const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
+  ssr: false, // Disable server-side rendering for this component
+});
 export type IMockFeedback = {
   name: string;
   comment: string;
@@ -24,22 +18,22 @@ export default function DocumentationView() {
   const { api } = useApi();
 
   const [jsonData, setJsonData] = useState<any>({});
-  useEffect(() => {
-    // This effect runs once on component mount
-    window.MonacoEnvironment = {
-      baseUrl: `${document.baseURI || window.location.href}dist/`,
-    };
-  }, []);
+  // useEffect(() => {
+  //   // This effect runs once on component mount
+  //   window.MonacoEnvironment = {
+  //     baseUrl: `${document.baseURI || window.location.href}dist/`,
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    fetch("/files/swagger.yaml") // Adjust the path if your YAML file is located elsewhere
-      .then((response) => response.text())
-      .then((yamlText) => {
-        const data: any = yaml.load(yamlText);
-        setJsonData(data);
-      })
-      .catch((error) => console.error("Error fetching YAML:", error));
-  }, []);
+  // useEffect(() => {
+  //   fetch("/files/swagger.yaml") // Adjust the path if your YAML file is located elsewhere
+  //     .then((response) => response.text())
+  //     .then((yamlText) => {
+  //       const data: any = yaml.load(yamlText);
+  //       setJsonData(JSON.stringify(data));
+  //     })
+  //     .catch((error) => console.error("Error fetching YAML:", error));
+  // }, []);
   return (
     <div className="w-full flex flex-col-reverse md:flex-row justify-between">
       <div className="w-full md:w-[65%]">
