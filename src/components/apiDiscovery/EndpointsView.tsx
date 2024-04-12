@@ -1,12 +1,35 @@
 import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 import "swagger-ui-react/swagger-ui.css";
 const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
   ssr: false, // Disable server-side rendering for this component
 });
+import yaml from "js-yaml";
 export default function EndpointView() {
+  // const [jsonData, setJsonData] = useState<any>({});
+  // useEffect(() => {
+  //   // This effect runs once on component mount
+  //   window.MonacoEnvironment = {
+  //     baseUrl: `${document.baseURI || window.location.href}dist/`,
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   fetch("/files/swagger.yaml") // Adjust the path if your YAML file is located elsewhere
+  //     .then((response) => response.text())
+  //     .then((yamlText) => {
+  //       const data: any = yaml.load(yamlText);
+  //       setJsonData(data);
+  //     })
+  //     .catch((error) => console.error("Error fetching YAML:", error));
+  // }, []);
   return (
     <div className="">
-      <SwaggerUI url="http://bct-product.westeurope.cloudapp.azure.com:8060/webjars/swagger-ui/index.html" />
+      <SwaggerUI
+        url={
+          "https://raw.githubusercontent.com/quaddss52/portfoliomain/main/public/documents/output-onlineyamltools.txt?token=GHSAT0AAAAAACHJAWWBOO23R3OIDGPKDIZGZQTW2HQ"
+        }
+      />
     </div>
   );
 }

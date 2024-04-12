@@ -1,0 +1,9 @@
+{
+    "apps": [
+      {
+        "name": "apim.ui",
+        "script": "npm",
+        "args": "start"
+      }
+    ]
+  }

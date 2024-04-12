@@ -159,7 +159,7 @@ export function OwnershipManagementView() {
               <input
                 type="search"
                 placeholder="Search Client"
-                className="text-base font-semibold focus:outline-none"
+                className="text-base font-semibold focus:outline-none w-full"
               />
             </div>
             <button className="rounded-lg border border-primary py-2 px-4 text-primary hover:bg-primary hover:text-white duration-300 text-xs font-semibold">

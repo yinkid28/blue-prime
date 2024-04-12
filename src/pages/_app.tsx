@@ -6,6 +6,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { OnboardingProvider } from "@/context/OnboardingContext";
 import { OnApiProvider } from "@/context/ApiDiscoveryContext";
 import { UserProvider } from "@/context/userContext";
+import { useEffect } from "react";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

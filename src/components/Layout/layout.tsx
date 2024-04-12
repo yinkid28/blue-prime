@@ -1,3 +1,4 @@
+"use client";
 import { useOnboarding } from "@/context/OnboardingContext";
 
 import MainSidebar from "./sidebars/mainsidebar";
@@ -6,12 +7,13 @@ import { useApi } from "@/context/ApiDiscoveryContext";
 import { IMockApi } from "@/models/apidiscovery.model";
 import WebberSidebar from "./sidebars/webberSidebar";
 import ApiProgressSidebar from "./sidebars/apiProgressSideBar";
+import { Spinner } from "@chakra-ui/react";
 
 type LayoutProps = {
   children: React.ReactNode | React.ReactNode[];
 };
 export default function ApiLayout({ children }: LayoutProps) {
-  const { sidebar } = useOnboarding();
+  const { sidebar, loading } = useOnboarding();
   const { api } = useApi();
   switch (sidebar) {
     case "":
@@ -21,7 +23,10 @@ export default function ApiLayout({ children }: LayoutProps) {
             <MainSidebar />
           </div>
 
-          <div className="bg-white rounded-t overflow-y-scroll">{children}</div>
+          <div className="bg-white rounded-t overflow-y-scroll">
+            {" "}
+            {loading ? <Spinner /> : children}
+          </div>
         </div>
       );
     case "api":
@@ -31,7 +36,10 @@ export default function ApiLayout({ children }: LayoutProps) {
             <ApiProductSidebar api={api as IMockApi} />
           </div>
 
-          <div className="bg-white rounded-t overflow-y-scroll">{children}</div>
+          <div className="bg-white rounded-t overflow-y-scroll">
+            {" "}
+            {loading ? <Spinner /> : children}
+          </div>
         </div>
       );
     case "apiProgress":
@@ -41,7 +49,9 @@ export default function ApiLayout({ children }: LayoutProps) {
             <ApiProgressSidebar api={api as IMockApi} />
           </div>
 
-          <div className="bg-white rounded-t overflow-y-scroll">{children}</div>
+          <div className="bg-white rounded-t overflow-y-scroll">
+            {loading ? <Spinner /> : children}
+          </div>
         </div>
       );
     case "webber":
@@ -51,7 +61,10 @@ export default function ApiLayout({ children }: LayoutProps) {
             <WebberSidebar />
           </div>
 
-          <div className="bg-white rounded-t overflow-y-scroll">{children}</div>
+          <div className="bg-white rounded-t overflow-y-scroll">
+            {" "}
+            {loading ? <Spinner /> : children}
+          </div>
         </div>
       );
 
