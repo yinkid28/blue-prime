@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { HiOutlineStar } from "react-icons/hi";
 import { CiMenuKebab } from "react-icons/ci";
@@ -12,7 +13,7 @@ import {
   MenuList,
   Show,
 } from "@chakra-ui/react";
-
+// import dynamic from "next/dynamic";
 import {
   CartesianGrid,
   Line,
