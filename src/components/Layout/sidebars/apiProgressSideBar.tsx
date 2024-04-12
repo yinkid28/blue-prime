@@ -385,7 +385,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
           <p>Deploy</p>
         </div>
         <div
-          className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+          className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-4 w-full ${
             router.asPath ==
             `/webber/${toTitleCase(api.title, true)}/api_manager`
               ? "text-primary"
@@ -396,7 +396,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
             // setSidebar("webber");
           }}
         >
-          <Icon icon="solar:library-linear" className="text-xl" />
+          <Icon icon="solar:library-linear" />
 
           <p>API Manager</p>
         </div>
