@@ -30,6 +30,7 @@ export default function ApiProduct() {
     setSidebar("api");
     setLoading(false);
   }, []);
+
   return (
     <>
       <ApiLayout>
@@ -99,7 +100,9 @@ export default function ApiProduct() {
           <div className="my-5">
             {view === "Endpoint" ? <EndpointView /> : null}
             {view === "Documentation" ? <DocumentationView /> : null}
-            {view === "Feedback" ? <FeedbackView /> : null}
+            {view === "Feedback" ? (
+              <FeedbackView commentButtonDisplay={true} />
+            ) : null}
             {view === "Pricing" ? <PriceView /> : null}
           </div>
         </div>

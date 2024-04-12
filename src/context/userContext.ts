@@ -5,7 +5,7 @@ import constate from "constate";
 import { useEffect, useMemo, useReducer } from "react";
 
 export const initialState: UserInititals = {
-  userType: "",
+  userType: "weaver",
 };
 
 const reducer = (state: any, action: any) => {
