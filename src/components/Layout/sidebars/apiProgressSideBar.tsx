@@ -17,6 +17,7 @@ import {
   useDisclosure,
   Show,
 } from "@chakra-ui/react";
+import { Icon } from "@iconify/react";
 
 type sideBarProps = {
   api: IMockApi;
@@ -51,7 +52,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
             <DrawerOverlay />
             <DrawerContent>
               {/* <DrawerHeader borderBottomWidth="1px"></DrawerHeader> */}
-              <DrawerBody className="space-y-4 mt-16 bg-light-grey p-2">
+              <DrawerBody className="space-y-4 mt-20 bg-light-grey p-2">
                 <div className="bg-white mt-2 p-4 rounded">
                   <div
                     className="flex items-center gap-2 cursor-pointer"
@@ -82,9 +83,9 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                   </div>
                 </div>
 
-                <div className="bg-white h-[80%] rounded p-5 flex flex-col gap-4">
+                <div className="bg-white h-[60%] rounded p-5 flex flex-col gap-4">
                   <div
-                    className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+                    className={`flex items-center h-fit cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath ==
                       `/webber/${toTitleCase(api.title, true)}/overview`
                         ? "text-primary"
@@ -96,7 +97,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                       // setSidebar("webber");
                     }}
                   >
-                    <MdGridView />
+                    <Icon icon="lets-icons:widget-light" />
 
                     <p>Overview</p>
                   </div>
@@ -111,7 +112,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                       // setSidebar("webber");
                     }}
                   >
-                    <MdGridView />
+                    <Icon icon="material-symbols-light:list-alt-outline" />
 
                     <p>API Information</p>
                   </div>
@@ -126,7 +127,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                       // setSidebar("webber");
                     }}
                   >
-                    <MdGridView />
+                    <Icon icon="lets-icons:link-alt-light" />
 
                     <p>Runtime</p>
                   </div>
@@ -141,7 +142,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                       // setSidebar("webber");
                     }}
                   >
-                    <MdGridView />
+                    <Icon icon="ph:line-segments-light" />
 
                     <p>Endpoints</p>
                   </div>
@@ -156,7 +157,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                       // setSidebar("webber");
                     }}
                   >
-                    <MdGridView />
+                    <Icon icon="lets-icons:subttasks-light" />
 
                     <p>Modules</p>
                   </div>
@@ -171,7 +172,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                       // setSidebar("webber");
                     }}
                   >
-                    <MdGridView />
+                    <Icon icon="lets-icons:code-light" />
 
                     <p>API definition</p>
                   </div>
@@ -186,7 +187,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                       // setSidebar("webber");
                     }}
                   >
-                    <MdGridView />
+                    <Icon icon="lets-icons:edit-light" />
 
                     <p>Test</p>
                   </div>
@@ -201,7 +202,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                       // setSidebar("webber");
                     }}
                   >
-                    <MdGridView />
+                    <Icon icon="material-symbols-light:deployed-code-outline-sharp" />
 
                     <p>Deploy</p>
                   </div>
@@ -217,7 +218,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                       // setSidebar("webber");
                     }}
                   >
-                    <MdGridView />
+                    <Icon icon="solar:library-linear" />
 
                     <p>API Manager</p>
                   </div>
@@ -268,7 +269,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
             // setSidebar("webber");
           }}
         >
-          <MdGridView />
+          <Icon icon="lets-icons:widget-light" className="text-xl" />
 
           <p>Overview</p>
         </div>
@@ -283,7 +284,10 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
             // setSidebar("webber");
           }}
         >
-          <MdGridView />
+          <Icon
+            icon="material-symbols-light:list-alt-outline"
+            className="text-xl"
+          />
 
           <p>API Information</p>
         </div>
@@ -298,7 +302,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
             // setSidebar("webber");
           }}
         >
-          <MdGridView />
+          <Icon icon="lets-icons:link-alt-light" className="text-xl" />
 
           <p>Runtime</p>
         </div>
@@ -313,7 +317,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
             // setSidebar("webber");
           }}
         >
-          <MdGridView />
+          <Icon icon="ph:line-segments-light" className="text-xl" />
 
           <p>Endpoints</p>
         </div>
@@ -328,7 +332,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
             // setSidebar("webber");
           }}
         >
-          <MdGridView />
+          <Icon icon="lets-icons:subttasks-light" className="text-xl" />
 
           <p>Modules</p>
         </div>
@@ -343,7 +347,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
             // setSidebar("webber");
           }}
         >
-          <MdGridView />
+          <Icon icon="lets-icons:code-light" className="text-xl" />
 
           <p>API definition</p>
         </div>
@@ -358,7 +362,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
             // setSidebar("webber");
           }}
         >
-          <MdGridView />
+          <Icon icon="lets-icons:edit-light" className="text-xl" />
 
           <p>Test</p>
         </div>
@@ -373,7 +377,10 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
             // setSidebar("webber");
           }}
         >
-          <MdGridView />
+          <Icon
+            icon="material-symbols-light:deployed-code-outline-sharp"
+            className="text-xl"
+          />
 
           <p>Deploy</p>
         </div>
@@ -389,7 +396,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
             // setSidebar("webber");
           }}
         >
-          <MdGridView />
+          <Icon icon="solar:library-linear" className="text-xl" />
 
           <p>API Manager</p>
         </div>
