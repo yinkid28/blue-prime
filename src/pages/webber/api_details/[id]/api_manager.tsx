@@ -38,8 +38,8 @@ export default function ApiManager() {
       <WebberLayout>
         <Navbar title={`${api?.title}`} />
         <BreadCrumbs
-          breadCrumbItems={breadCrumbs}
-          breadCrumbActiveItem={"API Manager"}
+          // breadCrumbItems={breadCrumbs}
+          breadCrumbActiveItem={`${api?.title}-API Manager`}
         />
         <div className="p-5">
           <div className="hidden md:flex items-center gap-3">

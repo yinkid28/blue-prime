@@ -34,7 +34,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
 
   return (
     <div className="w-full  flex flex-col h-full gap-2">
-      <div className="bg-white rounded p-5 h-fit flex flex-row md:flex-col justify-between md:justify-normal gap-4 ">
+      <div className="bg-white rounded p-5 h-fit flex flex-row items-center md:items-start md:flex-col justify-between md:justify-normal gap-4 ">
         <p className="text-2xl">Logo</p>
         <IoMenu
           size={23}
@@ -51,13 +51,12 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
           >
             <DrawerOverlay />
             <DrawerContent>
-              {/* <DrawerHeader borderBottomWidth="1px"></DrawerHeader> */}
               <DrawerBody className="space-y-4 mt-20 bg-light-grey p-2">
-                <div className="bg-white mt-2 p-4 rounded">
+                <div className="bg-white mt-2 p-4 rounded space-y-2">
                   <div
                     className="flex items-center gap-2 cursor-pointer"
                     onClick={() => {
-                      router.push("/webber/api_details/dashboard");
+                      router.push("/webber/dashboard");
                       setSidebar("webber");
                     }}
                   >
@@ -97,7 +96,10 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                     // I am going to hard code the route to be pushed to for a brief while!
                     onClick={() => {
                       router.push(
-                        "/webber/api_details/TextTranslator/overview"
+                        `/webber/api_details/${toTitleCase(
+                          api.title,
+                          true
+                        )}/overview`
                       );
                       // setSidebar("webber");
                     }}
@@ -114,7 +116,12 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                         : "text-dark-grey"
                     }`}
                     onClick={() => {
-                      // router.push("/webber/api_details/dashboard");
+                      router.push(
+                        `/webber/api_details/${toTitleCase(
+                          api.title,
+                          true
+                        )}/api_information`
+                      );
                       // setSidebar("webber");
                     }}
                   >
@@ -130,7 +137,13 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                         : "text-dark-grey"
                     }`}
                     onClick={() => {
-                      // router.push("/webber/api_details/dashboard");
+                      router.push(
+                        `/webber/api_details/${toTitleCase(
+                          api.title,
+                          true
+                        )}/runtime`
+                      );
+
                       // setSidebar("webber");
                     }}
                   >
@@ -146,7 +159,12 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                         : "text-dark-grey"
                     }`}
                     onClick={() => {
-                      // router.push("/webber/api_details/dashboard");
+                      router.push(
+                        `/webber/api_details/${toTitleCase(
+                          api.title,
+                          true
+                        )}/endpoints`
+                      );
                       // setSidebar("webber");
                     }}
                   >
@@ -162,7 +180,12 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                         : "text-dark-grey"
                     }`}
                     onClick={() => {
-                      // router.push("/webber/api_details/dashboard");
+                      router.push(
+                        `/webber/api_details/${toTitleCase(
+                          api.title,
+                          true
+                        )}/modules`
+                      );
                       // setSidebar("webber");
                     }}
                   >
@@ -178,7 +201,12 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                         : "text-dark-grey"
                     }`}
                     onClick={() => {
-                      // router.push("/webber/api_details/dashboard");
+                      router.push(
+                        `/webber/api_details/${toTitleCase(
+                          api.title,
+                          true
+                        )}/api_definition`
+                      );
                       // setSidebar("webber");
                     }}
                   >
@@ -230,12 +258,15 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                     }`}
                     onClick={() => {
                       router.push(
-                        "/webber/api_details/TextTranslator/api_manager"
+                        `/webber/api_details/${toTitleCase(
+                          api.title,
+                          true
+                        )}/api_manager`
                       );
                       // setSidebar("webber");
                     }}
                   >
-                    <Icon icon="solar:library-linear" />
+                    <Icon icon="solar:library-linear" className="text-sm" />
 
                     <p>API Manager</p>
                   </div>
