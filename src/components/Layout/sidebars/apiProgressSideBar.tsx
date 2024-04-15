@@ -283,7 +283,9 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
           }`}
           // I am going to hard code the route to be pushed to for a brief while!
           onClick={() => {
-            router.push("/webber/api_details/TextTranslator/overview");
+            router.push(
+              `/webber/api_details/${toTitleCase(api.title, true)}/overview`
+            );
             // setSidebar("webber");
           }}
         >
@@ -293,12 +295,21 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
         </div>
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath == `/webber/api_details/${api.title}/overview`
+            router.asPath ==
+            `/webber/api_details/${toTitleCase(
+              api.title,
+              true
+            )}/api_information`
               ? "text-primary"
               : "text-dark-grey"
           }`}
           onClick={() => {
-            // router.push("/webber/api_details/dashboard");
+            router.push(
+              `/webber/api_details/${toTitleCase(
+                api.title,
+                true
+              )}/api_information`
+            );
             // setSidebar("webber");
           }}
         >
@@ -311,12 +322,16 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
         </div>
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath == `/webber/api_details/${api.title}/overview`
+            router.asPath ==
+            `/webber/api_details/${toTitleCase(api.title, true)}/runtime`
               ? "text-primary"
               : "text-dark-grey"
           }`}
           onClick={() => {
-            // router.push("/webber/api_details/dashboard");
+            router.push(
+              `/webber/api_details/${toTitleCase(api.title, true)}/runtime`
+            );
+
             // setSidebar("webber");
           }}
         >
@@ -326,12 +341,15 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
         </div>
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath == `/webber/api_details/${api.title}/overview`
+            router.asPath ==
+            `/webber/api_details/${toTitleCase(api.title, true)}/endpoints`
               ? "text-primary"
               : "text-dark-grey"
           }`}
           onClick={() => {
-            // router.push("/webber/api_details/dashboard");
+            router.push(
+              `/webber/api_details/${toTitleCase(api.title, true)}/endpoints`
+            );
             // setSidebar("webber");
           }}
         >
@@ -341,12 +359,15 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
         </div>
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath == `/webber/api_details/${api.title}/overview`
+            router.asPath ==
+            `/webber/api_details/${toTitleCase(api.title, true)}/modules`
               ? "text-primary"
               : "text-dark-grey"
           }`}
           onClick={() => {
-            // router.push("/webber/api_details/dashboard");
+            router.push(
+              `/webber/api_details/${toTitleCase(api.title, true)}/modules`
+            );
             // setSidebar("webber");
           }}
         >
@@ -356,12 +377,18 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
         </div>
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath == `/webber/api_details/${api.title}/overview`
+            router.asPath ==
+            `/webber/api_details/${toTitleCase(api.title, true)}/api_definition`
               ? "text-primary"
               : "text-dark-grey"
           }`}
           onClick={() => {
-            // router.push("/webber/api_details/dashboard");
+            router.push(
+              `/webber/api_details/${toTitleCase(
+                api.title,
+                true
+              )}/api_definition`
+            );
             // setSidebar("webber");
           }}
         >
@@ -410,7 +437,9 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
               : "text-dark-grey"
           }`}
           onClick={() => {
-            router.push("/webber/api_details/TextTranslator/api_manager");
+            router.push(
+              `/webber/api_details/${toTitleCase(api.title, true)}/api_manager`
+            );
             // setSidebar("webber");
           }}
         >
