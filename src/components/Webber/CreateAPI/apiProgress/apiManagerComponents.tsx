@@ -144,47 +144,49 @@ export function FeedbackManagementView() {
     </div>
   );
 }
-export function OwnershipManagementView() {
-  return (
-    <div className="border rounded-xl p-4">
-      <div className="w-full md:w-[58%] 2xl:w-[50%]">
-        <div className="space-y-4 text-sm leading-normal mb-32">
-          <h3 className="font-semibold text-mid-grey">Transfer Ownership</h3>
-          <p>Transfer ownership of API to a client on Anasee Marketplace.</p>
-          <form action="#" className="space-y-6">
-            <div className="flex items-center border rounded-lg w-full py-2 px-4 gap-1">
-              <Icon
-                icon="lets-icons:search-alt-light"
-                className="text-mid-grey text-2xl"
-              />
-              <input
-                type="search"
-                placeholder="Search Client"
-                className="text-base font-semibold focus:outline-none w-full"
-              />
-            </div>
-            <button className="rounded-lg border border-primary py-2 px-4 text-primary hover:bg-primary hover:text-white duration-300 text-xs font-semibold">
-              Transfer Ownership
-            </button>
-          </form>
-        </div>
 
-        <div className="space-y-4 text-sm leading-normal mb-16">
-          <h3 className="font-semibold text-mid-grey">Delete API</h3>
-          <p>
-            This action will cause this API to be deleted permanently, It will
-            be removed from Anansee’s gateway and your projects data from
-            requests, testing and descriptions will be destroyed. This action is
-            not reversible.
-          </p>
-          <button className="rounded-lg border border-[rgba(255, 154, 158, 0.30)] py-2 px-4 text-error hover:bg-error hover:border-error hover:text-white duration-300 text-xs font-semibold">
-            Delete API
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
+// THIS VIEW HAS BEEN ARCHIVED
+// export function OwnershipManagementView() {
+//   return (
+//     <div className="border rounded-xl p-4">
+//       <div className="w-full md:w-[58%] 2xl:w-[50%]">
+//         <div className="space-y-4 text-sm leading-normal mb-32">
+//           <h3 className="font-semibold text-mid-grey">Transfer Ownership</h3>
+//           <p>Transfer ownership of API to a client on Anasee Marketplace.</p>
+//           <form action="#" className="space-y-6">
+//             <div className="flex items-center border rounded-lg w-full py-2 px-4 gap-1">
+//               <Icon
+//                 icon="lets-icons:search-alt-light"
+//                 className="text-mid-grey text-2xl"
+//               />
+//               <input
+//                 type="search"
+//                 placeholder="Search Client"
+//                 className="text-base font-semibold focus:outline-none w-full"
+//               />
+//             </div>
+//             <button className="rounded-lg border border-primary py-2 px-4 text-primary hover:bg-primary hover:text-white duration-300 text-xs font-semibold">
+//               Transfer Ownership
+//             </button>
+//           </form>
+//         </div>
+
+//         <div className="space-y-4 text-sm leading-normal mb-16">
+//           <h3 className="font-semibold text-mid-grey">Delete API</h3>
+//           <p>
+//             This action will cause this API to be deleted permanently, It will
+//             be removed from Anansee’s gateway and your projects data from
+//             requests, testing and descriptions will be destroyed. This action is
+//             not reversible.
+//           </p>
+//           <button className="rounded-lg border border-[rgba(255, 154, 158, 0.30)] py-2 px-4 text-error hover:bg-error hover:border-error hover:text-white duration-300 text-xs font-semibold">
+//             Delete API
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
 
 /* OVERVIEW VIEW SUB-COMPONENTS */
 export function TopCards({

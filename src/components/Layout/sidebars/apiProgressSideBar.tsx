@@ -154,7 +154,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath ==
-                      `/webber/api_details/${api.title}/overview`
+                      `/webber/api_details/${api.title}/endpoints`
                         ? "text-primary"
                         : "text-dark-grey"
                     }`}
@@ -175,7 +175,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath ==
-                      `/webber/api_details/${api.title}/overview`
+                      `/webber/api_details/${api.title}/modules`
                         ? "text-primary"
                         : "text-dark-grey"
                     }`}
@@ -196,7 +196,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath ==
-                      `/webber/api_details/${api.title}/overview`
+                      `/webber/api_details/${api.title}/api_definition`
                         ? "text-primary"
                         : "text-dark-grey"
                     }`}
@@ -222,7 +222,12 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                         : "text-dark-grey"
                     }`}
                     onClick={() => {
-                      // router.push("/webber/api_details/dashboard");
+                      router.push(
+                        `/webber/api_details/${toTitleCase(
+                          api.title,
+                          true
+                        )}/test`
+                      );
                       // setSidebar("webber");
                     }}
                   >
@@ -233,7 +238,10 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath ==
-                      `/webber/api_details/${api.title}/overview`
+                      `/webber/api_details/${toTitleCase(
+                        api.title,
+                        true
+                      )}/deploy`
                         ? "text-primary"
                         : "text-dark-grey"
                     }`}
@@ -452,7 +460,8 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
         </div>
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath == `/webber/api_details/${api.title}/overview`
+            router.asPath ==
+            `/webber/api_details/${toTitleCase(api.title, true)}/deploy`
               ? "text-primary"
               : "text-dark-grey"
           }`}

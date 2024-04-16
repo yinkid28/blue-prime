@@ -1,9 +1,11 @@
 import Navbar from "@/components/Layout/Nav/navbar";
+import { toTitleCase } from "@/components/utils";
 import { BreadCrumbs } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { CiMenuKebab } from "react-icons/ci";
 
@@ -20,6 +22,7 @@ type TableRowProps = {
 
 export default function Deploy() {
   const { api } = useApi();
+  const router = useRouter();
   const { loading, setLoading } = useOnboarding();
   useEffect(() => {
     setLoading(false);
@@ -64,7 +67,14 @@ export default function Deploy() {
             </table>
           </div>
           <div className="w-full md:w-[25%] flex justify-end mb-3 md:mb-0">
-            <button className="flex gap-2 items-center rounded-lg text-primary h-fit border-2 w-[25%] md:w-[80%] border-light-grey py-2 justify-center">
+            <button
+              className="flex gap-2 items-center rounded-lg text-primary h-fit border-2 w-[25%] md:w-[80%] border-light-grey py-2 justify-center"
+              onClick={() => {
+                router.push(
+                  `/webber/api_details/${toTitleCase(api.title, true)}/publish`
+                );
+              }}
+            >
               <p className="text-sm font-semibold tracking-normal">Deploy</p>
             </button>
           </div>
