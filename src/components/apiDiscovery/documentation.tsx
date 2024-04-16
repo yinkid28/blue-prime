@@ -40,11 +40,7 @@ export default function DocumentationView() {
         <p className="text-sm mb-3 text-primary">{api?.category}</p>
         <p className="text-sm ">README</p>
         <div className="w-full">
-          <SwaggerUI
-            url={
-              "https://raw.githubusercontent.com/quaddss52/portfoliomain/main/public/documents/output-onlineyamltools.txt?token=GHSAT0AAAAAACHJAWWBOO23R3OIDGPKDIZGZQTW2HQ"
-            }
-          />
+          <SwaggerUI url={"https://104.40.209.29/files/output-online.yaml"} />
         </div>
       </div>
       <div className="md:w-[35%] w-full flex justify-end">
