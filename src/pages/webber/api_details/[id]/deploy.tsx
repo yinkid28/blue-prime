@@ -38,7 +38,7 @@ export default function Deploy() {
           // breadCrumbItems={breadCrumbs}
           breadCrumbActiveItem={`${api?.title}-Deploy`}
         />
-        <div className="flex flex-col-reverse md:flex-row md:justify-between p-5 h-[80dvh] md:h-fit -translate-y-80 md:-translate-y-0">
+        <div className="flex flex-col-reverse md:flex-row md:justify-between p-5 h-[80dvh] md:h-fit -translate-y-60 md:-translate-y-0">
           <div className="rounded-lg border overflow-scroll w-full md:w-[75%] gap-2">
             <table className="w-full ">
               <thead className="bg-[#f8f8f8] text-mid-grey rounded-lg">
