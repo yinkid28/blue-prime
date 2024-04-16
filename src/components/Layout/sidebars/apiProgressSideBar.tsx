@@ -33,7 +33,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <div className="w-full  flex flex-col h-full gap-2">
+    <div className="w-full flex flex-col h-full gap-2">
       <div className="bg-white rounded p-5 h-fit flex flex-row items-center md:items-start md:flex-col justify-between md:justify-normal gap-4 ">
         <p className="text-2xl">Logo</p>
         <IoMenu
@@ -82,7 +82,7 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                   </div>
                 </div>
 
-                <div className="bg-white h-[60%] rounded p-5 flex flex-col gap-4">
+                <div className="bg-white h-[72%] rounded p-5 flex flex-col gap-4">
                   <div
                     className={`flex items-center h-fit cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath ==
@@ -238,7 +238,12 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                         : "text-dark-grey"
                     }`}
                     onClick={() => {
-                      // router.push("/webber/api_details/dashboard");
+                      router.push(
+                        `/webber/api_details/${toTitleCase(
+                          api.title,
+                          true
+                        )}/deploy`
+                      );
                       // setSidebar("webber");
                     }}
                   >
@@ -449,7 +454,9 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
               : "text-dark-grey"
           }`}
           onClick={() => {
-            // router.push("/webber/api_details/dashboard");
+            router.push(
+              `/webber/api_details/${toTitleCase(api.title, true)}/deploy`
+            );
             // setSidebar("webber");
           }}
         >
