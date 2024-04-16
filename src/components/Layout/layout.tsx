@@ -8,6 +8,7 @@ import { IMockApi } from "@/models/apidiscovery.model";
 import WebberSidebar from "./sidebars/webberSidebar";
 import ApiProgressSidebar from "./sidebars/apiProgressSideBar";
 import { Spinner } from "@chakra-ui/react";
+import { Loader } from "../utils";
 
 type LayoutProps = {
   children: React.ReactNode | React.ReactNode[];
@@ -18,54 +19,75 @@ export default function ApiLayout({ children }: LayoutProps) {
   switch (sidebar) {
     case "":
       return (
-        <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[20%_1fr]  gap-2 bg-light-grey p-2">
-          <div className="">
-            <MainSidebar />
-          </div>
+        <>
+          {loading ? (
+            <Loader />
+          ) : (
+            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[20%_1fr]  gap-2 bg-light-grey p-2">
+              <div className="">
+                <MainSidebar />
+              </div>
 
-          <div className="bg-white rounded-t overflow-y-scroll">
-            {" "}
-            {loading ? <Spinner /> : children}
-          </div>
-        </div>
+              <div className="bg-white rounded-t overflow-y-scroll">
+                {children}
+              </div>
+            </div>
+          )}
+        </>
       );
     case "api":
       return (
-        <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[25%_1fr]  gap-2 bg-light-grey p-2">
-          <div className="">
-            <ApiProductSidebar api={api as IMockApi} />
-          </div>
+        <>
+          {loading ? (
+            <Loader />
+          ) : (
+            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[25%_1fr]  gap-2 bg-light-grey p-2">
+              <div className="">
+                <ApiProductSidebar api={api as IMockApi} />
+              </div>
 
-          <div className="bg-white rounded-t overflow-y-scroll">
-            {" "}
-            {loading ? <Spinner /> : children}
-          </div>
-        </div>
+              <div className="bg-white rounded-t overflow-y-scroll">
+                {children}
+              </div>
+            </div>
+          )}
+        </>
       );
     case "apiProgress":
       return (
-        <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[20%_1fr]  gap-2 bg-light-grey p-2">
-          <div className="">
-            <ApiProgressSidebar api={api as IMockApi} />
-          </div>
+        <>
+          {loading ? (
+            <Loader />
+          ) : (
+            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[20%_1fr]  gap-2 bg-light-grey p-2">
+              <div className="">
+                <ApiProgressSidebar api={api as IMockApi} />
+              </div>
 
-          <div className="bg-white rounded-t overflow-y-scroll">
-            {loading ? <Spinner /> : children}
-          </div>
-        </div>
+              <div className="bg-white rounded-t overflow-y-scroll">
+                {children}
+              </div>
+            </div>
+          )}
+        </>
       );
     case "webber":
       return (
-        <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[20%_1fr]  gap-2 bg-light-grey p-2">
-          <div className="">
-            <WebberSidebar />
-          </div>
+        <>
+          {loading ? (
+            <Loader />
+          ) : (
+            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[20%_1fr]  gap-2 bg-light-grey p-2">
+              <div className="">
+                <WebberSidebar />
+              </div>
 
-          <div className="bg-white rounded-t overflow-y-scroll">
-            {" "}
-            {loading ? <Spinner /> : children}
-          </div>
-        </div>
+              <div className="bg-white rounded-t overflow-y-scroll">
+                {children}
+              </div>
+            </div>
+          )}
+        </>
       );
 
     default:

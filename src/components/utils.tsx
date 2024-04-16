@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { FaChevronRight } from "react-icons/fa";
 import { MdSearch } from "react-icons/md";
@@ -68,6 +69,14 @@ export function SearchBar() {
     <div className="w-full p-2 flex border-light-grey border-[1px] rounded-lg flex items-center gap-2">
       <MdSearch />
       <input className="border-none outline-none w-full" placeholder="search" />
+    </div>
+  );
+}
+
+export function Loader() {
+  return (
+    <div className="w-full h-screen flex items-center justify-center">
+      <Image src={"/gifs/loader.gif"} alt="loader" width={50} height={50} />
     </div>
   );
 }
