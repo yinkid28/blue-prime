@@ -19,6 +19,7 @@ const config: Config = {
       },
       fontFamily: {
         urban: "Urbanist",
+        manrope: ["Manrope", "sans-serif"],
       },
       colors: {
         "light-grey": "#EAECF0",

@@ -63,7 +63,7 @@ export default function Publish() {
                 router.back();
               }}
             />
-            {/* CONVERT THE FONT USED IN THIS DIV TO MANROPE */}
+            {/* CONVERT THE FONT USED IN THIS DIV TO MANROPE, I TRIED BUT FAILED */}
             <div className="text-sm space-y-3">
               <p className="leading-none text-dark-grey">Step {stage} of 4</p>
               {/* ↑ changes ☑️*/}
