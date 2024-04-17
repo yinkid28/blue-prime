@@ -4,7 +4,7 @@ import { useOnboarding } from "@/context/OnboardingContext";
 import { IMockApi } from "@/models/apidiscovery.model";
 import { Progress } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { Button } from "@/components/utils";
 
 import { useRouter } from "next/router";
@@ -86,7 +86,7 @@ export default function Publish() {
               <div className="flex items-center gap-3 mb-5">
                 <div className="w-6 h-6 rounded bg-mid-grey overflow-hidden">
                   <Image
-                    src={api.img}
+                    src={api?.img as StaticImageData}
                     alt="icon"
                     width={200}
                     height={200}
@@ -94,7 +94,7 @@ export default function Publish() {
                   />
                 </div>
                 <div className="">
-                  <p className="font-semibold text-base">{api.title}</p>
+                  <p className="font-semibold text-base">{api?.title}</p>
                 </div>
               </div>
 

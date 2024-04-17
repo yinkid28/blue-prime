@@ -14,14 +14,13 @@ type User = {
 export default function UserType() {
   const router = useRouter();
   const [selected, setSelected] = useState<User>();
-  const { progress, setProgress, setStage } = useOnboarding();
-  useEffect(() => {
-    console.log(selected);
-  }, [selected]);
+  const { progress, setLoading, loading, setProgress, setStage } =
+    useOnboarding();
   const users = [
     { name: "Organization", id: 1 },
     { name: "Individual", id: 2 },
   ];
+
   return (
     <div className="flex flex-col gap-2">
       {users?.map((user) => (
@@ -60,10 +59,9 @@ export default function UserType() {
               } else {
                 router.push("/onboarding/sign-up-individual");
               }
-              setTimeout(() => {
-                setProgress(25);
-                setStage(1);
-              }, 200);
+              setLoading(true);
+              setProgress(25);
+              setStage(1);
 
               //   router.push("/");
             }}

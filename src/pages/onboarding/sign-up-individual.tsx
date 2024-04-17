@@ -17,8 +17,11 @@ import { useOnboarding } from "@/context/OnboardingContext";
 export default function SignUpOrganization() {
   const router = useRouter();
   const [email, setEmail] = useState<string>("");
-  const { progress, setProgress, setStage } = useOnboarding();
+  const { progress, setProgress, setStage, setLoading } = useOnboarding();
 
+  useEffect(() => {
+    setLoading(false);
+  }, []);
   return (
     <OnboardingLayout title="Finish creating your account" step={1}>
       <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">

@@ -71,7 +71,10 @@ export default function Deploy() {
               className="flex gap-2 items-center rounded-lg text-primary h-fit border-2 w-[25%] md:w-[80%] border-light-grey py-2 justify-center"
               onClick={() => {
                 router.push(
-                  `/webber/api_details/${toTitleCase(api.title, true)}/publish`
+                  `/webber/api_details/${toTitleCase(
+                    api?.title as string,
+                    true
+                  )}/publish`
                 );
               }}
             >

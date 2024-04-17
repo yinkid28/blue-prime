@@ -1,13 +1,15 @@
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { OnboardingInitials } from "@/models/onboarding.model";
+import { ErrorStatusEnum, OnboardingInitials } from "@/models/onboarding.model";
 import constate from "constate";
-import { useEffect, useMemo, useReducer } from "react";
+import { useCallback, useEffect, useMemo, useReducer } from "react";
 
 export const initialState: OnboardingInitials = {
   progress: 0,
   stage: 0,
   sidebar: "",
   loading: true,
+  errorMessage: "",
+  errorStatus: "error",
 };
 
 const reducer = (state: any, action: any) => {
@@ -32,6 +34,12 @@ const reducer = (state: any, action: any) => {
         ...state,
         loading: action.payload,
       };
+    case "SET_ERROR_MESSAGE":
+      return {
+        ...state,
+        errorStatus: action.errorStatus,
+        errorMessage: action.errorMessage,
+      };
   }
 };
 
@@ -41,32 +49,49 @@ const useOnboardingContext = () => {
   useEffect(() => {
     setData(state);
   }, [state, setData]);
-  const { progress, stage, sidebar, loading } = state as OnboardingInitials;
+  const { progress, stage, sidebar, loading, errorMessage, errorStatus } =
+    state as OnboardingInitials;
 
-  const setProgress = (progress: number) => {
+  const setProgress = useCallback((progress: number) => {
     dispatch({
       type: "SET_PROGRESS",
       payload: progress,
     });
-  };
-  const setStage = (stage: number) => {
+  }, []);
+  const setStage = useCallback((stage: number) => {
     dispatch({
       type: "SET_STAGE",
       payload: stage,
     });
-  };
-  const setLoading = (loading: boolean) => {
-    dispatch({
-      type: "SET_LOADING",
-      payload: loading,
-    });
-  };
-  const setSidebar = (sidebar: string) => {
+  }, []);
+  const setLoading = useCallback(
+    (loading: boolean) => {
+      dispatch({
+        type: "SET_LOADING",
+        payload: loading,
+      });
+    },
+
+    []
+  );
+
+  const setSidebar = useCallback((sidebar: string) => {
     dispatch({
       type: "SET_SIDEBAR",
       payload: sidebar,
     });
-  };
+  }, []);
+  const setApiErrorMessage = useCallback(
+    (errorMessage: string | null, errorStatus: ErrorStatusEnum = "error") => {
+      dispatch({
+        type: "SET_ERROR_MESSAGE",
+        errorMessage,
+        errorStatus,
+      });
+    },
+    [dispatch]
+  );
+
   return useMemo(
     () => ({
       progress,
@@ -77,6 +102,9 @@ const useOnboardingContext = () => {
       setStage,
       setSidebar,
       setLoading,
+      errorMessage,
+      errorStatus,
+      setApiErrorMessage,
     }),
     [
       progress,
@@ -87,6 +115,9 @@ const useOnboardingContext = () => {
       setSidebar,
       setLoading,
       loading,
+      errorMessage,
+      errorStatus,
+      setApiErrorMessage,
     ]
   );
 };

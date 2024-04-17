@@ -19,9 +19,12 @@ import ApiCard from "@/components/apiDiscovery/apiCard";
 import { useEffect } from "react";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { Spinner } from "@chakra-ui/react";
+import { RegisterUserDto } from "@/models/onboarding.model";
+import OnboardingServices from "@/services/onboarding_services/onboarding_services";
 
 export default function ApiDiscoveryDashboard() {
-  const { setSidebar, loading, setLoading } = useOnboarding();
+  const { setSidebar, loading, setLoading, setApiErrorMessage } =
+    useOnboarding();
   const rec = [
     {
       img: icon1,
