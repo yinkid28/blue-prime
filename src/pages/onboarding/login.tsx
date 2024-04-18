@@ -120,7 +120,7 @@ export default function Login() {
             <span
               className="text-primary cursor-pointer font-semibold"
               onClick={() => {
-                router.push("/onboarding");
+                router.push("/onboarding/sign-up-organization");
               }}
             >
               Sign Up{" "}

@@ -1,5 +1,9 @@
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { ErrorStatusEnum, OnboardingInitials } from "@/models/onboarding.model";
+import {
+  ErrorStatusEnum,
+  IUser,
+  OnboardingInitials,
+} from "@/models/onboarding.model";
 import constate from "constate";
 import { useCallback, useEffect, useMemo, useReducer } from "react";
 
@@ -10,6 +14,7 @@ export const initialState: OnboardingInitials = {
   loading: true,
   errorMessage: "",
   errorStatus: "error",
+  user: null,
 };
 
 const reducer = (state: any, action: any) => {
@@ -40,6 +45,11 @@ const reducer = (state: any, action: any) => {
         errorStatus: action.errorStatus,
         errorMessage: action.errorMessage,
       };
+    case "SET_USER":
+      return {
+        ...state,
+        user: action.payload,
+      };
   }
 };
 
@@ -49,7 +59,7 @@ const useOnboardingContext = () => {
   useEffect(() => {
     setData(state);
   }, [state, setData]);
-  const { progress, stage, sidebar, loading, errorMessage, errorStatus } =
+  const { progress, stage, sidebar, loading, errorMessage, errorStatus, user } =
     state as OnboardingInitials;
 
   const setProgress = useCallback((progress: number) => {
@@ -81,6 +91,12 @@ const useOnboardingContext = () => {
       payload: sidebar,
     });
   }, []);
+  const setUser = useCallback((user: IUser) => {
+    dispatch({
+      type: "SET_USER",
+      payload: user,
+    });
+  }, []);
   const setApiErrorMessage = useCallback(
     (errorMessage: string | null, errorStatus: ErrorStatusEnum = "error") => {
       dispatch({
@@ -99,14 +115,17 @@ const useOnboardingContext = () => {
       sidebar,
       loading,
       setProgress,
+      user,
       setStage,
       setSidebar,
       setLoading,
       errorMessage,
       errorStatus,
       setApiErrorMessage,
+      setUser,
     }),
     [
+      user,
       progress,
       setProgress,
       stage,
@@ -118,6 +137,7 @@ const useOnboardingContext = () => {
       errorMessage,
       errorStatus,
       setApiErrorMessage,
+      setUser,
     ]
   );
 };
