@@ -7,15 +7,41 @@ import { useApi } from "@/context/ApiDiscoveryContext";
 import { IMockApi } from "@/models/apidiscovery.model";
 import WebberSidebar from "./sidebars/webberSidebar";
 import ApiProgressSidebar from "./sidebars/apiProgressSideBar";
-import { Spinner } from "@chakra-ui/react";
+import { Spinner, UseToastOptions, useToast } from "@chakra-ui/react";
 import { Loader } from "../utils";
+import { useEffect } from "react";
 
 type LayoutProps = {
   children: React.ReactNode | React.ReactNode[];
 };
+const toastProps: UseToastOptions = {
+  description: "",
+  status: "error",
+  duration: 3000,
+  isClosable: true,
+  position: "bottom-right",
+};
 export default function ApiLayout({ children }: LayoutProps) {
-  const { sidebar, loading } = useOnboarding();
+  const toast = useToast();
+  const { sidebar, loading, setApiErrorMessage, errorMessage, errorStatus } =
+    useOnboarding();
   const { api } = useApi();
+  useEffect(() => {
+    if (errorMessage) {
+      const status = errorStatus;
+      toast({ ...toastProps, description: errorMessage, status });
+    }
+    return () => {
+      setApiErrorMessage(null);
+    };
+  }, [errorMessage, errorStatus, setApiErrorMessage, toast]);
+  useEffect(() => {
+    window.addEventListener("offline", (event) => {
+      const status = "warning";
+      const message = "No internet connection";
+      setApiErrorMessage(message, status);
+    });
+  }, [setApiErrorMessage, toast]);
   switch (sidebar) {
     case "":
       return (

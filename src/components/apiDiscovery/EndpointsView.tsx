@@ -25,7 +25,13 @@ export default function EndpointView() {
   // }, []);
   return (
     <div className="">
-      <SwaggerUI url={"https://104.40.209.29:443/files/output-online.yaml"} />
+      {/* <SwaggerUI url={"https://104.40.209.29:443/files/output-online.yaml"} /> */}
+      {/* for testing purpoosees remove after */}
+      <SwaggerUI
+        url={
+          "https://raw.githubusercontent.com/quaddss52/portfoliomain/main/public/documents/output-onlineyamltools.txt?token=GHSAT0AAAAAACHJAWWBQCVY6AQ6DTXR57UCZRA4WNA"
+        }
+      />
     </div>
   );
 }

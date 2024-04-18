@@ -10,43 +10,51 @@ const OnboardingLayout = dynamic(
 import { Button } from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useRouter } from "next/router";
-export default function Recommendations() {
-  const options = [
-    "module_1",
-    "module_2",
-    "module_3",
-    "module_4",
-    "module_5",
-    "module_6",
-    "module_7",
-    "module_8",
-    "module_9",
-    "module_10",
-    "module_11",
-    "module_12",
-    "module_13",
-    "module_14",
-    "module_15",
-    "module_16",
-    "module_17",
-    "module_18",
-    "module_19",
-    "module_20",
-  ];
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import axios from "axios";
+import { IIndustry, IUser, LogIndustryDto } from "@/models/onboarding.model";
+import OnboardingServices from "@/services/onboarding_services/onboarding_services";
+import { useToast } from "@chakra-ui/react";
+import CookieManager from "@/helper_utils/cookie_manager";
+const url = process.env.NEXT_PUBLIC_BASE_URL;
+type PageProps = {
+  industries: IIndustry[];
+  currentUser: IUser;
+};
+export default function Recommendations({
+  industries,
+  currentUser,
+}: PageProps) {
   const fixedLength = 10;
-  const initVals = options.slice(0, fixedLength); // More concise and clear
+  const initVals = industries.slice(0, fixedLength); // More concise and clear
   const router = useRouter();
-  const { progress, setProgress, setStage } = useOnboarding();
+  const { setProgress, setStage, setLoading, setApiErrorMessage, setUser } =
+    useOnboarding();
+  const toast = useToast();
+  const [selected, setSelected] = useState<IIndustry[]>([]);
+  const [renderedOptions, setRenderedOptions] = useState<IIndustry[]>(initVals);
+  const proceed = () => {
+    setProgress(0);
+    setStage(0);
+    setLoading(true);
+  };
+  const reset = () => {
+    setLoading(false);
+    setProgress(100);
+    setStage(4);
+  };
 
-  const [selected, setSelected] = useState<string[]>([]);
-  const [renderedOptions, setRenderedOptions] = useState<string[]>(initVals);
-
+  useEffect(() => {
+    reset();
+    setUser(currentUser);
+  }, []);
   useEffect(() => {
     // This might need adjustment based on deselection handling
     const filteredOptions = renderedOptions.filter(
       (item) => !selected.includes(item)
     );
     setRenderedOptions(filteredOptions);
+    console.log(selected);
   }, [selected]);
 
   useEffect(() => {
@@ -58,16 +66,62 @@ export default function Recommendations() {
     const availableSpace = fixedLength - currentLength;
     if (availableSpace <= 0) return;
 
-    const startIndex = options.findIndex(
+    const startIndex = industries.findIndex(
       (option) =>
         !renderedOptions.includes(option) && !selected.includes(option)
     );
     if (startIndex === -1) return; // All options are either selected or rendered
 
-    const endIndex = Math.min(startIndex + availableSpace, options.length);
-    const newOptions = options.slice(startIndex, endIndex);
+    const endIndex = Math.min(startIndex + availableSpace, industries.length);
+    const newOptions = industries.slice(startIndex, endIndex);
 
     setRenderedOptions([...renderedOptions, ...newOptions]);
+  };
+  const loguserIndustries = async () => {
+    try {
+      const dataArray: LogIndustryDto[] = Array.from(selected, (item) => {
+        return {
+          industryId: item.industryId,
+          userId: 4,
+        };
+      });
+
+      // TO BE REFACTORED WHEN NEW ENDPOINT COMES IN
+      const promises = dataArray.map((data: LogIndustryDto) => {
+        OnboardingServices.logUserIndustries(data).then((res) => {
+          if (res.status === "OK" || res.message === "success") {
+            return res.message;
+          } else {
+            return null; // or handle the error differently
+          }
+        });
+      });
+
+      const moduleResponse = await Promise.all(promises);
+      const filteredResponses = moduleResponse.filter(
+        (response) => response !== null
+      );
+
+      if (filteredResponses.includes(undefined)) {
+        toast({
+          description: "Welcome!!",
+          position: "bottom-right",
+          status: "success",
+        });
+        router.push({
+          pathname: "/onboarding/recommendations",
+        });
+        proceed();
+      } else {
+        reset();
+        setApiErrorMessage("Something went wrong", "error");
+      }
+    } catch (error: any) {
+      reset();
+      console.log(error);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
   };
   return (
     <OnboardingLayout
@@ -81,7 +135,9 @@ export default function Recommendations() {
               className={`w-full hover:shadow-md ease-in-out duration-500 slideInRight cursor-pointer rounded-lg h-fit bg-white border-[1px] relative p-3 flex gap-2`}
               onClick={() => {
                 if (selected.includes(item)) {
-                  setSelected(selected.filter((mod) => mod !== item));
+                  setSelected(
+                    selected.filter((mod) => mod.industryId !== item.industryId)
+                  );
                 } else {
                   const updatedArr = [...selected];
                   updatedArr.push(item);
@@ -90,7 +146,7 @@ export default function Recommendations() {
               }}
               key={index}
             >
-              {item}
+              {item.name}
             </div>
           ))}
         </div>
@@ -100,13 +156,10 @@ export default function Recommendations() {
               text="Confirm"
               type="full"
               onClick={() => {
+                loguserIndustries();
                 router.push({
-                  pathname: "/onboarding/login",
+                  pathname: "/api_discovery",
                 });
-                setTimeout(() => {
-                  setProgress(0);
-                  setStage(0);
-                }, 200);
               }}
             />
           </div>
@@ -115,3 +168,44 @@ export default function Recommendations() {
     </OnboardingLayout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const { query } = context;
+  let industries = null;
+  let id = query.userId;
+  let currentUser = null;
+  let jwt = context.req.cookies.jwt;
+
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET",
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${jwt}`,
+  };
+  try {
+    const { data } = await axios.get(
+      `${url}/onboarding-and-rbac/api/industries`,
+      { headers }
+    );
+    // const res = await axios.get(
+    //   `${url}/onboarding-and-rbac/api/get_user_by_id/${id}`,
+    //   { headers }
+    // );
+
+    industries = data;
+    // currentUser = res.data;
+    console.log(currentUser);
+    // console.log(currentUser);
+  } catch (err) {
+    console.log(err);
+  }
+
+  return {
+    props: {
+      industries,
+      // currentUser,
+    },
+  };
+};

@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
+import { HiEye, HiEyeOff } from "react-icons/hi";
 import { MdSearch } from "react-icons/md";
 
 type ButtonProps = {
@@ -8,17 +10,60 @@ type ButtonProps = {
   text: string;
   onClick: () => void;
   className?: string;
+  Type?: "button" | "reset" | "submit";
 };
-export function Button({ type, text, onClick, className }: ButtonProps) {
+export function Button({ type, text, onClick, className, Type }: ButtonProps) {
   return (
     <button
       className={`${
         type === "fit" ? "w-fit" : "w-full"
       } px-4 py-2 text-center bg-primaryGradient hover:bg-secondaryGradient text-white rounded-lg ${className}`}
       onClick={onClick}
+      type={Type}
     >
       {text}
     </button>
+  );
+}
+type InputProps = {
+  type?: string;
+  placeholder: string;
+  secondaryElement?: boolean;
+  field: any;
+};
+export function Input({
+  type,
+  placeholder,
+  secondaryElement,
+  field,
+}: InputProps) {
+  const [show, setShow] = useState<boolean>(false);
+  const handleClick = () => setShow(!show);
+
+  return (
+    <div className="w-full border border-light-grey rounded flex justify-between p-2">
+      <input
+        type={
+          secondaryElement && show
+            ? "text"
+            : secondaryElement && !show
+            ? "password"
+            : type
+        }
+        {...field}
+        placeholder={placeholder}
+        className="bg-transparent w-[90%] outline-none border-none"
+      />
+      {secondaryElement && (
+        <>
+          {show ? (
+            <HiEyeOff onClick={handleClick} cursor="pointer" />
+          ) : (
+            <HiEye onClick={handleClick} cursor="pointer" />
+          )}
+        </>
+      )}
+    </div>
   );
 }
 export type BreadCrumbItems = {

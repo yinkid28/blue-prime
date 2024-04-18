@@ -9,7 +9,6 @@ import {
   OverviewView,
   SubHistoryView,
   FeedbackManagementView,
-  OwnershipManagementView,
 } from "@/components/Webber/CreateAPI/apiProgress/apiManagerComponents";
 
 // remember to use static generation here but for now we will use context to get current api
@@ -79,24 +78,11 @@ export default function ApiManager() {
             >
               <p>Manage feedbacks</p>
             </div>
-            <div
-              className={`w-fit h-fit cursor-pointer px-5 py-2 ease-in-out duration-700 hover:border-primary rounded-xl hover:text-primary ${
-                view === "Manage-ownership"
-                  ? "text-primary border-primary"
-                  : "text-mid-grey border-mid-grey"
-              }  bg-transparent border-[1px]`}
-              onClick={() => {
-                setView("Manage-ownership");
-              }}
-            >
-              <p>Manage Ownership</p>
-            </div>
           </div>
           <div className="my-5">
             {view === "Overview" && <OverviewView />}
             {view === "Subscription" && <SubHistoryView />}
             {view === "Manage-feedbacks" && <FeedbackManagementView />}
-            {view === "Manage-ownership" && <OwnershipManagementView />}
           </div>
         </div>
       </WebberLayout>
