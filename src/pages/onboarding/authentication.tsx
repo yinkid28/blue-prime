@@ -36,12 +36,13 @@ export default function Authentication() {
   });
 
   const router = useRouter();
+  const { userId } = router.query;
   const email = router.query.email as string;
   useEffect(() => {
     setLoading(false);
     setProgress(50);
     setStage(2);
-    startCountdown(20);
+    startCountdown(300);
   }, []);
   function startCountdown(duration: number) {
     let timer = duration,
@@ -83,12 +84,13 @@ export default function Authentication() {
       toast({
         status: "success",
         description: "Token successfully Verified",
-        position: "bottom-left",
+        position: "bottom-right",
       });
       router.push({
         pathname: "/onboarding/intentions",
         query: {
           email,
+          userId,
         },
       });
       setLoading(true);

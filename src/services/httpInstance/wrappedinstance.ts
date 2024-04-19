@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useOnboarding } from "@/context/OnboardingContext";
 // ErrorHandling.ts
 import { AxiosResponse, AxiosError } from "axios";
-const baseURL = "http://40.118.91.177:8060";
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 const instance = axios.create({
   baseURL,
 });

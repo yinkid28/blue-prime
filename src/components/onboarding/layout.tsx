@@ -91,7 +91,7 @@ export default function OnboardingLayout({
                   className="flex my-2 items-center cursor-pointer flex-row gap-3"
                   onClick={() => {
                     setLoading(true);
-                    if (progress !== 0) {
+                    if (progress > 25) {
                       router.back();
                       const newProgress = (progress as number) - 25;
                       const newStage = (stage as number) - 1;

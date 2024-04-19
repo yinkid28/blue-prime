@@ -12,16 +12,22 @@ import { useEffect, useState } from "react";
 import google from "../../../public/icons/googleIcon.svg";
 import github from "../../../public/icons/githubIcon.svg";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { RegisterUserDto } from "@/models/onboarding.model";
+import { RegisterUserDto, SignInDto } from "@/models/onboarding.model";
 import OnboardingServices from "@/services/onboarding_services/onboarding_services";
 import { Formik, Field, Form } from "formik";
-import { FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  useToast,
+} from "@chakra-ui/react";
+import CookieManager from "@/helper_utils/cookie_manager";
 
 export default function SignUpOrganization() {
   const router = useRouter();
   const { progress, setProgress, setStage, setLoading, setApiErrorMessage } =
     useOnboarding();
-
+  const toast = useToast();
   const [email, setEmail] = useState<string>("");
   const initialValues = {
     name: "",
@@ -73,11 +79,25 @@ export default function SignUpOrganization() {
     };
     try {
       const res = await OnboardingServices.RegisterUser(data);
+
+      const loginData: SignInDto = {
+        email: res.data.officeEmail,
+        password: values.password,
+      };
+
+      const loginres = await OnboardingServices.signInUser(loginData);
       actions.setSubmitting(false);
+      CookieManager.setCookie("jwt", loginres.data.jwt, 2);
+      toast({
+        status: "success",
+        description: "User successfully created",
+        position: "bottom-right",
+      });
       router.push({
         pathname: "/onboarding/authentication",
         query: {
           email: values.email,
+          userId: loginres.data.id,
         },
       });
     } catch (error: any) {
