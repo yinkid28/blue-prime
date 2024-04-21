@@ -56,7 +56,7 @@ export default function ApiProductSidebar({ api }: sideBarProps) {
         <IoBookmarkOutline className="hover:text-primary cursor-pointer" />
       </div>
       <div className="flex items-center justify-between w-full">
-        <p className="text-mid-grey font-thin text-sm">Created 12th Dec 2024</p>
+        <p className="text-mid-grey font-thin text-xs">Created 12th Dec 2024</p>
 
         <div className="bg-light-grey w-fit h-fit px-3 py-1 rounded-full text-sm text-primary">
           {" "}
