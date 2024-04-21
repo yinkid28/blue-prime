@@ -82,7 +82,7 @@ export function BreadCrumbs({
 }: BreadProps) {
   const router = useRouter();
   return (
-    <div className="flex mb-3 border-b-[1px] border-light-grey px-5 gap-2 items-center">
+    <div className="flex mb-3 px-5 gap-2 items-center">
       <p
         className="text-mid-grey font-semibold"
         onClick={() => {
