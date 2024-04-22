@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { BsFilePlay, BsSearch } from "react-icons/bs";
-import { MdHomeFilled } from "react-icons/md";
+import { MdFolder, MdHomeFilled } from "react-icons/md";
 import { FiFolder } from "react-icons/fi";
 import { IoMenu } from "react-icons/io5";
 import {
@@ -12,6 +12,7 @@ import {
   useDisclosure,
   Show,
 } from "@chakra-ui/react";
+import { FaFolder } from "react-icons/fa";
 
 export default function MainSidebar() {
   const router = useRouter();
@@ -27,7 +28,8 @@ export default function MainSidebar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <div className="w-full  flex flex-col h-full">
+      {/* <div className="w-full  flex flex-col h-full> - This was how I met it*/}
+      <div className="w-full  flex flex-col h-full gap-2">
         <div className="bg-white rounded p-5 h-fit flex flex-col gap-4 ">
           <div className="flex justify-between">
             <p className="text-2xl">Logo</p>
@@ -99,6 +101,7 @@ export default function MainSidebar() {
                 ? "text-primary"
                 : "text-dark-grey"
             }`}
+            onClick={() => router.push("/api_discovery")}
           >
             <MdHomeFilled />
             <p className="font-semibold">Home</p>
@@ -113,10 +116,17 @@ export default function MainSidebar() {
           </div>
           <div
             className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-              router.asPath == "" ? "text-primary" : "text-dark-grey"
+              router.asPath == "/api_discovery/library"
+                ? "text-primary"
+                : "text-dark-grey"
             }`}
+            onClick={() => router.push("/api_discovery/library")}
           >
-            <FiFolder />
+            {router.asPath == "/api_discovery/library" ? (
+              <MdFolder size={18} />
+            ) : (
+              <FiFolder />
+            )}
             <p className="font-semibold">Library</p>
           </div>
           <div
@@ -128,14 +138,27 @@ export default function MainSidebar() {
             <p className="font-semibold">How to Use</p>
           </div>
         </div>
-        <div className="bg-white h-full rounded p-5 md:flex hidden flex-col gap-4">
-          <p className="text-2xl text-mid-grey font-bold">Categories</p>
-          {cats?.map((cat, index) => (
-            <p className="text-dark-grey cursor-pointer" key={index}>
-              {cat.name}
-            </p>
-          ))}
-        </div>
+
+        {router.asPath == "/api_discovery/library" ? (
+          <div className="bg-white h-full rounded p-5 md:flex hidden flex-col gap-4">
+            <p className="text-base text-mid-grey font-bold">Library</p>
+            {/* Since it is not much, may not abstract it into an array */}
+            <ul className="space-y-3 text-dark-grey">
+              <li>API Product</li>
+              <li>Saved </li>
+              <li>Subscribed</li>
+            </ul>
+          </div>
+        ) : (
+          <div className="bg-white h-full rounded p-5 md:flex hidden flex-col gap-4">
+            <p className="text-2xl text-mid-grey font-bold">Categories</p>
+            {cats?.map((cat, index) => (
+              <p className="text-dark-grey cursor-pointer" key={index}>
+                {cat.name}
+              </p>
+            ))}
+          </div>
+        )}
       </div>
     </>
   );

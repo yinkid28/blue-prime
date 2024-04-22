@@ -24,6 +24,7 @@ type PageProps = {
 };
 export default function Intensions({ intentions, currentUser }: PageProps) {
   const router = useRouter();
+  const { userId } = router.query;
   const [selected, setSelected] = useState<IActivity[]>([]);
   const { setProgress, setStage, setLoading, setApiErrorMessage, setUser } =
     useOnboarding();
@@ -58,7 +59,7 @@ export default function Intensions({ intentions, currentUser }: PageProps) {
       const dataArray: LogActivityDto[] = Array.from(selected, (item) => {
         return {
           activityId: item.id,
-          userId: 4,
+          userId: parseInt(userId as string),
         };
       });
 
@@ -183,7 +184,8 @@ export const getServerSideProps: GetServerSideProps = async (
   let id = query.userId;
   let currentUser = null;
   let jwt = context.req.cookies.jwt;
-  console.log(id);
+  // console.log(id);
+  console.log(context);
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET",
