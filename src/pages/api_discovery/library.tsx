@@ -13,15 +13,12 @@ import icon7 from "../../../public/images/api_icons/icon7.png";
 import icon8 from "../../../public/images/api_icons/icon8.png";
 import ApiCard from "@/components/apiDiscovery/apiLibraryCard";
 import { Icon } from "@iconify/react";
-import { useApi } from "@/context/ApiDiscoveryContext";
-import { IMockApi } from "@/models/apidiscovery.model";
 const DiscoveryLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
 
 export default function LibraryDashboard() {
   const { setSidebar, setLoading } = useOnboarding();
-  const { libraryAPIs, setLibraryAPIs } = useApi();
   //   const { libraryCardsData, setLibraryCardsData } = useApiDiscoveryContext();
   //   const [bookmarked, setBookmarked] = useState(false);
 
@@ -106,14 +103,14 @@ export default function LibraryDashboard() {
   ];
 
   // Make it type safe after it works
-  setLibraryAPIs(apiCardData);
+  const [inData, setInData] = useState(apiCardData);
 
-  function toggleBookmarked(apiId: number | undefined) {
-    const itemsWithBookMarks = libraryAPIs.map((data) =>
+  function toggleBookmarked(apiId: number) {
+    const itemsWithBookMarks = inData.map((data) =>
       data.id === apiId ? { ...data, bookmarked: !data.bookmarked } : data
     );
 
-    setLibraryAPIs(itemsWithBookMarks);
+    setInData(itemsWithBookMarks);
   }
 
   return (
@@ -160,7 +157,7 @@ export default function LibraryDashboard() {
         {/* THIRD SECTION - SECTION CONTAINING THE API CARDS */}
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           {/* bit of prop drilling in here */}
-          {libraryAPIs.map((item, index) => (
+          {inData.map((item, index) => (
             <ApiCard
               key={index}
               img={item.img}

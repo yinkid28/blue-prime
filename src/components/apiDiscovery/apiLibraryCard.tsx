@@ -9,13 +9,22 @@ import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
 
 // THE ONLY THING DIFFERENT HERE IS STYLING AND THE PROPS PASSED.
 
+type dataToBeUsed = {
+  id: number;
+  img: any;
+  title: string;
+  description: string;
+  category: string;
+  bookmarked: boolean;
+};
+
 type ApiCardProps = {
   img: StaticImageData;
   title: string;
   description: string;
   category: string;
   bookmarked: boolean | undefined;
-  item: IMockApi;
+  item: dataToBeUsed;
   onToggleBookmarked: (apiId: number) => void;
 };
 
@@ -61,9 +70,7 @@ export default function ApiCard({
           className="hover:text-primary cursor-pointer"
           onClick={(e) => {
             e.stopPropagation();
-            if (item?.id !== undefined) {
-              onToggleBookmarked(item.id);
-            }
+            onToggleBookmarked(item.id);
           }}
         >
           {bookmarked ? <IoBookmark /> : <IoBookmarkOutline />}

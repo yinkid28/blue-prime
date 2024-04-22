@@ -9,7 +9,7 @@ export type IMockApi = {
 };
 export type ApiDiscoveryInititals = {
   api: IMockApi | null;
-  libraryAPIs: IMockApi[];
+  bookmarkedAPIs: IMockApi[];
 };
 export type FileType = {
   name: string;
