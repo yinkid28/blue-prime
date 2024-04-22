@@ -23,7 +23,7 @@ export default function LibraryDashboard() {
   const { setSidebar, setLoading } = useOnboarding();
   //   const { libraryCardsData, setLibraryCardsData } = useApiDiscoveryContext();
   //   const [bookmarked, setBookmarked] = useState(false);
-  const { setBookMarked, bookmarkedAPIs } = useApi();
+  const { setBookMarked, bookmarkedAPIs, libraryView } = useApi();
 
   useEffect(() => {
     setSidebar("");
@@ -108,13 +108,6 @@ export default function LibraryDashboard() {
   // Make it type safe after it works
   const [inData, setInData] = useState(apiCardData);
 
-  // function toggleBookmarked(apiId: number) {
-  //   const itemsWithBookMarks = inData.map((data) =>
-  //     data.id === apiId ? { ...data, bookmarked: !data.bookmarked } : data
-  //   );
-
-  //   setInData(itemsWithBookMarks);
-  // }
   function toggleBookmarked(apiId: number, item: IMockApi) {
     const itemsWithBookMarks = inData.map((data) => {
       if (data.id === apiId) {
@@ -137,6 +130,10 @@ export default function LibraryDashboard() {
     }
     setInData(itemsWithBookMarks);
   }
+
+  useEffect(() => {
+    console.log(bookmarkedAPIs);
+  }, [bookmarkedAPIs]);
 
   return (
     <DiscoveryLayout>
@@ -181,19 +178,31 @@ export default function LibraryDashboard() {
 
         {/* THIRD SECTION - SECTION CONTAINING THE API CARDS */}
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {/* bit of prop drilling in here */}
-          {inData.map((item, index) => (
-            <ApiCard
-              key={index}
-              img={item.img}
-              title={item.title}
-              category={item.category}
-              description={item.description}
-              bookmarked={item.bookmarked}
-              item={item}
-              onToggleBookmarked={toggleBookmarked}
-            />
-          ))}
+          {libraryView == "saved"
+            ? bookmarkedAPIs!.map((item, index) => (
+                <ApiCard
+                  key={index}
+                  img={item.img}
+                  title={item.title}
+                  category={item.category}
+                  description={item.description}
+                  bookmarked={item.bookmarked as boolean}
+                  item={item}
+                  onToggleBookmarked={toggleBookmarked}
+                />
+              ))
+            : inData.map((item, index) => (
+                <ApiCard
+                  key={index}
+                  img={item.img}
+                  title={item.title}
+                  category={item.category}
+                  description={item.description}
+                  bookmarked={item.bookmarked as boolean}
+                  item={item}
+                  onToggleBookmarked={toggleBookmarked}
+                />
+              ))}
         </div>
       </div>
     </DiscoveryLayout>

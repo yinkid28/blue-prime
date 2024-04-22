@@ -3,9 +3,14 @@ import { ApiDiscoveryInititals, IMockApi } from "@/models/apidiscovery.model";
 import constate from "constate";
 import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 
+/* THINKING AND IDEATION 💡🎯
+  
+*/
+
 export const initialState: ApiDiscoveryInititals = {
   api: null,
   bookmarkedAPIs: [],
+  libraryView: "api-product",
 };
 
 const reducer = (state: any, action: any) => {
@@ -32,6 +37,12 @@ const reducer = (state: any, action: any) => {
         ...state,
         bookmarkedAPIs: payload,
       };
+
+    case "SET_LIBRARYVIEW":
+      return {
+        ...state,
+        libraryView: action.payload,
+      };
   }
 };
 
@@ -42,7 +53,7 @@ const useApiContext = () => {
     setData(state);
   }, [state, setData]);
 
-  const { api, bookmarkedAPIs } = state as ApiDiscoveryInititals;
+  const { api, bookmarkedAPIs, libraryView } = state as ApiDiscoveryInititals;
 
   const setApi = useCallback((api: IMockApi) => {
     dispatch({
@@ -58,14 +69,23 @@ const useApiContext = () => {
     });
   }, []);
 
+  const setLibraryView = useCallback((libraryView: string) => {
+    dispatch({
+      type: "SET_LIBRARYVIEW",
+      payload: libraryView,
+    });
+  }, []);
+
   return useMemo(
     () => ({
       api,
       setApi,
       bookmarkedAPIs,
       setBookMarked,
+      libraryView,
+      setLibraryView,
     }),
-    [api, setApi, setBookMarked, bookmarkedAPIs]
+    [api, setApi, setBookMarked, bookmarkedAPIs, libraryView, setLibraryView]
   );
 };
 

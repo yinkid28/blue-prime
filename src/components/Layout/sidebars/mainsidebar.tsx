@@ -13,6 +13,7 @@ import {
   Show,
 } from "@chakra-ui/react";
 import { FaFolder } from "react-icons/fa";
+import { useApi } from "@/context/ApiDiscoveryContext";
 
 export default function MainSidebar() {
   const router = useRouter();
@@ -25,6 +26,7 @@ export default function MainSidebar() {
   ];
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { bookmarkedAPIs, libraryView, setLibraryView } = useApi();
   return (
     <>
       {/* <div className="w-full  flex flex-col h-full> - This was how I met it*/}
@@ -139,8 +141,29 @@ export default function MainSidebar() {
             <p className="text-base text-mid-grey font-bold">Library</p>
             {/* Since it is not much, may not abstract it into an array */}
             <ul className="space-y-3 text-dark-grey">
-              <li>API Product</li>
-              <li>Saved </li>
+              <li
+                onClick={() => setLibraryView("api-product")}
+                className={`cursor-pointer
+                  ${
+                    libraryView == "api-product"
+                      ? "text-primary"
+                      : "text-dark-grey"
+                  }`}
+              >
+                API Product
+              </li>
+              <li
+                onClick={() =>
+                  bookmarkedAPIs.length === 0 ? null : setLibraryView("saved")
+                }
+                className={`${
+                  !(bookmarkedAPIs.length === 0) && "cursor-pointer"
+                }
+                ${libraryView == "saved" ? "text-primary" : "text-dark-grey"}`}
+              >
+                Saved
+              </li>
+              {/* ↓ Would tackle this when I understand what Subscribed means */}
               <li>Subscribed</li>
             </ul>
           </div>
