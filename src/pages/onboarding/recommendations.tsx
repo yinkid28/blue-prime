@@ -28,7 +28,7 @@ export default function Recommendations({
   const fixedLength = 10;
   const initVals = industries.slice(0, fixedLength); // More concise and clear
   const router = useRouter();
-  const { setProgress, setStage, setLoading, setApiErrorMessage, setUser } =
+  const { setProgress, setStage, setLoading, setApiErrorMessage, user } =
     useOnboarding();
   const toast = useToast();
   const [selected, setSelected] = useState<IIndustry[]>([]);
@@ -46,7 +46,6 @@ export default function Recommendations({
 
   useEffect(() => {
     reset();
-    setUser(currentUser);
   }, []);
   useEffect(() => {
     // This might need adjustment based on deselection handling
@@ -82,7 +81,7 @@ export default function Recommendations({
       const dataArray: LogIndustryDto[] = Array.from(selected, (item) => {
         return {
           industryId: item.industryId,
-          userId: 4,
+          userId: user!.id,
         };
       });
 
