@@ -122,7 +122,6 @@ export default function ApiDiscoveryDashboard() {
 
   return (
     <DiscoveryLayout>
-      <></>
       <Navbar title="Dashboard" />
       <BreadCrumbs breadCrumbActiveItem="Dashboard" />
       <ApiHero />

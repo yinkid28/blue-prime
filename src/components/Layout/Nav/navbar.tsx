@@ -29,7 +29,7 @@ export default function Navbar({ title }: NavbarProps) {
       <div>
         <p className="md:text-xl font-semibold">{title}</p>
       </div>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center md:gap-3 lg:gap-8">
         <Button
           type="fit"
           className="sm:flex hidden"
