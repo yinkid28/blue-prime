@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 
 export const initialState: ApiDiscoveryInititals = {
   api: null,
-  bookmarkedAPIs: [],
+  libraryAPIs: [],
 };
 
 const reducer = (state: any, action: any) => {
@@ -16,10 +16,10 @@ const reducer = (state: any, action: any) => {
         api: action.payload,
       };
 
-    case "SET_BOOKMARKED":
+    case "SET_LIBRARY":
       return {
         ...state,
-        bookmarkedAPIs: action.payload,
+        libraryAPIs: action.payload,
       };
   }
 };
@@ -31,7 +31,7 @@ const useApiContext = () => {
     setData(state);
   }, [state, setData]);
 
-  const { api, bookmarkedAPIs } = state as ApiDiscoveryInititals;
+  const { api, libraryAPIs } = state as ApiDiscoveryInititals;
 
   const setApi = useCallback((api: IMockApi) => {
     dispatch({
@@ -40,9 +40,9 @@ const useApiContext = () => {
     });
   }, []);
 
-  const setBookMarked = useCallback((api: IMockApi[]) => {
+  const setLibraryAPIs = useCallback((api: IMockApi[]) => {
     dispatch({
-      type: "SET_BOOKMARKED",
+      type: "SET_LIBRARY",
       payload: api,
     });
   }, []);
@@ -51,10 +51,10 @@ const useApiContext = () => {
     () => ({
       api,
       setApi,
-      bookmarkedAPIs,
-      setBookMarked,
+      libraryAPIs,
+      setLibraryAPIs,
     }),
-    [api, setApi, setBookMarked, bookmarkedAPIs]
+    [api, setApi, libraryAPIs, setLibraryAPIs]
   );
 };
 
