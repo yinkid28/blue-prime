@@ -20,7 +20,7 @@ export default function MainSidebar() {
     { name: "Entertainment" },
     { name: "Gaming" },
     { name: "Banking and Finance" },
-    { name: "Agriculture" },
+    { name: " e" },
     { name: "E-Commerce" },
     { name: "Sports" },
   ];
