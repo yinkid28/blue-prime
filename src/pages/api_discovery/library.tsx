@@ -19,6 +19,7 @@ const DiscoveryLayout = dynamic(() => import("@/components/Layout/layout"), {
 
 export default function LibraryDashboard() {
   const { setSidebar, setLoading } = useOnboarding();
+  //   const { libraryCardsData, setLibraryCardsData } = useApiDiscoveryContext();
   //   const [bookmarked, setBookmarked] = useState(false);
 
   useEffect(() => {

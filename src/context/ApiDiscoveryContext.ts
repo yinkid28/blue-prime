@@ -1,10 +1,11 @@
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { ApiDiscoveryInititals, IMockApi } from "@/models/apidiscovery.model";
 import constate from "constate";
-import { useEffect, useMemo, useReducer } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 
 export const initialState: ApiDiscoveryInititals = {
   api: null,
+  bookmarkedAPIs: [],
 };
 
 const reducer = (state: any, action: any) => {
@@ -14,11 +15,12 @@ const reducer = (state: any, action: any) => {
         ...state,
         api: action.payload,
       };
-    // case "SET_STAGE":
-    //   return {
-    //     ...state,
-    //     stage: action.payload,
-    //   };
+
+    case "SET_BOOKMARKED":
+      return {
+        ...state,
+        bookmarkedAPIs: action.payload,
+      };
   }
 };
 
@@ -29,26 +31,30 @@ const useApiContext = () => {
     setData(state);
   }, [state, setData]);
 
-  const { api } = state as ApiDiscoveryInititals;
+  const { api, bookmarkedAPIs } = state as ApiDiscoveryInititals;
 
-  const setApi = (api: IMockApi) => {
+  const setApi = useCallback((api: IMockApi) => {
     dispatch({
       type: "SET_API",
       payload: api,
     });
-  };
-  const setStage = (stage: number) => {
+  }, []);
+
+  const setBookMarked = useCallback((api: IMockApi[]) => {
     dispatch({
-      type: "SET_STAGE",
-      payload: stage,
+      type: "SET_BOOKMARKED",
+      payload: api,
     });
-  };
+  }, []);
+
   return useMemo(
     () => ({
       api,
       setApi,
+      bookmarkedAPIs,
+      setBookMarked,
     }),
-    [api, setApi]
+    [api, setApi, setBookMarked, bookmarkedAPIs]
   );
 };
 
