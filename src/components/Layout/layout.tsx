@@ -49,7 +49,7 @@ export default function ApiLayout({ children }: LayoutProps) {
           {loading ? (
             <Loader />
           ) : (
-            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[17%_1fr]  gap-2 bg-light-grey p-2">
+            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[20%_1fr]  gap-2 bg-light-grey p-2">
               <div className="">
                 <MainSidebar />
               </div>
@@ -67,7 +67,7 @@ export default function ApiLayout({ children }: LayoutProps) {
           {loading ? (
             <Loader />
           ) : (
-            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[20%_1fr]  gap-2 bg-light-grey p-2">
+            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[25%_1fr]  gap-2 bg-light-grey p-2">
               <div className="">
                 <ApiProductSidebar api={api as IMockApi} />
               </div>
@@ -85,7 +85,7 @@ export default function ApiLayout({ children }: LayoutProps) {
           {loading ? (
             <Loader />
           ) : (
-            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[17%_1fr]  gap-2 bg-light-grey p-2">
+            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[20%_1fr]  gap-2 bg-light-grey p-2">
               <div className="">
                 <ApiProgressSidebar api={api as IMockApi} />
               </div>
@@ -103,7 +103,7 @@ export default function ApiLayout({ children }: LayoutProps) {
           {loading ? (
             <Loader />
           ) : (
-            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[17%_1fr]  gap-2 bg-light-grey p-2">
+            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[20%_1fr]  gap-2 bg-light-grey p-2">
               <div className="">
                 <WebberSidebar />
               </div>
