@@ -24,8 +24,8 @@ type ApiCardProps = {
   description: string;
   category: string;
   bookmarked: boolean;
-  item: dataToBeUsed;
-  onToggleBookmarked: (apiId: number) => void;
+  item: IMockApi;
+  onToggleBookmarked: (apiId: number, item: IMockApi) => void;
 };
 
 export default function ApiCard({
@@ -70,7 +70,7 @@ export default function ApiCard({
           className="hover:text-primary cursor-pointer"
           onClick={(e) => {
             e.stopPropagation();
-            onToggleBookmarked(item.id);
+            onToggleBookmarked(item.id as number, item);
           }}
         >
           {bookmarked ? <IoBookmark /> : <IoBookmarkOutline />}

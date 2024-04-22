@@ -17,9 +17,20 @@ const reducer = (state: any, action: any) => {
       };
 
     case "SET_BOOKMARKED":
+      const exist = state.bookmarkedAPIs.find(
+        (item: IMockApi) => item.id === action.payload.id
+      );
+      let payload;
+      if (exist) {
+        payload = state.bookmarkedAPIs.filter(
+          (item: IMockApi) => item.id !== action.payload.id
+        );
+      } else {
+        payload = [...state.bookmarkedAPIs, action.payload];
+      }
       return {
         ...state,
-        bookmarkedAPIs: action.payload,
+        bookmarkedAPIs: payload,
       };
   }
 };
@@ -40,7 +51,7 @@ const useApiContext = () => {
     });
   }, []);
 
-  const setBookMarked = useCallback((api: IMockApi[]) => {
+  const setBookMarked = useCallback((api: IMockApi) => {
     dispatch({
       type: "SET_BOOKMARKED",
       payload: api,

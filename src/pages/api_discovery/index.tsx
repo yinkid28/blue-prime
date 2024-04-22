@@ -16,105 +16,140 @@ import icon7 from "../../../public/images/api_icons/icon7.png";
 import icon8 from "../../../public/images/api_icons/icon8.png";
 import icon9 from "../../../public/images/api_icons/icon9.jpg";
 import ApiCard from "@/components/apiDiscovery/apiCard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { Spinner } from "@chakra-ui/react";
 import { RegisterUserDto } from "@/models/onboarding.model";
 import OnboardingServices from "@/services/onboarding_services/onboarding_services";
+import { IMockApi } from "@/models/apidiscovery.model";
+import { useApi } from "@/context/ApiDiscoveryContext";
 
 export default function ApiDiscoveryDashboard() {
   const { setSidebar, loading, setLoading, setApiErrorMessage } =
     useOnboarding();
-  const rec = [
+  const { setBookMarked, bookmarkedAPIs } = useApi();
+  const rec: IMockApi[] = [
     {
+      id: 1,
       img: icon1,
       title: "Text Translator",
       description:
         "Translate text to 100+ languages. Fast processing, cost-saving. Free up to 100,000 characters  per month",
       category: "Banking and finance",
+      bookmarked: false,
     },
     {
+      id: 2,
       img: icon2,
       title: "Text Translator",
       description:
         "Translate text to 100+ languages. Fast processing, cost-saving. Free up to 100,000 characters  per month",
       category: "Banking and finance",
+      bookmarked: false,
     },
     {
+      id: 3,
       img: icon3,
       title: "Text Translator",
       description:
         "Translate text to 100+ languages. Fast processing, cost-saving. Free up to 100,000 characters  per month",
       category: "Banking and finance",
+      bookmarked: false,
     },
     {
+      id: 4,
       img: icon4,
       title: "Text Translator",
       description:
         "Translate text to 100+ languages. Fast processing, cost-saving. Free up to 100,000 characters  per month",
       category: "Banking and finance",
+      bookmarked: false,
     },
-  ];
-  const tfa = [
     {
+      id: 5,
       img: icon5,
       title: "Text Translator",
       description:
         "Translate text to 100+ languages. Fast processing, cost-saving. Free up to 100,000 characters  per month",
       category: "Banking and finance",
+      bookmarked: false,
     },
     {
+      id: 6,
       img: icon6,
       title: "Text Translator",
       description:
         "Translate text to 100+ languages. Fast processing, cost-saving. Free up to 100,000 characters  per month",
       category: "Banking and finance",
+      bookmarked: false,
     },
     {
+      id: 7,
       img: icon7,
       title: "Text Translator",
       description:
         "Translate text to 100+ languages. Fast processing, cost-saving. Free up to 100,000 characters  per month",
       category: "Banking and finance",
+      bookmarked: false,
     },
     {
+      id: 8,
       img: icon8,
       title: "Text Translator",
       description:
         "Translate text to 100+ languages. Fast processing, cost-saving. Free up to 100,000 characters  per month",
       category: "Banking and finance",
-    },
-  ];
-  const tsr = [
-    {
-      img: icon9,
-      title: "Text Translator",
-      description:
-        "Translate text to 100+ languages. Fast processing, cost-saving. Free up to 100,000 characters  per month",
-      category: "Banking and finance",
+      bookmarked: false,
     },
     {
-      img: icon2,
-      title: "Text Translator",
-      description:
-        "Translate text to 100+ languages. Fast processing, cost-saving. Free up to 100,000 characters  per month",
-      category: "Banking and finance",
-    },
-    {
-      img: icon4,
-      title: "Text Translator",
-      description:
-        "Translate text to 100+ languages. Fast processing, cost-saving. Free up to 100,000 characters  per month",
-      category: "Banking and finance",
-    },
-    {
+      id: 9,
       img: icon5,
       title: "Text Translator",
       description:
         "Translate text to 100+ languages. Fast processing, cost-saving. Free up to 100,000 characters  per month",
       category: "Banking and finance",
+      bookmarked: false,
+    },
+    {
+      id: 10,
+      img: icon6,
+      title: "Text Translator",
+      description:
+        "Translate text to 100+ languages. Fast processing, cost-saving. Free up to 100,000 characters  per month",
+      category: "Banking and finance",
+      bookmarked: false,
+    },
+    {
+      id: 11,
+      img: icon7,
+      title: "Text Translator",
+      description:
+        "Translate text to 100+ languages. Fast processing, cost-saving. Free up to 100,000 characters  per month",
+      category: "Banking and finance",
+      bookmarked: false,
+    },
+    {
+      id: 12,
+      img: icon8,
+      title: "Text Translator",
+      description:
+        "Translate text to 100+ languages. Fast processing, cost-saving. Free up to 100,000 characters  per month",
+      category: "Banking and finance",
+      bookmarked: false,
     },
   ];
+  const [allApis, setAllApis] = useState<IMockApi[]>(rec);
+
+  function toggleBookmarked(apiId: number) {
+    // const itemsWithBookMarks = allApis.map((data) =>
+    //   data.id === apiId ? { ...data, bookmarked: !data.bookmarked } : data
+    // );
+    // const filteredApi = allApis.filter((api) => api.bookmarked === true);
+    // console.log(filteredApi, "filtered");
+    // setBookMarked([...bookmarkedAPIs, ...filteredApi]);
+    // setAllApis(itemsWithBookMarks);
+    console.log("first");
+  }
   useEffect(() => {
     setSidebar("");
     setLoading(false);
@@ -135,51 +170,14 @@ export default function ApiDiscoveryDashboard() {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           {rec.map((item, index) => (
             <ApiCard
+              key={index}
               img={item.img}
               title={item.title}
               category={item.category}
               description={item.description}
-              key={index}
-            />
-          ))}
-        </div>
-      </div>
-      <div className="p-5">
-        <div className="my-3 flex justify-between flex-col gap-2 md:flex-row">
-          <p className=" font-semibold text-dark-grey">Top Finance API’s</p>
-          <button className="bg-transparent w-fit border-none text-mid-grey">
-            View all
-          </button>
-        </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {tfa.map((item, index) => (
-            <ApiCard
-              img={item.img}
-              title={item.title}
-              category={item.category}
-              description={item.description}
-              key={index}
-            />
-          ))}
-        </div>
-      </div>
-      <div className="p-5">
-        <div className="my-3 flex justify-between flex-col gap-2 md:flex-row">
-          <p className=" font-semibold text-dark-grey">
-            Top Speech Recognition
-          </p>
-          <button className="bg-transparent w-fit border-none text-mid-grey">
-            View all
-          </button>
-        </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {tsr.map((item, index) => (
-            <ApiCard
-              img={item.img}
-              title={item.title}
-              category={item.category}
-              description={item.description}
-              key={index}
+              bookmarked={item.bookmarked as boolean}
+              item={item}
+              onToggleBookmarked={toggleBookmarked}
             />
           ))}
         </div>

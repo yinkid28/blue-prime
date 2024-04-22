@@ -5,26 +5,32 @@ import Image, { StaticImageData } from "next/image";
 import { useRouter } from "next/router";
 import { FaRegClock, FaRegEye, FaRegStar } from "react-icons/fa";
 // import { MdBookmarkBorder } from "react-icons/md";
-import { IoBookmarkOutline } from "react-icons/io5";
+import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
 
 type ApiCardProps = {
   img: StaticImageData;
   title: string;
   description: string;
   category: string;
+  bookmarked: boolean;
+  onToggleBookmarked: (apiId: number) => void;
+  item: IMockApi;
 };
 export default function ApiCard({
   img,
   title,
   description,
   category,
+  bookmarked,
+  onToggleBookmarked,
+  item,
 }: ApiCardProps) {
   const router = useRouter();
   const { setApi } = useApi();
   const { setSidebar, setLoading } = useOnboarding();
   return (
     <div
-      className="w-full border-[1px] border-light-grey hover:shadow-md cursor-pointer rounded-lg p-3 flex flex-col gap-3"
+      className="w-full border-[1px] cursor-pointer border-light-grey hover:shadow-md rounded-lg p-3 flex flex-col gap-3"
       onClick={() => {
         setLoading(true);
         router.push(`/api_discovery/api_product/${title}`);
@@ -47,7 +53,15 @@ export default function ApiCard({
             className="w-full h-full"
           />
         </div>
-        <IoBookmarkOutline className="hover:text-primary cursor-pointer" />
+        <div
+          className="hover:text-primary cursor-pointer"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleBookmarked(item.id as number);
+          }}
+        >
+          {bookmarked ? <IoBookmark /> : <IoBookmarkOutline />}
+        </div>
       </div>
 
       <div className="flex flex-col gap-2">
