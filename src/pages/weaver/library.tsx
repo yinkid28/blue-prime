@@ -15,6 +15,7 @@ import ApiCard from "@/components/apiDiscovery/apiLibraryCard";
 import { Icon } from "@iconify/react";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { IMockApi } from "@/models/apidiscovery.model";
+import { AnimatePresence } from "framer-motion";
 const DiscoveryLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
@@ -178,31 +179,43 @@ export default function LibraryDashboard() {
 
         {/* THIRD SECTION - SECTION CONTAINING THE API CARDS */}
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {libraryView == "saved"
-            ? bookmarkedAPIs!.map((item, index) => (
-                <ApiCard
-                  key={index}
-                  img={item.img}
-                  title={item.title}
-                  category={item.category}
-                  description={item.description}
-                  bookmarked={item.bookmarked as boolean}
-                  item={item}
-                  onToggleBookmarked={toggleBookmarked}
-                />
-              ))
-            : inData.map((item, index) => (
-                <ApiCard
-                  key={index}
-                  img={item.img}
-                  title={item.title}
-                  category={item.category}
-                  description={item.description}
-                  bookmarked={item.bookmarked as boolean}
-                  item={item}
-                  onToggleBookmarked={toggleBookmarked}
-                />
-              ))}
+          <AnimatePresence mode="popLayout">
+            {libraryView == "saved"
+              ? bookmarkedAPIs!.map((item, index) => (
+                  <ApiCard
+                    key={index}
+                    img={item.img}
+                    title={item.title}
+                    category={item.category}
+                    description={item.description}
+                    bookmarked={item.bookmarked as boolean}
+                    layout
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.5 }}
+                    transition={{ duration: 0.6, type: "spring" }}
+                    item={item}
+                    onToggleBookmarked={toggleBookmarked}
+                  />
+                ))
+              : inData.map((item, index) => (
+                  <ApiCard
+                    key={index}
+                    img={item.img}
+                    title={item.title}
+                    category={item.category}
+                    description={item.description}
+                    bookmarked={item.bookmarked as boolean}
+                    layout
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.5 }}
+                    transition={{ duration: 0.6, type: "spring" }}
+                    item={item}
+                    onToggleBookmarked={toggleBookmarked}
+                  />
+                ))}
+          </AnimatePresence>
         </div>
       </div>
     </DiscoveryLayout>
