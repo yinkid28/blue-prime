@@ -22,45 +22,93 @@ type NavbarProps = {
 
 export default function Navbar({ title }: NavbarProps) {
   const { userType, setUserType } = useUser();
-  const { setLoading, setSidebar } = useOnboarding();
+  const { setLoading, setSidebar, user, setUser } = useOnboarding();
   const router = useRouter();
   return (
     <div className="w-full bg-transparent flex justify-between items-center p-5 ">
       <div>
         <p className="md:text-xl font-semibold">{title}</p>
       </div>
-      <div className="flex items-center md:gap-3 lg:gap-8">
-        <Button
-          type="fit"
-          className="sm:flex hidden"
-          text={userType === "weaver" ? "Switch to Webber" : "Switch to Weaver"}
-          onClick={() => {
-            if (userType === "weaver") {
-              setLoading(true);
-              setUserType("webber");
-              router.push("/webber/dashboard");
-              setSidebar("webber");
-            } else {
-              setLoading(true);
-              setUserType("weaver");
-              router.push("/api_discovery");
-              setSidebar("");
-            }
-          }}
-        />
-        <RiNotificationLine className="sm:flex hidden" />
-        <BiMessageRounded className="sm:flex hidden" />
 
-        <div className="w-[40px] h-[40px] rounded-full overflow-hidden sm:flex hidden">
-          <Image
-            className="w-[40px] h-[40px]"
-            width={200}
-            height={200}
-            alt="avi"
-            src={"/images/avatar.jpg"}
-          />
-        </div>
-        <FaChevronDown className="text-mid-grey sm:flex hidden" />
+      <div className="flex items-center md:gap-3 lg:gap-8">
+        {user !== null ? (
+          <div className="flex items-center md:gap-3 lg:gap-8">
+            <Button
+              type="fit"
+              className="sm:flex hidden"
+              text={
+                userType === "weaver" ? "Switch to Webber" : "Switch to Weaver"
+              }
+              onClick={() => {
+                if (userType === "weaver") {
+                  setLoading(true);
+                  setUserType("webber");
+                  router.push("/webber/dashboard");
+                  setSidebar("webber");
+                } else {
+                  setLoading(true);
+                  setUserType("weaver");
+                  router.push("/api_discovery");
+                  setSidebar("");
+                }
+              }}
+            />
+            <RiNotificationLine className="sm:flex hidden" />
+            <BiMessageRounded className="sm:flex hidden" />
+
+            <div className="w-[40px] h-[40px] rounded-full overflow-hidden sm:flex hidden">
+              <Image
+                className="w-[40px] h-[40px]"
+                width={200}
+                height={200}
+                alt="avi"
+                src={"/images/avatar.jpg"}
+              />
+            </div>
+            <Menu>
+              <MenuButton>
+                <FaChevronDown className="text-mid-grey sm:flex hidden" />
+              </MenuButton>
+              <MenuList>
+                {/* <MenuItem> */}
+                <div className="w-full text-center font-semibold">Profile</div>
+                {/* </MenuItem> */}
+                <MenuDivider />
+                <MenuItem onClick={() => setUser(null)}>
+                  <div className="w-full  ">Logout</div>
+                </MenuItem>
+                <MenuItem>
+                  <div className="w-full  ">Language</div>
+                </MenuItem>
+                <MenuItem>
+                  <div className="w-full  ">Settings</div>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </div>
+        ) : (
+          <div className="">
+            <Menu>
+              <MenuButton>
+                <button className="w-fit border border-primary rounded-lg px-4 py-2 text-primary font-semibold">
+                  Signup / Login
+                </button>
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  onClick={() =>
+                    router.push("/onboarding/sign-up-organization")
+                  }
+                >
+                  Sign up
+                </MenuItem>
+                <MenuItem onClick={() => router.push("/onboarding/login")}>
+                  Login
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </div>
+        )}
 
         {/* THE MENU */}
         <Show breakpoint="(max-width: 640px)">

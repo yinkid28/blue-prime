@@ -37,11 +37,11 @@ export type VerifyTokenDto = {
 };
 export type LogActivityDto = {
   userId: number;
-  activityId: number;
+  activityIds: number[];
 };
 export type LogIndustryDto = {
   userId: number;
-  industryId: number;
+  industryId: number[];
 };
 
 export type IUser = {
@@ -67,7 +67,7 @@ export type IUser = {
   deletedAt: any;
   createdBy: string;
   createdAt: string;
-  onboardingCompleted: true;
+  onboardingCompleted: boolean;
   passwordUpdatedAt: any;
   roles: Irole[];
   id: number;

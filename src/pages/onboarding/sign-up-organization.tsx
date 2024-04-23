@@ -25,8 +25,14 @@ import CookieManager from "@/helper_utils/cookie_manager";
 
 export default function SignUpOrganization() {
   const router = useRouter();
-  const { progress, setProgress, setStage, setLoading, setApiErrorMessage } =
-    useOnboarding();
+  const {
+    progress,
+    setProgress,
+    setStage,
+    setLoading,
+    setApiErrorMessage,
+    setUser,
+  } = useOnboarding();
   const toast = useToast();
   const [email, setEmail] = useState<string>("");
   const initialValues = {
@@ -97,9 +103,10 @@ export default function SignUpOrganization() {
         pathname: "/onboarding/authentication",
         query: {
           email: values.email,
-          userId: loginres.data.id,
+          userId: loginres.data.user.id,
         },
       });
+      setUser(loginres.data.user);
     } catch (error: any) {
       console.log(error);
       actions.setSubmitting(false);
