@@ -20,7 +20,6 @@ export default function MainSidebar() {
     { name: "Entertainment" },
     { name: "Gaming" },
     { name: "Banking and Finance" },
-    { name: " e" },
     { name: "E-Commerce" },
     { name: "Sports" },
   ];
@@ -116,17 +115,13 @@ export default function MainSidebar() {
           </div>
           <div
             className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-              router.asPath == "/api_discovery/library"
+              router.asPath == "/weaver/library"
                 ? "text-primary"
                 : "text-dark-grey"
             }`}
-            onClick={() => router.push("/api_discovery/library")}
+            onClick={() => router.push("/weaver/library")}
           >
-            {router.asPath == "/api_discovery/library" ? (
-              <MdFolder size={18} />
-            ) : (
-              <FiFolder />
-            )}
+            <MdFolder size={18} />
             <p className="font-semibold">Library</p>
           </div>
           <div
@@ -139,7 +134,7 @@ export default function MainSidebar() {
           </div>
         </div>
 
-        {router.asPath == "/api_discovery/library" ? (
+        {router.asPath == "/weaver/library" ? (
           <div className="bg-white h-full rounded p-5 md:flex hidden flex-col gap-4">
             <p className="text-base text-mid-grey font-bold">Library</p>
             {/* Since it is not much, may not abstract it into an array */}

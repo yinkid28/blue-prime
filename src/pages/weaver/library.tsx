@@ -13,6 +13,8 @@ import icon7 from "../../../public/images/api_icons/icon7.png";
 import icon8 from "../../../public/images/api_icons/icon8.png";
 import ApiCard from "@/components/apiDiscovery/apiLibraryCard";
 import { Icon } from "@iconify/react";
+import { useApi } from "@/context/ApiDiscoveryContext";
+import { IMockApi } from "@/models/apidiscovery.model";
 const DiscoveryLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
@@ -21,6 +23,7 @@ export default function LibraryDashboard() {
   const { setSidebar, setLoading } = useOnboarding();
   //   const { libraryCardsData, setLibraryCardsData } = useApiDiscoveryContext();
   //   const [bookmarked, setBookmarked] = useState(false);
+  const { setBookMarked, bookmarkedAPIs } = useApi();
 
   useEffect(() => {
     setSidebar("");
@@ -105,11 +108,33 @@ export default function LibraryDashboard() {
   // Make it type safe after it works
   const [inData, setInData] = useState(apiCardData);
 
-  function toggleBookmarked(apiId: number) {
-    const itemsWithBookMarks = inData.map((data) =>
-      data.id === apiId ? { ...data, bookmarked: !data.bookmarked } : data
-    );
+  // function toggleBookmarked(apiId: number) {
+  //   const itemsWithBookMarks = inData.map((data) =>
+  //     data.id === apiId ? { ...data, bookmarked: !data.bookmarked } : data
+  //   );
 
+  //   setInData(itemsWithBookMarks);
+  // }
+  function toggleBookmarked(apiId: number, item: IMockApi) {
+    const itemsWithBookMarks = inData.map((data) => {
+      if (data.id === apiId) {
+        return {
+          ...data,
+          bookmarked: !data.bookmarked,
+        };
+      } else {
+        return data;
+      }
+    });
+    if (!item.bookmarked) {
+      const newItem = {
+        ...item,
+        bookmarked: true,
+      };
+      setBookMarked(newItem);
+    } else {
+      setBookMarked(item);
+    }
     setInData(itemsWithBookMarks);
   }
 

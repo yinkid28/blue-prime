@@ -41,7 +41,7 @@ export function Input({
   const handleClick = () => setShow(!show);
 
   return (
-    <div className="w-full border border-light-grey rounded flex justify-between p-2">
+    <div className="w-full border border-light-grey rounded flex items-center justify-between p-2">
       <input
         type={
           secondaryElement && show
