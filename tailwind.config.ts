@@ -28,6 +28,7 @@ const config: Config = {
         "dark-grey-fade": "#66708550",
         "category-fade": "#FFFAEB",
         "success-bg": "#ECFDF3",
+        "blue-dark": "#2548A0",
         success: "#027A48",
         error: "#F13636",
         warning: "#FA642E",

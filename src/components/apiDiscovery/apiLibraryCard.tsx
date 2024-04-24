@@ -7,6 +7,7 @@ import { FaRegClock, FaRegEye, FaRegStar } from "react-icons/fa";
 // import { MdBookmarkBorder } from "react-icons/md";
 import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
 import { motion } from "framer-motion";
+import { toTitleCase } from "../utils";
 
 // THE ONLY THING DIFFERENT HERE IS STYLING AND THE PROPS PASSED.
 
@@ -62,14 +63,15 @@ export default function ApiCard({
       className="w-full border-[1px] cursor-pointer border-light-grey hover:shadow-md rounded-lg p-3 flex flex-col gap-3"
       onClick={() => {
         setLoading(true);
-        router.push(`/api_discovery/api_product/${title}`);
-        setApi({
-          img,
-          title,
-          description,
-          category,
-        });
-        setSidebar("api");
+        router.push(`/weaver/library/${toTitleCase(title, true)}/overview`);
+        // I would comment all these ones for now ↓
+        // setApi({
+        //   img,
+        //   title,
+        //   description,
+        //   category,
+        // });
+        // setSidebar("api");
       }}
     >
       <div className="w-full flex justify-between">
