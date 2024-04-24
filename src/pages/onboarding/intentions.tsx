@@ -56,31 +56,15 @@ export default function Intensions({ intentions, currentUser }: PageProps) {
       return;
     }
     try {
-      const dataArray: LogActivityDto[] = Array.from(selected, (item) => {
-        return {
-          activityId: item.id,
-          userId: parseInt(userId as string),
-        };
-      });
+      const activityArr = Array.from(selected, (item) => item.id);
 
-      // TO BE REFACTORED WHEN NEW ENDPOINT COMES IN
-      const promises = dataArray.map((data: LogActivityDto) => {
-        OnboardingServices.logUserIntentions(data).then((res) => {
-          if (res.status === "OK" || res.message === "success") {
-            return res.message;
-          } else {
-            return null; // or handle the error differently
-          }
-        });
-      });
+      const data: LogActivityDto = {
+        userId: parseInt(userId as string),
+        activityIds: activityArr,
+      };
 
-      const moduleResponse = await Promise.all(promises);
-      const filteredResponses = moduleResponse.filter(
-        (response) => response !== null
-      );
-      console.log(moduleResponse, "filly");
-
-      if (filteredResponses.includes(undefined)) {
+      const res = await OnboardingServices.logUserIntentions(data);
+      if (res.status === "OK") {
         toast({
           description: "Successfully saved modules",
           position: "bottom-right",
@@ -90,9 +74,6 @@ export default function Intensions({ intentions, currentUser }: PageProps) {
           pathname: "/onboarding/recommendations",
         });
         proceed();
-      } else {
-        reset();
-        setApiErrorMessage("Something went wrong", "error");
       }
     } catch (error: any) {
       reset();

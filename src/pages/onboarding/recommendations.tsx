@@ -78,42 +78,22 @@ export default function Recommendations({
   };
   const loguserIndustries = async () => {
     try {
-      const dataArray: LogIndustryDto[] = Array.from(selected, (item) => {
-        return {
-          industryId: item.industryId,
-          userId: user!.id,
-        };
-      });
-
-      // TO BE REFACTORED WHEN NEW ENDPOINT COMES IN
-      const promises = dataArray.map((data: LogIndustryDto) => {
-        OnboardingServices.logUserIndustries(data).then((res) => {
-          if (res.status === "OK" || res.message === "success") {
-            return res.message;
-          } else {
-            return null; // or handle the error differently
-          }
-        });
-      });
-
-      const moduleResponse = await Promise.all(promises);
-      const filteredResponses = moduleResponse.filter(
-        (response) => response !== null
-      );
-
-      if (filteredResponses.includes(undefined)) {
+      const activityArr = Array.from(selected, (item) => item.industryId);
+      const data: LogIndustryDto = {
+        userId: user!.id,
+        industryId: activityArr,
+      };
+      const res = await OnboardingServices.logUserIndustries(data);
+      if (res.id) {
         toast({
           description: "Welcome!!",
           position: "bottom-right",
           status: "success",
         });
         router.push({
-          pathname: "/onboarding/recommendations",
+          pathname: "/api_discovery",
         });
         proceed();
-      } else {
-        reset();
-        setApiErrorMessage("Something went wrong", "error");
       }
     } catch (error: any) {
       reset();
@@ -122,6 +102,7 @@ export default function Recommendations({
       setApiErrorMessage(errorMessage, "error");
     }
   };
+
   return (
     <OnboardingLayout
       title="API Industry, Please select as much as possible"
@@ -156,9 +137,6 @@ export default function Recommendations({
               type="full"
               onClick={() => {
                 loguserIndustries();
-                router.push({
-                  pathname: "/api_discovery",
-                });
               }}
             />
           </div>

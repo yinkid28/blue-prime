@@ -91,7 +91,7 @@ const useOnboardingContext = () => {
       payload: sidebar,
     });
   }, []);
-  const setUser = useCallback((user: IUser) => {
+  const setUser = useCallback((user: IUser | null) => {
     dispatch({
       type: "SET_USER",
       payload: user,
