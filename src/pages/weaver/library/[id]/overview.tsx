@@ -29,7 +29,7 @@ export default function ApiOverview() {
   const [copied, setCopied] = useState<boolean>(false);
   useEffect(() => {
     setLoading(false);
-    setSidebar("apiProgressWeaver");
+    // setSidebar("apiProgressWeaver");
   }, []);
   const breadCrumbs: BreadCrumbItems[] = [
     {

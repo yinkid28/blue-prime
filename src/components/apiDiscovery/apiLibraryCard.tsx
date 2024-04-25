@@ -63,15 +63,20 @@ export default function ApiCard({
       className="w-full border-[1px] cursor-pointer border-light-grey hover:shadow-md rounded-lg p-3 flex flex-col gap-3"
       onClick={() => {
         setLoading(true);
-        router.push(`/weaver/library/${toTitleCase(title, true)}/overview`);
+        if (router.asPath === "/api_discovery") {
+          router.push(`/api_discovery/api_product/${title}`);
+          setSidebar("api");
+        } else {
+          setSidebar("apiProgressWeaver");
+          router.push(`/weaver/library/${toTitleCase(title, true)}/overview`);
+        }
         // I would comment all these ones for now ↓
-        // setApi({
-        //   img,
-        //   title,
-        //   description,
-        //   category,
-        // });
-        // setSidebar("api");
+        setApi({
+          img,
+          title,
+          description,
+          category,
+        });
       }}
     >
       <div className="w-full flex justify-between">

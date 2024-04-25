@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { FaFolder } from "react-icons/fa";
 import { useApi } from "@/context/ApiDiscoveryContext";
+import { useOnboarding } from "@/context/OnboardingContext";
 
 export default function MainSidebar() {
   const router = useRouter();
@@ -27,6 +28,7 @@ export default function MainSidebar() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { bookmarkedAPIs, libraryView, setLibraryView } = useApi();
+  const { user } = useOnboarding();
   return (
     <>
       {/* <div className="w-full  flex flex-col h-full> - This was how I met it*/}
@@ -66,17 +68,19 @@ export default function MainSidebar() {
                     <BsSearch />
                     <p className="font-semibold">Search</p>
                   </div>
-                  <div
-                    className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                      router.asPath == "/weaver/library"
-                        ? "text-primary"
-                        : "text-dark-grey"
-                    }`}
-                    onClick={() => router.push("/weaver/library")}
-                  >
-                    <MdFolder size={18} />
-                    <p className="font-semibold">Library</p>
-                  </div>
+                  {user !== null && (
+                    <div
+                      className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+                        router.asPath == "/weaver/library"
+                          ? "text-primary"
+                          : "text-dark-grey"
+                      }`}
+                      onClick={() => router.push("/weaver/library")}
+                    >
+                      <MdFolder size={18} />
+                      <p className="font-semibold">Library</p>
+                    </div>
+                  )}
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath == "" ? "text-primary" : "text-dark-grey"
@@ -166,17 +170,19 @@ export default function MainSidebar() {
             <BsSearch />
             <p className="font-semibold">Search</p>
           </div>
-          <div
-            className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-              router.asPath == "/weaver/library"
-                ? "text-primary"
-                : "text-dark-grey"
-            }`}
-            onClick={() => router.push("/weaver/library")}
-          >
-            <MdFolder size={18} />
-            <p className="font-semibold">Library</p>
-          </div>
+          {user !== null && (
+            <div
+              className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+                router.asPath == "/weaver/library"
+                  ? "text-primary"
+                  : "text-dark-grey"
+              }`}
+              onClick={() => router.push("/weaver/library")}
+            >
+              <MdFolder size={18} />
+              <p className="font-semibold">Library</p>
+            </div>
+          )}
           <div
             className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
               router.asPath == "" ? "text-primary" : "text-dark-grey"
