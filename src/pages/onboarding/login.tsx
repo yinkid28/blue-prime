@@ -2,7 +2,7 @@ import OnboardingNavbar from "@/components/onboarding/onboardingNavbar";
 import { Button, Input } from "@/components/utils";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import google from "../../../public/icons/googleIcon.svg";
 import github from "../../../public/icons/githubIcon.svg";
 import { FaChevronLeft } from "react-icons/fa";
@@ -28,6 +28,9 @@ export default function Login() {
     email: "",
     password: "",
   };
+  useEffect(() => {
+    setLoading(false);
+  }, []);
 
   function validate(values: any) {
     // setErrorMessage("");
