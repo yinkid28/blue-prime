@@ -56,8 +56,8 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
                   <div
                     className="flex items-center gap-2 cursor-pointer"
                     onClick={() => {
-                      router.push("/webber/dashboard");
-                      setSidebar("webber");
+                      router.back();
+                      // setSidebar("webber");
                     }}
                   >
                     <FaChevronLeft className="text-xs text-dark-grey" />
@@ -84,204 +84,145 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
 
                 <div className="bg-white h-[72%] rounded p-5 flex flex-col gap-4">
                   <div
-                    className={`flex items-center h-fit cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+                    className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath ==
-                      `/webber/api_details/${toTitleCase(
-                        api.title,
-                        true
-                      )}/overview`
-                        ? "text-primary"
+                      `/weaver/library/${toTitleCase(api.title, true)}/overview`
+                        ? "text-primary font-semibold"
                         : "text-dark-grey"
                     }`}
                     // I am going to hard code the route to be pushed to for a brief while!
                     onClick={() => {
                       router.push(
-                        `/webber/api_details/${toTitleCase(
+                        `/weaver/library/${toTitleCase(
                           api.title,
                           true
                         )}/overview`
                       );
-                      // setSidebar("webber");
                     }}
                   >
-                    <Icon icon="lets-icons:widget-light" />
+                    <Icon icon="lets-icons:widget-light" className="text-xl" />
 
                     <p>Overview</p>
                   </div>
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath ==
-                      `/webber/api_details/${api.title}/overview`
-                        ? "text-primary"
+                      `/weaver/library/${toTitleCase(
+                        api.title,
+                        true
+                      )}/api_information`
+                        ? "text-primary font-semibold"
                         : "text-dark-grey"
                     }`}
+                    // I am going to hard code the route to be pushed to for a brief while!
                     onClick={() => {
                       router.push(
-                        `/webber/api_details/${toTitleCase(
+                        `/weaver/library/${toTitleCase(
                           api.title,
                           true
                         )}/api_information`
                       );
-                      // setSidebar("webber");
                     }}
                   >
-                    <Icon icon="material-symbols-light:list-alt-outline" />
+                    <Icon
+                      icon="material-symbols-light:list-alt-outline"
+                      className="text-xl"
+                    />
 
                     <p>API Information</p>
                   </div>
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath ==
-                      `/webber/api_details/${api.title}/overview`
-                        ? "text-primary"
+                      `/weaver/library/${toTitleCase(
+                        api.title,
+                        true
+                      )}/consumption_rate`
+                        ? "text-primary font-semibold"
                         : "text-dark-grey"
                     }`}
+                    // I am going to hard code the route to be pushed to for a brief while!
                     onClick={() => {
                       router.push(
-                        `/webber/api_details/${toTitleCase(
+                        `/weaver/library/${toTitleCase(
                           api.title,
                           true
-                        )}/runtime`
+                        )}/consumption_rate`
                       );
-
-                      // setSidebar("webber");
                     }}
                   >
-                    <Icon icon="lets-icons:link-alt-light" />
+                    <Icon
+                      icon="lets-icons:link-alt-light"
+                      className="text-xl"
+                    />
 
-                    <p>Runtime</p>
+                    <p>Consumption Rate</p>
                   </div>
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath ==
-                      `/webber/api_details/${api.title}/endpoints`
-                        ? "text-primary"
+                      `/weaver/library/${toTitleCase(api.title, true)}/test`
+                        ? "text-primary font-semibold"
                         : "text-dark-grey"
                     }`}
+                    // I am going to hard code the route to be pushed to for a brief while!
                     onClick={() => {
                       router.push(
-                        `/webber/api_details/${toTitleCase(
-                          api.title,
-                          true
-                        )}/endpoints`
+                        `/weaver/library/${toTitleCase(api.title, true)}/test`
                       );
-                      // setSidebar("webber");
                     }}
                   >
-                    <Icon icon="ph:line-segments-light" />
-
-                    <p>Endpoints</p>
-                  </div>
-                  <div
-                    className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                      router.asPath ==
-                      `/webber/api_details/${api.title}/modules`
-                        ? "text-primary"
-                        : "text-dark-grey"
-                    }`}
-                    onClick={() => {
-                      router.push(
-                        `/webber/api_details/${toTitleCase(
-                          api.title,
-                          true
-                        )}/modules`
-                      );
-                      // setSidebar("webber");
-                    }}
-                  >
-                    <Icon icon="lets-icons:subttasks-light" />
-
-                    <p>Modules</p>
-                  </div>
-                  <div
-                    className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                      router.asPath ==
-                      `/webber/api_details/${api.title}/api_definition`
-                        ? "text-primary"
-                        : "text-dark-grey"
-                    }`}
-                    onClick={() => {
-                      router.push(
-                        `/webber/api_details/${toTitleCase(
-                          api.title,
-                          true
-                        )}/api_definition`
-                      );
-                      // setSidebar("webber");
-                    }}
-                  >
-                    <Icon icon="lets-icons:code-light" />
-
-                    <p>API definition</p>
-                  </div>
-                  <div
-                    className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                      router.asPath ==
-                      `/webber/api_details/${api.title}/overview`
-                        ? "text-primary"
-                        : "text-dark-grey"
-                    }`}
-                    onClick={() => {
-                      router.push(
-                        `/webber/api_details/${toTitleCase(
-                          api.title,
-                          true
-                        )}/test`
-                      );
-                      // setSidebar("webber");
-                    }}
-                  >
-                    <Icon icon="lets-icons:edit-light" />
+                    <Icon icon="lets-icons:edit-light" className="text-xl" />
 
                     <p>Test</p>
                   </div>
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath ==
-                      `/webber/api_details/${toTitleCase(
+                      `/weaver/library/${toTitleCase(
                         api.title,
                         true
-                      )}/deploy`
-                        ? "text-primary"
+                      )}/subscriptions`
+                        ? "text-primary font-semibold"
                         : "text-dark-grey"
                     }`}
+                    // I am going to hard code the route to be pushed to for a brief while!
                     onClick={() => {
                       router.push(
-                        `/webber/api_details/${toTitleCase(
+                        `/weaver/library/${toTitleCase(
                           api.title,
                           true
-                        )}/deploy`
+                        )}/subscriptions`
                       );
-                      // setSidebar("webber");
                     }}
                   >
-                    <Icon icon="material-symbols-light:deployed-code-outline-sharp" />
+                    <Icon
+                      icon="material-symbols-light:deployed-code-outline-sharp"
+                      className="text-xl"
+                    />
 
-                    <p>Deploy</p>
+                    <p>Subscriptions</p>
                   </div>
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath ==
-                      `/webber/api_details/${toTitleCase(
-                        api.title,
-                        true
-                      )}/api_manager`
-                        ? "text-primary"
+                      `/weaver/library/${toTitleCase(api.title, true)}/feedback`
+                        ? "text-primary font-semibold"
                         : "text-dark-grey"
                     }`}
+                    // I am going to hard code the route to be pushed to for a brief while!
                     onClick={() => {
                       router.push(
-                        `/webber/api_details/${toTitleCase(
+                        `/weaver/library/${toTitleCase(
                           api.title,
                           true
-                        )}/api_manager`
+                        )}/feedback`
                       );
-                      // setSidebar("webber");
                     }}
                   >
-                    <Icon icon="solar:library-linear" className="text-sm" />
+                    <Icon icon="solar:library-linear" />
 
-                    <p>API Manager</p>
+                    <p>Feedback</p>
                   </div>
                 </div>
               </DrawerBody>
@@ -292,8 +233,8 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
         <div
           className="hidden md:flex items-center gap-2 cursor-pointer"
           onClick={() => {
-            router.push("/webber/dashboard");
-            setSidebar("webber");
+            router.back();
+            // setSidebar("webber");
           }}
         >
           <FaChevronLeft className="text-xs text-dark-grey" />
@@ -339,21 +280,15 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
             router.asPath ==
-            `/webber/api_details/${toTitleCase(
-              api.title,
-              true
-            )}/api_information`
-              ? "text-primary"
+            `/weaver/library/${toTitleCase(api.title, true)}/api_information`
+              ? "text-primary font-semibold"
               : "text-dark-grey"
           }`}
+          // I am going to hard code the route to be pushed to for a brief while!
           onClick={() => {
             router.push(
-              `/webber/api_details/${toTitleCase(
-                api.title,
-                true
-              )}/api_information`
+              `/weaver/library/${toTitleCase(api.title, true)}/api_information`
             );
-            // setSidebar("webber");
           }}
         >
           <Icon
@@ -366,16 +301,15 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
             router.asPath ==
-            `/webber/api_details/${toTitleCase(api.title, true)}/runtime`
-              ? "text-primary"
+            `/weaver/library/${toTitleCase(api.title, true)}/consumption_rate`
+              ? "text-primary font-semibold"
               : "text-dark-grey"
           }`}
+          // I am going to hard code the route to be pushed to for a brief while!
           onClick={() => {
             router.push(
-              `/webber/api_details/${toTitleCase(api.title, true)}/runtime`
+              `/weaver/library/${toTitleCase(api.title, true)}/consumption_rate`
             );
-
-            // setSidebar("webber");
           }}
         >
           <Icon icon="lets-icons:link-alt-light" className="text-xl" />
@@ -385,15 +319,13 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
             router.asPath ==
-            `/webber/api_details/${toTitleCase(api.title, true)}/test`
-              ? "text-primary"
+            `/weaver/library/${toTitleCase(api.title, true)}/test`
+              ? "text-primary font-semibold"
               : "text-dark-grey"
           }`}
+          // I am going to hard code the route to be pushed to for a brief while!
           onClick={() => {
-            router.push(
-              `/webber/api_details/${toTitleCase(api.title, true)}/test`
-            );
-            // setSidebar("webber");
+            router.push(`/weaver/library/${toTitleCase(api.title, true)}/test`);
           }}
         >
           <Icon icon="lets-icons:edit-light" className="text-xl" />
@@ -403,15 +335,15 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
             router.asPath ==
-            `/webber/api_details/${toTitleCase(api.title, true)}/deploy`
-              ? "text-primary"
+            `/weaver/library/${toTitleCase(api.title, true)}/subscriptions`
+              ? "text-primary font-semibold"
               : "text-dark-grey"
           }`}
+          // I am going to hard code the route to be pushed to for a brief while!
           onClick={() => {
             router.push(
-              `/webber/api_details/${toTitleCase(api.title, true)}/deploy`
+              `/weaver/library/${toTitleCase(api.title, true)}/subscriptions`
             );
-            // setSidebar("webber");
           }}
         >
           <Icon
@@ -422,17 +354,17 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
           <p>Subscriptions</p>
         </div>
         <div
-          className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-4 w-full ${
+          className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
             router.asPath ==
-            `/webber/api_details/${toTitleCase(api.title, true)}/api_manager`
-              ? "text-primary"
+            `/weaver/library/${toTitleCase(api.title, true)}/feedback`
+              ? "text-primary font-semibold"
               : "text-dark-grey"
           }`}
+          // I am going to hard code the route to be pushed to for a brief while!
           onClick={() => {
             router.push(
-              `/webber/api_details/${toTitleCase(api.title, true)}/api_manager`
+              `/weaver/library/${toTitleCase(api.title, true)}/feedback`
             );
-            // setSidebar("webber");
           }}
         >
           <Icon icon="solar:library-linear" />
