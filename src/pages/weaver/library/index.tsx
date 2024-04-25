@@ -3,27 +3,26 @@ import Navbar from "@/components/Layout/Nav/navbar";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { BreadCrumbs } from "@/components/utils";
-import icon1 from "../../../public/images/api_icons/icon1.jpg";
-import icon2 from "../../../public/images/api_icons/icon2.png";
-import icon3 from "../../../public/images/api_icons/icon3.png";
-import icon4 from "../../../public/images/api_icons/icon4.png";
-import icon5 from "../../../public/images/api_icons/icon5.png";
-import icon6 from "../../../public/images/api_icons/icon6.png";
-import icon7 from "../../../public/images/api_icons/icon7.png";
-import icon8 from "../../../public/images/api_icons/icon8.png";
+import icon1 from "../../../../public/images/api_icons/icon1.jpg";
+import icon2 from "../../../../public/images/api_icons/icon2.png";
+import icon3 from "../../../../public/images/api_icons/icon3.png";
+import icon4 from "../../../../public/images/api_icons/icon4.png";
+import icon5 from "../../../../public/images/api_icons/icon5.png";
+import icon6 from "../../../../public/images/api_icons/icon6.png";
+import icon7 from "../../../../public/images/api_icons/icon7.png";
+import icon8 from "../../../../public/images/api_icons/icon8.png";
 import ApiCard from "@/components/apiDiscovery/apiLibraryCard";
 import { Icon } from "@iconify/react";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { IMockApi } from "@/models/apidiscovery.model";
+import { AnimatePresence } from "framer-motion";
 const DiscoveryLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
 
 export default function LibraryDashboard() {
   const { setSidebar, setLoading } = useOnboarding();
-  //   const { libraryCardsData, setLibraryCardsData } = useApiDiscoveryContext();
-  //   const [bookmarked, setBookmarked] = useState(false);
-  const { setBookMarked, bookmarkedAPIs } = useApi();
+  const { setBookMarked, bookmarkedAPIs, libraryView } = useApi();
 
   useEffect(() => {
     setSidebar("");
@@ -108,13 +107,6 @@ export default function LibraryDashboard() {
   // Make it type safe after it works
   const [inData, setInData] = useState(apiCardData);
 
-  // function toggleBookmarked(apiId: number) {
-  //   const itemsWithBookMarks = inData.map((data) =>
-  //     data.id === apiId ? { ...data, bookmarked: !data.bookmarked } : data
-  //   );
-
-  //   setInData(itemsWithBookMarks);
-  // }
   function toggleBookmarked(apiId: number, item: IMockApi) {
     const itemsWithBookMarks = inData.map((data) => {
       if (data.id === apiId) {
@@ -137,6 +129,10 @@ export default function LibraryDashboard() {
     }
     setInData(itemsWithBookMarks);
   }
+
+  useEffect(() => {
+    console.log(bookmarkedAPIs);
+  }, [bookmarkedAPIs]);
 
   return (
     <DiscoveryLayout>
@@ -181,19 +177,43 @@ export default function LibraryDashboard() {
 
         {/* THIRD SECTION - SECTION CONTAINING THE API CARDS */}
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {/* bit of prop drilling in here */}
-          {inData.map((item, index) => (
-            <ApiCard
-              key={index}
-              img={item.img}
-              title={item.title}
-              category={item.category}
-              description={item.description}
-              bookmarked={item.bookmarked}
-              item={item}
-              onToggleBookmarked={toggleBookmarked}
-            />
-          ))}
+          <AnimatePresence mode="popLayout">
+            {libraryView == "saved"
+              ? bookmarkedAPIs!.map((item, index) => (
+                  <ApiCard
+                    key={index}
+                    img={item.img}
+                    title={item.title}
+                    category={item.category}
+                    description={item.description}
+                    bookmarked={item.bookmarked as boolean}
+                    layout
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.5 }}
+                    transition={{ duration: 0.6, type: "spring" }}
+                    item={item}
+                    onToggleBookmarked={toggleBookmarked}
+                  />
+                ))
+              : inData.map((item, index) => (
+                  <ApiCard
+                    key={index}
+                    img={item.img}
+                    title={item.title}
+                    category={item.category}
+                    description={item.description}
+                    bookmarked={item.bookmarked as boolean}
+                    layout
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.5 }}
+                    transition={{ duration: 0.6, type: "spring" }}
+                    item={item}
+                    onToggleBookmarked={toggleBookmarked}
+                  />
+                ))}
+          </AnimatePresence>
         </div>
       </div>
     </DiscoveryLayout>

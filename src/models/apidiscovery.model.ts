@@ -10,6 +10,7 @@ export type IMockApi = {
 export type ApiDiscoveryInititals = {
   api: IMockApi | null;
   bookmarkedAPIs: IMockApi[];
+  libraryView: string;
 };
 export type FileType = {
   name: string;
