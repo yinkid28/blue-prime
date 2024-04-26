@@ -28,4 +28,4 @@ jobs:
       - name: Build Next Application
         run: npm run build
       - name: Start PM2
-        run: "pm2 delete --silent apim.ui.dev || :; pm2 start pm2.config-dev.json"
+        run: "pm2 delete --silent apim.ui.dev || :; pm2 start pm2.config.json"
