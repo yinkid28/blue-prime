@@ -148,19 +148,15 @@ export default function Login() {
                 )}
               </Field>
 
-              {/* <div className="flex my-3 flex-row gap-2">
-                    <input
-                      type="checkbox"
-                      name="tandc"
-                      className="outline-none bg-transparent"
-                    />
-                    <p className="text-dark-grey">
-                      By signing up, I agree to the{" "}
-                      <span className="text-primary">Terms</span> and{" "}
-                      <span className="text-primary">Privacy Policy</span>{" "}
-                    </p>
-                  </div> */}
-              <div className="my-5">
+              <div className="flex mt-1 mb-3 w-full justify-end flex-row gap-2">
+                <p
+                  className="text-primary font-semibold text-sm cursor-pointer"
+                  onClick={() => router.push("/onboarding/forgotPassword")}
+                >
+                  Forgot Password?
+                </p>
+              </div>
+              <div className="mb-5">
                 <Button
                   Type="submit"
                   text="Sign In"

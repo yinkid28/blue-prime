@@ -78,7 +78,8 @@ export default function OnboardingLayout({
         <div className="w-full font-urban flex justify-center">
           <div className="w-[80%] md:w-[95%] flex flex-col gap-3 items-center">
             <OnboardingNavbar />
-            {router.asPath !== "/onboarding/login" ? (
+            {router.asPath !== "/onboarding/login" &&
+            router.asPath !== "/onboarding/forgotPassword" ? (
               <div className="w-full md:w-[60%] lg:w-[40%] flex items-center flex-col gap-3">
                 <div className="w-full">
                   <Progress
