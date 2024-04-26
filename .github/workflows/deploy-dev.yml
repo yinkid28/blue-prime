@@ -1,14 +1,14 @@
-name: Anansee UAT Deployment
+name: Anansee DEV Deployment
 
 on:
   push:
     branches:
-      - main
+      - development
 
 jobs:
   build:
     name: Build
-    runs-on: [self-hosted, anansee]
+    runs-on: [self-hosted, anansee-dev]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -21,4 +21,4 @@ jobs:
       - name: Build Next Application
         run: npm run build
       - name: Start PM2
-        run: "pm2 delete --silent apim.ui || :; pm2 start pm2.config.json"
+        run: "pm2 delete --silent apim.ui.dev || :; pm2 start pm2.config-dev.json"
