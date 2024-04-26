@@ -3,7 +3,7 @@
       {
         "name": "apim.ui.dev",
         "script": "npm",
-        "args": "development-start"
+        "args": "run development-start"
       }
     ]
   }
