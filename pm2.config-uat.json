@@ -1,9 +1,9 @@
 {
     "apps": [
       {
-        "name": "apim.ui.dev",
+        "name": "apim.ui.uat",
         "script": "npm",
-        "args": "start"
+        "args": "run uat-start"
       }
     ]
   }
