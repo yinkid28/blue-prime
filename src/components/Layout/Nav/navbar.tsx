@@ -16,6 +16,7 @@ import {
   MenuList,
   Show,
 } from "@chakra-ui/react";
+import { useLogout } from "@/hooks/useLocalStorage";
 type NavbarProps = {
   title: string;
 };
@@ -24,6 +25,7 @@ export default function Navbar({ title }: NavbarProps) {
   const { userType, setUserType } = useUser();
   const { setLoading, setSidebar, user, setUser } = useOnboarding();
   const router = useRouter();
+  const logout = useLogout();
   return (
     <div className="w-full bg-transparent flex justify-between items-center p-5 ">
       <div>
@@ -74,7 +76,11 @@ export default function Navbar({ title }: NavbarProps) {
                 <div className="w-full text-center font-semibold">Profile</div>
                 {/* </MenuItem> */}
                 <MenuDivider />
-                <MenuItem onClick={() => setUser(null)}>
+                <MenuItem
+                  onClick={() => {
+                    logout();
+                  }}
+                >
                   <div className="w-full  ">Logout</div>
                 </MenuItem>
                 <MenuItem>

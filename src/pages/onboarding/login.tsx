@@ -17,7 +17,13 @@ import {
 } from "@chakra-ui/react";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { Formik, Field, Form } from "formik";
-import OnboardingLayout from "@/components/onboarding/layout";
+import dynamic from "next/dynamic";
+const OnboardingLayout = dynamic(
+  () => import("@/components/onboarding/layout"),
+  {
+    ssr: false,
+  }
+);
 
 export default function Login() {
   const router = useRouter();

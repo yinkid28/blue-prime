@@ -2,6 +2,7 @@ import {
   LogActivityDto,
   LogIndustryDto,
   RegisterUserDto,
+  ResetPassword,
   ResetTokenDto,
   SignInDto,
   VerifyTokenDto,
@@ -65,6 +66,20 @@ export default class OnboardingServices {
   static async logUserIndustries(data: LogIndustryDto) {
     const response = await HTTPClient.post(
       "/onboarding-and-rbac/api/user-industry-logs",
+      data
+    );
+    return response.data;
+  }
+  static async requestForgotPassword(email: string) {
+    const response = await HTTPClient.post(
+      `/onboarding-and-rbac/api/forgotPassword/${email}`,
+      undefined
+    );
+    return response.data;
+  }
+  static async ForgotPassword(data: ResetPassword) {
+    const response = await HTTPClient.post(
+      `/onboarding-and-rbac/api/resetPassword'`,
       data
     );
     return response.data;
