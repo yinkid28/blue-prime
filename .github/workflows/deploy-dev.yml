@@ -18,12 +18,12 @@ jobs:
         run: npm install -g pm2
       - name: Install App Dependencies
         run: npm install
-        - name: Create .env File
+      - name: Create .env File
         uses: 1arp/create-a-file-action@0.4.5
         with:
-          path: '.' # Specify the root directory where you want to create the file
+          path: "." # Specify the root directory where you want to create the file
           isAbsolutePath: true # Set to true as the path is absolute
-          file: '.env'
+          file: ".env"
           content: ${{ secrets.ENV_FILE_DEV }}
       - name: Build Next Application
         run: npm run build
