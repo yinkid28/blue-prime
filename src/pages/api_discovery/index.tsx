@@ -15,7 +15,7 @@ import icon6 from "../../../public/images/api_icons/icon6.png";
 import icon7 from "../../../public/images/api_icons/icon7.png";
 import icon8 from "../../../public/images/api_icons/icon8.png";
 import icon9 from "../../../public/images/api_icons/icon9.jpg";
-import ApiCard from "@/components/apiDiscovery/apiCard";
+
 import { useEffect, useState } from "react";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { Spinner } from "@chakra-ui/react";
@@ -23,6 +23,7 @@ import { RegisterUserDto } from "@/models/onboarding.model";
 import OnboardingServices from "@/services/onboarding_services/onboarding_services";
 import { IMockApi } from "@/models/apidiscovery.model";
 import { useApi } from "@/context/ApiDiscoveryContext";
+import ApiCard from "@/components/apiDiscovery/apiLibraryCard";
 
 export default function ApiDiscoveryDashboard() {
   const { setSidebar, loading, setLoading, setApiErrorMessage } =

@@ -84,7 +84,7 @@ export default function Recommendations({
         industryId: activityArr,
       };
       const res = await OnboardingServices.logUserIndustries(data);
-      if (res.id) {
+      if (res.status === "OK") {
         toast({
           description: "Welcome!!",
           position: "bottom-right",

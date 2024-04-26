@@ -7,6 +7,7 @@ import { useApi } from "@/context/ApiDiscoveryContext";
 import { IMockApi } from "@/models/apidiscovery.model";
 import WebberSidebar from "./sidebars/webberSidebar";
 import ApiProgressSidebar from "./sidebars/apiProgressSideBar";
+import WeaverProgressSidebar from "./sidebars/weaverProgressSidebar";
 import { Spinner, UseToastOptions, useToast } from "@chakra-ui/react";
 import { Loader } from "../utils";
 import { useEffect } from "react";
@@ -67,7 +68,7 @@ export default function ApiLayout({ children }: LayoutProps) {
           {loading ? (
             <Loader />
           ) : (
-            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[20%_1fr]  gap-2 bg-light-grey p-2">
+            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[23%_1fr]  gap-2 bg-light-grey p-2">
               <div className="">
                 <ApiProductSidebar api={api as IMockApi} />
               </div>
@@ -88,6 +89,24 @@ export default function ApiLayout({ children }: LayoutProps) {
             <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[17%_1fr]  gap-2 bg-light-grey p-2">
               <div className="">
                 <ApiProgressSidebar api={api as IMockApi} />
+              </div>
+
+              <div className="bg-white rounded-t overflow-y-scroll">
+                {children}
+              </div>
+            </div>
+          )}
+        </>
+      );
+    case "apiProgressWeaver":
+      return (
+        <>
+          {loading ? (
+            <Loader />
+          ) : (
+            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[17%_1fr]  gap-2 bg-light-grey p-2">
+              <div className="">
+                <WeaverProgressSidebar api={api as IMockApi} />
               </div>
 
               <div className="bg-white rounded-t overflow-y-scroll">

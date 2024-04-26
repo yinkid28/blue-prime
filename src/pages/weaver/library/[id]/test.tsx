@@ -24,7 +24,7 @@ const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
   ssr: false, // Disable server-side rendering for this component
 });
 import "swagger-ui-react/swagger-ui.css";
-const WebberLayout = dynamic(() => import("@/components/Layout/layout"), {
+const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
 export type ImockEndpoint = {
@@ -108,7 +108,7 @@ const tags: ImockTag[] = [
     ],
   },
 ];
-export default function ApiModulesTests() {
+export default function WeaverTests() {
   const { api } = useApi();
   const router = useRouter();
   const [view, setView] = useState<string>("info");
@@ -127,17 +127,17 @@ export default function ApiModulesTests() {
     setView(tags[0].name);
   }, []);
   return (
-    <WebberLayout>
+    <WeaverLayout>
       <Navbar title={`${api?.title}`} />
       <BreadCrumbs
         // breadCrumbItems={breadCrumbs}
-        breadCrumbActiveItem={`${api?.title}-Module`}
+        breadCrumbActiveItem={`${api?.title}-Test`}
       />
       <div className="flex flex-col h-screen md:flex-row gap-3 p-5 justify-between">
         <div className="w-full md:w-[20%] h-full flex flex-col gap-2">
           <div className="w-full text-mid-grey items-center border-bottom-[1px] border-light-grey py-2 flex justify-between">
             <p className="">API Tags</p>
-            <MdAdd className="cursor-pointer" onClick={onTagOpen} />
+            {/* <MdAdd className="cursor-pointer" onClick={onTagOpen} /> */}
           </div>
           <div className="w-full bg-light-grey rounded text-mid-grey flex flex-col gap-1">
             {tags.map((item, index) => (
@@ -165,6 +165,6 @@ export default function ApiModulesTests() {
       </div>
       <AddEndpointModal isOpen={isOpen} onClose={onClose} />
       <AddTagModal isOpen={isTagOpen} onClose={onTagClose} />
-    </WebberLayout>
+    </WeaverLayout>
   );
 }

@@ -2,7 +2,7 @@ import OnboardingNavbar from "@/components/onboarding/onboardingNavbar";
 import { Button, Input } from "@/components/utils";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import google from "../../../public/icons/googleIcon.svg";
 import github from "../../../public/icons/githubIcon.svg";
 import { FaChevronLeft } from "react-icons/fa";
@@ -28,6 +28,9 @@ export default function Login() {
     email: "",
     password: "",
   };
+  useEffect(() => {
+    setLoading(false);
+  }, []);
 
   function validate(values: any) {
     // setErrorMessage("");
@@ -145,19 +148,15 @@ export default function Login() {
                 )}
               </Field>
 
-              {/* <div className="flex my-3 flex-row gap-2">
-                    <input
-                      type="checkbox"
-                      name="tandc"
-                      className="outline-none bg-transparent"
-                    />
-                    <p className="text-dark-grey">
-                      By signing up, I agree to the{" "}
-                      <span className="text-primary">Terms</span> and{" "}
-                      <span className="text-primary">Privacy Policy</span>{" "}
-                    </p>
-                  </div> */}
-              <div className="my-5">
+              <div className="flex mt-1 mb-3 w-full justify-end flex-row gap-2">
+                <p
+                  className="text-primary font-semibold text-sm cursor-pointer"
+                  onClick={() => router.push("/onboarding/forgotPassword")}
+                >
+                  Forgot Password?
+                </p>
+              </div>
+              <div className="mb-5">
                 <Button
                   Type="submit"
                   text="Sign In"

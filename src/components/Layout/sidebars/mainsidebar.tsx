@@ -13,6 +13,8 @@ import {
   Show,
 } from "@chakra-ui/react";
 import { FaFolder } from "react-icons/fa";
+import { useApi } from "@/context/ApiDiscoveryContext";
+import { useOnboarding } from "@/context/OnboardingContext";
 
 export default function MainSidebar() {
   const router = useRouter();
@@ -25,6 +27,8 @@ export default function MainSidebar() {
   ];
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { bookmarkedAPIs, libraryView, setLibraryView } = useApi();
+  const { user } = useOnboarding();
   return (
     <>
       {/* <div className="w-full  flex flex-col h-full> - This was how I met it*/}
@@ -51,6 +55,7 @@ export default function MainSidebar() {
                         ? "text-primary"
                         : "text-dark-grey"
                     }`}
+                    onClick={() => router.push("/api_discovery")}
                   >
                     <MdHomeFilled />
                     <p className="font-semibold">Home</p>
@@ -63,14 +68,19 @@ export default function MainSidebar() {
                     <BsSearch />
                     <p className="font-semibold">Search</p>
                   </div>
-                  <div
-                    className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                      router.asPath == "" ? "text-primary" : "text-dark-grey"
-                    }`}
-                  >
-                    <FiFolder />
-                    <p className="font-semibold">Library</p>
-                  </div>
+                  {user !== null && (
+                    <div
+                      className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+                        router.asPath == "/weaver/library"
+                          ? "text-primary"
+                          : "text-dark-grey"
+                      }`}
+                      onClick={() => router.push("/weaver/library")}
+                    >
+                      <MdFolder size={18} />
+                      <p className="font-semibold">Library</p>
+                    </div>
+                  )}
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath == "" ? "text-primary" : "text-dark-grey"
@@ -79,16 +89,63 @@ export default function MainSidebar() {
                     <BsFilePlay />
                     <p className="font-semibold">How to Use</p>
                   </div>
-                  <div className="pt-6 h-full rounded flex flex-col gap-4">
-                    <p className="text-2xl text-mid-grey font-bold">
-                      Categories
-                    </p>
-                    {cats?.map((cat, index) => (
-                      <p className="text-dark-grey cursor-pointer" key={index}>
-                        {cat.name}
+                  {router.asPath == "/weaver/library" ? (
+                    <div className="bg-white h-full pt-6 rounded flex flex-col gap-4">
+                      <p className="text-base text-mid-grey font-bold">
+                        Library
                       </p>
-                    ))}
-                  </div>
+                      <ul className="space-y-3 text-dark-grey">
+                        <li
+                          onClick={() => {
+                            setLibraryView("api-product");
+                            isOpen && onClose();
+                          }}
+                          className={`cursor-pointer
+                                  ${
+                                    libraryView == "api-product"
+                                      ? "text-primary"
+                                      : "text-dark-grey"
+                                  }`}
+                        >
+                          API Product
+                        </li>
+                        <li
+                          onClick={() => {
+                            bookmarkedAPIs.length === 0
+                              ? null
+                              : setLibraryView("saved");
+                            isOpen && onClose();
+                          }}
+                          className={`${
+                            !(bookmarkedAPIs.length === 0) && "cursor-pointer"
+                          }
+                                ${
+                                  libraryView == "saved"
+                                    ? "text-primary"
+                                    : "text-dark-grey"
+                                }`}
+                        >
+                          Saved
+                        </li>
+                        {/* ↓ Would tackle this when I understand what Subscribed means */}
+                        <li>Subscribed</li>
+                      </ul>
+                    </div>
+                  ) : (
+                    <div className="pt-6 h-full rounded flex flex-col gap-4">
+                      <p className="text-2xl text-mid-grey font-bold">
+                        Categories
+                      </p>
+                      {cats?.map((cat, index) => (
+                        <p
+                          className="text-dark-grey cursor-pointer"
+                          key={index}
+                        >
+                          {cat.name}
+                        </p>
+                      ))}
+                    </div>
+                  )}
                 </DrawerBody>
               </DrawerContent>
             </Drawer>
@@ -113,17 +170,19 @@ export default function MainSidebar() {
             <BsSearch />
             <p className="font-semibold">Search</p>
           </div>
-          <div
-            className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-              router.asPath == "/weaver/library"
-                ? "text-primary"
-                : "text-dark-grey"
-            }`}
-            onClick={() => router.push("/weaver/library")}
-          >
-            <MdFolder size={18} />
-            <p className="font-semibold">Library</p>
-          </div>
+          {user !== null && (
+            <div
+              className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+                router.asPath == "/weaver/library"
+                  ? "text-primary"
+                  : "text-dark-grey"
+              }`}
+              onClick={() => router.push("/weaver/library")}
+            >
+              <MdFolder size={18} />
+              <p className="font-semibold">Library</p>
+            </div>
+          )}
           <div
             className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
               router.asPath == "" ? "text-primary" : "text-dark-grey"
@@ -137,10 +196,30 @@ export default function MainSidebar() {
         {router.asPath == "/weaver/library" ? (
           <div className="bg-white h-full rounded p-5 md:flex hidden flex-col gap-4">
             <p className="text-base text-mid-grey font-bold">Library</p>
-            {/* Since it is not much, may not abstract it into an array */}
             <ul className="space-y-3 text-dark-grey">
-              <li>API Product</li>
-              <li>Saved </li>
+              <li
+                onClick={() => setLibraryView("api-product")}
+                className={`cursor-pointer
+                  ${
+                    libraryView == "api-product"
+                      ? "text-primary"
+                      : "text-dark-grey"
+                  }`}
+              >
+                API Product
+              </li>
+              <li
+                onClick={() =>
+                  bookmarkedAPIs.length === 0 ? null : setLibraryView("saved")
+                }
+                className={`${
+                  !(bookmarkedAPIs.length === 0) && "cursor-pointer"
+                }
+                ${libraryView == "saved" ? "text-primary" : "text-dark-grey"}`}
+              >
+                Saved
+              </li>
+              {/* ↓ Would tackle this when I understand what Subscribed means */}
               <li>Subscribed</li>
             </ul>
           </div>
