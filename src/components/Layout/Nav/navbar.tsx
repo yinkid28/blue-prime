@@ -1,8 +1,10 @@
 import { Button } from "../../utils";
 import { RiNotificationLine } from "react-icons/ri";
 import { BiMessageRounded } from "react-icons/bi";
-import Image from "next/image";
+import { ImCog } from "react-icons/im";
+import { HiMiniLanguage, HiOutlineCog6Tooth } from "react-icons/hi2";
 import { FaChevronDown } from "react-icons/fa";
+import Image from "next/image";
 import { useUser } from "@/context/userContext";
 import { useRouter } from "next/router";
 import { useOnboarding } from "@/context/OnboardingContext";
@@ -16,6 +18,8 @@ import {
   MenuList,
   Show,
 } from "@chakra-ui/react";
+import { FiLogOut } from "react-icons/fi";
+import { HiOutlineCog } from "react-icons/hi";
 type NavbarProps = {
   title: string;
 };
@@ -35,7 +39,7 @@ export default function Navbar({ title }: NavbarProps) {
           <div className="flex items-center md:gap-3 lg:gap-8">
             <Button
               type="fit"
-              className="sm:flex hidden"
+              className="md:flex hidden"
               text={
                 userType === "weaver" ? "Switch to Webber" : "Switch to Weaver"
               }
@@ -53,21 +57,23 @@ export default function Navbar({ title }: NavbarProps) {
                 }
               }}
             />
-            <RiNotificationLine className="sm:flex hidden" />
-            <BiMessageRounded className="sm:flex hidden" />
+            <RiNotificationLine className="md:flex hidden" />
+            <BiMessageRounded className="md:flex hidden" />
 
-            <div className="w-[40px] h-[40px] rounded-full overflow-hidden sm:flex hidden">
-              <Image
-                className="w-[40px] h-[40px]"
-                width={200}
-                height={200}
-                alt="avi"
-                src={"/images/avatar.jpg"}
-              />
+            <div className="w-[40px] h-[40px] rounded-full overflow-hidden md:flex hidden">
+              {userType !== "" && (
+                <Image
+                  className="w-[40px] h-[40px]"
+                  width={200}
+                  height={200}
+                  alt="avi"
+                  src={"/images/avatar.jpg"}
+                />
+              )}
             </div>
             <Menu>
               <MenuButton>
-                <FaChevronDown className="text-mid-grey sm:flex hidden" />
+                <FaChevronDown className="text-mid-grey md:flex hidden" />
               </MenuButton>
               <MenuList>
                 {/* <MenuItem> */}
@@ -111,7 +117,7 @@ export default function Navbar({ title }: NavbarProps) {
         )}
 
         {/* THE MENU */}
-        <Show breakpoint="(max-width: 640px)">
+        <Show breakpoint="(max-width: 768px)">
           {/* To show on screens 640px and smaller */}
           <Menu>
             <MenuButton>
@@ -129,6 +135,24 @@ export default function Navbar({ title }: NavbarProps) {
 
             <MenuList>
               <MenuGroup>
+                <MenuItem
+                  className="flex items-center gap-2"
+                  onClick={() => setUser(null)}
+                >
+                  <FiLogOut />
+
+                  <p>Logout</p>
+                </MenuItem>
+                <MenuItem className="flex items-center gap-2">
+                  <HiMiniLanguage />
+
+                  <p>Language</p>
+                </MenuItem>
+                <MenuItem className="flex items-center gap-2">
+                  <HiOutlineCog6Tooth />
+
+                  <p>Settings</p>
+                </MenuItem>
                 <MenuItem className="flex items-center gap-2">
                   <RiNotificationLine />
                   <p>Notifications</p>
