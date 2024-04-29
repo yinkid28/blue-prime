@@ -1,4 +1,4 @@
-import useLocalStorage from "@/hooks/useLocalStorage";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { ApiDiscoveryInititals, IMockApi } from "@/models/apidiscovery.model";
 import constate from "constate";
 import { useCallback, useEffect, useMemo, useReducer, useState } from "react";

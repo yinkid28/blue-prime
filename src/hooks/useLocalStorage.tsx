@@ -1,3 +1,6 @@
+import { useOnboarding } from "@/context/OnboardingContext";
+import CookieManager from "@/helper_utils/cookie_manager";
+import { useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 export function useLocalStorage(key: string, initialValue: any) {
@@ -39,4 +42,20 @@ export function useLocalStorage(key: string, initialValue: any) {
   return [storedValue, setValue];
 }
 
-export default useLocalStorage;
+// export default useLocalStorage;
+
+export function useLogout() {
+  const { setUser } = useOnboarding();
+  const toast = useToast();
+
+  return function logout() {
+    setUser(null);
+    CookieManager.deleteCookie("jwt");
+
+    toast({
+      description: "See you soon!!",
+      position: "bottom-right",
+      status: "success",
+    });
+  };
+}

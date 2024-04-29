@@ -43,6 +43,11 @@ export type LogIndustryDto = {
   userId: number;
   industryId: number[];
 };
+export type ResetPassword = {
+  email: string;
+  token: string;
+  newPassword: string;
+};
 
 export type IUser = {
   name: string;
