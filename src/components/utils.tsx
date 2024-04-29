@@ -126,6 +126,28 @@ export function Loader() {
   );
 }
 
+type ProgressProps = {
+  trailBg: string;
+  pathBg: string;
+  value: string;
+  height: string;
+};
+export function ProgressBar({ trailBg, pathBg, value, height }: ProgressProps) {
+  return (
+    <div
+      className={`w-full rounded-full`}
+      style={{ height, background: trailBg }}
+    >
+      <div
+        className={`rounded-full  bg-${pathBg} h-full`}
+        style={{
+          width: `${value}%`,
+        }}
+      ></div>
+    </div>
+  );
+}
+
 export function toTitleCase(input: string, space?: boolean): string {
   // Step 1: Remove underscores
   const noUnderscores = input?.replace(/_/g, " ");

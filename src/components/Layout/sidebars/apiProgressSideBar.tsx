@@ -111,7 +111,10 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath ==
-                      `/webber/api_details/${api.title}/overview`
+                      `/webber/api_details/${toTitleCase(
+                        api.title,
+                        true
+                      )}/api_information`
                         ? "text-primary"
                         : "text-dark-grey"
                     }`}

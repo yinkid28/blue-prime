@@ -1,4 +1,4 @@
-import useLocalStorage from "@/hooks/useLocalStorage";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { ApiDiscoveryInititals, IMockApi } from "@/models/apidiscovery.model";
 import { UserInititals } from "@/models/user.model";
 import constate from "constate";
