@@ -72,7 +72,7 @@ export default function WaverSubscriptions() {
       plan: "15th Apr 2024",
       price: "2.90",
       paymentMethod: "Card",
-      paymentStatus: "failed",
+      paymentStatus: "Failed",
     },
     {
       date: "15th Apr 2024",
@@ -134,29 +134,47 @@ export default function WaverSubscriptions() {
         <div className="flex items-center">
           <SearchBar />
         </div>
-        <TableContainer>
-          <Table size="sm">
-            <Thead className="rounded-t-lg">
-              <Tr className="bg-light-grey rounded-t-lg p-2">
-                <Th>Date</Th>
-                <Th>Application Name</Th>
-                <Th>Plan</Th>
-                <Th>Price</Th>
-                <Th>Payment Method</Th>
-                <Th>Payment Method</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {tableData?.map((item, index) => (
-                <Tr key={index}>
-                  <Td>{item.date}</Td>
-                  <Td>{item.appName}</Td>
-                  <Td>{item.plan}</Td>
-                  <Td>${item.price}</Td>
-                  <Td>{item.paymentMethod}</Td>
-                  <Td>
+
+        {/* THE PERFECT TABLE */}
+        <div className="rounded-lg border overflow-scroll">
+          <table className="min-w-full">
+            <thead className="bg-resources-bg text-mid-grey">
+              <tr className="text-left">
+                <th className="w-1/6 px-6 py-2 whitespace-nowrap">Date</th>
+                <th className="w-1/6 px-6 py-2 whitespace-nowrap">
+                  Application Name
+                </th>
+                <th className="w-1/6 px-6 py-2 whitespace-nowrap">Plan</th>
+                <th className="w-1/6 px-6 py-2 whitespace-nowrap">Price</th>
+                <th className="w-1/6 px-6 py-2 whitespace-nowrap">
+                  Payment Method
+                </th>
+                <th className="w-1/6 px-6 py-2 whitespace-nowrap">
+                  Payment Status
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {tableData.map((item, index) => (
+                <tr key={index}>
+                  <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
+                    {item.date}
+                  </td>
+                  <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
+                    {item.appName}
+                  </td>
+                  <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
+                    {item.plan}
+                  </td>
+                  <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
+                    {item.price}
+                  </td>
+                  <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
+                    {item.paymentMethod}
+                  </td>
+                  <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
                     <div
-                      className={`w-fit h-fit px-3 py-1 rounded-full ${
+                      className={`rounded-full w-fit px-3 whitespace-nowrap ${
                         item.paymentStatus.toLowerCase() === "success"
                           ? "bg-success-bg text-success"
                           : "bg-error-bg text-error"
@@ -164,12 +182,12 @@ export default function WaverSubscriptions() {
                     >
                       {item.paymentStatus}
                     </div>
-                  </Td>
-                </Tr>
+                  </td>
+                </tr>
               ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+            </tbody>
+          </table>
+        </div>
       </div>
     </WeaverLayout>
   );

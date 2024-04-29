@@ -9,6 +9,7 @@ import Image, { StaticImageData } from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
+import { UseToastOptions, useToast } from "@chakra-ui/react";
 
 // remember to use static generation here but for now we will use context to get current api
 const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
@@ -22,14 +23,23 @@ type TableRowProps = {
   renewDate: string;
 };
 
+const toastProps: UseToastOptions = {
+  description: "successfully copied",
+  status: "success",
+  isClosable: true,
+  duration: 800,
+  position: "bottom-right",
+};
+
 export default function ApiOverview() {
+  const toast = useToast();
   const { api } = useApi();
   const router = useRouter();
   const { loading, setLoading, setSidebar } = useOnboarding();
   const [copied, setCopied] = useState<boolean>(false);
   useEffect(() => {
     setLoading(false);
-    // setSidebar("apiProgressWeaver");
+    setSidebar("apiProgressWeaver");
   }, []);
   const breadCrumbs: BreadCrumbItems[] = [
     {
@@ -64,6 +74,7 @@ export default function ApiOverview() {
       .writeText("http://www.codehow.com/specs")
       .then(() => {
         setCopied(true);
+        toast({ ...toastProps });
         setTimeout(() => setCopied(false), 800);
       })
       .catch((err) => {

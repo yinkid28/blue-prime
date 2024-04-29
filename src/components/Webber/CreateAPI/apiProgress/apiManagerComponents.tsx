@@ -111,7 +111,7 @@ export function SubHistoryView() {
         </TopCards>
         <div className="rounded-lg border overflow-scroll">
           <table className="min-w-full">
-            <thead className="bg-[#f8f8f8] text-mid-grey rounded-lg">
+            <thead className="bg-resources-bg text-mid-grey rounded-lg">
               <tr className="text-left">
                 <th className="w-1/3 px-6 py-2 whitespace-nowrap">
                   Application Name
@@ -328,7 +328,7 @@ function TableRow({ appName, status }: TableRowProps) {
       </td>
       <td className="px-6 py-4 text-sm border-t items-center">
         <p
-          className={`rounded-full w-fit px-3  whitespace-nowrap
+          className={`rounded-full w-fit px-3 whitespace-nowrap
             ${status === "Paid" && "bg-[#F0FFEB] text-[#298413]"}
             ${status === "Awaiting Renewal" && " bg-[#fffecf] text-[#97930b]"}
             ${status === "Failed" && " bg-[#ffe9e9] text-[#f13636]"}
