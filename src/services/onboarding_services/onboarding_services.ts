@@ -56,6 +56,13 @@ export default class OnboardingServices {
     );
     return response.data;
   }
+  static async VerifyPasswordToken(data: VerifyTokenDto) {
+    const response = await HTTPClient.post(
+      "/onboarding-and-rbac/api/verify_forgot_password_token",
+      data
+    );
+    return response.data;
+  }
   static async logUserIntentions(data: LogActivityDto) {
     const response = await HTTPClient.post(
       "/onboarding-and-rbac/api/user-activity-logs",
@@ -77,9 +84,16 @@ export default class OnboardingServices {
     );
     return response.data;
   }
+  static async resetPassword(data: ResetPassword) {
+    const response = await HTTPClient.post(
+      `/onboarding-and-rbac/api/resetPassword`,
+      data
+    );
+    return response.data;
+  }
   static async ForgotPassword(data: ResetPassword) {
     const response = await HTTPClient.post(
-      `/onboarding-and-rbac/api/resetPassword'`,
+      `/onboarding-and-rbac/api/resetPassword`,
       data
     );
     return response.data;

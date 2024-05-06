@@ -45,7 +45,7 @@ export type LogIndustryDto = {
 };
 export type ResetPassword = {
   email: string;
-  token: string;
+
   newPassword: string;
 };
 

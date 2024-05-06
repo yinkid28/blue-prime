@@ -1,7 +1,7 @@
 // import OnboardingLayout from "@/components/onboarding/layout";
 import { Button, Input } from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { VerifyTokenDto } from "@/models/onboarding.model";
+import { ResetPassword, VerifyTokenDto } from "@/models/onboarding.model";
 import OnboardingServices from "@/services/onboarding_services/onboarding_services";
 import {
   FormControl,
@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 const OnboardingLayout = dynamic(
   () => import("@/components/onboarding/layout"),
   {
@@ -23,6 +24,7 @@ import { BsDot } from "react-icons/bs";
 import OTPInput from "react-otp-input";
 export default function ForgotPassword() {
   const toast = useToast();
+  const router = useRouter();
   const [view, setView] = useState<number>(1);
   const [email, setEmail] = useState<string>("");
   const [token, setToken] = useState<string>("");
@@ -63,7 +65,7 @@ export default function ForgotPassword() {
       token,
     };
     try {
-      const res = await OnboardingServices.VerifyToken(data);
+      const res = await OnboardingServices.VerifyPasswordToken(data);
       toast({
         description: "Token successfully Verified",
         status: "success",
@@ -99,48 +101,30 @@ export default function ForgotPassword() {
   }
 
   async function onSubmit(values: any, actions: any) {
-    // const data: RegisterUserDto = {
-    //   name: values.name,
-    //   officeEmail: values.email,
-    //   officePhoneNumber: "string",
-    //   usageLocation: "string;",
-    //   prefferedLanguageId: 1,
-    //   createdBy: values.name,
-    //   password: values.password,
-    //   roleIds: [1],
-    // };
-    // try {
-    //   const res = await OnboardingServices.RegisterUser(data);
-    //   const loginData: SignInDto = {
-    //     email: res.data.officeEmail,
-    //     password: values.password,
-    //   };
-    //   const loginres = await OnboardingServices.signInUser(loginData);
-    //   actions.setSubmitting(false);
-    //   CookieManager.setCookie("jwt", loginres.data.jwt, 2);
-    //   toast({
-    //     status: "success",
-    //     description: "User successfully created",
-    //     position: "bottom-right",
-    //   });
-    //   router.push({
-    //     pathname: "/onboarding/authentication",
-    //     query: {
-    //       email: values.email,
-    //       userId: loginres.data.user.id,
-    //     },
-    //   });
-    //   setUser(loginres.data.user);
-    // } catch (error: any) {
-    //   console.log(error);
-    //   actions.setSubmitting(false);
-    //   setProgress(25);
-    //   setStage(1);
-    //   setLoading(false);
-    //   const errorMessage = error?.response?.data?.message;
-    //   setApiErrorMessage(errorMessage, "error");
-    //   return;
-    // }
+    const data: ResetPassword = {
+      email,
+      newPassword: values.cPassword,
+    };
+    try {
+      const res = await OnboardingServices.resetPassword(data);
+
+      actions.setSubmitting(false);
+      toast({
+        status: "success",
+        description: "Password reset successful",
+        position: "bottom-right",
+      });
+      router.push({
+        pathname: "/onboarding/login",
+      });
+    } catch (error: any) {
+      console.log(error);
+      actions.setSubmitting(false);
+
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+      return;
+    }
   }
 
   return (
