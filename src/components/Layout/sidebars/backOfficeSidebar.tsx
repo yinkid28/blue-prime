@@ -28,7 +28,7 @@ export default function BackOfficeSidebar() {
             router.push("/admin_back_office/category_management");
           }}
         >
-          <Icon icon="lets-icons:widget-alt-light" className="text-xl" />
+          <Icon icon="lets-icons:widget-alt-light" className="text-2xl" />
 
           <p>Category Management</p>
         </div>
@@ -40,7 +40,10 @@ export default function BackOfficeSidebar() {
           }`}
           onClick={() => router.push("/admin_back_office/api_management")}
         >
-          <Icon icon="material-symbols-light:deployed-code-outline-sharp" />
+          <Icon
+            icon="material-symbols-light:deployed-code-outline-sharp"
+            className="text-xl"
+          />
 
           <p>API Management</p>
         </div>
@@ -76,7 +79,7 @@ export default function BackOfficeSidebar() {
             router.asPath == `somePath` ? "text-primary" : "text-dark-grey"
           }`}
         >
-          <Icon icon="lets-icons:file-dock-search-light" />
+          <Icon icon="lets-icons:file-dock-search-light" className="text-xl" />
 
           <p>Audit Trial</p>
         </div>

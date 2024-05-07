@@ -182,8 +182,8 @@ interface TableTypes {
 export function Table({ children }: TableTypes) {
   return (
     <TableContext.Provider value={{}}>
-      <div className="rounded-lg border overflow-scroll">
-        <table className="min-w-full">{children}</table>
+      <div className={`rounded-lg border overflow-scroll `}>
+        <table className={`min-w-full`}>{children}</table>
       </div>
     </TableContext.Provider>
   );
