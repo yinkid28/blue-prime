@@ -29,9 +29,10 @@ const breadCrumbs: BreadCrumbItems[] = [
 
 export default function WaverSubscriptions() {
   const { api } = useApi();
-  const { setLoading } = useOnboarding();
+  const { setLoading, setSidebar } = useOnboarding();
   useEffect(() => {
     setLoading(false);
+    setSidebar("apiProgressWeaver");
   }, []);
 
   const apps = [

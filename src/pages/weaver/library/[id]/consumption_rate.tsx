@@ -1,10 +1,11 @@
 import Navbar from "@/components/Layout/Nav/navbar";
 import { BreadCrumbItems, BreadCrumbs, ProgressBar } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
+import { useOnboarding } from "@/context/OnboardingContext";
 import { Progress } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // remember to use static generation here but for now we will use context to get current api
 const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
@@ -27,6 +28,7 @@ interface rateTypes {
 
 export default function ConsumptionRate() {
   const { api } = useApi();
+  const { setLoading, setSidebar } = useOnboarding();
 
   const consumptionRateTableData: rateTypes[] = [
     { date: "12th Jan 2024", calls: (400).toLocaleString(), price: "$2.90" },
@@ -38,6 +40,10 @@ export default function ConsumptionRate() {
   ];
 
   const [searchedText, setSearchedText] = useState<string>("");
+  useEffect(() => {
+    setLoading(false);
+    setSidebar("apiProgressWeaver");
+  }, []);
 
   return (
     <>
