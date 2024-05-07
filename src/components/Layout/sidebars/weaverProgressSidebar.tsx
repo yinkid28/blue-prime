@@ -233,7 +233,7 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
         <div
           className="hidden md:flex items-center gap-2 cursor-pointer"
           onClick={() => {
-            router.back();
+            router.push("/weaver/library");
             // setSidebar("webber");
           }}
         >

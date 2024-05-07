@@ -123,7 +123,7 @@ export default function WeaverTests() {
   const router = useRouter();
   const [view, setView] = useState<string>("info");
   const [selectedTag, setSelectedTag] = useState<ImockTag>();
-  const { loading, setLoading } = useOnboarding();
+  const { setLoading, setSidebar } = useOnboarding();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -134,8 +134,10 @@ export default function WeaverTests() {
   useEffect(() => {
     setLoading(false);
     setSelectedTag(tags[0]);
+    setSidebar("apiProgressWeaver");
     setView(tags[0].name);
   }, []);
+
   return (
     <WeaverLayout>
       <Navbar title={`${api?.title}`} />

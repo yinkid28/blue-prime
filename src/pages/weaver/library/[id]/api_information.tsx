@@ -21,7 +21,7 @@ export default function ApiOverview() {
   const { loading, setLoading, setSidebar } = useOnboarding();
   useEffect(() => {
     setLoading(false);
-    // setSidebar("apiProgressWeaver");
+    setSidebar("apiProgressWeaver");
   }, []);
   const breadCrumbs: BreadCrumbItems[] = [
     {
