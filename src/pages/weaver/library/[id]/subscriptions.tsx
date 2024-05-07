@@ -19,6 +19,14 @@ import {
 const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
+
+const breadCrumbs: BreadCrumbItems[] = [
+  {
+    breadCrumbText: "Library",
+    breadCrumbPath: "/weaver/library",
+  },
+];
+
 export default function WaverSubscriptions() {
   const { api } = useApi();
   const { setLoading } = useOnboarding();
@@ -103,7 +111,7 @@ export default function WaverSubscriptions() {
     <WeaverLayout>
       <Navbar title={`${api?.title}`} />
       <BreadCrumbs
-        // breadCrumbItems={breadCrumbs}
+        breadCrumbItems={breadCrumbs}
         breadCrumbActiveItem={`${api?.title}-Subscriptions`}
       />
 

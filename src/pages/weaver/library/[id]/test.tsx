@@ -1,5 +1,5 @@
 import Navbar from "@/components/Layout/Nav/navbar";
-import { BreadCrumbs } from "@/components/utils";
+import { BreadCrumbItems, BreadCrumbs } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
 import dynamic from "next/dynamic";
@@ -27,6 +27,14 @@ import "swagger-ui-react/swagger-ui.css";
 const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
+
+const breadCrumbs: BreadCrumbItems[] = [
+  {
+    breadCrumbText: "Library",
+    breadCrumbPath: "/weaver/library",
+  },
+];
+
 export type ImockEndpoint = {
   method: string;
   url: string;
@@ -37,6 +45,7 @@ export type ImockTag = {
   id: number;
   endpoints: ImockEndpoint[];
 };
+
 const tags: ImockTag[] = [
   {
     name: "Pets",
@@ -108,6 +117,7 @@ const tags: ImockTag[] = [
     ],
   },
 ];
+
 export default function WeaverTests() {
   const { api } = useApi();
   const router = useRouter();
@@ -130,7 +140,7 @@ export default function WeaverTests() {
     <WeaverLayout>
       <Navbar title={`${api?.title}`} />
       <BreadCrumbs
-        // breadCrumbItems={breadCrumbs}
+        breadCrumbItems={breadCrumbs}
         breadCrumbActiveItem={`${api?.title}-Test`}
       />
       <div className="flex flex-col h-screen md:flex-row gap-3 p-5 justify-between">

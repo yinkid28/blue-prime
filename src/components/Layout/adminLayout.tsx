@@ -1,7 +1,7 @@
 "use client";
 import { useOnboarding } from "@/context/OnboardingContext";
 
-import MainSidebar from "./sidebars/mainsidebar";
+import BackOfficeSidebar from "./sidebars/BackOfficeSidebar";
 import ApiProductSidebar from "./sidebars/apiProductSidebar";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { IMockApi } from "@/models/apidiscovery.model";
@@ -51,7 +51,9 @@ export default function ApiLayout({ children }: LayoutProps) {
             <Loader />
           ) : (
             <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[17%_1fr]  gap-2 bg-light-grey p-2">
-              <div className="">{/* INSERT MAIN ADMIN SIDEBAR */}</div>
+              <div className="">
+                <BackOfficeSidebar />
+              </div>
 
               <div className="bg-white rounded-t overflow-y-scroll">
                 {children}
