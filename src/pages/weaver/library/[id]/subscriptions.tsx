@@ -1,21 +1,11 @@
 import Navbar from "@/components/Layout/Nav/navbar";
-import { BreadCrumbs, SearchBar } from "@/components/utils";
+import { BreadCrumbItems, BreadCrumbs, SearchBar } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
+import { Key, useEffect } from "react";
 import { FaEllipsisV } from "react-icons/fa";
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
-} from "@chakra-ui/react";
+import { Table } from "@/components/utils";
 const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
@@ -57,7 +47,17 @@ export default function WaverSubscriptions() {
       date: "15th Apr 2024",
     },
   ];
-  const tableData = [
+
+  type tableTypes = {
+    date: string;
+    appName: string;
+    plan: string;
+    price: string;
+    paymentMethod: string;
+    paymentStatus: string;
+  };
+
+  const tableData: tableTypes[] = [
     {
       date: "15th Apr 2024",
       appName: "Trexapayment",
@@ -143,59 +143,55 @@ export default function WaverSubscriptions() {
           <SearchBar />
         </div>
 
-        {/* THE PERFECT TABLE */}
-        <div className="rounded-lg border overflow-scroll">
-          <table className="min-w-full">
-            <thead className="bg-resources-bg text-mid-grey">
-              <tr className="text-left">
-                <th className="w-1/6 px-6 py-2 whitespace-nowrap">Date</th>
-                <th className="w-1/6 px-6 py-2 whitespace-nowrap">
-                  Application Name
-                </th>
-                <th className="w-1/6 px-6 py-2 whitespace-nowrap">Plan</th>
-                <th className="w-1/6 px-6 py-2 whitespace-nowrap">Price</th>
-                <th className="w-1/6 px-6 py-2 whitespace-nowrap">
-                  Payment Method
-                </th>
-                <th className="w-1/6 px-6 py-2 whitespace-nowrap">
-                  Payment Status
-                </th>
+        <Table>
+          <Table.Header>
+            <th className="w-1/6 px-6 py-2 whitespace-nowrap">Date</th>
+            <th className="w-1/6 px-6 py-2 whitespace-nowrap">
+              Application Name
+            </th>
+            <th className="w-1/6 px-6 py-2 whitespace-nowrap">Plan</th>
+            <th className="w-1/6 px-6 py-2 whitespace-nowrap">Price</th>
+            <th className="w-1/6 px-6 py-2 whitespace-nowrap">
+              Payment Method
+            </th>
+            <th className="w-1/6 px-6 py-2 whitespace-nowrap">
+              Payment Status
+            </th>
+          </Table.Header>
+          <Table.Body
+            data={tableData}
+            render={(item: tableTypes, index: Key | null | undefined) => (
+              <tr key={index}>
+                <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
+                  {item.date}
+                </td>
+                <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
+                  {item.appName}
+                </td>
+                <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
+                  {item.plan}
+                </td>
+                <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
+                  {item.price}
+                </td>
+                <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
+                  {item.paymentMethod}
+                </td>
+                <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
+                  <div
+                    className={`rounded-full w-fit px-3 whitespace-nowrap ${
+                      item.paymentStatus.toLowerCase() === "success"
+                        ? "bg-success-bg text-success"
+                        : "bg-error-bg text-error"
+                    }`}
+                  >
+                    {item.paymentStatus}
+                  </div>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {tableData.map((item, index) => (
-                <tr key={index}>
-                  <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
-                    {item.date}
-                  </td>
-                  <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
-                    {item.appName}
-                  </td>
-                  <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
-                    {item.plan}
-                  </td>
-                  <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
-                    {item.price}
-                  </td>
-                  <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
-                    {item.paymentMethod}
-                  </td>
-                  <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
-                    <div
-                      className={`rounded-full w-fit px-3 whitespace-nowrap ${
-                        item.paymentStatus.toLowerCase() === "success"
-                          ? "bg-success-bg text-success"
-                          : "bg-error-bg text-error"
-                      }`}
-                    >
-                      {item.paymentStatus}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            )}
+          />
+        </Table>
       </div>
     </WeaverLayout>
   );
