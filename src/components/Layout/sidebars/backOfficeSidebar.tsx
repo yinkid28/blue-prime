@@ -6,7 +6,7 @@ export default function BackOfficeSidebar() {
   const router = useRouter();
   return (
     // <p>Hey, there</p>
-    <div className="w-full h-full rounded bg-white text-dark-txt p-6">
+    <div className="w-full h-full rounded text-[14px] bg-white text-dark-txt p-6">
       <div className="flex flex-col gap-6">
         <p className="text-2xl font-semibold mt-2">Logo</p>
         <div
@@ -20,8 +20,13 @@ export default function BackOfficeSidebar() {
         </div>
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath == `somePath` ? "text-primary" : "text-dark-grey"
+            router.asPath == `/admin_back_office/category_management`
+              ? "text-primary"
+              : "text-dark-grey"
           }`}
+          onClick={() => {
+            router.push("/admin_back_office/category_management");
+          }}
         >
           <Icon icon="lets-icons:widget-alt-light" className="text-xl" />
 
@@ -29,8 +34,11 @@ export default function BackOfficeSidebar() {
         </div>
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath == `somePath` ? "text-primary" : "text-dark-grey"
+            router.asPath == `/admin_back_office/api_management`
+              ? "text-primary"
+              : "text-dark-grey"
           }`}
+          onClick={() => router.push("/admin_back_office/api_management")}
         >
           <Icon icon="material-symbols-light:deployed-code-outline-sharp" />
 
