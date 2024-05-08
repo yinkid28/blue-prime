@@ -28,6 +28,7 @@ export type ImockEndpoint = {
   method: string;
   url: string;
   description: string;
+  criteria?: { name: string; description: string };
 };
 export type ImockTag = {
   name: string;

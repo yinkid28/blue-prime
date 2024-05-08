@@ -24,6 +24,7 @@ const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
   ssr: false, // Disable server-side rendering for this component
 });
 import "swagger-ui-react/swagger-ui.css";
+import { ImockEndpoint } from "@/pages/webber/api_details/[id]/modules";
 const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
@@ -35,11 +36,6 @@ const breadCrumbs: BreadCrumbItems[] = [
   },
 ];
 
-export type ImockEndpoint = {
-  method: string;
-  url: string;
-  description: string;
-};
 export type ImockTag = {
   name: string;
   id: number;

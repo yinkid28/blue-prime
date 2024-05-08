@@ -13,7 +13,7 @@ export default function CategoryManager() {
   const { setSidebar, loading, setLoading, setApiErrorMessage } =
     useOnboarding();
   useEffect(() => {
-    setSidebar("categoryManager");
+    setSidebar("backOffice");
     setLoading(false);
   }, []);
 
