@@ -1,5 +1,5 @@
 import Navbar from "@/components/Layout/Nav/navbar";
-import { BreadCrumbItems, BreadCrumbs } from "@/components/utils";
+import { BreadCrumbItems, BreadCrumbs, Table } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react";
 import dynamic from "next/dynamic";
 import Image, { StaticImageData } from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { Key, useEffect, useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
 import { UseToastOptions, useToast } from "@chakra-ui/react";
 
@@ -151,39 +151,36 @@ export default function ApiOverview() {
           </div>
           <div>
             <h3 className="mb-4 text-mid-grey font-semibold">Subscriptions</h3>
-            {/* THE TABLE */}
-            {/* <div className="rounded-lg border overflow-scroll w-full md:w-[75%] gap-2"> */}
-            <div className="rounded-lg border overflow-scroll w-full">
-              <table className="min-w-full">
-                <thead className="bg-[#f8f8f8] text-mid-grey">
-                  <tr className="text-left text-sm">
-                    <th className="w-1/5 px-6 py-2 whitespace-nowrap">
-                      Application Name
-                    </th>
-                    <th className="w-1/5 px-6 py-2 whitespace-nowrap">
-                      Request Calls
-                    </th>
-                    <th className="w-1/5 px-6 py-2">Status</th>
-                    <th className="w-1/5 px-6 py-2 whitespace-nowrap">
-                      Subscription Renewal Date
-                    </th>
-                    <th className="w-[5%] px-6 py-2">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {/* THE TABLE ROWS */}
-                  {weaverOverviewTableData.map((item, index) => (
-                    <TableRow
-                      name={item.name}
-                      calls={item.calls}
-                      status={item.status}
-                      renewDate={item.renewDate}
-                      key={index}
-                    />
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <Table>
+              <Table.Header>
+                <th className="w-1/5 px-6 py-2 whitespace-nowrap">
+                  Application Name
+                </th>
+                <th className="w-1/5 px-6 py-2 whitespace-nowrap">
+                  Request Calls
+                </th>
+                <th className="w-1/5 px-6 py-2">Status</th>
+                <th className="w-1/5 px-6 py-2 whitespace-nowrap">
+                  Subscription Renewal Date
+                </th>
+                <th className="w-[5%] px-6 py-2">Actions</th>
+              </Table.Header>
+              <Table.Body
+                data={weaverOverviewTableData}
+                render={(
+                  data: TableRowProps,
+                  index: Key | null | undefined
+                ) => (
+                  <TableRow
+                    name={data.name}
+                    calls={data.calls}
+                    status={data.status}
+                    renewDate={data.renewDate}
+                    key={index}
+                  />
+                )}
+              />
+            </Table>
           </div>
         </div>
       </WeaverLayout>

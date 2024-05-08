@@ -1,9 +1,10 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import React, { useState, createContext, useContext } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 import { MdSearch } from "react-icons/md";
+// import { createContext } from "vm";
 
 type ButtonProps = {
   type?: string;
@@ -165,3 +166,53 @@ export function toTitleCase(input: string, space?: boolean): string {
   }
   return titleCase;
 }
+
+//  THE COMPOUND COMPONENT PATTERN is the advanced react pattern used to create this table component. Below are the steps followed.
+
+// 1. Create a context
+const TableContext = createContext();
+
+interface TableTypes {
+  children?: React.ReactNode;
+  data?: any[];
+  render?: any;
+}
+
+// 2. Create parent component
+export function Table({ children }: TableTypes) {
+  return (
+    <TableContext.Provider value={{}}>
+      <div className={`rounded-lg border overflow-scroll `}>
+        <table className={`min-w-full`}>{children}</table>
+      </div>
+    </TableContext.Provider>
+  );
+}
+
+// 3. Creation of child components to render table header and body.
+function Header({ children }: TableTypes) {
+  return (
+    <thead className="bg-resources-bg text-mid-grey rounded-lg">
+      <tr className="text-left">{children}</tr>
+    </thead>
+  );
+}
+
+function Body({ data, render }: TableTypes) {
+  if (!data?.length)
+    return (
+      <tbody>
+        <tr>
+          <td colSpan={data?.length} className="text-center py-4 text-dark-txt">
+            Data not avalaible!
+          </td>
+        </tr>
+      </tbody>
+    );
+
+  return <tbody>{data?.map(render)}</tbody>;
+}
+
+// 4. Child components added as properties to the parent component.
+Table.Header = Header;
+Table.Body = Body;
