@@ -170,7 +170,7 @@ export function toTitleCase(input: string, space?: boolean): string {
 //  THE COMPOUND COMPONENT PATTERN is the advanced react pattern used to create this table component. Below are the steps followed.
 
 // 1. Create a context
-const TableContext = createContext();
+const TableContext = createContext(undefined);
 
 interface TableTypes {
   children?: React.ReactNode;
@@ -181,7 +181,7 @@ interface TableTypes {
 // 2. Create parent component
 export function Table({ children }: TableTypes) {
   return (
-    <TableContext.Provider value={{}}>
+    <TableContext.Provider value={undefined}>
       <div className={`rounded-lg border overflow-scroll `}>
         <table className={`min-w-full`}>{children}</table>
       </div>
