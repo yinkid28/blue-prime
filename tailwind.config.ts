@@ -39,8 +39,9 @@ const config: Config = {
         info: "#3FBDF3",
         category: "#B54708",
         primary: "#424CF9",
+        criteriaBg: "#E3E5FE",
+        criteria: "#2548A0",
         primaryFade: "#424CF970",
-        
       },
     },
   },

@@ -10,9 +10,11 @@ export type IMockFeedback = {
 
 type FeedbackViewProps = {
   commentButtonDisplay: boolean;
+  ratingButton?: boolean;
 };
 export default function FeedbackView({
   commentButtonDisplay,
+  ratingButton,
 }: FeedbackViewProps) {
   const [view, setView] = useState<string>("all");
   const [currentItem, setCurrentItem] = useState<IMockFeedback>();
@@ -65,14 +67,21 @@ export default function FeedbackView({
           />
         )}
       </div>
-      {commentButtonDisplay && (
-        <div className="md:w-[35%] w-full flex justify-end">
+
+      <div className="md:w-[35%] w-full gap-2 flex justify-end">
+        {commentButtonDisplay && (
           <button className="flex gap-2 items-center rounded-lg text-primary w-fit h-fit border-2 border-light-grey px-3 py-1">
             <MdAdd />
             <p>Comment</p>
           </button>
-        </div>
-      )}
+        )}
+        {ratingButton && (
+          <button className="flex gap-2 items-center rounded-lg text-primary w-fit h-fit border-2 border-light-grey px-3 py-1">
+            <MdAdd />
+            <p>Add Ratting</p>
+          </button>
+        )}
+      </div>
     </div>
   );
 }

@@ -3,6 +3,7 @@ import React from "react";
 import { HiOutlineStar } from "react-icons/hi";
 import { CiMenuKebab } from "react-icons/ci";
 import { Icon } from "@iconify/react";
+import { Table } from "../../../utils";
 import {
   Box,
   Menu,
@@ -39,6 +40,7 @@ type TopCardsProps = {
 };
 
 type TableRowProps = {
+  id?: React.Key | number;
   appName: string;
   status: string;
 };
@@ -83,7 +85,7 @@ export function OverviewView() {
 }
 
 export function SubHistoryView() {
-  const tableData = [
+  const tableData: TableRowProps[] = [
     { id: 1, appName: "Parse Generator", status: "Paid" },
     { id: 2, appName: "Parse Generator", status: "Awaiting Renewal" },
     { id: 3, appName: "Parse Generator", status: "Paid" },
@@ -109,7 +111,7 @@ export function SubHistoryView() {
         >
           3$
         </TopCards>
-        <div className="rounded-lg border overflow-scroll">
+        {/* <div className="rounded-lg border overflow-scroll">
           <table className="min-w-full">
             <thead className="bg-resources-bg text-mid-grey rounded-lg">
               <tr className="text-left">
@@ -130,7 +132,27 @@ export function SubHistoryView() {
               ))}
             </tbody>
           </table>
-        </div>
+        </div> */}
+
+        <Table>
+          <Table.Header>
+            <th className="w-1/3 px-6 py-2 whitespace-nowrap">
+              Application Name
+            </th>
+            <th className="w-1/3 px-6 py-2">Status</th>
+            <th className="w-[5%] px-6 py-2">Action</th>
+          </Table.Header>
+          <Table.Body
+            data={tableData}
+            render={(data: TableRowProps) => (
+              <TableRow
+                key={data.id}
+                appName={data.appName}
+                status={data.status}
+              />
+            )}
+          />
+        </Table>
       </div>
     </div>
   );

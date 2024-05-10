@@ -1,5 +1,5 @@
 import Navbar from "@/components/Layout/Nav/navbar";
-import { BreadCrumbs } from "@/components/utils";
+import { BreadCrumbItems, BreadCrumbs } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
 import dynamic from "next/dynamic";
@@ -24,19 +24,24 @@ const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
   ssr: false, // Disable server-side rendering for this component
 });
 import "swagger-ui-react/swagger-ui.css";
+import { ImockEndpoint } from "@/pages/webber/api_details/[id]/modules";
 const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
-export type ImockEndpoint = {
-  method: string;
-  url: string;
-  description: string;
-};
+
+const breadCrumbs: BreadCrumbItems[] = [
+  {
+    breadCrumbText: "Library",
+    breadCrumbPath: "/weaver/library",
+  },
+];
+
 export type ImockTag = {
   name: string;
   id: number;
   endpoints: ImockEndpoint[];
 };
+
 const tags: ImockTag[] = [
   {
     name: "Pets",
@@ -108,12 +113,13 @@ const tags: ImockTag[] = [
     ],
   },
 ];
+
 export default function WeaverTests() {
   const { api } = useApi();
   const router = useRouter();
   const [view, setView] = useState<string>("info");
   const [selectedTag, setSelectedTag] = useState<ImockTag>();
-  const { loading, setLoading } = useOnboarding();
+  const { setLoading, setSidebar } = useOnboarding();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -124,13 +130,15 @@ export default function WeaverTests() {
   useEffect(() => {
     setLoading(false);
     setSelectedTag(tags[0]);
+    setSidebar("apiProgressWeaver");
     setView(tags[0].name);
   }, []);
+
   return (
     <WeaverLayout>
       <Navbar title={`${api?.title}`} />
       <BreadCrumbs
-        // breadCrumbItems={breadCrumbs}
+        breadCrumbItems={breadCrumbs}
         breadCrumbActiveItem={`${api?.title}-Test`}
       />
       <div className="flex flex-col h-screen md:flex-row gap-3 p-5 justify-between">
