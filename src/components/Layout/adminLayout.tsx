@@ -12,6 +12,7 @@ import { Loader } from "../utils";
 import { useEffect } from "react";
 import BackOfficeSidebar from "./sidebars/backOfficeSidebar";
 import CategoryDetailSidebar from "./sidebars/categoryDetailSidebar";
+import BusinessSolutionSidebar from "./sidebars/businessSolutionSidebar";
 
 type LayoutProps = {
   children: React.ReactNode | React.ReactNode[];
@@ -25,8 +26,14 @@ const toastProps: UseToastOptions = {
 };
 export default function ApiLayout({ children }: LayoutProps) {
   const toast = useToast();
-  const { sidebar, loading, setApiErrorMessage, errorMessage, errorStatus } =
-    useOnboarding();
+  const {
+    sidebar,
+    loading,
+    setApiErrorMessage,
+    errorMessage,
+    errorStatus,
+    apiCategory,
+  } = useOnboarding();
   const { api } = useApi();
   useEffect(() => {
     if (errorMessage) {
@@ -71,7 +78,25 @@ export default function ApiLayout({ children }: LayoutProps) {
           ) : (
             <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[19%_1fr]  gap-2 bg-light-grey p-2">
               <div className="">
-                <CategoryDetailSidebar />
+                <CategoryDetailSidebar category={apiCategory} />
+              </div>
+
+              <div className="bg-white rounded-t overflow-y-scroll">
+                {children}
+              </div>
+            </div>
+          )}
+        </>
+      );
+    case "businessSolution":
+      return (
+        <>
+          {loading ? (
+            <Loader />
+          ) : (
+            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[19%_1fr]  gap-2 bg-light-grey p-2">
+              <div className="">
+                <BusinessSolutionSidebar />
               </div>
 
               <div className="bg-white rounded-t overflow-y-scroll">

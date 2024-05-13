@@ -1,7 +1,13 @@
 import { useRouter } from "next/router";
 import { FaChevronLeft } from "react-icons/fa";
 
-export default function CategoryDetailSidebar() {
+type categorySidebarProps = {
+  category: string;
+};
+
+export default function CategoryDetailSidebar({
+  category,
+}: categorySidebarProps) {
   const router = useRouter();
   return (
     <div className="w-full h-full rounded text-[14px] bg-white text-dark-txt p-6">
@@ -16,7 +22,7 @@ export default function CategoryDetailSidebar() {
         </p>
       </div>
       <div className="flex flex-col gap-4">
-        <p className="text-blue-dark">Entertainment</p>
+        <p className="text-blue-dark">{category}</p>
         <p>
           Refers to all endpoints that fit into the criteria of Pop culture,
           celebrity lifestyle,

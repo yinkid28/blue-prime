@@ -83,7 +83,7 @@ export function BreadCrumbs({
 }: BreadProps) {
   const router = useRouter();
   return (
-    <div className="flex mb-3  px-5 gap-2 items-center">
+    <div className="md:flex hidden mb-3 px-5 gap-2 items-center">
       <p
         className="text-mid-grey font-semibold"
         onClick={() => {
@@ -176,6 +176,8 @@ interface TableTypes {
   children?: React.ReactNode;
   data?: any[];
   render?: any;
+  // For extra styling
+  className?: string;
 }
 
 // 2. Create parent component
@@ -198,6 +200,10 @@ function Header({ children }: TableTypes) {
   );
 }
 
+function Heading({ children, className }: TableTypes) {
+  return <th className={`px-6 py-2 ${className}`}>{children}</th>;
+}
+
 function Body({ data, render }: TableTypes) {
   if (!data?.length)
     return (
@@ -215,4 +221,5 @@ function Body({ data, render }: TableTypes) {
 
 // 4. Child components added as properties to the parent component.
 Table.Header = Header;
+Table.Heading = Heading;
 Table.Body = Body;
