@@ -15,6 +15,7 @@ export const initialState: OnboardingInitials = {
   errorMessage: "",
   errorStatus: "error",
   user: null,
+  apiCategory: "Entertainment",
 };
 
 const reducer = (state: any, action: any) => {
@@ -50,6 +51,11 @@ const reducer = (state: any, action: any) => {
         ...state,
         user: action.payload,
       };
+    case "SET_CATEGORY":
+      return {
+        ...state,
+        apiCategory: action.payload,
+      };
   }
 };
 
@@ -59,13 +65,27 @@ const useOnboardingContext = () => {
   useEffect(() => {
     setData(state);
   }, [state, setData]);
-  const { progress, stage, sidebar, loading, errorMessage, errorStatus, user } =
-    state as OnboardingInitials;
+  const {
+    progress,
+    stage,
+    sidebar,
+    loading,
+    errorMessage,
+    errorStatus,
+    user,
+    apiCategory,
+  } = state as OnboardingInitials;
 
   const setProgress = useCallback((progress: number) => {
     dispatch({
       type: "SET_PROGRESS",
       payload: progress,
+    });
+  }, []);
+  const setApiCategory = useCallback((apiCategory: string) => {
+    dispatch({
+      type: "SET_CATEGORY",
+      payload: apiCategory,
     });
   }, []);
   const setStage = useCallback((stage: number) => {
@@ -114,6 +134,7 @@ const useOnboardingContext = () => {
       stage,
       sidebar,
       loading,
+      apiCategory,
       setProgress,
       user,
       setStage,
@@ -123,10 +144,12 @@ const useOnboardingContext = () => {
       errorStatus,
       setApiErrorMessage,
       setUser,
+      setApiCategory,
     }),
     [
       user,
       progress,
+      apiCategory,
       setProgress,
       stage,
       setStage,
@@ -138,6 +161,7 @@ const useOnboardingContext = () => {
       errorStatus,
       setApiErrorMessage,
       setUser,
+      setApiCategory,
     ]
   );
 };
