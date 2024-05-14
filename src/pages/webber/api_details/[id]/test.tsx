@@ -24,14 +24,11 @@ const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
   ssr: false, // Disable server-side rendering for this component
 });
 import "swagger-ui-react/swagger-ui.css";
+import { ImockEndpoint } from "./modules";
 const WebberLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
-export type ImockEndpoint = {
-  method: string;
-  url: string;
-  description: string;
-};
+
 export type ImockTag = {
   name: string;
   id: number;

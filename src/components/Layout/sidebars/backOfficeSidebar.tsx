@@ -197,11 +197,12 @@ export default function BackOfficeSidebar() {
           <p>API Product Management</p>
         </div>
         <div
-          className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath == `somePath`
-              ? "text-primary font-semibold"
+          className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+            router.asPath == `/admin_back_office/user_management`
+              ? "text-primary"
               : "text-dark-grey"
           }`}
+          onClick={() => router.push("/admin_back_office/user_management")}
         >
           <Icon icon="solar:users-group-rounded-broken" className="text-xl" />
 
