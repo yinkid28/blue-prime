@@ -105,9 +105,9 @@ export default function Navbar({ title }: NavbarProps) {
           <div className="">
             <Menu>
               <MenuButton>
-                <button className="w-fit border border-primary rounded-lg px-4 py-2 text-primary font-semibold">
+                <div className="w-fit border border-primary rounded-lg px-4 py-2 text-primary font-semibold">
                   Signup / Login
-                </button>
+                </div>
               </MenuButton>
               <MenuList>
                 <MenuItem

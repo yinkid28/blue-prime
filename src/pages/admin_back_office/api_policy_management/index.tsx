@@ -14,17 +14,18 @@ import icon3 from "../../../../public/images/api_icons/icon3.png";
 import { useDisclosure } from "@chakra-ui/react";
 import ImportAPi from "@/components/modals/importApi";
 import AddAPi from "@/components/modals/addApi";
+import CreatePolicy from "@/components/modals/createPolicy";
 
 const AdminLayout = dynamic(() => import("@/components/Layout/adminLayout"), {
   ssr: false,
 });
-export default function ApiProductManager() {
+export default function ApiPolicyManager() {
   const router = useRouter();
   const { setSidebar, loading, setLoading, setApiErrorMessage } =
     useOnboarding();
   const [searchedText, setSearchedText] = useState<string>("");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [view, setView] = useState<string>("product");
+  const [view, setView] = useState<string>("advanced");
   useEffect(() => {
     setSidebar("backOffice");
     setLoading(false);
@@ -39,55 +40,28 @@ export default function ApiProductManager() {
 
   const apis = [
     {
-      img: icon1,
-      title: "Tickets++",
-      description: "Attract attention",
-      provider: "Marketing API",
-      Ui: "Encounters marketing materials",
+      name: "10k per min",
+      quotaPolicy: "Request Count",
+      quota: 10000,
+      unitTime: "1 min",
     },
     {
-      img: icon2,
-      title: "Tickets++",
-      description: "Attract attention",
-      provider: "Marketing API",
-      Ui: "Encounters marketing materials",
+      name: "10k per min",
+      quotaPolicy: "Request Count",
+      quota: 10000,
+      unitTime: "1 min",
     },
     {
-      img: icon3,
-      title: "Tickets++",
-      description: "Attract attention",
-      provider: "Marketing API",
-      Ui: "Encounters marketing materials",
+      name: "10k per min",
+      quotaPolicy: "Request Count",
+      quota: 10000,
+      unitTime: "1 min",
     },
     {
-      img: icon1,
-      title: "Tickets++",
-      description: "Attract attention",
-      provider: "Marketing API",
-      Ui: "Encounters marketing materials",
-    },
-  ];
-  const apiProducts = [
-    {
-      img: icon1,
-      title: "Tickets++",
-      description:
-        "An event ticketing manger that  is revolutionizing the event ticketing landscape by offering a seamless, digital solution for ticket buyers, event owners, and merchants, streamlining the entire process from ticket purchase to event attendance with state-of-the-art technology.",
-      category: "Event Management",
-    },
-    {
-      img: icon2,
-      title: "Text Translator",
-      description:
-        "Translate text to 100+ languages. Fast processing, cost-saving. Free up to 100,000 characters  per month",
-      category: "Data Analysis",
-    },
-    {
-      img: icon3,
-      title: "API Business Solution",
-      description:
-        "Translate text to 100+ languages. Fast processing, cost-saving. Free up to 100,000 characters per month",
-      category: "Banking and Finance",
+      name: "10k per min",
+      quotaPolicy: "Request Count",
+      quota: 10000,
+      unitTime: "1 min",
     },
   ];
 
@@ -101,39 +75,59 @@ export default function ApiProductManager() {
           <div className="flex gap-2">
             <div
               className={`px-4 py-2 border ${
-                view === "product"
+                view === "advanced"
                   ? "border-primary text-primary"
                   : "text-mid-grey"
               }  rounded-lg cursor-pointer`}
-              onClick={() => setView("product")}
+              onClick={() => setView("advanced")}
             >
-              <p>API Product</p>
+              <p>Advanced Policies</p>
             </div>
             <div
               className={`px-4 py-2 border ${
-                view === "api" ? "border-primary text-primary" : "text-mid-grey"
+                view === "application"
+                  ? "border-primary text-primary"
+                  : "text-mid-grey"
               }  rounded-lg cursor-pointer`}
-              onClick={() => setView("api")}
+              onClick={() => setView("application")}
             >
-              <p>API Library</p>
+              <p>Application Policies</p>
+            </div>
+            <div
+              className={`px-4 py-2 border ${
+                view === "subscription"
+                  ? "border-primary text-primary"
+                  : "text-mid-grey"
+              }  rounded-lg cursor-pointer`}
+              onClick={() => setView("subscription")}
+            >
+              <p>Subscription Policies</p>
             </div>
           </div>
 
           <Button
             type="fit"
-            text={view === "product" ? "Create API Product" : "Add API"}
+            text={
+              view === "advanced"
+                ? "Add New Advanced Policy"
+                : view === "application"
+                ? "Add New Application Policy"
+                : "Add New Subscription Policy"
+            }
             onClick={() => {
-              if (view === "product") {
-                router.push(
-                  "/admin_back_office/api_product_management/new_api_product"
-                );
-              } else {
-                onOpen();
-              }
+              //   if (view === "advanced") {
+              //     router.push(
+              //       "/admin_back_office/api_product_management/new_api_product"
+              //     );
+              //   } else {
+              //     onOpen();
+              //   }
+
+              onOpen();
             }}
           />
           {/* <ImportAPi isOpen={isOpen} onClose={onClose} /> */}
-          <AddAPi isOpen={isOpen} onClose={onClose} />
+          <CreatePolicy isOpen={isOpen} onClose={onClose} />
         </div>
 
         <div className="flex justify-between my-6">
@@ -154,59 +148,18 @@ export default function ApiProductManager() {
             <p>Filter</p>
           </div>
         </div>
-        {view === "product" ? (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {apiProducts.map((apiProduct, index) => (
-              <div
-                key={index}
-                className="p-4 space-y-4 border rounded-lg text-dark-txt flex flex-col"
-              >
-                <div className="flex gap-[10px] items-center font-semibold">
-                  <Image
-                    src={apiProduct.img}
-                    width={53}
-                    height={53}
-                    alt="API Product Image"
-                  />
-                  <p>{apiProduct.title}</p>
-                </div>
-                <p className="flex-1">{apiProduct.description}</p>
-                <div className="w-fit px-4 py-1 rounded-full bg-category-fade text-category">
-                  <p className="font-semibold text-sm">{apiProduct.category}</p>
-                </div>
-                <div className="flex items-center text-xs justify-between">
-                  <div className="flex items-center gap-1">
-                    <FaRegEye className=" text-mid-grey" />
-                    <p className="font-thin text-mid-grey">10k</p>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <FaRegStar className=" text-mid-grey" />
-                    <p className="font-thin text-mid-grey">4.0/5</p>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <FaRegClock className=" text-mid-grey" />
-                    <p className="font-thin text-mid-grey">100ms</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
+        {view === "advanced" && (
           <div className="rounded-lg border overflow-scroll my-5 w-full">
             <table className="min-w-full">
               <thead className="bg-[#f8f8f8] text-mid-grey">
                 <tr className="text-left text-sm">
+                  <th className="w-1/3 px-6 py-2 whitespace-nowrap">NAME</th>
                   <th className="w-1/3 px-6 py-2 whitespace-nowrap">
-                    API NAME
+                    QUOTA POLICY
                   </th>
+                  <th className="w-1/3 px-6 py-2 whitespace-nowrap">QUOTA</th>
                   <th className="w-1/3 px-6 py-2 whitespace-nowrap">
-                    PROVIDER
-                  </th>
-                  <th className="w-1/3 px-6 py-2 whitespace-nowrap">
-                    DESCRIPTION
-                  </th>
-                  <th className="w-1/3 px-6 py-2 whitespace-nowrap">
-                    USER INTERACTION
+                    UNIT TIME
                   </th>
                   <th className="w-1/3 px-6 py-2 whitespace-nowrap">ACTION</th>
                 </tr>
@@ -214,13 +167,13 @@ export default function ApiProductManager() {
               <tbody>
                 {apis.filter((item) =>
                   searchedText.length > 0
-                    ? item.title.includes(searchedText)
+                    ? item.name.includes(searchedText)
                     : item
                 ).length > 0 ? (
                   apis
                     .filter((item) =>
                       searchedText.length > 0
-                        ? item.title.includes(searchedText)
+                        ? item.name.includes(searchedText)
                         : item
                     )
                     .map((item, index) => <TableRow key={index} api={item} />)
@@ -257,19 +210,14 @@ function TableRow({ api }: any) {
       }}
     >
       <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
-        <div className="flex gap-2 items-center font-semibold">
-          <Image src={api.img} width={20} height={20} alt="API Product Image" />
-          <p>{api.title}</p>
-        </div>
+        <p>{api.name}</p>
       </td>
 
       <td className="px-6 py-4 text-sm border-t">
-        <div className="w-fit h-fit px-3 py-1 bg-category-fade rounded-full text-category">
-          <p className="text-sm">{api.provider}</p>
-        </div>
+        <p className="">{api.quotaPolicy}</p>
       </td>
-      <td className="px-6 py-4 text-sm border-t">{api.description}</td>
-      <td className="px-6 py-4 text-sm border-t">{api.Ui}</td>
+      <td className="px-6 py-4 text-sm border-t">{api.quota}</td>
+      <td className="px-6 py-4 text-sm border-t">{api.unitTime}</td>
       <td className="px-6 py-4 text-sm border-t">
         <FaEllipsisV />
       </td>

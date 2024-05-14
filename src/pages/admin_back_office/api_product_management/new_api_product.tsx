@@ -15,12 +15,10 @@ export default function NewApiProduct() {
   const { api } = useApi();
   const { progress, stage, setProgress, setStage } = useOnboarding();
 
-  // On initial render
   useEffect(() => {
-    setTimeout(() => {
-      setProgress(50);
-      setStage(1);
-    }, 200);
+    // This will only run once, on the client, after mounting
+    setProgress(50);
+    setStage(1);
   }, []);
 
   const categories = [
