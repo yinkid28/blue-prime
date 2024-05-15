@@ -111,36 +111,17 @@ export function SubHistoryView() {
         >
           3$
         </TopCards>
-        {/* <div className="rounded-lg border overflow-scroll">
-          <table className="min-w-full">
-            <thead className="bg-resources-bg text-mid-grey rounded-lg">
-              <tr className="text-left">
-                <th className="w-1/3 px-6 py-2 whitespace-nowrap">
-                  Application Name
-                </th>
-                <th className="w-1/3 px-6 py-2">Status</th>
-                <th className="w-[5%] px-6 py-2">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tableData.map((data) => (
-                <TableRow
-                  key={data.id}
-                  appName={data.appName}
-                  status={data.status}
-                />
-              ))}
-            </tbody>
-          </table>
-        </div> */}
 
         <Table>
           <Table.Header>
-            <th className="w-1/3 px-6 py-2 whitespace-nowrap">
+            {/* <th className="w-1/3 px-6 py-2 whitespace-nowrap">
               Application Name
             </th>
             <th className="w-1/3 px-6 py-2">Status</th>
-            <th className="w-[5%] px-6 py-2">Action</th>
+            <th className="w-[5%] px-6 py-2">Action</th> */}
+            <Table.Heading className="w-1/3">Application Name</Table.Heading>
+            <Table.Heading className="w-1/3">Status</Table.Heading>
+            <Table.Heading className="w-[5%]">Action</Table.Heading>
           </Table.Header>
           <Table.Body
             data={tableData}
