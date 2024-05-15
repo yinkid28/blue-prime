@@ -64,62 +64,57 @@ export default function NewApiProduct() {
             </div>
           </div>
 
-          {/* <div className="mt-6 px-14">
-            <form className="space-y-3">
-              <div className="border rounded-lg flex flex-col px-4 py-2">
-                <label
-                  className="text-xs text-dark-txt"
-                  htmlFor="business-name"
-                >
-                  Name
-                </label>
-                <input
-                  type="text"
-                  placeholder="API Product Business Solutions"
-                  id="business-name"
-                  className="text-base mt-1 outline-none border-none text-dark-txt"
-                />
-              </div>
-
-              <div className="border rounded-lg flex flex-col px-4 py-2">
-                <label className="text-xs text-dark-txt" htmlFor="description">
-                  Description
-                </label>
-                <textarea
-                  placeholder="A carefully curated set of functional and integral solutions to improve the working process of the XYZ sector"
-                  id="description"
-                  className="text-base mt-1 outline-none border-none text-dark-txt"
-                  rows={3}
-                ></textarea>
-              </div>
-
-              <div className="border rounded-lg flex flex-col px-4 py-2">
-                <label className="text-xs text-dark-txt" htmlFor="category">
-                  Category
-                </label>
-                <select
-                  id="category"
-                  className="text-mid-grey outline-none w-full px-0"
-                >
-                  {categories.map((category, index) => (
-                    <option className="px-0" key={index}>
-                      {category.title}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <Button
-                text="Next"
-                className="translate-y-3"
-                onClick={() =>
-                  router.push(
-                    "/admin_back_office/api_product_management/business_solution"
-                  )
-                }
+          <form className="space-y-3 mt-6 px-14">
+            <div className="border rounded-lg flex flex-col px-4 py-2">
+              <label className="text-xs text-dark-txt" htmlFor="business-name">
+                Name
+              </label>
+              <input
+                type="text"
+                placeholder="API Product Business Solutions"
+                id="business-name"
+                className="text-base mt-1 outline-none border-none text-dark-txt"
               />
-            </form>
-          </div> */}
+            </div>
+
+            <div className="border rounded-lg flex flex-col px-4 py-2">
+              <label className="text-xs text-dark-txt" htmlFor="description">
+                Description
+              </label>
+              <textarea
+                placeholder="A carefully curated set of functional and integral solutions to improve the working process of the XYZ sector"
+                id="description"
+                className="text-base mt-1 outline-none border-none text-dark-txt"
+                rows={3}
+              ></textarea>
+            </div>
+
+            <div className="border rounded-lg flex flex-col px-4 py-2">
+              <label className="text-xs text-dark-txt" htmlFor="category">
+                Category
+              </label>
+              <select
+                id="category"
+                className="text-mid-grey outline-none w-full px-0"
+              >
+                {categories.map((category, index) => (
+                  <option className="px-0" key={index}>
+                    {category.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <Button
+              text="Next"
+              className="translate-y-3"
+              onClick={() =>
+                router.push(
+                  "/admin_back_office/api_product_management/business_solution"
+                )
+              }
+            />
+          </form>
         </div>
       </div>
     </div>

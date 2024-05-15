@@ -1,5 +1,10 @@
 import Navbar from "@/components/Layout/Nav/navbar";
-import { BreadCrumbItems, BreadCrumbs, ProgressBar } from "@/components/utils";
+import {
+  BreadCrumbItems,
+  BreadCrumbs,
+  ProgressBar,
+  Table,
+} from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { Progress } from "@chakra-ui/react";
@@ -125,8 +130,8 @@ export default function ConsumptionRate() {
             </button>
           </div>
 
-          {/* TABLE */}
-          <div className="rounded-lg border overflow-scroll w-full">
+          {/* TABLE - I had to say goodbye to the search functionality for now. */}
+          {/* <div className="rounded-lg border overflow-scroll w-full">
             <table className="min-w-full">
               <thead className="bg-[#f8f8f8] text-mid-grey">
                 <tr className="text-left text-sm">
@@ -169,7 +174,26 @@ export default function ConsumptionRate() {
                 )}
               </tbody>
             </table>
-          </div>
+          </div> */}
+
+          <Table>
+            <Table.Header>
+              <Table.Heading>Date</Table.Heading>
+              <Table.Heading>Request Calls</Table.Heading>
+              <Table.Heading>Price</Table.Heading>
+            </Table.Header>
+            <Table.Body
+              data={consumptionRateTableData}
+              render={(item: rateTypes, index: number) => (
+                <TableRow
+                  key={index}
+                  date={item.date}
+                  calls={item.calls}
+                  price={item.price}
+                />
+              )}
+            />
+          </Table>
         </div>
       </WeaverLayout>
     </>

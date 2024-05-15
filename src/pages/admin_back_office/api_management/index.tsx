@@ -1,6 +1,6 @@
 import AdminNavbar from "@/components/Layout/Nav/adminNavbar";
 import Navbar from "@/components/Layout/Nav/navbar";
-import { BreadCrumbs, SearchBar, toTitleCase } from "@/components/utils";
+import { BreadCrumbs, SearchBar, Table, toTitleCase } from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { IMockApi } from "@/models/apidiscovery.model";
 import { Icon } from "@iconify/react";
@@ -85,7 +85,9 @@ export default function AdminApiManager() {
             </button>
           </div>
         </div>
-        <div className="rounded-lg border overflow-scroll my-5 w-full">
+
+        {/* IN CASE YOU STILL WANNA TAKE A LOOK AT IT */}
+        {/* <div className="rounded-lg border overflow-scroll my-5 w-full">
           <table className="min-w-full">
             <thead className="bg-[#f8f8f8] text-mid-grey">
               <tr className="text-left text-sm">
@@ -119,7 +121,23 @@ export default function AdminApiManager() {
               )}
             </tbody>
           </table>
-        </div>
+        </div> */}
+
+        <Table className="my-5">
+          <Table.Header>
+            <Table.Heading>API Name</Table.Heading>
+            <Table.Heading>Version</Table.Heading>
+            <Table.Heading>Category</Table.Heading>
+            <Table.Heading>Status</Table.Heading>
+            <Table.Heading className="w-[5%]">Action</Table.Heading>
+          </Table.Header>
+          <Table.Body
+            data={apis}
+            render={(item: IMockApi, index: number) => (
+              <TableRow key={index} api={item} />
+            )}
+          />
+        </Table>
       </div>
     </AdminLayout>
   );

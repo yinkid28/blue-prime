@@ -181,10 +181,10 @@ interface TableTypes {
 }
 
 // 2. Create parent component
-export function Table({ children }: TableTypes) {
+export function Table({ children, className }: TableTypes) {
   return (
     <TableContext.Provider value={undefined}>
-      <div className={`rounded-lg border overflow-scroll `}>
+      <div className={`rounded-lg border overflow-scroll ${className}`}>
         <table className={`min-w-full`}>{children}</table>
       </div>
     </TableContext.Provider>
@@ -201,7 +201,9 @@ function Header({ children }: TableTypes) {
 }
 
 function Heading({ children, className }: TableTypes) {
-  return <th className={`px-6 py-2 ${className}`}>{children}</th>;
+  return (
+    <th className={`px-6 py-2 whitespace-nowrap ${className}`}>{children}</th>
+  );
 }
 
 function Body({ data, render }: TableTypes) {

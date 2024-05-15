@@ -206,7 +206,7 @@ export default function BackOfficeSidebar() {
             router.push("/admin_back_office/api_policy_management")
           }
         >
-          <Icon icon="carbon:api-1" className="text-xl" />
+          <Icon icon="lets-icons:filter-big" className="text-xl" />
 
           <p>API Policy Management</p>
         </div>

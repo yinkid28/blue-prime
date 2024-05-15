@@ -1,5 +1,5 @@
 import AdminNavbar from "@/components/Layout/Nav/adminNavbar";
-import { BreadCrumbs, Button, toTitleCase } from "@/components/utils";
+import { BreadCrumbs, Button, Table, toTitleCase } from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { Icon } from "@iconify/react";
 import dynamic from "next/dynamic";
@@ -192,49 +192,64 @@ export default function ApiProductManager() {
             ))}
           </div>
         ) : (
-          <div className="rounded-lg border overflow-scroll my-5 w-full">
-            <table className="min-w-full">
-              <thead className="bg-[#f8f8f8] text-mid-grey">
-                <tr className="text-left text-sm">
-                  <th className="w-1/3 px-6 py-2 whitespace-nowrap">
-                    API NAME
-                  </th>
-                  <th className="w-1/3 px-6 py-2 whitespace-nowrap">
-                    PROVIDER
-                  </th>
-                  <th className="w-1/3 px-6 py-2 whitespace-nowrap">
-                    DESCRIPTION
-                  </th>
-                  <th className="w-1/3 px-6 py-2 whitespace-nowrap">
-                    USER INTERACTION
-                  </th>
-                  <th className="w-1/3 px-6 py-2 whitespace-nowrap">ACTION</th>
-                </tr>
-              </thead>
-              <tbody>
-                {apis.filter((item) =>
-                  searchedText.length > 0
-                    ? item.title.includes(searchedText)
-                    : item
-                ).length > 0 ? (
-                  apis
-                    .filter((item) =>
-                      searchedText.length > 0
-                        ? item.title.includes(searchedText)
-                        : item
-                    )
-                    .map((item, index) => <TableRow key={index} api={item} />)
-                ) : (
-                  <tr>
-                    <td colSpan={3} className="text-center py-4 text-dark-txt">
-                      &quot;{searchedText}&quot; doesn&apos;t match any
-                      consumption rate!
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+          // <div className="rounded-lg border overflow-scroll my-5 w-full">
+          //   <table className="min-w-full">
+          //     <thead className="bg-[#f8f8f8] text-mid-grey">
+          //       <tr className="text-left text-sm">
+          //         <th className="w-1/3 px-6 py-2 whitespace-nowrap">
+          //           API NAME
+          //         </th>
+          //         <th className="w-1/3 px-6 py-2 whitespace-nowrap">
+          //           PROVIDER
+          //         </th>
+          //         <th className="w-1/3 px-6 py-2 whitespace-nowrap">
+          //           DESCRIPTION
+          //         </th>
+          //         <th className="w-1/3 px-6 py-2 whitespace-nowrap">
+          //           USER INTERACTION
+          //         </th>
+          //         <th className="w-1/3 px-6 py-2 whitespace-nowrap">ACTION</th>
+          //       </tr>
+          //     </thead>
+          //     <tbody>
+          //       {apis.filter((item) =>
+          //         searchedText.length > 0
+          //           ? item.title.includes(searchedText)
+          //           : item
+          //       ).length > 0 ? (
+          //         apis
+          //           .filter((item) =>
+          //             searchedText.length > 0
+          //               ? item.title.includes(searchedText)
+          //               : item
+          //           )
+          //           .map((item, index) => <TableRow key={index} api={item} />)
+          //       ) : (
+          //         <tr>
+          //           <td colSpan={3} className="text-center py-4 text-dark-txt">
+          //             &quot;{searchedText}&quot; doesn&apos;t match any
+          //             consumption rate!
+          //           </td>
+          //         </tr>
+          //       )}
+          //     </tbody>
+          //   </table>
+          // </div>
+          <Table>
+            <Table.Header>
+              <Table.Heading>API Name</Table.Heading>
+              <Table.Heading>Provider</Table.Heading>
+              <Table.Heading>Description</Table.Heading>
+              <Table.Heading>User Interaction</Table.Heading>
+              <Table.Heading>Action</Table.Heading>
+            </Table.Header>
+            <Table.Body
+              data={apis}
+              render={(item: any, index: number) => (
+                <TableRow key={index} api={item} />
+              )}
+            />
+          </Table>
         )}
       </div>
     </AdminLayout>
