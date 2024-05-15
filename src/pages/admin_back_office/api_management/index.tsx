@@ -1,6 +1,6 @@
 import AdminNavbar from "@/components/Layout/Nav/adminNavbar";
 import Navbar from "@/components/Layout/Nav/navbar";
-import { BreadCrumbs, SearchBar } from "@/components/utils";
+import { BreadCrumbs, SearchBar, toTitleCase } from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { IMockApi } from "@/models/apidiscovery.model";
 import { Icon } from "@iconify/react";
@@ -8,6 +8,8 @@ import icon4 from "../../../../public/images/api_icons/icon4.png";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { FaEllipsisV } from "react-icons/fa";
+import { useRouter } from "next/router";
+import { useApi } from "@/context/ApiDiscoveryContext";
 const AdminLayout = dynamic(() => import("@/components/Layout/adminLayout"), {
   ssr: false,
 });
@@ -16,7 +18,7 @@ export default function AdminApiManager() {
     useOnboarding();
   const [searchedText, setSearchedText] = useState<string>("");
   useEffect(() => {
-    setSidebar("categoryManager");
+    setSidebar("backOffice");
     setLoading(false);
   }, []);
 
@@ -33,7 +35,7 @@ export default function AdminApiManager() {
     {
       id: Math.ceil(Math.random() * 100),
       img: icon4,
-      title: "Text Translator",
+      title: "Food Translator",
       description:
         "Translate text to 100+ languages. Fast processing, cost-saving. Free up to 100,000 characters  per month",
       category: "Banking and finance",
@@ -127,8 +129,21 @@ type APIM = {
   api: IMockApi;
 };
 function TableRow({ api }: APIM) {
+  const router = useRouter();
+  const { setApi } = useApi();
   return (
-    <tr className="text-dark-txt hover:bg-light-grey cursor-pointer">
+    <tr
+      className="text-dark-txt hover:bg-light-grey cursor-pointer"
+      onClick={() => {
+        router.push(
+          `/admin_back_office/api_management/${toTitleCase(
+            api.title,
+            true
+          )}/overview`
+        );
+        setApi(api);
+      }}
+    >
       <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
         {api.title}
       </td>

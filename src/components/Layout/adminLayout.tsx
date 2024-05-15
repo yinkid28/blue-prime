@@ -52,7 +52,7 @@ export default function ApiLayout({ children }: LayoutProps) {
     });
   }, [setApiErrorMessage, toast]);
   switch (sidebar) {
-    case "categoryManager":
+    case "backOffice":
       return (
         <>
           {loading ? (
@@ -97,6 +97,24 @@ export default function ApiLayout({ children }: LayoutProps) {
             <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[19%_1fr]  gap-2 bg-light-grey p-2">
               <div className="">
                 <BusinessSolutionSidebar />
+              </div>
+
+              <div className="bg-white rounded-t overflow-y-scroll">
+                {children}
+              </div>
+            </div>
+          )}
+        </>
+      );
+    case "backOfficeApi":
+      return (
+        <>
+          {loading ? (
+            <Loader />
+          ) : (
+            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[23%_1fr]  gap-2 bg-light-grey p-2">
+              <div className="">
+                <ApiProductSidebar api={api as IMockApi} />
               </div>
 
               <div className="bg-white rounded-t overflow-y-scroll">

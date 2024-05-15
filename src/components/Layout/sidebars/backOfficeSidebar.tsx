@@ -198,10 +198,25 @@ export default function BackOfficeSidebar() {
         </div>
         <div
           className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath == `somePath`
+            router.asPath == `/admin_back_office/api_policy_management`
               ? "text-primary font-semibold"
               : "text-dark-grey"
           }`}
+          onClick={() =>
+            router.push("/admin_back_office/api_policy_management")
+          }
+        >
+          <Icon icon="carbon:api-1" className="text-xl" />
+
+          <p>API Policy Management</p>
+        </div>
+        <div
+          className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+            router.asPath == `/admin_back_office/user_management`
+              ? "text-primary"
+              : "text-dark-grey"
+          }`}
+          onClick={() => router.push("/admin_back_office/user_management")}
         >
           <Icon icon="solar:users-group-rounded-broken" className="text-xl" />
 
