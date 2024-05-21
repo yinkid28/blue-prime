@@ -1,5 +1,9 @@
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { ApiDiscoveryInititals, IMockApi } from "@/models/apidiscovery.model";
+import {
+  ApiDiscoveryInititals,
+  IMockApi,
+  IMockapiProduct,
+} from "@/models/apidiscovery.model";
 import constate from "constate";
 import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 
@@ -11,6 +15,7 @@ export const initialState: ApiDiscoveryInititals = {
   api: null,
   bookmarkedAPIs: [],
   libraryView: "api-product",
+  apiProduct: null,
 };
 
 const reducer = (state: any, action: any) => {
@@ -19,6 +24,11 @@ const reducer = (state: any, action: any) => {
       return {
         ...state,
         api: action.payload,
+      };
+    case "SET_APIPRODUCT":
+      return {
+        ...state,
+        apiProduct: action.payload,
       };
 
     case "SET_BOOKMARKED":
@@ -53,11 +63,18 @@ const useApiContext = () => {
     setData(state);
   }, [state, setData]);
 
-  const { api, bookmarkedAPIs, libraryView } = state as ApiDiscoveryInititals;
+  const { api, bookmarkedAPIs, libraryView, apiProduct } =
+    state as ApiDiscoveryInititals;
 
   const setApi = useCallback((api: IMockApi) => {
     dispatch({
       type: "SET_API",
+      payload: api,
+    });
+  }, []);
+  const setApiProduct = useCallback((api: IMockapiProduct) => {
+    dispatch({
+      type: "SET_APIPRODUCT",
       payload: api,
     });
   }, []);
@@ -79,13 +96,24 @@ const useApiContext = () => {
   return useMemo(
     () => ({
       api,
+      apiProduct,
+      setApiProduct,
       setApi,
       bookmarkedAPIs,
       setBookMarked,
       libraryView,
       setLibraryView,
     }),
-    [api, setApi, setBookMarked, bookmarkedAPIs, libraryView, setLibraryView]
+    [
+      api,
+      setApi,
+      setBookMarked,
+      bookmarkedAPIs,
+      libraryView,
+      setLibraryView,
+      apiProduct,
+      setApiProduct,
+    ]
   );
 };
 

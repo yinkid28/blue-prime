@@ -6,6 +6,7 @@ export type OnboardingInitials = {
   errorMessage: string;
   errorStatus: ErrorStatusEnum;
   user: IUser | null;
+  apiCategory: string;
 };
 export type ErrorStatusEnum =
   | "error"

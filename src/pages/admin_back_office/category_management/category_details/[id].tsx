@@ -13,10 +13,19 @@ const AdminLayout = dynamic(() => import("@/components/Layout/adminLayout"), {
   ssr: false,
 });
 export default function CategoryDetail() {
-  const { setSidebar, loading, setLoading, setApiErrorMessage } =
-    useOnboarding();
+  const {
+    setSidebar,
+    loading,
+    setLoading,
+    apiCategory,
+    setApiCategory,
+    setApiErrorMessage,
+  } = useOnboarding();
   const router = useRouter();
   const { id } = router.query;
+  if (id) setApiCategory(id as string);
+  // console.log(apiCategory);
+
   const breadCrumbs: BreadCrumbItems[] = [
     {
       breadCrumbText: "Category Management",
@@ -113,9 +122,14 @@ export default function CategoryDetail() {
         </div>
         <Table>
           <Table.Header>
-            <th className="w-[40%] px-6 py-2">Name</th>
+            {/* <th className="w-[40%] px-6 py-2">Name</th>
             <th className="w-[50%] px-6 py-2">Description</th>
-            <th className="w-[10%] px-6 py-2">Action</th>
+            <th className="w-[10%] px-6 py-2">Action</th> */}
+            <Table.Heading className="w-[20%] md:w-[40%]">Name</Table.Heading>
+            <Table.Heading className="w-[75%] md:w-[50%]">
+              Description
+            </Table.Heading>
+            <Table.Heading className="w-[5%]">Action</Table.Heading>
           </Table.Header>
           <Table.Body
             data={categoryDetailData}
@@ -124,7 +138,9 @@ export default function CategoryDetail() {
               index: Key | null | undefined
             ) => (
               <tr key={index} className="border-t">
-                <td className="px-6 py-4 text-sm">{item.name}</td>
+                <td className="px-6 py-4 text-sm whitespace-nowrap">
+                  {item.name}
+                </td>
                 <td className="px-6 py-4 text-sm">{item.description}</td>
                 <td className="px-6 py-4 text-sm">
                   <Menu>

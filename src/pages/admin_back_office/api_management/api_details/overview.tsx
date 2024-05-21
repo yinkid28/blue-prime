@@ -3,10 +3,7 @@ import AdminNavbar from "@/components/Layout/Nav/adminNavbar";
 import { BreadCrumbItems, BreadCrumbs } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
-import {
-  ImockEndpoint,
-  ImockTag,
-} from "@/pages/webber/api_details/[id]/modules";
+import { ImockEndpoint } from "@/pages/webber/api_details/[id]/modules";
 import {
   Accordion,
   AccordionButton,
@@ -30,6 +27,7 @@ import {
 } from "react-icons/fa";
 import { MdAdd } from "react-icons/md";
 import { CircularProgress, CircularProgressLabel } from "@chakra-ui/react";
+import { ImockTag } from "@/pages/webber/api_details/[id]/test";
 const AdminLayout = dynamic(() => import("@/components/Layout/adminLayout"), {
   ssr: false,
 });
@@ -39,44 +37,28 @@ const tags: ImockTag[] = [
     id: 1,
     endpoints: [
       {
+        id: 1,
         method: "POST",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
-        criteria: {
-          name: "Image Upload",
-          description:
-            "Webber must sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
-        },
       },
       {
+        id: 2,
         method: "PUT",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
-        criteria: {
-          name: "Food Doings",
-          description:
-            "Webber must sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
-        },
       },
       {
+        id: 3,
         method: "GET",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
-        criteria: {
-          name: "Hunger Games",
-          description:
-            "Webber must sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
-        },
       },
       {
+        id: 4,
         method: "DELETE",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
-        criteria: {
-          name: "Image Upload",
-          description:
-            "Webber must sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
-        },
       },
     ],
   },
@@ -85,35 +67,23 @@ const tags: ImockTag[] = [
     id: 2,
     endpoints: [
       {
+        id: 5,
         method: "POST",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
-        criteria: {
-          name: "Image Upload",
-          description:
-            "Webber must sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
-        },
       },
 
       {
+        id: 6,
         method: "GET",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
-        criteria: {
-          name: "Image Upload",
-          description:
-            "Webber must sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
-        },
       },
       {
+        id: 7,
         method: "DELETE",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
-        criteria: {
-          name: "Image Upload",
-          description:
-            "Webber must sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
-        },
       },
     ],
   },
@@ -122,34 +92,22 @@ const tags: ImockTag[] = [
     id: 3,
     endpoints: [
       {
+        id: 8,
         method: "POST",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
-        criteria: {
-          name: "Image Upload",
-          description:
-            "Webber must sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
-        },
       },
       {
+        id: 9,
         method: "PUT",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
-        criteria: {
-          name: "Image Upload",
-          description:
-            "Webber must sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
-        },
       },
       {
+        id: 10,
         method: "GET",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
-        criteria: {
-          name: "Image Upload",
-          description:
-            "Webber must sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
-        },
       },
     ],
   },
