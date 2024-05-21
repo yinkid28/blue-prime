@@ -15,6 +15,7 @@ import { useDisclosure } from "@chakra-ui/react";
 import ImportAPi from "@/components/modals/importApi";
 import AddAPi from "@/components/modals/addApi";
 import CreatePolicy from "@/components/modals/createPolicy";
+import SubscriptionPolicy from "@/components/modals/subscriptionPolicy";
 
 import {
   Hide,
@@ -36,7 +37,9 @@ export default function ApiPolicyManager() {
   const { setSidebar, loading, setLoading, setApiErrorMessage } =
     useOnboarding();
   const [searchedText, setSearchedText] = useState<string>("");
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const [view, setView] = useState<string>("advanced");
   useEffect(() => {
     setSidebar("backOffice");
@@ -230,7 +233,12 @@ export default function ApiPolicyManager() {
             }}
           />
           {/* <ImportAPi isOpen={isOpen} onClose={onClose} /> */}
-          <CreatePolicy isOpen={isOpen} onClose={onClose} />
+          {view !== "subscription" && (
+            <CreatePolicy isOpen={isOpen} onClose={onClose} />
+          )}
+          {view === "subscription" && (
+            <SubscriptionPolicy isOpen={isOpen} onClose={onClose} />
+          )}
         </div>
 
         <div className="flex justify-between my-6">

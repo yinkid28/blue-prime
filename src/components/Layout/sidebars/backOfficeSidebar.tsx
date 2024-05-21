@@ -211,7 +211,7 @@ export default function BackOfficeSidebar() {
           <p>API Policy Management</p>
         </div>
         <div
-          className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+          className={`hidden md:flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
             router.asPath == `/admin_back_office/user_management`
               ? "text-primary"
               : "text-dark-grey"
