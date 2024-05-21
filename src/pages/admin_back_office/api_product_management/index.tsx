@@ -14,6 +14,8 @@ import icon3 from "../../../../public/images/api_icons/icon3.png";
 import { useDisclosure } from "@chakra-ui/react";
 import ImportAPi from "@/components/modals/importApi";
 import AddAPi from "@/components/modals/addApi";
+import { useApi } from "@/context/ApiDiscoveryContext";
+import { IMockapiProduct } from "@/models/apidiscovery.model";
 
 const AdminLayout = dynamic(() => import("@/components/Layout/adminLayout"), {
   ssr: false,
@@ -22,6 +24,7 @@ export default function ApiProductManager() {
   const router = useRouter();
   const { setSidebar, loading, setLoading, setApiErrorMessage } =
     useOnboarding();
+  const { setApiProduct } = useApi();
   const [searchedText, setSearchedText] = useState<string>("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [view, setView] = useState<string>("product");
@@ -67,7 +70,7 @@ export default function ApiProductManager() {
       Ui: "Encounters marketing materials",
     },
   ];
-  const apiProducts = [
+  const apiProducts: IMockapiProduct[] = [
     {
       img: icon1,
       title: "Tickets++",
@@ -159,7 +162,13 @@ export default function ApiProductManager() {
             {apiProducts.map((apiProduct, index) => (
               <div
                 key={index}
-                className="p-4 space-y-4 border rounded-lg text-dark-txt flex flex-col"
+                className="p-4 space-y-4 border rounded-lg text-dark-txt hover:shadow-md cursor-pointer flex flex-col"
+                onClick={() => {
+                  router.push(
+                    `/admin_back_office/api_product_management/apiProductDetails-${apiProduct.title}`
+                  );
+                  setApiProduct(apiProduct);
+                }}
               >
                 <div className="flex gap-[10px] items-center font-semibold">
                   <Image

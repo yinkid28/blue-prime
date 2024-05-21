@@ -2,7 +2,7 @@ import { toTitleCase } from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { IMockApi } from "@/models/apidiscovery.model";
 import { Badge } from "@chakra-ui/react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { FaChevronLeft, FaRegClock, FaRegEye, FaRegStar } from "react-icons/fa";
@@ -19,10 +19,12 @@ import {
 } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
 import icon3 from "../../../../public/images/api_icons/icon3.png";
+import { useApi } from "@/context/ApiDiscoveryContext";
 
-export default function BusinessSolutionSidebar() {
+export default function APIProductDetailsSidebar() {
   const router = useRouter();
   const { setSidebar } = useOnboarding();
+  const { apiProduct } = useApi();
 
   useEffect(() => {
     console.log(router.asPath);
@@ -32,7 +34,7 @@ export default function BusinessSolutionSidebar() {
 
   return (
     <div className="w-full flex flex-col h-full gap-2">
-      <div className="bg-white rounded p-5 h-fit flex flex-row items-center md:items-start md:flex-col justify-between md:justify-normal gap-4 ">
+      <div className="bg-white w-full rounded p-5 h-fit  flex flex-row items-center md:items-start md:flex-col justify-between md:justify-normal gap-4">
         <p className="text-2xl">Logo</p>
         <IoMenu
           size={23}
@@ -64,7 +66,7 @@ export default function BusinessSolutionSidebar() {
 
                   <div className="flex items-center justify-between w-full">
                     <div className="flex items-center gap-2">
-                      <div className="w-[50px] h-[50px] rounded bg-mid-grey overflow-hidden">
+                      <div className="w-[10px] h-[10px] rounded bg-mid-grey overflow-hidden">
                         <Image
                           src={icon3}
                           alt="icon"
@@ -161,9 +163,9 @@ export default function BusinessSolutionSidebar() {
 
         <div className="hidden md:flex items-center justify-between w-full">
           <div className="flex items-center gap-2">
-            <div className="w-[50px] h-[50px] rounded bg-mid-grey overflow-hidden">
+            <div className="w-[20px] h-[20px] rounded bg-mid-grey overflow-hidden">
               <Image
-                src={icon3}
+                src={apiProduct?.img as StaticImageData}
                 alt="icon"
                 width={200}
                 height={200}
@@ -171,8 +173,8 @@ export default function BusinessSolutionSidebar() {
               />
             </div>
             <div className="">
-              <p className="font-semibold truncate">
-                API Product Business Solution
+              <p className="font-semibold text-sm truncate text-ellipsis">
+                {apiProduct?.title}
               </p>
             </div>
           </div>
@@ -181,15 +183,16 @@ export default function BusinessSolutionSidebar() {
       <div className="bg-white h-full rounded p-5 hidden md:flex flex-col gap-4">
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath ==
-            `/admin_back_office/api_product_management/business_solution`
+            router.asPath.includes(
+              `/admin_back_office/api_product_management/apiProductDetails`
+            )
               ? "text-primary"
               : "text-dark-grey"
           }`}
           // I am going to hard code the route to be pushed to for a brief while!
           onClick={() => {
             router.push(
-              `/admin_back_office/api_product_management/business_solution`
+              `/admin_back_office/api_product_management/apiProductDetails-${apiProduct?.title}`
             );
           }}
         >

@@ -20,42 +20,44 @@ import {
 import { GiPadlock } from "react-icons/gi";
 import AddEndpointModal from "@/components/modals/addEndpointModal";
 import AddTagModal from "@/components/modals/addTagModal";
+import { ImockTag } from "./test";
 
 const WebberLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
 export type ImockEndpoint = {
+  id: number;
   method: string;
   url: string;
   description: string;
   criteria?: { name: string; description: string };
 };
-export type ImockTag = {
-  name: string;
-  id: number;
-  endpoints: ImockEndpoint[];
-};
+
 const tags: ImockTag[] = [
   {
     name: "Pets",
     id: 1,
     endpoints: [
       {
+        id: 1,
         method: "POST",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
       },
       {
+        id: 2,
         method: "PUT",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
       },
       {
+        id: 3,
         method: "GET",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
       },
       {
+        id: 4,
         method: "DELETE",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
@@ -67,17 +69,20 @@ const tags: ImockTag[] = [
     id: 2,
     endpoints: [
       {
+        id: 5,
         method: "POST",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
       },
 
       {
+        id: 6,
         method: "GET",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
       },
       {
+        id: 7,
         method: "DELETE",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
@@ -89,16 +94,19 @@ const tags: ImockTag[] = [
     id: 3,
     endpoints: [
       {
+        id: 8,
         method: "POST",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
       },
       {
+        id: 9,
         method: "PUT",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
       },
       {
+        id: 10,
         method: "GET",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",

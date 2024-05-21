@@ -110,7 +110,7 @@ export default function NewApiProduct() {
               className="translate-y-3"
               onClick={() =>
                 router.push(
-                  "/admin_back_office/api_product_management/business_solution"
+                  `/admin_back_office/api_product_management/apiProductDetails${1}`
                 )
               }
             />

@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import AdminNavbar from "@/components/Layout/Nav/adminNavbar";
 import { BreadCrumbItems, BreadCrumbs } from "@/components/utils";
 import dynamic from "next/dynamic";
+import { useApi } from "@/context/ApiDiscoveryContext";
+import CustomerJourneyCard from "@/components/Admin/CustomerJourneyCard";
 
 const AdminLayout = dynamic(() => import("@/components/Layout/adminLayout"), {
   ssr: false,
@@ -20,8 +22,10 @@ export default function BusinessSolution() {
   const router = useRouter();
   const { setSidebar, loading, setLoading, setApiErrorMessage } =
     useOnboarding();
+  const { apiProduct } = useApi();
+
   useEffect(() => {
-    setSidebar("businessSolution");
+    setSidebar("ApiProductDetails");
     setLoading(false);
   }, []);
 
@@ -29,13 +33,13 @@ export default function BusinessSolution() {
 
   return (
     <AdminLayout>
-      <AdminNavbar title="Category Management" />
+      <AdminNavbar title={apiProduct?.title as string} />
       <BreadCrumbs
         breadCrumbItems={breadCrumbs}
-        breadCrumbActiveItem="API Product Business Solution"
+        breadCrumbActiveItem={apiProduct?.title as string}
       />
 
-      <div className="px-4 py-6">
+      <div className="p-5">
         <div className="flex justify-between mb-4 items-center">
           <p className="font-semibold">Customer Journeys</p>
 
@@ -49,6 +53,17 @@ export default function BusinessSolution() {
           >
             Add New Customer Journey
           </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-4">
+          <CustomerJourneyCard />
+          <CustomerJourneyCard />
+          <CustomerJourneyCard />
+          <CustomerJourneyCard />
+          <CustomerJourneyCard />
+          <CustomerJourneyCard />
+          <CustomerJourneyCard />
+          <CustomerJourneyCard />
+          <CustomerJourneyCard />
         </div>
       </div>
     </AdminLayout>

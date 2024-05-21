@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import BackOfficeSidebar from "./sidebars/backOfficeSidebar";
 import CategoryDetailSidebar from "./sidebars/categoryDetailSidebar";
 import BusinessSolutionSidebar from "./sidebars/businessSolutionSidebar";
+import APIProductDetailsSidebar from "./sidebars/businessSolutionSidebar";
 
 type LayoutProps = {
   children: React.ReactNode | React.ReactNode[];
@@ -88,7 +89,7 @@ export default function ApiLayout({ children }: LayoutProps) {
           )}
         </>
       );
-    case "businessSolution":
+    case "ApiProductDetails":
       return (
         <>
           {loading ? (
@@ -96,7 +97,7 @@ export default function ApiLayout({ children }: LayoutProps) {
           ) : (
             <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[19%_1fr]  gap-2 bg-light-grey p-2">
               <div className="">
-                <BusinessSolutionSidebar />
+                <APIProductDetailsSidebar />
               </div>
 
               <div className="bg-white rounded-t overflow-y-scroll">

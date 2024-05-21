@@ -40,21 +40,25 @@ const tags: ImockTag[] = [
     id: 1,
     endpoints: [
       {
+        id: 1,
         method: "POST",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
       },
       {
+        id: 2,
         method: "PUT",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
       },
       {
+        id: 3,
         method: "GET",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
       },
       {
+        id: 4,
         method: "DELETE",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
@@ -66,17 +70,20 @@ const tags: ImockTag[] = [
     id: 2,
     endpoints: [
       {
+        id: 5,
         method: "POST",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
       },
 
       {
+        id: 6,
         method: "GET",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
       },
       {
+        id: 7,
         method: "DELETE",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
@@ -88,16 +95,19 @@ const tags: ImockTag[] = [
     id: 3,
     endpoints: [
       {
+        id: 8,
         method: "POST",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
       },
       {
+        id: 9,
         method: "PUT",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",
       },
       {
+        id: 10,
         method: "GET",
         url: "/pet/ {petID}/uploadImage",
         description: "uploads an image",

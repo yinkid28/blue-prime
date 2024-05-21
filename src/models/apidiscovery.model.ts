@@ -11,6 +11,7 @@ export type ApiDiscoveryInititals = {
   api: IMockApi | null;
   bookmarkedAPIs: IMockApi[];
   libraryView: string;
+  apiProduct: IMockapiProduct | null;
 };
 export type FileType = {
   name: string;
@@ -18,4 +19,11 @@ export type FileType = {
   type: string;
   webkitRelativePath: string;
   lastModified: number;
+};
+
+export type IMockapiProduct = {
+  img: StaticImageData;
+  title: string;
+  description: string;
+  category: string;
 };
