@@ -23,6 +23,7 @@ import { FiLogOut } from "react-icons/fi";
 import { HiOutlineCog } from "react-icons/hi";
 
 import { useLogout } from "@/hooks/useLocalStorage";
+import { useEffect } from "react";
 
 type NavbarProps = {
   title: string;
@@ -33,6 +34,13 @@ export default function Navbar({ title }: NavbarProps) {
   const { setLoading, setSidebar, user, setUser } = useOnboarding();
   const router = useRouter();
   const logout = useLogout();
+  useEffect(() => {
+    if (router.asPath.includes("/webber")) {
+      setUserType("webber");
+    } else {
+      setUserType("weaver");
+    }
+  }, [router]);
   return (
     <div className="w-full bg-transparent flex justify-between items-center p-5 ">
       <div>

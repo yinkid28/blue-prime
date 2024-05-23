@@ -81,7 +81,6 @@ export default function SignUpOrganization() {
       prefferedLanguageId: 1,
       createdBy: values.name,
       password: values.password,
-      roleIds: [1],
     };
     try {
       const res = await OnboardingServices.RegisterUser(data);

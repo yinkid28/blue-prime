@@ -19,7 +19,7 @@ export default class OnboardingServices {
   }
   static async signInUser(data: SignInDto) {
     const response = await HTTPClient.post(
-      "/onboarding-and-rbac/api/publicsignin",
+      "/onboarding-and-rbac/api/signin",
       data
     );
     return response.data;

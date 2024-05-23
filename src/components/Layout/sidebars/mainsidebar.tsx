@@ -15,6 +15,7 @@ import {
 import { FaFolder } from "react-icons/fa";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
+import { Icon } from "@iconify/react";
 
 export default function MainSidebar() {
   const router = useRouter();
@@ -67,6 +68,17 @@ export default function MainSidebar() {
                   >
                     <BsSearch />
                     <p className="font-semibold">Search</p>
+                  </div>
+                  <div
+                    className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+                      router.asPath == "/weaver/api_product"
+                        ? "text-primary"
+                        : "text-dark-grey"
+                    }`}
+                    onClick={() => router.push("/weaver/api_product")}
+                  >
+                    <Icon icon="carbon:api-1" className="text-xl" />
+                    <p className="font-semibold">API Product</p>
                   </div>
                   {user !== null && (
                     <div
@@ -169,6 +181,17 @@ export default function MainSidebar() {
           >
             <BsSearch />
             <p className="font-semibold">Search</p>
+          </div>
+          <div
+            className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+              router.asPath == "/weaver/api_product"
+                ? "text-primary"
+                : "text-dark-grey"
+            }`}
+            onClick={() => router.push("/weaver/api_product")}
+          >
+            <Icon icon="carbon:api-1" className="" />
+            <p className="font-semibold">API Product</p>
           </div>
           {user !== null && (
             <div

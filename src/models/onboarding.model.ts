@@ -23,7 +23,6 @@ export type RegisterUserDto = {
   prefferedLanguageId?: number;
   createdBy: string;
   password: string;
-  roleIds?: number[];
 };
 export type SignInDto = {
   email: string;
@@ -82,10 +81,10 @@ export type IUser = {
 export type Irole = {
   id: number;
   roleName: string;
-  roleType: string;
   description: string;
-  isCustom: number;
-  policies: [];
+  // roleType: string;
+  // isCustom: number;
+  // policies: [];
 };
 export type IActivity = {
   id: number;
