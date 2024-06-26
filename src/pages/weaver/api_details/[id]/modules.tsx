@@ -134,10 +134,10 @@ export default function ApiModules() {
   }, []);
   return (
     <WebberLayout>
-      <Navbar title={`${api?.title}`} />
+      <Navbar title={`${api?.name}`} />
       <BreadCrumbs
         // breadCrumbItems={breadCrumbs}
-        breadCrumbActiveItem={`${api?.title}-Module`}
+        breadCrumbActiveItem={`${api?.name}-Module`}
       />
       <div className="flex flex-col md:flex-row gap-3 p-5 justify-between">
         <div className="w-full md:w-[20%] flex flex-col gap-2">

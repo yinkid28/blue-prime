@@ -1,15 +1,15 @@
 import Navbar from "@/components/Layout/Nav/navbar";
+import {
+  FeedbackManagementView,
+  OverviewView,
+  SubHistoryView,
+} from "@/components/Webber/CreateAPI/apiProgress/apiManagerComponents";
 import { BreadCrumbItems, BreadCrumbs } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { Spinner } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import {
-  OverviewView,
-  SubHistoryView,
-  FeedbackManagementView,
-} from "@/components/Webber/CreateAPI/apiProgress/apiManagerComponents";
 
 // remember to use static generation here but for now we will use context to get current api
 const WebberLayout = dynamic(() => import("@/components/Layout/layout"), {
@@ -19,7 +19,7 @@ const WebberLayout = dynamic(() => import("@/components/Layout/layout"), {
 const breadCrumbs: BreadCrumbItems[] = [
   {
     breadCrumbText: "Text Translator",
-    breadCrumbPath: "/webber/TextTranslator/overview",
+    breadCrumbPath: "/weaver/TextTranslator/overview",
   },
 ];
 
@@ -35,10 +35,10 @@ export default function ApiManager() {
   return (
     <>
       <WebberLayout>
-        <Navbar title={`${api?.title}`} />
+        <Navbar title={`${api?.name}`} />
         <BreadCrumbs
           // breadCrumbItems={breadCrumbs}
-          breadCrumbActiveItem={`${api?.title}-API Manager`}
+          breadCrumbActiveItem={`${api?.name}-API Manager`}
         />
         <div className="p-5">
           <div className="hidden md:flex items-center gap-3">

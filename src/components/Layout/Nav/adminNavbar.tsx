@@ -156,7 +156,7 @@ export default function AdminNavbar({ title }: NavbarProps) {
                     if (userType === "weaver") {
                       setLoading(true);
                       setUserType("webber");
-                      router.push("/webber/dashboard");
+                      router.push("/weaver/dashboard");
                       setSidebar("webber");
                     } else {
                       setLoading(true);

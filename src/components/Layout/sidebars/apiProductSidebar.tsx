@@ -1,4 +1,5 @@
 import { useOnboarding } from "@/context/OnboardingContext";
+import { IApi } from "@/models/api.model";
 import { IMockApi } from "@/models/apidiscovery.model";
 import { Badge } from "@chakra-ui/react";
 import Image from "next/image";
@@ -8,7 +9,7 @@ import { IoBookmarkOutline } from "react-icons/io5";
 import { MdHomeFilled } from "react-icons/md";
 
 type sideBarProps = {
-  api: IMockApi;
+  api: IApi;
 };
 export default function ApiProductSidebar({ api }: sideBarProps) {
   const router = useRouter();
@@ -30,7 +31,7 @@ export default function ApiProductSidebar({ api }: sideBarProps) {
         <div className="flex items-center gap-2">
           <div className="w-[50px] h-[50px] rounded bg-mid-grey overflow-hidden">
             <Image
-              src={api.img}
+              src={"/images/api_icons/apiMock.webp"}
               alt="icon"
               width={200}
               height={200}
@@ -38,11 +39,11 @@ export default function ApiProductSidebar({ api }: sideBarProps) {
             />
           </div>
           <div className="">
-            <p className="font-semibold">{api.title}</p>
+            <p className="font-semibold">{api.name}</p>
             <div className="flex items-center gap-2">
               <div className="w-[10px] h-[10px] rounded-full bg-mid-grey overflow-hidden">
                 <Image
-                  src={api.img}
+                  src={"/images/api_icons/apiMock.webp"}
                   alt="icon"
                   width={200}
                   height={200}
@@ -64,7 +65,9 @@ export default function ApiProductSidebar({ api }: sideBarProps) {
         </div>
       </div>
       <div className="flex flex-col gap-3">
-        <p className="font-semibold text-primary text-sm">{api.category}</p>
+        <p className="font-semibold text-primary text-sm">
+          {api.categories.length > 0 ? api.categories[0] : "API"}
+        </p>
         <p className="text-sm text-dark-grey">{api.description}</p>
       </div>
 

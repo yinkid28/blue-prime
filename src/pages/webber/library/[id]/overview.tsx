@@ -44,7 +44,7 @@ export default function ApiOverview() {
   const breadCrumbs: BreadCrumbItems[] = [
     {
       breadCrumbText: "Library",
-      breadCrumbPath: "/weaver/library",
+      breadCrumbPath: "/webber/library",
     },
   ];
 
@@ -85,24 +85,24 @@ export default function ApiOverview() {
   return (
     <>
       <WeaverLayout>
-        <Navbar title={`${api?.title}`} />
+        <Navbar title={`${api?.name}`} />
         {/* Fix the breadcrumbs before commiting. Use the commented code in api_manager.tsx as a guide */}
         <BreadCrumbs
           breadCrumbItems={breadCrumbs}
-          breadCrumbActiveItem={`${api?.title}-Overview`}
+          breadCrumbActiveItem={`${api?.name}-Overview`}
         />
         <div className="border rounded-xl p-4 mx-4 my-6 min-h-[80dvh]">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center lg:gap-0 gap-6">
             <div className="flex items-center gap-3 h-[63px]">
               <Image
-                src={api?.img as StaticImageData}
+                src={"/images/apiMock.webp"}
                 alt="icon"
                 width={63}
                 height={63}
               />
               <div className="flex">
                 <div className="flex flex-col gap-2">
-                  <h1 className="text-sm font-semibold">{api?.title}</h1>
+                  <h1 className="text-sm font-semibold">{api?.name}</h1>
                   <p className="text-xs text-blue-dark font-semibold">
                     Entertainment
                   </p>

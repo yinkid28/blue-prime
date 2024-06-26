@@ -17,7 +17,7 @@ export default function WeaverFeedback() {
   const breadCrumbs: BreadCrumbItems[] = [
     {
       breadCrumbText: "Library",
-      breadCrumbPath: "/weaver/library",
+      breadCrumbPath: "/webber/library",
     },
   ];
   useEffect(() => {
@@ -26,10 +26,10 @@ export default function WeaverFeedback() {
   }, []);
   return (
     <WeaverLayout>
-      <Navbar title={`${api?.title}`} />
+      <Navbar title={`${api?.name}`} />
       <BreadCrumbs
         breadCrumbItems={breadCrumbs}
-        breadCrumbActiveItem={`${api?.title}-Consumption Rate`}
+        breadCrumbActiveItem={`${api?.name}-Consumption Rate`}
       />
       {/* CONTENT */}
       <div className="p-5">

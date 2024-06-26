@@ -1,15 +1,14 @@
 import Navbar from "@/components/Layout/Nav/navbar";
+import {
+  ApiInformationView,
+  DocumentationView,
+} from "@/components/Weaver/apiInformationComponents";
 import { BreadCrumbItems, BreadCrumbs } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import {
-  ApiInformationView,
-  DocumentationView,
-} from "../../../../components/Weaver/apiInformationComponents";
-
 // remember to use static generation here but for now we will use context to get current api
 const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
@@ -26,7 +25,7 @@ export default function ApiOverview() {
   const breadCrumbs: BreadCrumbItems[] = [
     {
       breadCrumbText: "Library",
-      breadCrumbPath: "/weaver/library",
+      breadCrumbPath: "/webber/library",
     },
   ];
 
@@ -35,11 +34,11 @@ export default function ApiOverview() {
   return (
     <>
       <WeaverLayout>
-        <Navbar title={`${api?.title}`} />
+        <Navbar title={`${api?.name}`} />
         {/* Fix the breadcrumbs before commiting. Use the commented code in api_manager.tsx as a guide */}
         <BreadCrumbs
           breadCrumbItems={breadCrumbs}
-          breadCrumbActiveItem={`${api?.title}-API Information`}
+          breadCrumbActiveItem={`${api?.name}-API Information`}
         />
         {/* CONTENT */}
         <div className="mx-4 my-6">

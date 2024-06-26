@@ -11,8 +11,8 @@ import {
 import dynamic from "next/dynamic";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import CustomerJourneyCard from "@/components/Admin/CustomerJourneyCard";
-import { ImockEndpoint } from "@/pages/webber/api_details/[id]/modules";
-import { ImockTag } from "@/pages/webber/api_details/[id]/test";
+import { ImockEndpoint } from "@/pages/weaver/api_details/[id]/modules";
+import { ImockTag } from "@/pages/weaver/api_details/[id]/test";
 import {
   Accordion,
   AccordionButton,
@@ -157,10 +157,12 @@ export default function AddApiToPool() {
     console.log(selectedEndpoints, "selec");
   }, [selectedEndpoints]);
 
-  const handleSort = (selectedApi:ImockTag, selectedEndpoints:ImockEndpoint)=>{
-
-    // return an object of aelectedAPI with name 
-  }
+  const handleSort = (
+    selectedApi: ImockTag,
+    selectedEndpoints: ImockEndpoint
+  ) => {
+    // return an object of aelectedAPI with name
+  };
   return (
     <AdminLayout>
       <AdminNavbar title={apiProduct?.title as string} />
@@ -297,7 +299,6 @@ export default function AddApiToPool() {
                   </div>
                 ))}
               </div>
-              
             </div>
           </div>
           <div className="flex flex-col gap-3">

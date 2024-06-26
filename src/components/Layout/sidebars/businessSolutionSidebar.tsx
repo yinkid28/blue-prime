@@ -56,7 +56,7 @@ export default function APIProductDetailsSidebar() {
                   <div
                     className="flex items-center gap-2 cursor-pointer"
                     onClick={() => {
-                      router.push("/webber/dashboard");
+                      router.push("/weaver/dashboard");
                       setSidebar("webber");
                     }}
                   >
@@ -153,7 +153,7 @@ export default function APIProductDetailsSidebar() {
         <div
           className="hidden md:flex items-center gap-2 cursor-pointer"
           onClick={() => {
-            router.push("/webber/dashboard");
+            router.push("/weaver/dashboard");
             setSidebar("webber");
           }}
         >

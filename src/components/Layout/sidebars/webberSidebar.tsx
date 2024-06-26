@@ -35,7 +35,7 @@ export default function WebberSidebar() {
               <DrawerBody className="space-y-4 mt-16">
                 <div
                   className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                    router.asPath == "/webber/dashboard"
+                    router.asPath == "/weaver/dashboard"
                       ? "text-primary"
                       : "text-dark-grey"
                   }`}
@@ -67,7 +67,7 @@ export default function WebberSidebar() {
 
         <div
           className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath == "/webber/dashboard"
+            router.asPath == "/weaver/dashboard"
               ? "text-primary"
               : "text-dark-grey"
           }`}

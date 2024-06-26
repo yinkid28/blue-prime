@@ -68,15 +68,15 @@ export default function ApiCard({
           setSidebar("api");
         } else {
           setSidebar("apiProgressWeaver");
-          router.push(`/weaver/library/${toTitleCase(title, true)}/overview`);
+          router.push(`/webber/library/${toTitleCase(title, true)}/overview`);
         }
         // I would comment all these ones for now ↓
-        setApi({
-          img,
-          title,
-          description,
-          category,
-        });
+        // setApi({
+        //   img,
+        //   title,
+        //   description,
+        //   category,
+        // });
       }}
     >
       <div className="w-full flex justify-between">

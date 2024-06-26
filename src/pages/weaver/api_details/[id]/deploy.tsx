@@ -36,10 +36,10 @@ export default function Deploy() {
   return (
     <>
       <WebberLayout>
-        <Navbar title={`${api?.title}`} />
+        <Navbar title={`${api?.name}`} />
         <BreadCrumbs
           // breadCrumbItems={breadCrumbs}
-          breadCrumbActiveItem={`${api?.title}-Deploy`}
+          breadCrumbActiveItem={`${api?.name}-Deploy`}
         />
         <div className="flex flex-col-reverse md:flex-row md:justify-between p-5 h-[80dvh] md:h-fit -translate-y-60 md:-translate-y-0">
           <div className="rounded-lg border overflow-scroll w-full md:w-[75%] gap-2">
@@ -71,8 +71,8 @@ export default function Deploy() {
               className="flex gap-2 items-center rounded-lg text-primary h-fit border-2 w-[25%] md:w-[80%] border-light-grey py-2 justify-center"
               onClick={() => {
                 router.push(
-                  `/webber/api_details/${toTitleCase(
-                    api?.title as string,
+                  `/weaver/api_details/${toTitleCase(
+                    api?.name as string,
                     true
                   )}/publish`
                 );

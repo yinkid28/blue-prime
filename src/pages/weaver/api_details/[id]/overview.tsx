@@ -2,7 +2,7 @@ import Navbar from "@/components/Layout/Nav/navbar";
 import { BreadCrumbs } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { Spinner } from "@chakra-ui/react";
+import { Spinner, useDisclosure } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -14,6 +14,9 @@ import {
   AccordionIcon,
 } from "@chakra-ui/react";
 import { FaCheck, FaCheckCircle } from "react-icons/fa";
+
+import DeleteAPIModal from "@/components/modals/deleteApi";
+import { IApi } from "@/models/api.model";
 import {
   ApiConfigurationCard,
   ApiDetailsCard,
@@ -27,6 +30,7 @@ const WebberLayout = dynamic(() => import("@/components/Layout/layout"), {
 export default function ApiOverview() {
   const { api } = useApi();
   const router = useRouter();
+  const { onOpen, isOpen, onClose } = useDisclosure();
   const { loading, setLoading, setSidebar } = useOnboarding();
   useEffect(() => {
     setLoading(false);
@@ -54,11 +58,19 @@ export default function ApiOverview() {
   return (
     <>
       <WebberLayout>
-        <Navbar title={`${api?.title}`} />
-        <BreadCrumbs
-          // breadCrumbItems={breadCrumbs}
-          breadCrumbActiveItem={`${api?.title}-Overview`}
-        />
+        <Navbar title={`${api?.name}`} />
+        <div className="w-full pr-5 flex flex-col md:flex-row justify-between">
+          <BreadCrumbs
+            // breadCrumbItems={breadCrumbs}
+            breadCrumbActiveItem={`${api?.name}-Overview`}
+          />
+          <button
+            className="w-fit h-fit rounded-lg px-4 py-1 bg-error-bg font-semibold text-error"
+            onClick={onOpen}
+          >
+            Delete
+          </button>
+        </div>
         <div className="p-5 flex gap-5">
           <div className="hidden md:w-[25%] md:flex flex-col gap-2 ">
             <div className="p-2  border-[1px] border-light-grey rounded-lg h-fit flex flex-col gap-3">
@@ -247,6 +259,7 @@ export default function ApiOverview() {
             <ApiEndpointCard />
           </div>
         </div>
+        <DeleteAPIModal isOpen={isOpen} onClose={onClose} api={api as IApi} />
       </WebberLayout>
     </>
   );

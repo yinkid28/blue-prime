@@ -12,13 +12,13 @@ export function ApiInformationView() {
         <div className="space-y-[19px]">
           <div className="flex flex-col lg:flex-row gap-3">
             <Image
-              src={api?.img as StaticImageData}
+              src={"/images/api_icons/apiMock.webp"}
               alt="icon"
               width={42}
               height={42}
             />
             <div className="flex flex-col gap-[2px]">
-              <h3 className="text-sm font-semibold">{api?.title}</h3>
+              <h3 className="text-sm font-semibold">{api?.name}</h3>
               <div className="flex gap-2">
                 <Image
                   src={profileImage}

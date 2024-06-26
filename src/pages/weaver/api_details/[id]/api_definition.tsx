@@ -43,10 +43,10 @@ export default function ApiDefinition() {
   return (
     <>
       <WebberLayout>
-        <Navbar title={`${api?.title}`} />
+        <Navbar title={`${api?.name}`} />
         <BreadCrumbs
           // breadCrumbItems={breadCrumbs}
-          breadCrumbActiveItem={`${api?.title}-Endpoints`}
+          breadCrumbActiveItem={`${api?.name}-Endpoints`}
         />
         <div className="p-5">
           <Editor

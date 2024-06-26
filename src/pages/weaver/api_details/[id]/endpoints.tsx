@@ -1,5 +1,5 @@
 import Navbar from "@/components/Layout/Nav/navbar";
-import ApiInfomationView from "@/components/Webber/CreateAPI/apiProgress/ApiInformationView";
+
 import { BreadCrumbs, Button } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
@@ -25,10 +25,10 @@ export default function ApiProgressEndpoints() {
   return (
     <>
       <WebberLayout>
-        <Navbar title={`${api?.title}`} />
+        <Navbar title={`${api?.name}`} />
         <BreadCrumbs
           // breadCrumbItems={breadCrumbs}
-          breadCrumbActiveItem={`${api?.title}-Endpoints`}
+          breadCrumbActiveItem={`${api?.name}-Endpoints`}
         />
         <div className="p-5">
           <div className="p-5 flex flex-col w-full gap-3 border border-light-grey rounded-lg">

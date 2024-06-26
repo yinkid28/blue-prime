@@ -60,36 +60,36 @@ export default function MainSidebar() {
                     <MdHomeFilled />
                     <p className="font-semibold">Home</p>
                   </div>
-                  <div
+                  {/* <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath == "" ? "text-primary" : "text-dark-grey"
                     }`}
                   >
                     <BsSearch />
                     <p className="font-semibold">Search</p>
-                  </div>
+                  </div> */}
                   {user !== null && (
                     <div
                       className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                        router.asPath == "/weaver/library"
+                        router.asPath == "/webber/library"
                           ? "text-primary"
                           : "text-dark-grey"
                       }`}
-                      onClick={() => router.push("/weaver/library")}
+                      onClick={() => router.push("/webber/library")}
                     >
                       <MdFolder size={18} />
                       <p className="font-semibold">Library</p>
                     </div>
                   )}
-                  <div
+                  {/* <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath == "" ? "text-primary" : "text-dark-grey"
                     }`}
                   >
                     <BsFilePlay />
                     <p className="font-semibold">How to Use</p>
-                  </div>
-                  {router.asPath == "/weaver/library" ? (
+                  </div> */}
+                  {router.asPath == "/webber/library" ? (
                     <div className="bg-white h-full pt-6 rounded flex flex-col gap-4">
                       <p className="text-base text-mid-grey font-bold">
                         Library
@@ -162,38 +162,38 @@ export default function MainSidebar() {
             <MdHomeFilled />
             <p className="font-semibold">Home</p>
           </div>
-          <div
+          {/* <div
             className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
               router.asPath == "" ? "text-primary" : "text-dark-grey"
             }`}
           >
             <BsSearch />
             <p className="font-semibold">Search</p>
-          </div>
+          </div> */}
           {user !== null && (
             <div
               className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                router.asPath == "/weaver/library"
+                router.asPath == "/webber/library"
                   ? "text-primary"
                   : "text-dark-grey"
               }`}
-              onClick={() => router.push("/weaver/library")}
+              onClick={() => router.push("/webber/library")}
             >
               <MdFolder size={18} />
               <p className="font-semibold">Library</p>
             </div>
           )}
-          <div
+          {/* <div
             className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
               router.asPath == "" ? "text-primary" : "text-dark-grey"
             }`}
           >
             <BsFilePlay />
             <p className="font-semibold">How to Use</p>
-          </div>
+          </div> */}
         </div>
 
-        {router.asPath == "/weaver/library" ? (
+        {router.asPath == "/webber/library" ? (
           <div className="bg-white h-full rounded p-5 md:flex hidden flex-col gap-4">
             <p className="text-base text-mid-grey font-bold">Library</p>
             <ul className="space-y-3 text-dark-grey">

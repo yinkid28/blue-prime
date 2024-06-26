@@ -1,4 +1,4 @@
-import { ImockEndpoint } from "@/pages/webber/api_details/[id]/modules";
+import { ImockEndpoint } from "@/pages/weaver/api_details/[id]/modules";
 
 type CardProps = {
   endpoint: ImockEndpoint;

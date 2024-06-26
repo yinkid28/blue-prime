@@ -1,5 +1,5 @@
 import Navbar from "@/components/Layout/Nav/navbar";
-import ApiInfomationView from "@/components/Webber/CreateAPI/apiProgress/ApiInformationView";
+
 import { BreadCrumbs } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
@@ -42,10 +42,10 @@ export default function ApiRuntime() {
   return (
     <>
       <WebberLayout>
-        <Navbar title={`${api?.title}`} />
+        <Navbar title={`${api?.name}`} />
         <BreadCrumbs
           // breadCrumbItems={breadCrumbs}
-          breadCrumbActiveItem={`${api?.title}-Runtime`}
+          breadCrumbActiveItem={`${api?.name}-Runtime`}
         />
         <div className="p-5 flex flex-col w-full md:flex-row gap-3">
           <div className="border border-light-grey w-full rounded-lg p-5 flex flex-col gap-3">

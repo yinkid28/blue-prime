@@ -1,12 +1,14 @@
 import Navbar from "@/components/Layout/Nav/navbar";
-import ApiInfomationView from "@/components/Webber/CreateAPI/apiProgress/ApiInformationView";
+
 import { BreadCrumbs } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
+import { IApi } from "@/models/api.model";
 import { Spinner } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { ApiInformationView } from "@/components/Weaver/apiInformationComponents";
 
 const WebberLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
@@ -20,13 +22,14 @@ export default function ApiInformationWebber() {
   useEffect(() => {
     setLoading(false);
   }, []);
+
   return (
     <>
       <WebberLayout>
-        <Navbar title={`${api?.title}`} />
+        <Navbar title={`${api?.name}`} />
         <BreadCrumbs
           // breadCrumbItems={breadCrumbs}
-          breadCrumbActiveItem={`${api?.title}-Api Information`}
+          breadCrumbActiveItem={`${api?.name}-Api Information`}
         />
         <div className="p-5">
           <div className="flex  items-center w-full justify-between ">
@@ -44,7 +47,7 @@ export default function ApiInformationWebber() {
                 <p>API Information</p>
               </div>
               <div
-                className={`w-fit h-fit cursor-pointer px-5 py-2 ease-in-out duration-700 hover:border-primary rounded-xl hover:text-primary ${
+                className={`w-fit hidden h-fit cursor-pointer px-5 py-2 ease-in-out duration-700 hover:border-primary rounded-xl hover:text-primary ${
                   view === "resource"
                     ? "text-primary border-primary "
                     : "text-mid-grey border-mid-grey"
@@ -56,7 +59,7 @@ export default function ApiInformationWebber() {
                 <p>Resources and Links</p>
               </div>
               <div
-                className={`w-fit h-fit cursor-pointer px-5 py-2 ease-in-out duration-700 hover:border-primary rounded-xl hover:text-primary ${
+                className={`w-fit hidden h-fit cursor-pointer px-5 py-2 ease-in-out duration-700 hover:border-primary rounded-xl hover:text-primary ${
                   view === "subscription"
                     ? "text-primary border-primary"
                     : "text-mid-grey border-mid-grey"
@@ -75,7 +78,7 @@ export default function ApiInformationWebber() {
             </div>
           </div>
           <div className="my-5 border border-light-grey rounded-lg p-5">
-            {view === "info" ? <ApiInfomationView /> : null}
+            {view === "info" ? <ApiInformationView /> : null}
           </div>
         </div>
       </WebberLayout>

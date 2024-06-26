@@ -1,5 +1,5 @@
 import Navbar from "@/components/Layout/Nav/navbar";
-import { BreadCrumbs } from "@/components/utils";
+import { BreadCrumbItems, BreadCrumbs } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
 import dynamic from "next/dynamic";
@@ -24,16 +24,19 @@ const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
   ssr: false, // Disable server-side rendering for this component
 });
 import "swagger-ui-react/swagger-ui.css";
-import { ImockEndpoint } from "./modules";
-const WebberLayout = dynamic(() => import("@/components/Layout/layout"), {
+import { ImockEndpoint } from "@/pages/weaver/api_details/[id]/modules";
+import { ImockTag } from "@/pages/weaver/api_details/[id]/test";
+const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
 
-export type ImockTag = {
-  name: string;
-  id: number;
-  endpoints: ImockEndpoint[];
-};
+const breadCrumbs: BreadCrumbItems[] = [
+  {
+    breadCrumbText: "Library",
+    breadCrumbPath: "/webber/library",
+  },
+];
+
 const tags: ImockTag[] = [
   {
     name: "Pets",
@@ -115,12 +118,13 @@ const tags: ImockTag[] = [
     ],
   },
 ];
-export default function ApiModulesTests() {
+
+export default function WeaverTests() {
   const { api } = useApi();
   const router = useRouter();
   const [view, setView] = useState<string>("info");
   const [selectedTag, setSelectedTag] = useState<ImockTag>();
-  const { loading, setLoading } = useOnboarding();
+  const { setLoading, setSidebar } = useOnboarding();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -131,20 +135,22 @@ export default function ApiModulesTests() {
   useEffect(() => {
     setLoading(false);
     setSelectedTag(tags[0]);
+    setSidebar("apiProgressWeaver");
     setView(tags[0].name);
   }, []);
+
   return (
-    <WebberLayout>
-      <Navbar title={`${api?.title}`} />
+    <WeaverLayout>
+      <Navbar title={`${api?.name}`} />
       <BreadCrumbs
-        // breadCrumbItems={breadCrumbs}
-        breadCrumbActiveItem={`${api?.title}-Module`}
+        breadCrumbItems={breadCrumbs}
+        breadCrumbActiveItem={`${api?.name}-Test`}
       />
       <div className="flex flex-col h-screen md:flex-row gap-3 p-5 justify-between">
         <div className="w-full md:w-[20%] h-full flex flex-col gap-2">
           <div className="w-full text-mid-grey items-center border-bottom-[1px] border-light-grey py-2 flex justify-between">
             <p className="">API Tags</p>
-            <MdAdd className="cursor-pointer" onClick={onTagOpen} />
+            {/* <MdAdd className="cursor-pointer" onClick={onTagOpen} /> */}
           </div>
           <div className="w-full bg-light-grey rounded text-mid-grey flex flex-col gap-1">
             {tags.map((item, index) => (
@@ -172,6 +178,6 @@ export default function ApiModulesTests() {
       </div>
       <AddEndpointModal isOpen={isOpen} onClose={onClose} />
       <AddTagModal isOpen={isTagOpen} onClose={onTagClose} />
-    </WebberLayout>
+    </WeaverLayout>
   );
 }

@@ -4,9 +4,7 @@ import { useOnboarding } from "@/context/OnboardingContext";
 import ApiProductSidebar from "./sidebars/apiProductSidebar";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { IMockApi } from "@/models/apidiscovery.model";
-import WebberSidebar from "./sidebars/webberSidebar";
-import ApiProgressSidebar from "./sidebars/apiProgressSideBar";
-import WeaverProgressSidebar from "./sidebars/weaverProgressSidebar";
+
 import { Spinner, UseToastOptions, useToast } from "@chakra-ui/react";
 import { Loader } from "../utils";
 import { useEffect } from "react";
@@ -14,6 +12,7 @@ import BackOfficeSidebar from "./sidebars/backOfficeSidebar";
 import CategoryDetailSidebar from "./sidebars/categoryDetailSidebar";
 import BusinessSolutionSidebar from "./sidebars/businessSolutionSidebar";
 import APIProductDetailsSidebar from "./sidebars/businessSolutionSidebar";
+import { IApi } from "@/models/api.model";
 
 type LayoutProps = {
   children: React.ReactNode | React.ReactNode[];
@@ -115,7 +114,7 @@ export default function ApiLayout({ children }: LayoutProps) {
           ) : (
             <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[23%_1fr]  gap-2 bg-light-grey p-2">
               <div className="">
-                <ApiProductSidebar api={api as IMockApi} />
+                <ApiProductSidebar api={api as IApi} />
               </div>
 
               <div className="bg-white rounded-t overflow-y-scroll">

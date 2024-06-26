@@ -37,7 +37,7 @@ export default function DocumentationView() {
   return (
     <div className="w-full flex flex-col-reverse md:flex-row justify-between">
       <div className="w-full md:w-[65%]">
-        <p className="text-sm mb-3 text-primary">{api?.category}</p>
+        <p className="text-sm mb-3 text-primary">{api?.categories[0]}</p>
         <p className="text-sm ">README</p>
         <div className="w-full">
           <SwaggerUI url={"https://104.40.209.29/files/output-online.yaml"} />

@@ -52,13 +52,13 @@ export default function Navbar({ title }: NavbarProps) {
                 if (userType === "weaver") {
                   setLoading(true);
                   setUserType("webber");
-                  router.push("/webber/dashboard");
-                  setSidebar("webber");
-                } else {
-                  setLoading(true);
-                  setUserType("weaver");
                   router.push("/api_discovery");
                   setSidebar("");
+                } else {
+                  setSidebar("webber");
+                  router.push("/weaver/dashboard");
+                  setLoading(true);
+                  setUserType("weaver");
                 }
               }}
             />
@@ -183,7 +183,7 @@ export default function Navbar({ title }: NavbarProps) {
                     if (userType === "weaver") {
                       setLoading(true);
                       setUserType("webber");
-                      router.push("/webber/dashboard");
+                      router.push("/weaver/dashboard");
                       setSidebar("webber");
                     } else {
                       setLoading(true);

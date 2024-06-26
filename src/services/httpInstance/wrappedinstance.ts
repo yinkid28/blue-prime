@@ -149,7 +149,7 @@ class HTTPClient {
   static async put(endpoint: string, data: any) {
     const headers = {
       "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST",
+      "Access-Control-Allow-Methods": "PUT",
       "Content-Type": "application/json",
       Authorization: getJWT(),
     };
@@ -160,11 +160,21 @@ class HTTPClient {
     const headers = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "POST",
-      "Content-Type": "multipart/form", //this is not the correct content type please change it
+      "Content-Type": "multipart/form-data", //this is not the correct content type please change it
       Authorization: getJWT(),
     };
 
     withErrorHandling(instance.post(endpoint, data, { headers }));
+  }
+  static async formDataPut(endpoint: string, data: any) {
+    const headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "PUT",
+      "Content-Type": "multipart/form-data", //this is not the correct content type please change it
+      Authorization: getJWT(),
+    };
+
+    withErrorHandling(instance.putForm(endpoint, data, { headers }));
   }
 
   static async patch(endpoint: string, data: any) {

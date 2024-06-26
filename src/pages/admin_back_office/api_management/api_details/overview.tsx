@@ -3,7 +3,7 @@ import AdminNavbar from "@/components/Layout/Nav/adminNavbar";
 import { BreadCrumbItems, BreadCrumbs } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { ImockEndpoint } from "@/pages/webber/api_details/[id]/modules";
+import { ImockEndpoint } from "@/pages/weaver/api_details/[id]/modules";
 import {
   Accordion,
   AccordionButton,
@@ -27,7 +27,7 @@ import {
 } from "react-icons/fa";
 import { MdAdd } from "react-icons/md";
 import { CircularProgress, CircularProgressLabel } from "@chakra-ui/react";
-import { ImockTag } from "@/pages/webber/api_details/[id]/test";
+import { ImockTag } from "@/pages/weaver/api_details/[id]/test";
 const AdminLayout = dynamic(() => import("@/components/Layout/adminLayout"), {
   ssr: false,
 });
@@ -136,7 +136,7 @@ export default function BackofficeApiOverview() {
     <AdminLayout>
       <AdminNavbar title="API Management" />
       <BreadCrumbs
-        breadCrumbActiveItem={api?.title as string}
+        breadCrumbActiveItem={api?.name as string}
         breadCrumbItems={breadcrumbs}
       />
       <div className="p-5 flex flex-col gap-5 ">

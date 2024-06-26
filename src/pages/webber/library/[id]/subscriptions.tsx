@@ -13,7 +13,7 @@ const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
 const breadCrumbs: BreadCrumbItems[] = [
   {
     breadCrumbText: "Library",
-    breadCrumbPath: "/weaver/library",
+    breadCrumbPath: "/webber/library",
   },
 ];
 
@@ -110,10 +110,10 @@ export default function WaverSubscriptions() {
   ];
   return (
     <WeaverLayout>
-      <Navbar title={`${api?.title}`} />
+      <Navbar title={`${api?.name}`} />
       <BreadCrumbs
         breadCrumbItems={breadCrumbs}
-        breadCrumbActiveItem={`${api?.title}-Subscriptions`}
+        breadCrumbActiveItem={`${api?.name}-Subscriptions`}
       />
 
       <div className="flex flex-col gap-4 p-5">

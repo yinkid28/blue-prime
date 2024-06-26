@@ -1,4 +1,5 @@
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { IApi } from "@/models/api.model";
 import {
   ApiDiscoveryInititals,
   IMockApi,
@@ -66,7 +67,7 @@ const useApiContext = () => {
   const { api, bookmarkedAPIs, libraryView, apiProduct } =
     state as ApiDiscoveryInititals;
 
-  const setApi = useCallback((api: IMockApi) => {
+  const setApi = useCallback((api: IApi) => {
     dispatch({
       type: "SET_API",
       payload: api,

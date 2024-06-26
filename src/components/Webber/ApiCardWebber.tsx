@@ -7,18 +7,21 @@ import { FaRegClock, FaRegEye, FaRegStar } from "react-icons/fa";
 // import { MdBookmarkBorder } from "react-icons/md";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { toTitleCase } from "../utils";
+import { IApi } from "@/models/api.model";
 
 type ApiCardProps = {
-  img: StaticImageData;
+  img: string;
   title: string;
   description: string;
   category: string;
+  api: IApi;
 };
 export default function ApiCardWebber({
   img,
   title,
   description,
   category,
+  api,
 }: ApiCardProps) {
   const router = useRouter();
   const { setApi } = useApi();
@@ -28,25 +31,27 @@ export default function ApiCardWebber({
       className="w-full border-[1px] border-light-grey hover:shadow-md cursor-pointer rounded-lg p-3 flex flex-col gap-3"
       onClick={() => {
         setLoading(true);
-        const path = `/webber/api_details/${toTitleCase(title, true)}/overview`;
+        const path = `/weaver/api_details/${toTitleCase(title, true)}/overview`;
         console.log(path);
         router.push(path);
-        setApi({
-          img,
-          title,
-          description,
-          category,
-        });
+        setApi(api);
+        // setApi({
+
+        //   title,
+        //   description,
+        //   category,
+        // });
         setSidebar("apiProgress");
       }}
     >
       <div className="w-full flex justify-between">
         <div className="w-[50px] h-[50px] rounded bg-mid-grey overflow-hidden">
           <Image
-            src={img}
+            src={"/images/api_icons/apiMock.webp"}
             alt="icon"
             width={200}
             height={200}
+            loading="lazy"
             className="w-full h-full"
           />
         </div>
