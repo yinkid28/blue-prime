@@ -66,15 +66,13 @@ export default function Navbar({ title }: NavbarProps) {
             <BiMessageRounded className="md:flex hidden" />
 
             <div className="w-[24px] h-[24px] rounded-full overflow-hidden md:flex hidden">
-              {userType !== "" && (
-                <Image
-                  className="w-[40px] h-[40px]"
-                  width={200}
-                  height={200}
-                  alt="avi"
-                  src={"/images/avatar.jpg"}
-                />
-              )}
+              <Image
+                className="w-[40px] h-[40px]"
+                width={200}
+                height={200}
+                alt="avi"
+                src={"/images/avatar.jpg"}
+              />
             </div>
             <Menu>
               <MenuButton>
