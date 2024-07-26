@@ -24,7 +24,7 @@ export function ApiInformation({ setStep, setProgress, setTitle }: CreateProp) {
     setTitle("Build API");
   });
   const handleNext = () => {
-    if (name == "" || context == "" || version == "" || category == "") {
+    if (name == "" || context == "" || version == "") {
       toast({
         title: "Create API",
         description: "Kindly fill in all necessary details",
@@ -85,7 +85,7 @@ export function ApiInformation({ setStep, setProgress, setTitle }: CreateProp) {
           onChange={(e) => setVersion(e.target.value)}
         />
       </div>
-      <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
+      {/* <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
         <p className="text-xs text-dark-grey">Category</p>
         <select
           className="outline-none bg-transparent"
@@ -96,7 +96,7 @@ export function ApiInformation({ setStep, setProgress, setTitle }: CreateProp) {
           <option value="Finance">Finance</option>
           <option value="Entertainment">Entertainment</option>
         </select>
-      </div>
+      </div> */}
       <Button
         text="Next"
         type="full"
@@ -137,7 +137,7 @@ export function ApiUpload({ setStep, setProgress, setTitle }: CreateProp) {
       description: info.description,
       context: info.context,
       version: info.version,
-      provider: "Admin",
+      provider: "admin",
       // categories: [info.category],
       lifeCycleStatus: "CREATED",
       responseCachingEnabled: false,
@@ -218,55 +218,7 @@ export function ApiUpload({ setStep, setProgress, setTitle }: CreateProp) {
       setApiErrorMessage(errorMessage, "error");
     }
   };
-  const importwsdl = async () => {
-    if (url === "")
-      toast({
-        title: "API Creation",
-        description: "Please Input you api url",
-        status: "error",
-      });
-    setLoading(true);
-    const data = {
-      name: info.name,
-      version: info.version,
-      context: info.context,
-      endpointConfig: {
-        endpoint_type: "http",
-        sandbox_endpoints: {
-          url: url,
-        },
-        production_endpoints: {
-          url: url,
-        },
-      },
-    };
-    const formData = new FormData();
-    formData.append("url", url);
-    formData.append("additionalProperties", JSON.stringify(data));
-    formData.append("implementationType", "SOAPTOREST");
-    try {
-      const res: any = await APIServices.importWsdl(
-        formData
-        // user?.customerCode as string
-      );
-      if (res.statusCode === 201) {
-        setLoading(false);
-        toast({
-          title: "API Creation",
-          description: "Api successfully created",
-          status: "success",
-          duration: 3000,
-          position: "bottom-right",
-        });
-        // router.push("/weaver/dashboard");
-      }
-      console.log(res);
-    } catch (error: any) {
-      setLoading(false);
-      const errorMessage = error?.response?.data?.message;
-      setApiErrorMessage(errorMessage, "error");
-    }
-  };
+
   return (
     <div className="w-full flex flex-col gap-5">
       <div className="w-full flex items-center gap-2">
@@ -294,7 +246,7 @@ export function ApiUpload({ setStep, setProgress, setTitle }: CreateProp) {
         </div>
       </div>
       {choice === "import" ? (
-        <ApiScratch url={url} setUrl={setUrl} />
+        <ApiScratch infor={info} />
       ) : (
         <>
           <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
@@ -306,54 +258,189 @@ export function ApiUpload({ setStep, setProgress, setTitle }: CreateProp) {
             >
               <option value="">Please select your api type</option>
               <option value="HTTP">HTTP</option>
-              <option value="WS">WS</option>
-              <option value="SOAPTOREST">SOAP TO REST</option>
-              <option value="SOAP">SOAP</option>
-              <option value="GRAPHQL">GRAPHQL</option>
-              <option value="WEBSUB">WEB SUB</option>
-              <option value="SSE">SSE</option>
-              <option value="WEBHOOK">WEBHOOK</option>
-              <option value="ASYNC">ASYNC</option>
+              {/* <option value="SOAP">SOAP</option>
+              <option value="GRAPHQL">GRAPHQL</option> */}
             </select>
           </div>
-          <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
-            <p className="text-xs text-dark-grey">Context URL</p>
-            <input
-              type="text"
-              name="url"
-              placeholder="Input Context URL"
-              className="outline-none bg-transparent"
-            />
-          </div>
+          <Button
+            text="Next"
+            type="full"
+            onClick={() => {
+              createApi();
+              // router.push("/weaver/dashboard");
+            }}
+          />
         </>
       )}
-      <Button
-        text="Next"
-        type="full"
-        onClick={() => {
-          if (choice === "import") {
-            importwsdl();
-          } else {
-            createApi();
-          }
-          // router.push("/weaver/dashboard");
-        }}
-      />
     </div>
   );
 }
 
-type Proppy = {
-  setUrl: Dispatch<SetStateAction<string>>;
-  url: string;
-};
-
-export default function ApiScratch({ setUrl, url }: Proppy) {
-  const [apiType, setApiType] = useState("");
-
+export default function ApiScratch({ infor }: any) {
+  const { user, setLoading, setApiErrorMessage } = useOnboarding();
+  const [apiType, setApiType] = useState("SOAP");
   const [firstName, setFirstName] = useState<any>();
+  const [implementationType, setImplementationType] = useState<string>("");
   const [file, setFile] = useState<any>(null);
+  const [url, setUrl] = useState<string>("");
+  const [info, setInfo] = useState<any>(infor);
+  const router = useRouter();
+  const toast = useToast();
   const hiddenFileInputTwo = useRef<HTMLInputElement>(null);
+
+  const importwsdl = async (cco: string) => {
+    if (file === null && url === "") {
+      toast({
+        title: "API Creation",
+        description: "Please Either Import a Wsdl file or insert wsdl url",
+        status: "error",
+        position: "bottom-right",
+      });
+      return;
+    }
+    if (implementationType === "") {
+      toast({
+        title: "API Creation",
+        description: "Please Select an implementation type",
+        position: "bottom-right",
+        status: "error",
+      });
+      return;
+    }
+
+    setLoading(true);
+    const data = {
+      name: info.name,
+      version: info.version,
+      context: info.context,
+      // endpointConfig: {
+      //   endpoint_type: "http",
+      //   sandbox_endpoints: {
+      //     url: url,
+      //   },
+      //   production_endpoints: {
+      //     url: url,
+      //   },
+      // },
+    };
+    const formData = new FormData();
+    if (file !== null) {
+      formData.append("file", file);
+    } else {
+      formData.append("url", url);
+    }
+    formData.append("additionalProperties", JSON.stringify(data));
+    formData.append("implementationType", implementationType);
+    try {
+      const res: any = await APIServices.importWsdl(formData, cco);
+      console.log(res);
+      if (res.statusCode === 201) {
+        setLoading(false);
+        toast({
+          title: "API Creation",
+          description: "Api successfully created",
+          status: "success",
+          duration: 3000,
+          position: "bottom-right",
+        });
+        router.push("/weaver/dashboard");
+      }
+      console.log(res);
+    } catch (error: any) {
+      setFile(null);
+      setImplementationType("");
+      setUrl("");
+      console.log(error);
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+      console.log(errorMessage, "ïyaayyaay");
+      toast({
+        title: "API Creation",
+        description: errorMessage,
+        position: "bottom-right",
+        status: "error",
+      });
+
+      // setApiErrorMessage(errorMessage, "error");
+    }
+  };
+
+  const importopenApi = async (cco: string) => {
+    if (file === null && url === "") {
+      toast({
+        title: "API Creation",
+        description:
+          "Please Either Import an open api file or insert open api url",
+        status: "error",
+        position: "bottom-right",
+      });
+      return;
+    }
+    // if (implementationType === "") {
+    //   toast({
+    //     title: "API Creation",
+    //     description: "Please Select an implementation type",
+    //     position: "bottom-right",
+    //     status: "error",
+    //   });
+    //   return;
+    // }
+
+    setLoading(true);
+    const data = {
+      name: info.name,
+      version: info.version,
+      context: info.context,
+      // endpointConfig: {
+      //   endpoint_type: "http",
+      //   sandbox_endpoints: {
+      //     url: url,
+      //   },
+      //   production_endpoints: {
+      //     url: url,
+      //   },
+      // },
+    };
+    const formData = new FormData();
+    if (file !== null) {
+      formData.append("file", file);
+    } else {
+      formData.append("url", url);
+    }
+    formData.append("additionalProperties", JSON.stringify(data));
+    // formData.append("implementationType", implementationType);
+    try {
+      const res: any = await APIServices.importOpenApi(formData, cco);
+      console.log(res);
+      if (res.statusCode === 201) {
+        setLoading(false);
+        toast({
+          title: "API Creation",
+          description: "Api successfully created",
+          status: "success",
+          duration: 3000,
+          position: "bottom-right",
+        });
+        router.push("/weaver/dashboard");
+      }
+      console.log(res);
+    } catch (error: any) {
+      setFile(null);
+      setUrl("");
+      console.log(error);
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+      console.log(errorMessage, "ïyaayyaay");
+      toast({
+        title: "API Creation",
+        description: errorMessage,
+        position: "bottom-right",
+        status: "error",
+      });
+
+      // setApiErrorMessage(errorMessage, "error");
+    }
+  };
 
   const handleClickTwo = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -367,12 +454,13 @@ export default function ApiScratch({ setUrl, url }: Proppy) {
     const file = event.target.files && event.target.files[0];
     console.log(file);
 
-    setFile(file as FileType);
+    setFile(file);
+    setUrl("");
   };
 
   const apis = [
     { name: "SOAP", id: 1 },
-    { name: "SOAPTOREST", id: 2 },
+    { name: "REST", id: 2 },
   ];
   return (
     <div className="w-full flex flex-col gap-3">
@@ -393,13 +481,26 @@ export default function ApiScratch({ setUrl, url }: Proppy) {
           </div>
         ))}
       </div>
+      {apiType === "SOAP" && (
+        <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
+          <p className="text-xs text-dark-grey">Implementation Type</p>
+          <select
+            value={implementationType}
+            onChange={(e) => setImplementationType(e.target.value)}
+          >
+            <option value="">Select Implemetation Type</option>
+            <option value="SOAP">Soap</option>
+            <option value="SOAPTOREST">Soap To Rest</option>
+          </select>
+        </div>
+      )}
       {!file ? (
         <div className="">
           <input
             type="file"
             ref={hiddenFileInputTwo}
             placeholder="click"
-            accept=".xlsx"
+            accept=""
             onChange={(e) => handleChangeTwo(e)}
             style={{ display: "none" }}
           />
@@ -411,7 +512,9 @@ export default function ApiScratch({ setUrl, url }: Proppy) {
           >
             <IoCloudUploadOutline />
             <p className="text-sm font-semibold ">Upload file</p>
-            <p className="text-sm font-semibold ">JSON, X-YAML, YAML</p>
+            <p className="text-sm font-semibold ">
+              {apiType === "SOAP" ? `.WSDL` : "Open API definition"}
+            </p>
           </button>
         </div>
       ) : (
@@ -454,6 +557,7 @@ export default function ApiScratch({ setUrl, url }: Proppy) {
       <div className="w-full my-1 flex items-center justify-center text-xl text-mid-grey">
         <p className="">OR</p>
       </div>
+
       <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
         <p className="text-xs text-dark-grey"> URL</p>
         <input
@@ -462,9 +566,26 @@ export default function ApiScratch({ setUrl, url }: Proppy) {
           placeholder="Input API URL"
           className="outline-none bg-transparent"
           value={url}
-          onChange={(e) => setUrl(e.target.value)}
+          disabled={file !== null ? true : false}
+          onChange={(e) => {
+            setFile(null);
+            setUrl(e.target.value);
+          }}
         />
       </div>
+      <Button
+        text="Next"
+        type="full"
+        onClick={() => {
+          if (apiType === "SOAP") {
+            importwsdl(user!.customerCode);
+          } else {
+            importopenApi(user!.customerCode);
+          }
+          // createApi();
+          // router.push("/weaver/dashboard");
+        }}
+      />
     </div>
   );
 }

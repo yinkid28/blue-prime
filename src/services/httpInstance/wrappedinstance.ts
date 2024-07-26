@@ -164,7 +164,7 @@ class HTTPClient {
       Authorization: getJWT(),
     };
 
-    withErrorHandling(instance.post(endpoint, data, { headers }));
+    return withErrorHandling(instance.post(endpoint, data, { headers }));
   }
   static async formDataPut(endpoint: string, data: any) {
     const headers = {
@@ -174,7 +174,7 @@ class HTTPClient {
       Authorization: getJWT(),
     };
 
-    withErrorHandling(instance.putForm(endpoint, data, { headers }));
+    return withErrorHandling(instance.putForm(endpoint, data, { headers }));
   }
 
   static async patch(endpoint: string, data: any) {
@@ -184,7 +184,7 @@ class HTTPClient {
       "Content-Type": "application/json",
       Authorization: getJWT(),
     };
-    withErrorHandling(instance.patch(endpoint, data, { headers }));
+    return withErrorHandling(instance.patch(endpoint, data, { headers }));
   }
 }
 export default HTTPClient;

@@ -28,19 +28,13 @@ export default function ApiCardWebber({
   const { setSidebar, setLoading } = useOnboarding();
   return (
     <div
-      className="w-full border-[1px] border-light-grey hover:shadow-md cursor-pointer rounded-lg p-3 flex flex-col gap-3"
+      className="w-full border-[1px] border-light-grey hover:shadow-md cursor-pointer rounded-lg p-3 flex flex-col justify-between gap-3"
       onClick={() => {
         setLoading(true);
         const path = `/weaver/api_details/${toTitleCase(title, true)}/overview`;
         console.log(path);
-        router.push(path);
+        router.push({ pathname: path, query: { apiCode: api.apiCode } });
         setApi(api);
-        // setApi({
-
-        //   title,
-        //   description,
-        //   category,
-        // });
         setSidebar("apiProgress");
       }}
     >

@@ -5,6 +5,7 @@
 :root {
   --color-gradient-start: #424cf9; /* Example start color */
   --color-gradient-end: #2548a0; /* Example end color */
+  --primary: #424cf9;
 }
 @keyframes slideInRightTabs {
   from {
@@ -16,6 +17,7 @@
 }
 ::-webkit-scrollbar {
   display: none;
+  /* color: var(--color-gradient-end); */
 }
 .slideInRight {
   animation: slideInRight 1s ease-out;

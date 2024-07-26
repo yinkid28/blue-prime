@@ -138,8 +138,8 @@ export function ApiEndpointCard() {
           Production Endpoint
         </p>
         <p className="w-fit md:w-[60%] font-normal text-mid-grey">
-          {api?.endpointConfig !== null
-            ? api?.endpointConfig!.production_endpoints!.url
+          {api?.endpointConfig
+            ? api?.endpointConfig?.production_endpoints?.url
             : ""}
         </p>
       </div>
@@ -148,8 +148,8 @@ export function ApiEndpointCard() {
           Sandbox Endpoint
         </p>
         <p className="w-fit md:w-[60%] font-normal text-mid-grey">
-          {api?.endpointConfig !== null
-            ? api?.endpointConfig!.sandbox_endpoints!.url
+          {api?.endpointConfig
+            ? api?.endpointConfig?.sandbox_endpoints?.url
             : ""}
         </p>
       </div>

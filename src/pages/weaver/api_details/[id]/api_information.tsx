@@ -9,6 +9,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ApiInformationView } from "@/components/Weaver/apiInformationComponents";
+import ApiInfomationViewWeaver from "@/components/Webber/CreateAPI/apiProgress/ApiInformationView";
 
 const WebberLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
@@ -78,7 +79,7 @@ export default function ApiInformationWebber() {
             </div>
           </div>
           <div className="my-5 border border-light-grey rounded-lg p-5">
-            {view === "info" ? <ApiInformationView /> : null}
+            {view === "info" ? <ApiInfomationViewWeaver /> : null}
           </div>
         </div>
       </WebberLayout>

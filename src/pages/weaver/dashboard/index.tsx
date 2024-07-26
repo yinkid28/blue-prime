@@ -22,7 +22,7 @@ export default function WebberDashboard() {
   const [isfetchingApis, setIsLoading] = useState<boolean>(false);
   const [fetchedApis, setFetchedApis] = useState<IApi[]>();
   const [pageNo, setPageNo] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(4);
+  const [pageSize, setPageSize] = useState<number>(12);
   const [dataCount, setDataCount] = useState(0);
   const [pageCount, setPageCount] = useState<number>(0);
   const [skels, setSkels] = useState<number[]>([1, 2, 3, 4]);
@@ -43,7 +43,7 @@ export default function WebberDashboard() {
     const page = dataCount / pageSize;
     console.log(page, "countt");
 
-    setPageCount(page);
+    setPageCount(Math.ceil(page));
   }, [dataCount]);
   const getApis = async (cco: string, pageNo: number, pageSize: number) => {
     setIsLoading(true);
@@ -70,10 +70,10 @@ export default function WebberDashboard() {
     <>
       <WebberLayout>
         <Navbar title="Home" />
-        <BreadCrumbs
+        {/* <BreadCrumbs
           // breadCrumbItems={breadCrumbs}
           breadCrumbActiveItem={"Home"}
-        />
+        /> */}
         <div className="p-5 flex flex-col gap-5">
           <div className="flex flex-col-reverse md:flex-row w-full">
             <div className="w-[60%] w-full ">
@@ -81,7 +81,7 @@ export default function WebberDashboard() {
             </div>
             <div className="w-[40%] w-full flex items-center justify-end">
               <button
-                className="w-fit h-fit px-5 py-2 font-semibold border-primaryFade border-[1px] text-primary rounded-lg"
+                className="w-fit h-fit hover:bg-primary hover:text-white transition ease-in-out duration-700  px-5 py-2 font-semibold border-primaryFade border-[1px] text-primary rounded-lg"
                 onClick={() => {
                   router.push("/weaver/create_api");
                 }}
@@ -98,9 +98,7 @@ export default function WebberDashboard() {
                 <ApiCardWebber
                   img={""}
                   title={item.name}
-                  category={
-                    item.categories.length > 0 ? item.categories[0] : "API"
-                  }
+                  category={item.lifeCycleStatus.toUpperCase()}
                   description={item.description}
                   key={index}
                   api={item}

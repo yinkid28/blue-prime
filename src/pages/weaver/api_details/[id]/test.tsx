@@ -25,6 +25,7 @@ const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
 });
 import "swagger-ui-react/swagger-ui.css";
 import { ImockEndpoint } from "./modules";
+import { SwaggerDefault } from "../../../../../config";
 const WebberLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
@@ -141,7 +142,7 @@ export default function ApiModulesTests() {
         breadCrumbActiveItem={`${api?.name}-Module`}
       />
       <div className="flex flex-col h-screen md:flex-row gap-3 p-5 justify-between">
-        <div className="w-full md:w-[20%] h-full flex flex-col gap-2">
+        {/* <div className="w-full md:w-[20%] h-full flex flex-col gap-2">
           <div className="w-full text-mid-grey items-center border-bottom-[1px] border-light-grey py-2 flex justify-between">
             <p className="">API Tags</p>
             <MdAdd className="cursor-pointer" onClick={onTagOpen} />
@@ -163,10 +164,10 @@ export default function ApiModulesTests() {
               </div>
             ))}
           </div>
-        </div>
-        <div className="w-full md:w-[80%] h-full overflow-y-scroll  flex flex-col gap-2">
+        </div> */}
+        <div className="w-full  h-full overflow-y-scroll  flex flex-col gap-2">
           <div className="flex flex-col gap-2">
-            <SwaggerUI url="https://petstore.swagger.io/v2/swagger.json" />
+            <SwaggerUI url={JSON.stringify(SwaggerDefault)} />
           </div>
         </div>
       </div>

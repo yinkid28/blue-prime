@@ -34,14 +34,14 @@ export default function Navbar({ title }: NavbarProps) {
   const router = useRouter();
   const logout = useLogout();
   return (
-    <div className="w-full bg-transparent flex justify-between items-center p-5 ">
+    <div className="w-full bg-transparent flex justify-between items-center p-4 ">
       <div>
-        <p className="md:text-xl font-semibold">{title}</p>
+        <p className="md:text-[18px] font-semibold">{title}</p>
       </div>
 
       <div className="flex items-center md:gap-3 lg:gap-8">
         {user !== null ? (
-          <div className="flex items-center md:gap-3 lg:gap-8">
+          <div className="flex items-center md:gap-3 lg:gap-5">
             <Button
               type="fit"
               className="md:flex hidden"
@@ -65,7 +65,7 @@ export default function Navbar({ title }: NavbarProps) {
             <RiNotificationLine className="md:flex hidden" />
             <BiMessageRounded className="md:flex hidden" />
 
-            <div className="w-[40px] h-[40px] rounded-full overflow-hidden md:flex hidden">
+            <div className="w-[24px] h-[24px] rounded-full overflow-hidden md:flex hidden">
               {userType !== "" && (
                 <Image
                   className="w-[40px] h-[40px]"

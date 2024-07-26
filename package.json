@@ -23,6 +23,7 @@
     "react-dom": "^18",
     "react-icons": "^5.0.1",
     "react-otp-input": "^3.1.1",
+    "react-select": "^5.8.0",
     "react-simple-code-editor": "^0.13.1",
     "recharts": "^2.12.4",
     "swagger-editor": "^4.12.1",

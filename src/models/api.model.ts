@@ -67,6 +67,31 @@ export type EndpointConfig = {
   };
 };
 
+export type IRevision = {
+  displayName: string;
+  id: string;
+  description: string;
+  createdTime: string;
+  apiInfo: {
+    id: string;
+  };
+  deploymentInfo: IDeploymentInfo[];
+};
+export type DeployRevisionDto = {
+  name: string;
+  vhost: string;
+  displayOnDevportal: boolean;
+};
+
+export type IDeploymentInfo = {
+  revisionUuid: string;
+  name: string;
+  vhost: string;
+  displayOnDevportal: boolean;
+  deployedTime: string;
+  successDeployedTime: any;
+};
+
 export type IApi = {
   monetization: {
     enabled: boolean;
@@ -76,6 +101,8 @@ export type IApi = {
       additionalProp3: string;
     };
   };
+  authorizationHeader?: string;
+  customerCode?: string;
   wso2ApiId: string;
   apiCode: string;
   id: string;
