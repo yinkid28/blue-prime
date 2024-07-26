@@ -1,12 +1,23 @@
 import Navbar from "@/components/Layout/Nav/navbar";
+import CreateRevision from "@/components/modals/createRevisionModal";
+import DeployRevision from "@/components/modals/deployRevision";
 import { toTitleCase } from "@/components/utils";
 import { BreadCrumbs } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import { IApi, IRevision } from "@/models/api.model";
+import APIServices from "@/services/api_services/api_service";
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
 
 // remember to use static generation here but for now we will use context to get current api
@@ -15,23 +26,50 @@ const WebberLayout = dynamic(() => import("@/components/Layout/layout"), {
 });
 
 type TableRowProps = {
-  name: string;
-  version: string;
-  approvedStatus: string;
+  revision: IRevision;
+  onOpen: () => void;
+  setSelectedRevision: Dispatch<SetStateAction<IRevision | undefined>>;
 };
 
 export default function Deploy() {
   const { api } = useApi();
   const router = useRouter();
+  const toast = useToast();
   const { loading, setLoading } = useOnboarding();
+  const { onOpen, isOpen, onClose } = useDisclosure();
+  const {
+    onOpen: onOpenDeploy,
+    isOpen: isOpenDeploy,
+    onClose: onDeployClose,
+  } = useDisclosure();
+  const [revisions, setRevisions] = useState<IRevision[]>([]);
+  const [selectedRivision, setSelectedRevision] = useState<IRevision>();
+  const { setApiErrorMessage } = useOnboarding();
   useEffect(() => {
     setLoading(false);
   }, []);
 
-  const deployTableData = [
-    { name: "Text Generator", version: "V1", approvedStatus: "Approved" },
-    { name: "Text Generator", version: "V1", approvedStatus: "Denied" },
-  ];
+  const getApiRevisions = async (aco: string) => {
+    try {
+      const res = await APIServices.getApiRevisions(aco);
+      console.log(res);
+      if (res.statusCode === 200) {
+        setRevisions(res.data.list);
+        // setLifeStatus(res.data.lifeCycleStatus.toLowerCase());
+        // handleLifeCycle(res.data.lifeCycleStatus);
+      }
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
+  useEffect(() => {
+    if (api) {
+      getApiRevisions(api.apiCode);
+    }
+  }, [api]);
 
   return (
     <>
@@ -47,20 +85,19 @@ export default function Deploy() {
               <thead className="bg-[#f8f8f8] text-mid-grey rounded-lg">
                 <tr className="text-left text-sm">
                   <th className="w-1/4 px-6 py-2">Name</th>
-                  <th className="w-1/4 px-6 py-2">Version</th>
-                  <th className="w-1/4 px-6 py-2 whitespace-nowrap">
-                    Approved Status
-                  </th>
+                  <th className="w-1/4 px-6 py-2">Description</th>
+                  <th className="w-1/4 px-6 py-2">Deployment Status</th>
+
                   <th className="w-[5%] px-6 py-2">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {deployTableData.map((data, index) => (
+                {revisions.map((data, index) => (
                   <TableRow
                     key={index}
-                    name={data.name}
-                    version={data.version}
-                    approvedStatus={data.approvedStatus}
+                    revision={data}
+                    onOpen={onOpenDeploy}
+                    setSelectedRevision={setSelectedRevision}
                   />
                 ))}
               </tbody>
@@ -70,48 +107,68 @@ export default function Deploy() {
             <button
               className="flex gap-2 items-center rounded-lg text-primary h-fit border-2 w-[25%] md:w-[80%] border-light-grey py-2 justify-center"
               onClick={() => {
-                router.push(
-                  `/weaver/api_details/${toTitleCase(
-                    api?.name as string,
-                    true
-                  )}/publish`
-                );
+                if (revisions.length === 5) {
+                  toast({
+                    title: "Create Revision",
+                    description:
+                      "You have reached a maximum of 5 revisions per API, kindly delete one before proceeding",
+                    status: "error",
+                    position: "bottom-right",
+                    duration: 3000,
+                  });
+                  return;
+                }
+                onOpen();
               }}
             >
-              <p className="text-sm font-semibold tracking-normal">Deploy</p>
+              <p className="text-sm font-semibold tracking-normal">
+                Create Revision
+              </p>
             </button>
           </div>
         </div>
+        <CreateRevision isOpen={isOpen} onClose={onClose} />
+        <DeployRevision
+          isOpen={isOpenDeploy}
+          onClose={onDeployClose}
+          revision={selectedRivision as IRevision}
+          api={api as IApi}
+        />
       </WebberLayout>
     </>
   );
 }
 
 // creating the table component in here for now!
-function TableRow({ name, version, approvedStatus }: TableRowProps) {
+function TableRow({ revision, onOpen, setSelectedRevision }: TableRowProps) {
   return (
     <tr>
       <td className="px-6 py-4 text-sm border-t whitespace-nowrap sm:whitespace-pre-wrap">
-        {name}
+        {revision.displayName}
       </td>
-      <td className="px-6 py-4 text-sm border-t">{version}</td>
-      <td className="px-6 py-4 text-sm border-t items-center">
-        <p
-          className={`rounded-full w-fit px-3  whitespace-nowrap
-              ${approvedStatus === "Approved" && "bg-[#F0FFEB] text-[#298413]"}
-              ${approvedStatus === "Denied" && " bg-[#ffe9e9] text-[#f13636]"}
-              `}
-        >
-          {approvedStatus}
-        </p>
+      <td className="px-6 py-4 text-sm border-t">{revision.description}</td>
+      <td className="px-6 py-4 text-sm border-t">
+        {revision.deploymentInfo.length > 0 ? "Deployed" : "Not Deployed"}
       </td>
+
       <td className="px-6 py-4 text-sm border-t">
         <Menu>
           <MenuButton>
             <CiMenuKebab />
           </MenuButton>
           <MenuList minW="0" w={"128px"} className="space-y-3 text-sm">
-            <MenuItem>Undeploy</MenuItem>
+            <MenuItem
+              onClick={() => {
+                if (revision.deploymentInfo.length > 0) {
+                  console.log("Undeploy");
+                } else {
+                  setSelectedRevision(revision);
+                  onOpen();
+                }
+              }}
+            >
+              {revision.deploymentInfo.length > 0 ? "Undeploy" : "Deploy"}
+            </MenuItem>
             <MenuItem>Publish</MenuItem>
             <MenuItem>Restore</MenuItem>
             <MenuItem>Delete</MenuItem>

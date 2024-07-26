@@ -12,9 +12,49 @@ export default class APIServices {
     );
     return response.data;
   }
+  static async getSingleApi(aco: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/apim-api/get?aco=${aco}`
+    );
+    return response.data;
+  }
+  static async getApiThumbnail(aco: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/apim-api/get-thumbnail?aco=${aco}`
+    );
+    return response.data;
+  }
+  static async getApiRevisions(aco: string, query?: boolean) {
+    const response = await HTTPClient.get(
+      `api-manager/api/publisher/v4/apis/${aco}/revisions${
+        query ? "?query=deployed:true" : ""
+      }`
+    );
+    return response.data;
+  }
+  static async getApiSwaggerDefition(aco: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/apim-api/get-swagger-definition?aco=${aco}`
+    );
+    return response.data;
+  }
   static async createApi(data: CreateAPI, cco: string) {
     const response = await HTTPClient.post(
       `api-manager/api/v1/apim-api/create?cco=${cco}`,
+      data
+    );
+    return response.data;
+  }
+  static async createRevision(data: any, aco: string) {
+    const response = await HTTPClient.post(
+      `api-manager/api/publisher/v4/apis/${aco}/revisions`,
+      data
+    );
+    return response.data;
+  }
+  static async deployRevision(data: any, aco: string, revId: string) {
+    const response = await HTTPClient.post(
+      `api-manager/api/publisher/v4/apis/${aco}/deploy-revision?revisionId=${revId}`,
       data
     );
     return response.data;
@@ -28,17 +68,33 @@ export default class APIServices {
   }
   static async importWsdl(data: any, cco?: string) {
     const response = await HTTPClient.formDataPost(
-      `api-manager/api/v1/apim-api/import-wsdl`,
+      `api-manager/api/v1/apim-api/import-wsdl?cco=${cco}`,
       data
     );
-    return response;
+    return response.data;
+  }
+  static async importOpenApi(data: any, cco?: string) {
+    const response = await HTTPClient.formDataPost(
+      `api-manager/api/v1/apim-api/import-open-api-definition?cco=${cco}`,
+      data
+    );
+    return response.data;
   }
   static async updateApiImg(data: any, cco: string) {
     const response = await HTTPClient.formDataPut(
       `api-manager/api/v1/apim-api/${cco}/thumbnail`,
       data
     );
-    return response;
+    return response.data;
+  }
+  static async updateApiLifeCycle(aco: string, action: string, life?: string) {
+    const response = await HTTPClient.post(
+      `/api-manager/api/v1/apim-api-lifecycle/change-api-status?aco=${aco}&action=${action}${
+        life ? `&lifecycleChecklist=${life}` : ""
+      }`,
+      undefined
+    );
+    return response.data;
   }
   static async deleteApi(aco: string) {
     const response = await HTTPClient.delete(

@@ -43,6 +43,7 @@ export default function CreateApi() {
                       router.back();
                     } else {
                       setStep(1);
+                      setProgress(50);
                     }
                   }}
                 >

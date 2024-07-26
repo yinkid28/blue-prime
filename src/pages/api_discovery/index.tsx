@@ -159,12 +159,12 @@ export default function ApiDiscoveryDashboard() {
   return (
     <DiscoveryLayout>
       <Navbar title="Dashboard" />
-      <BreadCrumbs breadCrumbActiveItem="Dashboard" />
+      {/* <BreadCrumbs breadCrumbActiveItem="Dashboard" /> */}
       <ApiHero />
       <div className="p-5">
         <div className="my-3 flex justify-between flex-col gap-2 md:flex-row">
           <p className=" font-semibold text-dark-grey">Recommended</p>
-          <button className="bg-transparent w-fit border-none text-mid-grey">
+          <button className="bg-transparent text-[14px] w-fit border-none text-mid-grey">
             View all
           </button>
         </div>

@@ -16,7 +16,13 @@ export default function ApiProductSidebar({ api }: sideBarProps) {
   const { setSidebar } = useOnboarding();
   return (
     <div className="bg-white rounded p-5 h-full flex flex-col gap-4 ">
-      <p className="text-2xl">Logo</p>
+      <Image
+        src={"/icons/logo.svg"}
+        alt="logo"
+        width={200}
+        height={100}
+        className="w-[80%]"
+      />
       <div
         className="flex items-center gap-2 cursor-pointer"
         onClick={() => {

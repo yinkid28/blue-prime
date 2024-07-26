@@ -89,7 +89,7 @@ export default function ApiLayout({ children }: LayoutProps) {
           {loading ? (
             <Loader />
           ) : (
-            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[17%_1fr]  gap-2 bg-light-grey p-2">
+            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[17%_1fr]  gap-2 bg-lightest-grey p-2">
               <div className="">
                 <ApiProgressSidebar api={api as IApi} />
               </div>

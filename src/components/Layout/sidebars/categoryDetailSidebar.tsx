@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { FaChevronLeft } from "react-icons/fa";
 
@@ -11,7 +12,13 @@ export default function CategoryDetailSidebar({
   const router = useRouter();
   return (
     <div className="w-full h-full rounded text-[14px] bg-white text-dark-txt p-6">
-      <p className="text-2xl font-semibold mt-2">Logo</p>
+      <Image
+        src={"/icons/logo.svg"}
+        alt="logo"
+        width={200}
+        height={100}
+        className="w-[80%]"
+      />
       <div className="flex gap-4 items-center">
         <FaChevronLeft className="text-xs" />
         <p

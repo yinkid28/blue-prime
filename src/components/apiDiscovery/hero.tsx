@@ -60,7 +60,7 @@ export default function ApiHero() {
     <>
       {view !== 0 && (
         <div
-          className={`w-full flex items-center text-white flex-col md:gap-7 gap-3 h-fit p-5 ease-in-out duration-500 ${bgGradient}`}
+          className={`w-full flex items-center text-white flex-col md:gap-7 gap-3 h-fit lg:h-[261px] p-5 ease-in-out duration-500 ${bgGradient}`}
         >
           <div className="text-center flex flex-col gap-3">
             <p className="text-xl font-semibold  md:text-2xl lg:text-3xl">
