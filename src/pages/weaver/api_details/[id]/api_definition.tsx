@@ -37,10 +37,16 @@ export default function ApiDefinition() {
       getApi(apiCode as string);
       getApiRevisions(apiCode as string);
       getDeployedApiRevisions(apiCode as string);
-      getApiSwagger(apiCode as string);
+      // getApiSwagger(apiCode as string);
       setSidebar("apiProgress");
     }
   }, [apiCode]);
+  useEffect(() => {
+    if (deployedrevisions) {
+      console.log(deployedrevisions[0]?.id);
+      getApiSwagger(deployedrevisions[0]?.id);
+    }
+  }, [deployedrevisions]);
 
   const getApi = async (aco: string) => {
     try {

@@ -24,8 +24,8 @@ const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
   ssr: false, // Disable server-side rendering for this component
 });
 import "swagger-ui-react/swagger-ui.css";
-import { ImockEndpoint } from "@/pages/weaver/api_details/[id]/modules";
-import { ImockTag } from "@/pages/weaver/api_details/[id]/test";
+import { ImockEndpoint } from "@/pages/onboarding/weaver/api_details/[id]/modules";
+import { ImockTag } from "@/pages/onboarding/weaver/api_details/[id]/test";
 const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });

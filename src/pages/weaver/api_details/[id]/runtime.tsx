@@ -26,7 +26,7 @@ import { useEffect, useRef, useState } from "react";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { IApi } from "@/models/api.model";
 import { StylesConfig } from "react-select";
-import { configData } from "../../../../../config";
+import { configData } from "../../../../../../config";
 
 const WebberLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,

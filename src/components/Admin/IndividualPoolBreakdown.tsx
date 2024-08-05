@@ -1,4 +1,4 @@
-import { ImockTag } from "@/pages/weaver/api_details/[id]/test";
+import { ImockTag } from "@/pages/onboarding/weaver/api_details/[id]/test";
 import { useState } from "react";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import { GiPadlock } from "react-icons/gi";

@@ -38,6 +38,28 @@ export default class APIServices {
     );
     return response.data;
   }
+  static async deleteCommentbyApicode(aco: string, commId: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/publisher/v4/apis/${aco}/comments/${commId}/replies`
+    );
+    return response.data;
+  }
+  static async getRepliesToComment(aco: string, commId: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/publisher/v4/apis/${aco}/comments/${commId}/replies`
+    );
+    return response.data;
+  }
+  static async getCommentsByApiCode(
+    aco: string,
+    limit: number,
+    offset: number
+  ) {
+    const response = await HTTPClient.get(
+      `/api-manager/api/publisher/v4/apis/${aco}/comments?limit=${limit}&offset=${offset}&includeCommenterInfo=false`
+    );
+    return response.data;
+  }
   static async createApi(data: CreateAPI, cco: string) {
     const response = await HTTPClient.post(
       `api-manager/api/v1/apim-api/create?cco=${cco}`,
@@ -48,6 +70,15 @@ export default class APIServices {
   static async createRevision(data: any, aco: string) {
     const response = await HTTPClient.post(
       `api-manager/api/publisher/v4/apis/${aco}/revisions`,
+      data
+    );
+    return response.data;
+  }
+  static async createComment(data: any, aco: string, to?: string) {
+    const response = await HTTPClient.post(
+      `/api-manager/api/publisher/v4/apis/${aco}/comments${
+        to ? `?replyTo=${to}` : ""
+      }`,
       data
     );
     return response.data;

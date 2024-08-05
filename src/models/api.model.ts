@@ -92,6 +92,27 @@ export type IDeploymentInfo = {
   successDeployedTime: any;
 };
 
+export type IComment = {
+  id: string;
+  content: string;
+  createdTime: string;
+  createdBy: string;
+  updatedTime: string;
+  category: string;
+  entryPoint: string;
+  replies: IReply;
+};
+export type IReply = {
+  count: number;
+  list: IComment[];
+  pagination: {
+    offset: any;
+    limit: any;
+    total: number;
+    next: any;
+    previous: any;
+  };
+};
 export type IApi = {
   monetization: {
     enabled: boolean;

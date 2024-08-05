@@ -25,7 +25,7 @@ const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
 });
 import "swagger-ui-react/swagger-ui.css";
 import { ImockEndpoint } from "./modules";
-import { SwaggerDefault } from "../../../../../config";
+import { SwaggerDefault } from "../../../../../../config";
 const WebberLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });

@@ -5,7 +5,13 @@ import { Badge } from "@chakra-ui/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { FaChevronLeft, FaRegClock, FaRegEye, FaRegStar } from "react-icons/fa";
+import {
+  FaBusinessTime,
+  FaChevronLeft,
+  FaRegClock,
+  FaRegEye,
+  FaRegStar,
+} from "react-icons/fa";
 import { GrCycle } from "react-icons/gr";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { IoMenu } from "react-icons/io5";
@@ -352,6 +358,33 @@ export default function ApiProgressSidebar({ api }: sideBarProps) {
           <Icon icon="lets-icons:widget-light" className="text-xl" />
 
           <p>Overview</p>
+        </div>
+        <div
+          className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+            router.asPath.includes(
+              `/weaver/api_details/${toTitleCase(
+                api.name,
+                true
+              )}/business_information`
+            )
+              ? "text-primary"
+              : "text-dark-grey"
+          }`}
+          // I am going to hard code the route to be pushed to for a brief while!
+          onClick={() => {
+            router.push({
+              pathname: `/weaver/api_details/${toTitleCase(
+                api.name,
+                true
+              )}/business_information`,
+              query: { apiCode: api.apiCode },
+            });
+            // setSidebar("webber");
+          }}
+        >
+          <FaBusinessTime />
+
+          <p>Business Information</p>
         </div>
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
