@@ -77,6 +77,7 @@ export default function CreateRevision({
               <Button
                 type="fit"
                 text="Create"
+                loading={loading}
                 onClick={() => {
                   createRevision(api?.apiCode as string);
                 }}

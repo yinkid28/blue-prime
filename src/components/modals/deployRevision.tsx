@@ -15,7 +15,7 @@ import { DeployRevisionDto, IApi, IRevision } from "@/models/api.model";
 import { useRouter } from "next/router";
 import APIServices from "@/services/api_services/api_service";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 type addEndpointModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -31,11 +31,11 @@ export default function DeployRevision({
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [deployName, setDeployname] = useState<string>("Default");
-  const [vhost, setVhost] = useState<string>("Default");
+  const [vhost, setVhost] = useState<string>("localhost");
   const [displayOnDevportal, setDisplayOnDevportal] = useState<boolean>(false);
   const { setApiErrorMessage } = useOnboarding();
   const toast = useToast();
-  const deployRevivision = async (aco: string, revId: string) => {
+  const deployRevivision = async (aco: string, rco: string) => {
     setLoading(true);
     try {
       const data: DeployRevisionDto[] = [
@@ -45,15 +45,46 @@ export default function DeployRevision({
           displayOnDevportal,
         },
       ];
-      const response = await APIServices.deployRevision(data, aco, revId);
-      if (response.statusCode === 200) {
+      const response = await APIServices.deployRevision(data, aco, rco);
+      if (response.statusCode === 201) {
         setLoading(false);
 
         toast({
-          title: "Deploy Revision",
+          title: "Revision",
           description: "Revision successfully deployed",
           duration: 3000,
           position: "bottom-right",
+          status: "success",
+        });
+        router.reload();
+      }
+    } catch (error: any) {
+      setLoading(false);
+
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
+  const undeployRevivision = async (aco: string, rco: string) => {
+    setLoading(true);
+    try {
+      const data: DeployRevisionDto[] = [
+        {
+          name: deployName,
+          vhost,
+          displayOnDevportal,
+        },
+      ];
+      const response = await APIServices.undeployRevision(data, aco, rco);
+      if (response.statusCode === 201) {
+        setLoading(false);
+
+        toast({
+          title: "Revision",
+          description: "Revision successfully undeployed",
+          duration: 3000,
+          position: "bottom-right",
+          status: "success",
         });
         router.reload();
       }
@@ -65,12 +96,21 @@ export default function DeployRevision({
     }
   };
 
+  useEffect(() => {
+    if (revision?.deploymentInfo.length > 0) {
+      setDisplayOnDevportal(revision.deploymentInfo[0].displayOnDevportal);
+    }
+    console.log(revision);
+  }, [revision]);
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent className="p-2 bg-light-grey" bg={"#F8F8F8"}>
         <ModalHeader className="text-mid-grey font-semibold">
-          Deploy Revision
+          {revision?.deploymentInfo.length > 0
+            ? "Undeploy Revision"
+            : "Deploy Revision"}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody className="w-full  rounded-lg bg-white">
@@ -100,6 +140,7 @@ export default function DeployRevision({
               <p className="text-xs text-dark-grey">Display on Dev Portal</p>
               <Switch
                 // value={displayOnDevportal}
+                disabled={revision?.deploymentInfo.length > 0}
                 onChange={(e) => setDisplayOnDevportal(e.target.checked)}
               />
             </div>
@@ -116,10 +157,14 @@ export default function DeployRevision({
             <button
               className="w-fit h-fit rounded-lg px-4 py-1 bg-primaryFade text-primary font-semibold"
               onClick={() => {
-                deployRevivision(api?.apiCode, revision?.id);
+                if (revision?.deploymentInfo.length > 0) {
+                  undeployRevivision(api?.apiCode, revision?.revisionCode);
+                } else {
+                  deployRevivision(api?.apiCode, revision?.revisionCode);
+                }
               }}
             >
-              {loading ? <Spinner size={"sm"} /> : "Deploy"}
+              {loading ? <Spinner size={"sm"} /> : "Confirm"}
             </button>
           </div>
         </ModalFooter>

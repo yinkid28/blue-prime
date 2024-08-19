@@ -64,7 +64,10 @@ export default function ApiOverview() {
   };
 
   const handleEndpointConfigCheck = (api: IApi) => {
-    if (api.endpointConfig) {
+    if (
+      api.endpointConfig?.sandbox_endpoints ||
+      api.endpointConfig?.production_endpoints
+    ) {
       return true;
     } else {
       return false;
@@ -157,7 +160,7 @@ export default function ApiOverview() {
                                     `/weaver/api_details/${toTitleCase(
                                       api!.name,
                                       true
-                                    )}/endpoints`
+                                    )}/endpoints?apicode=${apiCode}`
                                   )
                                 }
                               >
@@ -171,11 +174,28 @@ export default function ApiOverview() {
                                 }`}
                               />
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div
+                              className="flex items-center gap-2"
+                              onClick={() =>
+                                router.push(
+                                  `/weaver/api_details/${toTitleCase(
+                                    api!.name,
+                                    true
+                                  )}/business_information?apicode=${apiCode}`
+                                )
+                              }
+                            >
                               <p className="text-mid-grey font-bold text-sm">
-                                Business Plan
+                                Business Details
                               </p>
-                              <FaCheck className="text-success" />
+                              <FaCheck
+                                className={
+                                  api?.businessInformation?.businessOwner !==
+                                  null
+                                    ? "text-success"
+                                    : "text-mid-grey"
+                                }
+                              />
                             </div>
                           </div>
                         </AccordionPanel>
@@ -209,7 +229,17 @@ export default function ApiOverview() {
 
                         <AccordionPanel p={4}>
                           <div className="flex flex-col pl-8 gap-3">
-                            <div className="flex items-center gap-2">
+                            <div
+                              className="flex items-center gap-2"
+                              onClick={() =>
+                                router.push(
+                                  `/weaver/api_details/${toTitleCase(
+                                    api!.name,
+                                    true
+                                  )}/deploy?apicode=${apiCode}`
+                                )
+                              }
+                            >
                               <p className="text-mid-grey text-sm">Deploy</p>
                               <FaCheck
                                 className={`  ${
@@ -277,7 +307,13 @@ export default function ApiOverview() {
                           >
                             <p>Publish</p>
                           </div>
-                          <FaCheckCircle className="text-mid-grey text-xl" />
+                          <FaCheckCircle
+                            className={` text-xl ${
+                              api?.lifeCycleStatus === "PUBLISHED"
+                                ? "text-success"
+                                : "text-mid-grey"
+                            }`}
+                          />
                         </AccordionButton>
 
                         <AccordionPanel pb={4}>
@@ -302,28 +338,30 @@ export default function ApiOverview() {
             </div>
             <div className="p-2  border-[1px] border-light-grey rounded-lg h-fit flex flex-col gap-3">
               <p className="text-sm font-semibold text-mid-grey">Resources</p>
-              {api?.operations.map((item, index) => (
-                <div className="flex justify-between" key={index}>
-                  <div className="w-[30%]">
-                    <p className="text-mid-grey text-sm">{item.target}</p>
-                  </div>
-                  <div className="w-full gap-2 flex flex-wrap items-center">
-                    <div
-                      className={`${
-                        item.verb === "POST"
-                          ? "bg-success"
-                          : item.verb === "PUT"
-                          ? "bg-warning"
-                          : item.verb === "GET"
-                          ? "bg-info"
-                          : "bg-error"
-                      } px-3 py-1 rounded text-white text-xs font-semibold`}
-                    >
-                      <p>{item.verb}</p>
+              {api?.operations
+                .filter((item, index) => index < 5)
+                .map((item, index) => (
+                  <div className="flex justify-between" key={index}>
+                    <div className="w-[30%]">
+                      <p className="text-mid-grey text-sm">{item.target}</p>
+                    </div>
+                    <div className="w-full gap-2 flex flex-wrap items-center">
+                      <div
+                        className={`${
+                          item.verb === "POST"
+                            ? "bg-success"
+                            : item.verb === "PUT"
+                            ? "bg-warning"
+                            : item.verb === "GET"
+                            ? "bg-info"
+                            : "bg-error"
+                        } px-3 py-1 rounded text-white text-xs font-semibold`}
+                      >
+                        <p>{item.verb}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
           <div className="flex flex-col gap-2 w-full md:w-[75%]">

@@ -63,7 +63,7 @@ type endpointConfig = {
   algoClassName?: string;
 };
 export default function ApiProgressEndpoints() {
-  const { api } = useApi();
+  const { api, setApi } = useApi();
   const router = useRouter();
   const { apiCode } = router.query;
   const cancelRef = React.useRef();
@@ -89,7 +89,10 @@ export default function ApiProgressEndpoints() {
   const { loading, setLoading, setApiErrorMessage } = useOnboarding();
   useEffect(() => {
     setLoading(false);
-  }, []);
+    if (apiCode) {
+      getApi(apiCode as string);
+    }
+  }, [apiCode]);
   const addUrl = (
     event: any,
     setter: Dispatch<SetStateAction<any[]>>,
@@ -341,6 +344,22 @@ export default function ApiProgressEndpoints() {
           setApiErrorMessage(errorMessage, "error");
         }
       }
+    }
+  };
+  const getApi = async (aco: string) => {
+    try {
+      const res = await APIServices.getSingleApi(aco);
+      console.log(res);
+      if (res.statusCode === 200) {
+        setApi(res.data);
+        setSandBoxurl(res.data.endpointConfig.sandbox_endpoints.url);
+        setProdurl(res.data.endpointConfig.production_endpoints.url);
+      }
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
     }
   };
 

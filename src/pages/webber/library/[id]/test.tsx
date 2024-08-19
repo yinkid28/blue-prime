@@ -176,8 +176,8 @@ export default function WeaverTests() {
           </div>
         </div>
       </div>
-      <AddEndpointModal isOpen={isOpen} onClose={onClose} />
-      <AddTagModal isOpen={isTagOpen} onClose={onTagClose} />
+      {/* <AddEndpointModal isOpen={isOpen} onClose={onClose} />
+      <AddTagModal isOpen={isTagOpen} onClose={onTagClose} /> */}
     </WeaverLayout>
   );
 }

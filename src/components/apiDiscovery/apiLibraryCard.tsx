@@ -8,26 +8,25 @@ import { FaRegClock, FaRegEye, FaRegStar } from "react-icons/fa";
 import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
 import { motion } from "framer-motion";
 import { toTitleCase } from "../utils";
+import { IApi } from "@/models/api.model";
 
 // THE ONLY THING DIFFERENT HERE IS STYLING AND THE PROPS PASSED.
 
-type dataToBeUsed = {
-  id: number;
-  img: any;
+type ApiCardPropsd = {
+  img: string;
   title: string;
   description: string;
   category: string;
-  bookmarked: boolean;
+  api: IApi;
 };
-
 type ApiCardProps = {
-  img: StaticImageData;
+  img: string;
   title: string;
   description: string;
   category: string;
   bookmarked: boolean;
-  item: IMockApi;
-  onToggleBookmarked: (apiId: number, item: IMockApi) => void;
+  api: IApi;
+  onToggleBookmarked: (apiId: string, item: IApi) => void;
 
   // FROM FRAMER MOTION
   layout?: any;
@@ -44,7 +43,7 @@ export default function ApiCard({
   category,
   bookmarked,
   onToggleBookmarked,
-  item,
+  api,
   initial,
   animate,
   exit,
@@ -82,7 +81,7 @@ export default function ApiCard({
       <div className="w-full  flex justify-between">
         <div className="w-[50px] h-[50px] rounded bg-mid-grey overflow-hidden">
           <Image
-            src={img}
+            src={"/images/api_icons/apiMock.webp"}
             alt="icon"
             width={200}
             height={200}
@@ -93,7 +92,7 @@ export default function ApiCard({
           className="hover:text-primary cursor-pointer"
           onClick={(e) => {
             e.stopPropagation();
-            onToggleBookmarked(item.id as number, item);
+            onToggleBookmarked(api.apiCode, api);
           }}
         >
           {bookmarked ? <IoBookmark /> : <IoBookmarkOutline />}

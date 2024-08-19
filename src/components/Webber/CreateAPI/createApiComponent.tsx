@@ -132,69 +132,70 @@ export function ApiUpload({ setStep, setProgress, setTitle }: CreateProp) {
         status: "error",
       });
     setLoading(true);
-    const data: CreateAPI = {
+    const data: any = {
       name: info.name,
       description: info.description,
       context: info.context,
       version: info.version,
-      provider: "admin",
-      // categories: [info.category],
-      lifeCycleStatus: "CREATED",
-      responseCachingEnabled: false,
-      hasThumbnail: false,
-      isDefaultVersion: false,
-      enableSchemaValidation: false,
-      type: apiType,
-      transport: ["http", "https"],
-      tags: ["substract", "add"],
       policies: ["Unlimited"],
-      apiThrottlingPolicy: "Unlimited",
-      securityScheme: ["oauth2"],
-      maxTps: {
-        production: 1000,
-        sandbox: 1000,
-      },
-      visibility: "PUBLIC",
-      visibleRoles: [],
-      visibleTenants: [],
-      subscriptionAvailability: "CURRENT_TENANT",
-      additionalProperties: [
-        {
-          name: "AdditionalProperty",
-          value: "PropertyValue",
-          display: true,
-        },
-      ],
-      accessControl: "NONE",
-      businessInformation: {
-        businessOwner: "John Doe",
-        businessOwnerEmail: "johndoe@wso2.com",
-        technicalOwner: "Jane Roe",
-        technicalOwnerEmail: "janeroe@wso2.com",
-      },
-      endpointConfig: {
-        endpoint_type: "http",
-        sandbox_endpoints: {
-          url: "https://localhost:9443/am/sample/pizzashack/v1/api/",
-        },
-        production_endpoints: {
-          url: "https://localhost:9443/am/sample/pizzashack/v1/api/",
-        },
-      },
-      operations: [
-        {
-          target: "/order/{orderId}",
-          verb: "POST",
-          authType: "Application & Application User",
-          throttlingPolicy: "Unlimited",
-        },
-        {
-          target: "/menu",
-          verb: "GET",
-          authType: "Application & Application User",
-          throttlingPolicy: "Unlimited",
-        },
-      ],
+      gatewayType: "wso2/synapse",
+      // provider: "admin",
+      // categories: [info.category],
+      // lifeCycleStatus: "CREATED",
+      // responseCachingEnabled: false,
+      // hasThumbnail: false,
+      // isDefaultVersion: false,
+      // enableSchemaValidation: false,
+      // type: apiType,
+      // transport: ["http", "https"],
+      // tags: ["substract", "add"],
+      // apiThrottlingPolicy: "Unlimited",
+      // securityScheme: ["oauth2"],
+      // maxTps: {
+      //   production: 1000,
+      //   sandbox: 1000,
+      // },
+      // visibility: "PUBLIC",
+      // visibleRoles: [],
+      // visibleTenants: [],
+      // subscriptionAvailability: "CURRENT_TENANT",
+      // additionalProperties: [
+      //   {
+      //     name: "AdditionalProperty",
+      //     value: "PropertyValue",
+      //     display: true,
+      //   },
+      // ],
+      // accessControl: "NONE",
+      // businessInformation: {
+      //   businessOwner: "John Doe",
+      //   businessOwnerEmail: "johndoe@wso2.com",
+      //   technicalOwner: "Jane Roe",
+      //   technicalOwnerEmail: "janeroe@wso2.com",
+      // },
+      // endpointConfig: {
+      //   endpoint_type: "http",
+      //   sandbox_endpoints: {
+      //     url: "https://localhost:9443/am/sample/pizzashack/v1/api/",
+      //   },
+      //   production_endpoints: {
+      //     url: "https://localhost:9443/am/sample/pizzashack/v1/api/",
+      //   },
+      // },
+      // operations: [
+      //   {
+      //     target: "/order/{orderId}",
+      //     verb: "POST",
+      //     authType: "Application & Application User",
+      //     throttlingPolicy: "Unlimited",
+      //   },
+      //   {
+      //     target: "/menu",
+      //     verb: "GET",
+      //     authType: "Application & Application User",
+      //     throttlingPolicy: "Unlimited",
+      //   },
+      // ],
     };
     try {
       const res = await APIServices.createApi(

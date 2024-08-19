@@ -25,7 +25,9 @@ const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
 });
 import "swagger-ui-react/swagger-ui.css";
 import { ImockEndpoint } from "./modules";
-import { SwaggerDefault } from "../../../../../../config";
+import { IRevision } from "@/models/api.model";
+import APIServices from "@/services/api_services/api_service";
+
 const WebberLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
@@ -116,12 +118,19 @@ const tags: ImockTag[] = [
     ],
   },
 ];
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export default function ApiModulesTests() {
-  const { api } = useApi();
+  const { api, setApi } = useApi();
   const router = useRouter();
+  const { apiCode } = router.query;
   const [view, setView] = useState<string>("info");
   const [selectedTag, setSelectedTag] = useState<ImockTag>();
-  const { loading, setLoading } = useOnboarding();
+  const [swagger, setSwagger] = useState<any>();
+  const [deployedrevisions, setDeployedRevisions] = useState<IRevision[]>([]);
+  const [revisions, setRevisions] = useState<IRevision[]>([]);
+
+  const { loading, setLoading, setSidebar, setApiErrorMessage } =
+    useOnboarding();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -129,11 +138,105 @@ export default function ApiModulesTests() {
     onOpen: onTagOpen,
     onClose: onTagClose,
   } = useDisclosure();
-  useEffect(() => {
-    setLoading(false);
-    setSelectedTag(tags[0]);
-    setView(tags[0].name);
-  }, []);
+  // useEffect(() => {
+  //   setLoading(false);
+  //   setSelectedTag(tags[0]);
+  //   setView(tags[0].name);
+  // }, []);
+  // useEffect(() => {
+  //   // setLoading(false);
+  //   if (apiCode) {
+  //     getApi(apiCode as string);
+  //     getApiRevisions(apiCode as string);
+  //     getDeployedApiRevisions(apiCode as string);
+  //     // getApiSwagger(apiCode as string);
+  //     setSidebar("apiProgress");
+  //   }
+  // }, [apiCode]);
+  // useEffect(() => {
+  //   if (deployedrevisions.length > 0) {
+  //     getRevisionSwagger(deployedrevisions[0]?.revisionCode);
+  //   } else {
+  //     getApiSwagger(apiCode as string);
+  //   }
+  // }, [deployedrevisions, apiCode]);
+
+  const getApi = async (aco: string) => {
+    try {
+      const res = await APIServices.getSingleApi(aco);
+      if (res.statusCode === 200) {
+        setApi(res.data);
+      }
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
+
+  const getApiRevisions = async (aco: string) => {
+    try {
+      const res = await APIServices.getApiRevisions(aco);
+      if (res.statusCode === 200) {
+        setRevisions(res.data.list);
+        // setLifeStatus(res.data.lifeCycleStatus.toLowerCase());
+        // handleLifeCycle(res.data.lifeCycleStatus);
+      }
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
+  const getApiSwagger = async (aco: string) => {
+    try {
+      const res = await APIServices.getApiSwaggerDefition(aco);
+      console.log(res);
+      if (res.statusCode === 200) {
+        setSwagger(res.data);
+        // setLifeStatus(res.data.lifeCycleStatus.toLowerCase());
+        // handleLifeCycle(res.data.lifeCycleStatus);
+      }
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
+  const getRevisionSwagger = async (aco: string) => {
+    try {
+      const res = await APIServices.getRevisionSwaggerDefition(aco);
+      console.log(res);
+      if (res.statusCode === 200) {
+        setSwagger(res.data);
+        // setLifeStatus(res.data.lifeCycleStatus.toLowerCase());
+        // handleLifeCycle(res.data.lifeCycleStatus);
+      }
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
+  const getDeployedApiRevisions = async (aco: string) => {
+    try {
+      const res = await APIServices.getApiRevisions(aco, true);
+      if (res.statusCode === 200) {
+        setDeployedRevisions(res.data.list);
+        // setLifeStatus(res.data.lifeCycleStatus.toLowerCase());
+        // handleLifeCycle(res.data.lifeCycleStatus);
+      }
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
   return (
     <WebberLayout>
       <Navbar title={`${api?.name}`} />
@@ -167,12 +270,19 @@ export default function ApiModulesTests() {
         </div> */}
         <div className="w-full  h-full overflow-y-scroll  flex flex-col gap-2">
           <div className="flex flex-col gap-2">
-            <SwaggerUI url={JSON.stringify(SwaggerDefault)} />
+            <SwaggerUI
+              url={
+                deployedrevisions.length > 0
+                  ? `${BASE_URL}/api-manager/api/v1/apim-api/get-trimmed-revision-swagger-definition?rco=${deployedrevisions[0]?.revisionCode}`
+                  : `${BASE_URL}/api-manager/api/v1/apim-api/get-trimmed-api-swagger-definition?aco=${apiCode}`
+                // "https://raw.githubusercontent.com/quaddss52/portfoliomain/main/public/documents/output-onlineyamltools.txt?token=GHSAT0AAAAAACTRVRCEBHU5XH4LBF5XFNIEZV3K3UQ"
+              }
+            />
           </div>
         </div>
       </div>
-      <AddEndpointModal isOpen={isOpen} onClose={onClose} />
-      <AddTagModal isOpen={isTagOpen} onClose={onTagClose} />
+      {/* <AddEndpointModal isOpen={isOpen} onClose={onClose} />
+      <AddTagModal isOpen={isTagOpen} onClose={onTagClose} /> */}
     </WebberLayout>
   );
 }
