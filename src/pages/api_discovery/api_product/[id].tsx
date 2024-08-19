@@ -100,9 +100,9 @@ export default function ApiProduct() {
           <div className="my-5">
             {view === "Endpoint" ? <EndpointView /> : null}
             {view === "Documentation" ? <DocumentationView /> : null}
-            {view === "Feedback" ? (
+            {/* {view === "Feedback" ? (
               <FeedbackView commentButtonDisplay={true} />
-            ) : null}
+            ) : null} */}
             {view === "Pricing" ? <PriceView /> : null}
           </div>
         </div>

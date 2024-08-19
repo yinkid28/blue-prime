@@ -3,7 +3,7 @@ import AdminNavbar from "@/components/Layout/Nav/adminNavbar";
 import { BreadCrumbItems, BreadCrumbs } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { ImockEndpoint } from "@/pages/onboarding/weaver/api_details/[id]/modules";
+// import { ImockEndpoint } from "@/pages/onboarding/weaver/api_details/[id]/modules";
 import {
   Accordion,
   AccordionButton,
@@ -27,7 +27,9 @@ import {
 } from "react-icons/fa";
 import { MdAdd } from "react-icons/md";
 import { CircularProgress, CircularProgressLabel } from "@chakra-ui/react";
-import { ImockTag } from "@/pages/onboarding/weaver/api_details/[id]/test";
+import { ImockTag } from "@/pages/weaver/api_details/[id]/test";
+import { ImockEndpoint } from "@/pages/weaver/api_details/[id]/modules";
+// import { ImockTag } from "@/pages/onboarding/weaver/api_details/[id]/test";
 const AdminLayout = dynamic(() => import("@/components/Layout/adminLayout"), {
   ssr: false,
 });

@@ -33,7 +33,7 @@ export default function WeaverFeedback() {
       />
       {/* CONTENT */}
       <div className="p-5">
-        <FeedbackView commentButtonDisplay ratingButton />
+        {/* <FeedbackView commentButtonDisplay ratingButton /> */}
       </div>
     </WeaverLayout>
   );

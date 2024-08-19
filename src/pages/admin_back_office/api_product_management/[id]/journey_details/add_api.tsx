@@ -11,8 +11,8 @@ import {
 import dynamic from "next/dynamic";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import CustomerJourneyCard from "@/components/Admin/CustomerJourneyCard";
-import { ImockEndpoint } from "@/pages/onboarding/weaver/api_details/[id]/modules";
-import { ImockTag } from "@/pages/onboarding/weaver/api_details/[id]/test";
+// import { ImockEndpoint } from "@/pages/onboarding/weaver/api_details/[id]/modules";
+// import { ImockTag } from "@/pages/onboarding/weaver/api_details/[id]/test";
 import {
   Accordion,
   AccordionButton,
@@ -24,6 +24,8 @@ import {
 import IndividualPoolBreakdown from "@/components/Admin/IndividualPoolBreakdown";
 import { IMockPool } from "./[journey]";
 import { FiChevronsRight } from "react-icons/fi";
+import { ImockTag } from "@/pages/weaver/api_details/[id]/test";
+import { ImockEndpoint } from "@/pages/weaver/api_details/[id]/modules";
 
 const AdminLayout = dynamic(() => import("@/components/Layout/adminLayout"), {
   ssr: false,
