@@ -37,8 +37,8 @@ export type ImockEndpoint = {
 };
 
 const STATUS_CYCLES: any = {
-  created: ["Publish", "Prerelease"],
-  prerelease: ["Created", "Publish"],
+  created: ["Prerelease"],
+  prerelease: ["Created"],
   publish: ["Created", "Prerelease", "Deprecated", "Blocked"],
   republish: ["Created", "Prerelease", "Deprecated", "Blocked"],
   blocked: ["Republish", "Deprecated"],

@@ -12,8 +12,8 @@ import {
 import dynamic from "next/dynamic";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import CustomerJourneyCard from "@/components/Admin/CustomerJourneyCard";
-import { ImockEndpoint } from "@/pages/weaver/api_details/[id]/modules";
-import { ImockTag } from "@/pages/weaver/api_details/[id]/test";
+// import { ImockEndpoint } from "@/pages/onboarding/weaver/api_details/[id]/modules";
+// import { ImockTag } from "@/pages/onboarding/weaver/api_details/[id]/test";
 import {
   Accordion,
   AccordionButton,
@@ -22,6 +22,7 @@ import {
   AccordionPanel,
 } from "@chakra-ui/react";
 import IndividualPoolBreakdown from "@/components/Admin/IndividualPoolBreakdown";
+import { ImockTag } from "@/pages/weaver/api_details/[id]/test";
 
 const AdminLayout = dynamic(() => import("@/components/Layout/adminLayout"), {
   ssr: false,

@@ -27,6 +27,7 @@ import { IoCloudUploadOutline } from "react-icons/io5";
 import { IApi } from "@/models/api.model";
 import { StylesConfig } from "react-select";
 import { configData } from "../../../../../config";
+// import { configData } from "../../../../../../config";
 
 const WebberLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
@@ -498,25 +499,28 @@ export default function ApiRuntime() {
               </div>
             )}
             <p className="text-sm text-dark-grey font-semibold"> Endpoint</p>
-
-            <div className="flex gap-2 items-center">
-              <p className="text-xs font-bold text-dark-grey">
-                {" "}
-                Production Endpoint
-              </p>
-              <p className="text-xs  text-dark-grey">
-                https://loacalhost:8494/pg/sample/opinions
-              </p>
-            </div>
-            <div className="flex gap-2 items-center">
-              <p className="text-xs font-bold text-dark-grey">
-                {" "}
-                Sandbox Endpoint
-              </p>
-              <p className="text-xs  text-dark-grey">
-                https://loacalhost:8494/pg/sample/opinions
-              </p>
-            </div>
+            {api?.endpointConfig?.production_endpoints ? (
+              <div className="flex gap-2 items-center">
+                <p className="text-xs font-bold text-dark-grey">
+                  {" "}
+                  Production Endpoint
+                </p>
+                <p className="text-xs  text-dark-grey">
+                  {api?.endpointConfig?.production_endpoints?.url}
+                </p>
+              </div>
+            ) : null}
+            {api?.endpointConfig?.sandbox_endpoints ? (
+              <div className="flex gap-2 items-center">
+                <p className="text-xs font-bold text-dark-grey">
+                  {" "}
+                  Sandbox Endpoint
+                </p>
+                <p className="text-xs  text-dark-grey">
+                  {api?.endpointConfig?.sandbox_endpoints?.url}
+                </p>
+              </div>
+            ) : null}
           </div>
         </div>
         <div className="flex items-center w-full justify-end gap-2 md:flex-row flex-col-reverse">

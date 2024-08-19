@@ -1,9 +1,9 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { HiOutlineStar } from "react-icons/hi";
 import { CiMenuKebab } from "react-icons/ci";
 import { Icon } from "@iconify/react";
-import { Table } from "../../../utils";
+import GlobalPagination, { Table } from "../../../utils";
 import {
   Box,
   Menu,
@@ -13,6 +13,7 @@ import {
   MenuItem,
   MenuList,
   Show,
+  useDisclosure,
 } from "@chakra-ui/react";
 // import dynamic from "next/dynamic";
 import {
@@ -29,6 +30,12 @@ import {
 } from "recharts";
 import FeedbackView from "@/components/apiDiscovery/feedbackView";
 import { Button } from "@/components/utils";
+import { useApi } from "@/context/ApiDiscoveryContext";
+import APIServices from "@/services/api_services/api_service";
+import { useRouter } from "next/router";
+import { useOnboarding } from "@/context/OnboardingContext";
+import CreateComment from "@/components/modals/createCommentModal";
+import { IComment } from "@/models/api.model";
 
 type TopCardsProps = {
   cardOneTitle: string;
@@ -140,10 +147,59 @@ export function SubHistoryView() {
 }
 
 export function FeedbackManagementView() {
+  const [comments, setComments] = useState<IComment[]>([]);
+  const { api, setApi } = useApi();
+  const { loading, setLoading, setApiErrorMessage } = useOnboarding();
+
+  const router = useRouter();
+  const { apiCode } = router.query;
+  const [view, setView] = useState<string>("Overview");
+  const [offset, setOffset] = useState<number>(0);
+  const [pageCount, setPageCount] = useState<number>(0);
+  const [isLoadingComments, setIsLoadingComments] = useState<boolean>(false);
+  const limit = 10;
+  const handlePageClick = (page: number) => {
+    const newOffset = page;
+    setOffset(newOffset);
+    getApiComments(apiCode as string, limit, newOffset);
+  };
+  const getApiComments = async (aco: string, limit: number, offset: number) => {
+    setIsLoadingComments(true);
+    try {
+      const res = await APIServices.getCommentsByApiCode(aco, limit, offset);
+      if (res.statusCode === 200) {
+        setIsLoadingComments(false);
+        setComments(res.data.list);
+        const count = Math.ceil(res.data.count / limit);
+        setPageCount(count);
+      }
+      // setLoading(false);
+    } catch (error: any) {
+      // setLoading(false);
+      setIsLoadingComments(false);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
+
+  useEffect(() => {
+    if (apiCode) {
+      getApiComments(apiCode as string, limit, offset);
+    }
+  }, [apiCode]);
+
   return (
     <div className="border rounded-xl p-4">
       {/* FEEDBACK VIEW IS USED HERE SINCE THEY ARE SO SIMILAR. */}
-      <FeedbackView commentButtonDisplay={false} />
+      <FeedbackView
+        isLoading={isLoadingComments}
+        feedbacks={comments}
+        commentButtonDisplay
+      />
+      <GlobalPagination
+        onPageClick={handlePageClick}
+        pageCount={pageCount <= 1 ? 1 : pageCount}
+      />
     </div>
   );
 }

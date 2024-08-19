@@ -1,3 +1,5 @@
+// import { ImockEndpoint } from "@/pages/onboarding/weaver/api_details/[id]/modules";
+
 import { ImockEndpoint } from "@/pages/weaver/api_details/[id]/modules";
 
 type CardProps = {

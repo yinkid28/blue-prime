@@ -178,7 +178,7 @@ export default function LibraryDashboard() {
         {/* THIRD SECTION - SECTION CONTAINING THE API CARDS */}
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           <AnimatePresence mode="popLayout">
-            {libraryView == "saved"
+            {/* {libraryView == "saved"
               ? bookmarkedAPIs!.map((item, index) => (
                   <ApiCard
                     key={index}
@@ -212,7 +212,7 @@ export default function LibraryDashboard() {
                     item={item}
                     onToggleBookmarked={toggleBookmarked}
                   />
-                ))}
+                ))} */}
           </AnimatePresence>
         </div>
       </div>

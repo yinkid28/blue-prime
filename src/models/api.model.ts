@@ -76,6 +76,7 @@ export type IRevision = {
     id: string;
   };
   deploymentInfo: IDeploymentInfo[];
+  revisionCode: string;
 };
 export type DeployRevisionDto = {
   name: string;
@@ -92,6 +93,27 @@ export type IDeploymentInfo = {
   successDeployedTime: any;
 };
 
+export type IComment = {
+  id: string;
+  content: string;
+  createdTime: string;
+  createdBy: string;
+  updatedTime: string;
+  category: string;
+  entryPoint: string;
+  replies: IReply;
+};
+export type IReply = {
+  count: number;
+  list: IComment[];
+  pagination: {
+    offset: any;
+    limit: any;
+    total: number;
+    next: any;
+    previous: any;
+  };
+};
 export type IApi = {
   monetization: {
     enabled: boolean;
@@ -168,4 +190,54 @@ export type corsConfig = {
   accessControlAllowCredentials: boolean;
   accessControlAllowHeaders: string[];
   accessControlAllowMethods: string[];
+};
+export type SwaggerParam = {
+  name: string;
+  in: string;
+  required: boolean;
+  style: string;
+  explode: boolean;
+  schema: {
+    type: string;
+  };
+};
+export type SwaggerOperation = {
+  parameters: SwaggerParam[];
+  description: string;
+
+  summary: string;
+
+  responses: {
+    "200": {
+      description: string;
+    };
+  };
+  security: [
+    {
+      default: [];
+    }
+  ];
+  "x-auth-type": string;
+  "x-throttling-tier": string;
+  "x-wso2-application-security": {
+    "security-types": string[];
+    optional: boolean;
+  };
+};
+export type IPolicy = {
+  name: string;
+  description: string;
+  policyLevel: string;
+  displayName: string;
+  attributes: any;
+  requestCount: number;
+  dataUnit: any;
+  unitTime: number;
+  timeUnit: string;
+  rateLimitCount: number;
+  rateLimitTimeUnit: any;
+  quotaPolicyType: string;
+  tierPlan: any;
+  stopOnQuotaReach: boolean;
+  monetizationProperties: any;
 };

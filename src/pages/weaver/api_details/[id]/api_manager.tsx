@@ -7,8 +7,10 @@ import {
 import { BreadCrumbItems, BreadCrumbs } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
+import APIServices from "@/services/api_services/api_service";
 import { Spinner } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 // remember to use static generation here but for now we will use context to get current api
@@ -24,13 +26,35 @@ const breadCrumbs: BreadCrumbItems[] = [
 ];
 
 export default function ApiManager() {
-  const { api } = useApi();
-  const { loading, setLoading } = useOnboarding();
+  const { api, setApi } = useApi();
+  const { loading, setLoading, setApiErrorMessage } = useOnboarding();
+  const router = useRouter();
+  const { apiCode } = router.query;
+
   useEffect(() => {
     setLoading(false);
   }, []);
 
   const [view, setView] = useState<string>("Overview");
+  const getApi = async (aco: string) => {
+    try {
+      const res = await APIServices.getSingleApi(aco);
+      if (res.statusCode === 200) {
+        setApi(res.data);
+      }
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
+
+  useEffect(() => {
+    if (apiCode) {
+      getApi(apiCode as string);
+    }
+  }, [apiCode]);
 
   return (
     <>

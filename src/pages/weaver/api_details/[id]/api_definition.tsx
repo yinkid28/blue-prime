@@ -18,6 +18,10 @@ import { SwaggerDefault } from "../../../../../config";
 const WebberLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
+const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
+  ssr: false, // Disable server-side rendering for this component
+});
+import "swagger-ui-react/swagger-ui.css";
 export default function ApiDefinition() {
   const { api, setApi } = useApi();
   const router = useRouter();
@@ -37,10 +41,17 @@ export default function ApiDefinition() {
       getApi(apiCode as string);
       getApiRevisions(apiCode as string);
       getDeployedApiRevisions(apiCode as string);
-      getApiSwagger(apiCode as string);
+      // getApiSwagger(apiCode as string);
       setSidebar("apiProgress");
     }
   }, [apiCode]);
+  useEffect(() => {
+    if (deployedrevisions.length > 0) {
+      getRevisionSwagger(deployedrevisions[0]?.revisionCode);
+    } else {
+      getApiSwagger(apiCode as string);
+    }
+  }, [deployedrevisions, apiCode]);
 
   const getApi = async (aco: string) => {
     try {
@@ -56,13 +67,6 @@ export default function ApiDefinition() {
     }
   };
 
-  const handleEndpointConfigCheck = (api: IApi) => {
-    if (api.endpointConfig) {
-      return true;
-    } else {
-      return false;
-    }
-  };
   const getApiRevisions = async (aco: string) => {
     try {
       const res = await APIServices.getApiRevisions(aco);
@@ -94,6 +98,22 @@ export default function ApiDefinition() {
       setApiErrorMessage(errorMessage, "error");
     }
   };
+  const getRevisionSwagger = async (aco: string) => {
+    try {
+      const res = await APIServices.getRevisionSwaggerDefition(aco);
+      console.log(res);
+      if (res.statusCode === 200) {
+        setSwagger(res.data);
+        // setLifeStatus(res.data.lifeCycleStatus.toLowerCase());
+        // handleLifeCycle(res.data.lifeCycleStatus);
+      }
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
   const getDeployedApiRevisions = async (aco: string) => {
     try {
       const res = await APIServices.getApiRevisions(aco, true);
@@ -109,24 +129,32 @@ export default function ApiDefinition() {
       setApiErrorMessage(errorMessage, "error");
     }
   };
+  const handleEndpointConfigCheck = (api: IApi) => {
+    if (api.endpointConfig) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   useEffect(() => {
     setLoading(false);
   }, []);
-  const hightlightWithLineNumbers = (input: string, language: any) =>
-    highlight(input, language)
+  const hightlightWithLineNumbers = (input: string, language: any) => {
+    return highlight(input, language)
       .split("\n")
       .map(
         (line: string, i: number) =>
           `<span class='editorLineNumber'>${i + 1}</span>${line}`
       )
       .join("\n");
-
+  };
   async function loadAndParseYaml(url: string) {
     const response = await fetch(url);
     const text = await response.text();
     return yaml.load(text);
   }
+
   return (
     <>
       <WebberLayout>
@@ -137,9 +165,15 @@ export default function ApiDefinition() {
         />
         <div className="p-5 overflow-y-scroll h-[80vh] ">
           <Editor
-            value={code}
-            onValueChange={(code) => setCode(code)}
-            highlight={(code) => hightlightWithLineNumbers(code, languages.js)}
+            value={JSON.stringify(swagger)}
+            onValueChange={(swagger) => setSwagger(swagger)}
+            highlight={(swagger) =>
+              swagger &&
+              hightlightWithLineNumbers(
+                JSON.stringify(swagger),
+                languages.javascript
+              )
+            }
             padding={10}
             textareaId="codeArea"
             className="editor  bg-black  rounded-lg text-white"

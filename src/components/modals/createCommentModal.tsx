@@ -10,41 +10,46 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Button } from "../utils";
-import { useState } from "react";
 import APIServices from "@/services/api_services/api_service";
-import { useRouter } from "next/router";
-import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
+import { useState } from "react";
+import { useApi } from "@/context/ApiDiscoveryContext";
+import { useRouter } from "next/router";
 type addEndpointModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  to?: string;
 };
-export default function CreateRevision({
+export default function CreateComment({
   isOpen,
   onClose,
+  to,
 }: addEndpointModalProps) {
+  const { api, setApi } = useApi();
   const toast = useToast();
   const router = useRouter();
-  const [description, setDesc] = useState<string>("");
-  const { api } = useApi();
-  const { setApiErrorMessage } = useOnboarding();
-  const [loading, setLoading] = useState<boolean>(false);
-  const createRevision = async (apiCode: string) => {
-    setLoading(true);
-    const data = { description };
+  const { loading, setLoading, setApiErrorMessage } = useOnboarding();
+  const [content, setContent] = useState<string>("");
+
+  const createComment = async (aco: string, to?: string) => {
+    const data = {
+      content,
+      category: "",
+    };
     try {
-      const res = await APIServices.createRevision(data, apiCode);
+      const res = await APIServices.createComment(data, aco, to);
       if (res.statusCode === 201) {
-        setLoading(false);
+        // setComments(res.data);
         toast({
-          title: "Revision Creation",
-          description: "Revision successfully created",
-          status: "success",
+          title: "Feedback",
+          description: "Feedback Saved",
           duration: 3000,
+          status: "success",
           position: "bottom-right",
         });
-        router.reload();
+        onClose();
       }
+      setLoading(false);
     } catch (error: any) {
       setLoading(false);
       const errorMessage = error?.response?.data?.message;
@@ -56,30 +61,29 @@ export default function CreateRevision({
       <ModalOverlay />
       <ModalContent className="p-2 bg-light-grey" bg={"#F8F8F8"}>
         <ModalHeader className="text-mid-grey font-semibold">
-          New Revision
+          {to ? "New Reply" : "New Comment"}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody className="w-full  rounded-lg bg-white">
           <div className="flex flex-col gap-2">
             <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
-              <p className="text-xs text-dark-grey">Description</p>
+              <p className="text-xs text-dark-grey">Feedback</p>
               <textarea
-                placeholder="Describe your Endpoint"
-                name="endpointDescription"
-                id="endpointDescription"
+                placeholder="Give a Feedback"
+                name="feedback"
+                id="feedback"
                 rows={5}
-                value={description}
-                onChange={(e) => setDesc(e.target.value)}
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
               ></textarea>
             </div>
 
             <div className="flex justify-end">
               <Button
                 type="fit"
-                text="Create"
-                loading={loading}
+                text="Save"
                 onClick={() => {
-                  createRevision(api?.apiCode as string);
+                  createComment(api?.apiCode as string, to);
                 }}
               />
             </div>

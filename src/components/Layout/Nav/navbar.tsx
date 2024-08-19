@@ -34,7 +34,7 @@ export default function Navbar({ title }: NavbarProps) {
   const router = useRouter();
   const logout = useLogout();
   return (
-    <div className="w-full bg-transparent flex justify-between items-center p-4 ">
+    <div className="w-full bg-transparent bg-white sticky top-0  flex justify-between items-center p-4 ">
       <div>
         <p className="md:text-[18px] font-semibold">{title}</p>
       </div>
@@ -46,7 +46,7 @@ export default function Navbar({ title }: NavbarProps) {
               type="fit"
               className="md:flex hidden"
               text={
-                userType === "weaver" ? "Switch to Webber" : "Switch to Weaver"
+                userType === "webber" ? "Switch to Weaver" : "Switch to Webber"
               }
               onClick={() => {
                 if (userType === "weaver") {
