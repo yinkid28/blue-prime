@@ -75,9 +75,9 @@ export default function APIproductDetails() {
         <div className="my-5">
           {view === "Endpoint" ? <EndpointView /> : null}
 
-          {view === "Feedback" ? (
+          {/* {view === "Feedback" ? (
             <FeedbackView commentButtonDisplay={true} />
-          ) : null}
+          ) : null} */}
         </div>
       </div>
     </ApiLayout>

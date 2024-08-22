@@ -37,12 +37,12 @@ export default function ApiProductCard({
         router.push(
           `/weaver/api_product/api_product_details/${toTitleCase(title, true)}`
         );
-        setApi({
-          img,
-          title,
-          description,
-          category,
-        });
+        // setApi({
+        //   img,
+        //   title,
+        //   description,
+        //   category,
+        // });
         setSidebar("api");
       }}
     >
