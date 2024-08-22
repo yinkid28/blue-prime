@@ -5,12 +5,15 @@ import MainSidebar from "./sidebars/mainsidebar";
 import ApiProductSidebar from "./sidebars/apiProductSidebar";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { IMockApi } from "@/models/apidiscovery.model";
-import WebberSidebar from "./sidebars/webberSidebar";
+// import WebberSidebar from "./sidebars/weaverSidebar";
 import ApiProgressSidebar from "./sidebars/apiProgressSideBar";
-import WeaverProgressSidebar from "./sidebars/weaverProgressSidebar";
+// import WeaverProgressSidebar from "./sidebars/webberProgressSidebar";
 import { Spinner, UseToastOptions, useToast } from "@chakra-ui/react";
 import { Loader } from "../utils";
 import { useEffect } from "react";
+import { IApi } from "@/models/api.model";
+import WeaverProgressSidebar from "./sidebars/weaverProgressSidebar";
+import WebberSidebar from "./sidebars/webberSidebar";
 import ApiProductClientSidebar from "./sidebars/apiProductClientSidebar";
 
 type LayoutProps = {
@@ -71,7 +74,7 @@ export default function ApiLayout({ children }: LayoutProps) {
           ) : (
             <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[23%_1fr]  gap-2 bg-light-grey p-2">
               <div className="">
-                <ApiProductSidebar api={api as IMockApi} />
+                <ApiProductSidebar api={api as IApi} />
               </div>
 
               <div className="bg-white rounded-t overflow-y-scroll">
@@ -87,27 +90,9 @@ export default function ApiLayout({ children }: LayoutProps) {
           {loading ? (
             <Loader />
           ) : (
-            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[17%_1fr]  gap-2 bg-light-grey p-2">
+            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[17%_1fr]  gap-2 bg-lightest-grey p-2">
               <div className="">
-                <ApiProgressSidebar api={api as IMockApi} />
-              </div>
-
-              <div className="bg-white rounded-t overflow-y-scroll">
-                {children}
-              </div>
-            </div>
-          )}
-        </>
-      );
-    case "apiProductDetails":
-      return (
-        <>
-          {loading ? (
-            <Loader />
-          ) : (
-            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[23%_1fr]  gap-2 bg-light-grey p-2">
-              <div className="">
-                <ApiProductClientSidebar api={api as IMockApi} />
+                <ApiProgressSidebar api={api as IApi} />
               </div>
 
               <div className="bg-white rounded-t overflow-y-scroll">
@@ -125,7 +110,7 @@ export default function ApiLayout({ children }: LayoutProps) {
           ) : (
             <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[17%_1fr]  gap-2 bg-light-grey p-2">
               <div className="">
-                <WeaverProgressSidebar api={api as IMockApi} />
+                <WeaverProgressSidebar api={api as IApi} />
               </div>
 
               <div className="bg-white rounded-t overflow-y-scroll">
@@ -135,7 +120,7 @@ export default function ApiLayout({ children }: LayoutProps) {
           )}
         </>
       );
-    case "webber":
+    case "weaver":
       return (
         <>
           {loading ? (

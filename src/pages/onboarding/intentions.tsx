@@ -20,9 +20,8 @@ const url = process.env.NEXT_PUBLIC_BASE_URL;
 
 type PageProps = {
   intentions: IActivity[];
-  currentUser: IUser;
 };
-export default function Intensions({ intentions, currentUser }: PageProps) {
+export default function Intensions({ intentions }: PageProps) {
   const router = useRouter();
   const { userId } = router.query;
   const [selected, setSelected] = useState<IActivity[]>([]);
@@ -41,7 +40,7 @@ export default function Intensions({ intentions, currentUser }: PageProps) {
   };
   useEffect(() => {
     reset();
-    setUser(currentUser);
+
     if (!intentions && setApiErrorMessage) {
       setApiErrorMessage("Something went wrong", "error");
     }
@@ -165,8 +164,7 @@ export const getServerSideProps: GetServerSideProps = async (
   let id = query.userId;
   let currentUser = null;
   let jwt = context.req.cookies.jwt;
-  // console.log(id);
-  console.log(context);
+
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET",
@@ -178,15 +176,8 @@ export const getServerSideProps: GetServerSideProps = async (
       `${url}/onboarding-and-rbac/api/user-activities`,
       { headers }
     );
-    const res = await axios.get(
-      `${url}/onboarding-and-rbac/api/get_user_by_id/${id}`,
-      { headers }
-    );
 
     intentions = data;
-    currentUser = res.data.data;
-    console.log(currentUser, "currr");
-    // console.log(currentUser);
   } catch (err) {
     console.log(err);
   }
@@ -194,7 +185,6 @@ export const getServerSideProps: GetServerSideProps = async (
   return {
     props: {
       intentions,
-      currentUser,
     },
   };
 };

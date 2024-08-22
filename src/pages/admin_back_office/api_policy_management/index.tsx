@@ -331,7 +331,7 @@ function TableRow({ api }: any) {
       onClick={() => {
         // router.push(
         //   `/admin_back_office/api_management/${toTitleCase(
-        //     api.title,
+        //     api.name,
         //     true
         //   )}/overview`
         // );
@@ -374,7 +374,7 @@ function TableRow2({ api }: any) {
       onClick={() => {
         // router.push(
         //   `/admin_back_office/api_management/${toTitleCase(
-        //     api.title,
+        //     api.name,
         //     true
         //   )}/overview`
         // );
@@ -413,7 +413,7 @@ function TableRow3({ api }: any) {
       onClick={() => {
         // router.push(
         //   `/admin_back_office/api_management/${toTitleCase(
-        //     api.title,
+        //     api.name,
         //     true
         //   )}/overview`
         // );

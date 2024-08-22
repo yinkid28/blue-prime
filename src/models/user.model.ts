@@ -1,3 +1,3 @@
 export type UserInititals = {
-  userType: string;
+  userType: "weaver" | "webber";
 };

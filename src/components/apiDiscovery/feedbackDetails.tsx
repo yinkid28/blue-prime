@@ -4,35 +4,19 @@ import img from "../../../public/images/api_icons/icon4.png";
 import { TbMessageCircle } from "react-icons/tb";
 import { IMockFeedback } from "./feedbackView";
 import { Dispatch, SetStateAction } from "react";
+import { IComment } from "@/models/api.model";
 type FeedProp = {
-  feedback: IMockFeedback;
+  feedback: IComment;
   setView: Dispatch<SetStateAction<string>>;
+  onReplyOpen: () => void;
+  canReply?: boolean;
 };
-export default function FeedBackCardDetails({ feedback, setView }: FeedProp) {
-  const replies = [
-    {
-      name: "whitegoose497",
-      message:
-        "Can someone please provide me with access to the necessary tools/resources to complete this task?",
-    },
-    {
-      name: "whitegoose497",
-      message: `Did I make a mistake or is their just no data?
-        import requests
-        url = “https://api-basketball.p.rapidapi.com/odds”
-        querystring = {“season”:“2021”,“league”:“175”}
-        headers = {“X-RapidAPI-Key”: key,“X-RapidAPI-Host”: “api-basketball.p.rapidapi.com”}
-        response = requests.get(url, headers=headers, params=querystring)
-        season_2021 = response.json()
-        print(season_2021)
-        {‘get’: ‘odds’,‘parameters’: {‘league’: ‘175’, ‘season’: ‘2021’},‘errors’: [],‘results’: 0,‘response’: []}`,
-    },
-    {
-      name: "whitegoose497",
-      message:
-        "Can someone please provide me with access to the necessary tools/resources to complete this task?",
-    },
-  ];
+export default function FeedBackCardDetails({
+  feedback,
+  setView,
+  onReplyOpen,
+  canReply,
+}: FeedProp) {
   return (
     <div className="flex flex-col w-full gap-5">
       <div
@@ -54,17 +38,22 @@ export default function FeedBackCardDetails({ feedback, setView }: FeedProp) {
                 className="w-full h-full"
               />
             </div>
-            <p className="text-mid-grey text-sm">{feedback.name}</p>
+            <p className="text-mid-grey text-sm">{feedback.createdBy}</p>
           </div>
         </div>
-        <p className="text-dark-grey">{feedback.comment}</p>
-        <div className="flex justify-end text-primary items-center">
-          <TbMessageCircle />
-          <p className="font-semibold text-sm">Add Reply </p>
-        </div>
+        <p className="text-dark-grey">{feedback.content}</p>
+        {canReply ? (
+          <div
+            className="flex justify-end cursor-pointer text-primary items-center"
+            onClick={onReplyOpen}
+          >
+            <TbMessageCircle />
+            <p className="font-semibold  text-sm">Add Reply </p>
+          </div>
+        ) : null}
       </div>
       <div className="flex flex-col w-full gap-3 items-center">
-        {replies.map((item, index) => (
+        {feedback.replies.list.map((item, index) => (
           <div
             className="w-full rounded-xl border-[1px] border-light-grey p-3 flex flex-col gap-4"
             key={index}
@@ -79,9 +68,9 @@ export default function FeedBackCardDetails({ feedback, setView }: FeedProp) {
                   className="w-full h-full"
                 />
               </div>
-              <p className="text-mid-grey text-sm">{item.name}</p>
+              <p className="text-mid-grey text-sm">{item.createdBy}</p>
             </div>
-            <p className="text-sm text-dark-grey font-thin">{item.message}</p>
+            <p className="text-sm text-dark-grey font-thin">{item.content}</p>
           </div>
         ))}
       </div>

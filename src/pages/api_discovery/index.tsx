@@ -18,17 +18,26 @@ import icon9 from "../../../public/images/api_icons/icon9.jpg";
 
 import { useEffect, useState } from "react";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { Spinner } from "@chakra-ui/react";
+import { Skeleton, Spinner, useToast } from "@chakra-ui/react";
 import { RegisterUserDto } from "@/models/onboarding.model";
 import OnboardingServices from "@/services/onboarding_services/onboarding_services";
 import { IMockApi } from "@/models/apidiscovery.model";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import ApiCard from "@/components/apiDiscovery/apiLibraryCard";
+import APIServices from "@/services/api_services/api_service";
+import { IApi } from "@/models/api.model";
 
 export default function ApiDiscoveryDashboard() {
-  const { setSidebar, loading, setLoading, setApiErrorMessage } =
+  const { setSidebar, loading, setLoading, setApiErrorMessage, user } =
     useOnboarding();
   const { setBookMarked, bookmarkedAPIs } = useApi();
+  const [isfetchingApis, setIsLoading] = useState<boolean>(false);
+  const [fetchedApis, setFetchedApis] = useState<IApi[]>([]);
+  const [pageNo, setPageNo] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(12);
+  const [dataCount, setDataCount] = useState(0);
+  const [pageCount, setPageCount] = useState<number>(0);
+  const [skels, setSkels] = useState<number[]>([1, 2, 3, 4]);
   const rec: IMockApi[] = [
     {
       id: 1,
@@ -139,48 +148,87 @@ export default function ApiDiscoveryDashboard() {
       bookmarked: false,
     },
   ];
+  const toast = useToast();
   const [allApis, setAllApis] = useState<IMockApi[]>(rec);
+  const getApis = async (pageNo: number, pageSize: number) => {
+    setIsLoading(true);
 
-  function toggleBookmarked(apiId: number) {
-    // const itemsWithBookMarks = allApis.map((data) =>
-    //   data.id === apiId ? { ...data, bookmarked: !data.bookmarked } : data
-    // );
-    // const filteredApi = allApis.filter((api) => api.bookmarked === true);
-    // console.log(filteredApi, "filtered");
-    // setBookMarked([...bookmarkedAPIs, ...filteredApi]);
-    // setAllApis(itemsWithBookMarks);
-    console.log("first");
-  }
+    try {
+      const res = await APIServices.getAllWebberApis(pageNo, pageSize);
+      if (res.statusCode === 200) {
+        setIsLoading(false);
+        setFetchedApis(res.data.list);
+        setDataCount(res.data.count);
+      }
+    } catch (error: any) {
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
+  const bookmarkApis = async (cco: string, aco: string) => {
+    setIsLoading(true);
+
+    try {
+      const res = await APIServices.bookmarkApi(aco, cco);
+      if (res.statusCode === 201) {
+        toast({
+          description: "API added to bookmarks",
+          status: "success",
+          duration: 3000,
+          position: "bottom-left",
+        });
+        setIsLoading(false);
+      }
+    } catch (error: any) {
+      setIsLoading(false);
+
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
+
   useEffect(() => {
     setSidebar("");
     setLoading(false);
+    getApis(pageNo, pageSize);
   }, []);
 
   return (
     <DiscoveryLayout>
       <Navbar title="Dashboard" />
-      <BreadCrumbs breadCrumbActiveItem="Dashboard" />
+      {/* <BreadCrumbs breadCrumbActiveItem="Dashboard" /> */}
       <ApiHero />
       <div className="p-5">
         <div className="my-3 flex justify-between flex-col gap-2 md:flex-row">
           <p className=" font-semibold text-dark-grey">Recommended</p>
-          <button className="bg-transparent w-fit border-none text-mid-grey">
+          <button className="bg-transparent text-[14px] w-fit border-none text-mid-grey">
             View all
           </button>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {rec.map((item, index) => (
-            <ApiCard
-              key={index}
-              img={item.img}
-              title={item.title}
-              category={item.category}
-              description={item.description}
-              bookmarked={item.bookmarked as boolean}
-              item={item}
-              onToggleBookmarked={toggleBookmarked}
-            />
-          ))}
+          {isfetchingApis ? (
+            skels.map((item, index) => <Skeleton height={200} key={index} />)
+          ) : fetchedApis ? (
+            fetchedApis.map((item, index) => (
+              <ApiCard
+                key={index}
+                img={""}
+                title={item.name}
+                category={item.lifeCycleStatus}
+                description={item.description}
+                bookmarked={false}
+                api={item}
+                onToggleBookmarked={() => {
+                  bookmarkApis(user?.customerCode as string, item.apiCode);
+                }}
+              />
+            ))
+          ) : (
+            <>
+              <p>You Currently do not have any APIs</p>
+            </>
+          )}
         </div>
       </div>
     </DiscoveryLayout>

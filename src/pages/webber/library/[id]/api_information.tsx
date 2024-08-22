@@ -1,24 +1,26 @@
 import Navbar from "@/components/Layout/Nav/navbar";
-import { BreadCrumbItems, BreadCrumbs } from "@/components/utils";
-import { useApi } from "@/context/ApiDiscoveryContext";
-import { useOnboarding } from "@/context/OnboardingContext";
-import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import {
   ApiInformationView,
   DocumentationView,
-} from "../../../../components/Weaver/apiInformationComponents";
-
+} from "@/components/Weaver/apiInformationComponents";
+import { BreadCrumbItems, BreadCrumbs } from "@/components/utils";
+import { useApi } from "@/context/ApiDiscoveryContext";
+import { useOnboarding } from "@/context/OnboardingContext";
+import APIServices from "@/services/api_services/api_service";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 // remember to use static generation here but for now we will use context to get current api
 const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
 
 export default function ApiOverview() {
-  const { api } = useApi();
+  const { api, setApi } = useApi();
   const router = useRouter();
-  const { loading, setLoading, setSidebar } = useOnboarding();
+  const { id } = router.query;
+  const { loading, setLoading, setSidebar, setApiErrorMessage } =
+    useOnboarding();
   useEffect(() => {
     setLoading(false);
     setSidebar("apiProgressWeaver");
@@ -26,20 +28,35 @@ export default function ApiOverview() {
   const breadCrumbs: BreadCrumbItems[] = [
     {
       breadCrumbText: "Library",
-      breadCrumbPath: "/weaver/library",
+      breadCrumbPath: "/webber/library",
     },
   ];
 
   const [apiInfoView, setApiInfoView] = useState<string>("api-information");
-
+  const getApi = async (aco: string) => {
+    try {
+      const res = await APIServices.getSingleApiDev(aco);
+      console.log(res);
+      if (res.statusCode === 200) {
+        setApi(res.data);
+        // setSandBoxurl(res.data.endpointConfig.sandbox_endpoints.url);
+        // setProdurl(res.data.endpointConfig.production_endpoints.url);
+      }
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
   return (
     <>
       <WeaverLayout>
-        <Navbar title={`${api?.title}`} />
+        <Navbar title={`${api?.name}`} />
         {/* Fix the breadcrumbs before commiting. Use the commented code in api_manager.tsx as a guide */}
         <BreadCrumbs
           breadCrumbItems={breadCrumbs}
-          breadCrumbActiveItem={`${api?.title}-API Information`}
+          breadCrumbActiveItem={`${api?.name}-API Information`}
         />
         {/* CONTENT */}
         <div className="mx-4 my-6">

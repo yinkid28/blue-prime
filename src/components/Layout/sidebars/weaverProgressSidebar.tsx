@@ -18,9 +18,10 @@ import {
   Show,
 } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
+import { IApi } from "@/models/api.model";
 
 type sideBarProps = {
-  api: IMockApi;
+  api: IApi;
 };
 export default function WeaverProgressSidebar({ api }: sideBarProps) {
   const router = useRouter();
@@ -35,7 +36,13 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
   return (
     <div className="w-full flex flex-col h-full gap-2">
       <div className="bg-white rounded p-5 h-fit flex flex-row items-center md:items-start md:flex-col justify-between md:justify-normal gap-4 ">
-        <p className="text-2xl">Logo</p>
+        <Image
+          src={"/icons/logo.svg"}
+          alt="logo"
+          width={200}
+          height={100}
+          className="w-[80%]"
+        />
         <IoMenu
           size={23}
           onClick={isOpen ? onClose : onOpen}
@@ -68,7 +75,7 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
                     <div className="flex items-center gap-2">
                       <div className="w-[50px] h-[50px] rounded bg-mid-grey overflow-hidden">
                         <Image
-                          src={api.img}
+                          src={"/images/api_icons/apiMock.webp"}
                           alt="icon"
                           width={200}
                           height={200}
@@ -76,7 +83,7 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
                         />
                       </div>
                       <div className="">
-                        <p className="font-semibold">{api.title}</p>
+                        <p className="font-semibold">{api.name}</p>
                       </div>
                     </div>
                   </div>
@@ -85,16 +92,15 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
                 <div className="bg-white h-[72%] rounded p-5 flex flex-col gap-4">
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                      router.asPath ==
-                      `/weaver/library/${toTitleCase(api.title, true)}/overview`
+                      router.asPath == `/webber/library/${api.apiCode}/overview`
                         ? "text-primary font-semibold"
                         : "text-dark-grey"
                     }`}
                     // I am going to hard code the route to be pushed to for a brief while!
                     onClick={() => {
                       router.push(
-                        `/weaver/library/${toTitleCase(
-                          api.title,
+                        `/webber/library/${toTitleCase(
+                          api.name,
                           true
                         )}/overview`
                       );
@@ -107,8 +113,8 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath ==
-                      `/weaver/library/${toTitleCase(
-                        api.title,
+                      `/webber/library/${toTitleCase(
+                        api.name,
                         true
                       )}/api_information`
                         ? "text-primary font-semibold"
@@ -117,8 +123,8 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
                     // I am going to hard code the route to be pushed to for a brief while!
                     onClick={() => {
                       router.push(
-                        `/weaver/library/${toTitleCase(
-                          api.title,
+                        `/webber/library/${toTitleCase(
+                          api.name,
                           true
                         )}/api_information`
                       );
@@ -134,8 +140,8 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath ==
-                      `/weaver/library/${toTitleCase(
-                        api.title,
+                      `/webber/library/${toTitleCase(
+                        api.name,
                         true
                       )}/consumption_rate`
                         ? "text-primary font-semibold"
@@ -144,8 +150,8 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
                     // I am going to hard code the route to be pushed to for a brief while!
                     onClick={() => {
                       router.push(
-                        `/weaver/library/${toTitleCase(
-                          api.title,
+                        `/webber/library/${toTitleCase(
+                          api.name,
                           true
                         )}/consumption_rate`
                       );
@@ -160,16 +166,13 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
                   </div>
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                      router.asPath ==
-                      `/weaver/library/${toTitleCase(api.title, true)}/test`
+                      router.asPath == `/webber/library/${api.apiCode}/test`
                         ? "text-primary font-semibold"
                         : "text-dark-grey"
                     }`}
                     // I am going to hard code the route to be pushed to for a brief while!
                     onClick={() => {
-                      router.push(
-                        `/weaver/library/${toTitleCase(api.title, true)}/test`
-                      );
+                      router.push(`/webber/library/${api.apiCode}/test`);
                     }}
                   >
                     <Icon icon="lets-icons:edit-light" className="text-xl" />
@@ -179,8 +182,8 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath ==
-                      `/weaver/library/${toTitleCase(
-                        api.title,
+                      `/webber/library/${toTitleCase(
+                        api.name,
                         true
                       )}/subscriptions`
                         ? "text-primary font-semibold"
@@ -189,8 +192,8 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
                     // I am going to hard code the route to be pushed to for a brief while!
                     onClick={() => {
                       router.push(
-                        `/weaver/library/${toTitleCase(
-                          api.title,
+                        `/webber/library/${toTitleCase(
+                          api.name,
                           true
                         )}/subscriptions`
                       );
@@ -205,16 +208,15 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
                   </div>
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                      router.asPath ==
-                      `/weaver/library/${toTitleCase(api.title, true)}/feedback`
+                      router.asPath == `/webber/library/${api.apiCode}/feedback`
                         ? "text-primary font-semibold"
                         : "text-dark-grey"
                     }`}
                     // I am going to hard code the route to be pushed to for a brief while!
                     onClick={() => {
                       router.push(
-                        `/weaver/library/${toTitleCase(
-                          api.title,
+                        `/webber/library/${toTitleCase(
+                          api.name,
                           true
                         )}/feedback`
                       );
@@ -233,7 +235,7 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
         <div
           className="hidden md:flex items-center gap-2 cursor-pointer"
           onClick={() => {
-            router.push("/weaver/library");
+            router.push("/webber/library");
             // setSidebar("webber");
           }}
         >
@@ -245,7 +247,7 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
           <div className="flex items-center gap-2">
             <div className="w-[50px] h-[50px] rounded bg-mid-grey overflow-hidden">
               <Image
-                src={api.img}
+                src={"/images/api_icons/apiMock.webp"}
                 alt="icon"
                 width={200}
                 height={200}
@@ -253,7 +255,7 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
               />
             </div>
             <div className="">
-              <p className="font-semibold">{api.title}</p>
+              <p className="font-semibold">{api.name}</p>
             </div>
           </div>
         </div>
@@ -261,16 +263,13 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
       <div className="bg-white h-full rounded p-5 hidden md:flex flex-col gap-4">
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath ==
-            `/weaver/library/${toTitleCase(api.title, true)}/overview`
+            router.asPath == `/webber/library/${api.apiCode}/overview`
               ? "text-primary font-semibold"
               : "text-dark-grey"
           }`}
           // I am going to hard code the route to be pushed to for a brief while!
           onClick={() => {
-            router.push(
-              `/weaver/library/${toTitleCase(api.title, true)}/overview`
-            );
+            router.push(`/webber/library/${api.apiCode}/overview`);
           }}
         >
           <Icon icon="lets-icons:widget-light" className="text-xl" />
@@ -279,16 +278,13 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
         </div>
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath ==
-            `/weaver/library/${toTitleCase(api.title, true)}/api_information`
+            router.asPath == `/webber/library/${api.apiCode}/api_information`
               ? "text-primary font-semibold"
               : "text-dark-grey"
           }`}
           // I am going to hard code the route to be pushed to for a brief while!
           onClick={() => {
-            router.push(
-              `/weaver/library/${toTitleCase(api.title, true)}/api_information`
-            );
+            router.push(`/webber/library/${api.apiCode}/api_information`);
           }}
         >
           <Icon
@@ -300,16 +296,13 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
         </div>
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath ==
-            `/weaver/library/${toTitleCase(api.title, true)}/consumption_rate`
+            router.asPath == `/webber/library/${api.apiCode}/consumption_rate`
               ? "text-primary font-semibold"
               : "text-dark-grey"
           }`}
           // I am going to hard code the route to be pushed to for a brief while!
           onClick={() => {
-            router.push(
-              `/weaver/library/${toTitleCase(api.title, true)}/consumption_rate`
-            );
+            router.push(`/webber/library/${api.apiCode}/consumption_rate`);
           }}
         >
           <Icon icon="lets-icons:link-alt-light" className="text-xl" />
@@ -318,14 +311,13 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
         </div>
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath ==
-            `/weaver/library/${toTitleCase(api.title, true)}/test`
+            router.asPath == `/webber/library/${api.apiCode}/test`
               ? "text-primary font-semibold"
               : "text-dark-grey"
           }`}
           // I am going to hard code the route to be pushed to for a brief while!
           onClick={() => {
-            router.push(`/weaver/library/${toTitleCase(api.title, true)}/test`);
+            router.push(`/webber/library/${api.apiCode}/test`);
           }}
         >
           <Icon icon="lets-icons:edit-light" className="text-xl" />
@@ -334,16 +326,13 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
         </div>
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath ==
-            `/weaver/library/${toTitleCase(api.title, true)}/subscriptions`
+            router.asPath == `/webber/library/${api.apiCode}/subscriptions`
               ? "text-primary font-semibold"
               : "text-dark-grey"
           }`}
           // I am going to hard code the route to be pushed to for a brief while!
           onClick={() => {
-            router.push(
-              `/weaver/library/${toTitleCase(api.title, true)}/subscriptions`
-            );
+            router.push(`/webber/library/${api.apiCode}/subscriptions`);
           }}
         >
           <Icon
@@ -355,16 +344,13 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
         </div>
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath ==
-            `/weaver/library/${toTitleCase(api.title, true)}/feedback`
+            router.asPath == `/webber/library/${api.apiCode}/feedback`
               ? "text-primary font-semibold"
               : "text-dark-grey"
           }`}
           // I am going to hard code the route to be pushed to for a brief while!
           onClick={() => {
-            router.push(
-              `/weaver/library/${toTitleCase(api.title, true)}/feedback`
-            );
+            router.push(`/webber/library/${api.apiCode}/feedback`);
           }}
         >
           <Icon icon="solar:library-linear" />

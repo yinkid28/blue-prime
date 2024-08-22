@@ -16,18 +16,70 @@ import { Icon } from "@iconify/react";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { IMockApi } from "@/models/apidiscovery.model";
 import { AnimatePresence } from "framer-motion";
+import { IApi } from "@/models/api.model";
+import APIServices from "@/services/api_services/api_service";
+import { Skeleton, useToast } from "@chakra-ui/react";
 const DiscoveryLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
 
 export default function LibraryDashboard() {
-  const { setSidebar, setLoading } = useOnboarding();
+  const toast = useToast();
+  const { setSidebar, setLoading, setApiErrorMessage, user } = useOnboarding();
   const { setBookMarked, bookmarkedAPIs, libraryView } = useApi();
+  const [isfetchingApis, setIsLoading] = useState<boolean>(false);
+  const [fetchedApis, setFetchedApis] = useState<IApi[]>([]);
+  const [pageNo, setPageNo] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(12);
+  const [dataCount, setDataCount] = useState(0);
+  const [pageCount, setPageCount] = useState<number>(0);
+  const [skels, setSkels] = useState<number[]>([1, 2, 3, 4]);
+
+  const getApis = async (cco: string) => {
+    setIsLoading(true);
+
+    try {
+      const res = await APIServices.getbookmarkApi(cco);
+      if (res.statusCode === 200) {
+        setIsLoading(false);
+        setFetchedApis(res.data.content);
+        setDataCount(res.data.content.length);
+        setBookMarked(res.data.content);
+      }
+    } catch (error: any) {
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
+  const unbookmarkApi = async (cco: string, aco: string) => {
+    setIsLoading(true);
+
+    try {
+      const res = await APIServices.removebookmarkApi(aco, cco);
+      if (res.statusCode === 201) {
+        setIsLoading(false);
+        toast({
+          description: "API removed from bookmarks",
+          status: "success",
+          duration: 3000,
+          position: "bottom-left",
+        });
+      }
+    } catch (error: any) {
+      setIsLoading(false);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
 
   useEffect(() => {
-    setSidebar("");
-    setLoading(false);
-  }, []);
+    if (user) {
+      setSidebar("");
+      setLoading(false);
+      getApis(user.customerCode);
+    }
+  }, [user]);
 
   const apiCardData = [
     {
@@ -107,28 +159,28 @@ export default function LibraryDashboard() {
   // Make it type safe after it works
   const [inData, setInData] = useState(apiCardData);
 
-  function toggleBookmarked(apiId: number, item: IMockApi) {
-    const itemsWithBookMarks = inData.map((data) => {
-      if (data.id === apiId) {
-        return {
-          ...data,
-          bookmarked: !data.bookmarked,
-        };
-      } else {
-        return data;
-      }
-    });
-    if (!item.bookmarked) {
-      const newItem = {
-        ...item,
-        bookmarked: true,
-      };
-      setBookMarked(newItem);
-    } else {
-      setBookMarked(item);
-    }
-    setInData(itemsWithBookMarks);
-  }
+  // function toggleBookmarked(apiId: number, item: IMockApi) {
+  //   const itemsWithBookMarks = inData.map((data) => {
+  //     if (data.id === apiId) {
+  //       return {
+  //         ...data,
+  //         bookmarked: !data.bookmarked,
+  //       };
+  //     } else {
+  //       return data;
+  //     }
+  //   });
+  //   if (!item.bookmarked) {
+  //     const newItem = {
+  //       ...item,
+  //       bookmarked: true,
+  //     };
+  //     setBookMarked(newItem);
+  //   } else {
+  //     setBookMarked(item);
+  //   }
+  //   setInData(itemsWithBookMarks);
+  // }
 
   useEffect(() => {
     console.log(bookmarkedAPIs);
@@ -178,41 +230,28 @@ export default function LibraryDashboard() {
         {/* THIRD SECTION - SECTION CONTAINING THE API CARDS */}
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           <AnimatePresence mode="popLayout">
-            {libraryView == "saved"
-              ? bookmarkedAPIs!.map((item, index) => (
-                  <ApiCard
-                    key={index}
-                    img={item.img}
-                    title={item.title}
-                    category={item.category}
-                    description={item.description}
-                    bookmarked={item.bookmarked as boolean}
-                    layout
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.5 }}
-                    transition={{ duration: 0.6, type: "spring" }}
-                    item={item}
-                    onToggleBookmarked={toggleBookmarked}
-                  />
-                ))
-              : inData.map((item, index) => (
-                  <ApiCard
-                    key={index}
-                    img={item.img}
-                    title={item.title}
-                    category={item.category}
-                    description={item.description}
-                    bookmarked={item.bookmarked as boolean}
-                    layout
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.5 }}
-                    transition={{ duration: 0.6, type: "spring" }}
-                    item={item}
-                    onToggleBookmarked={toggleBookmarked}
-                  />
-                ))}
+            {isfetchingApis ? (
+              skels.map((item, index) => <Skeleton height={200} key={index} />)
+            ) : fetchedApis.length > 0 ? (
+              fetchedApis.map((item, index) => (
+                <ApiCard
+                  key={index}
+                  img={""}
+                  title={item.name}
+                  category={item.lifeCycleStatus}
+                  description={item.description}
+                  bookmarked={false}
+                  api={item}
+                  onToggleBookmarked={() => {
+                    unbookmarkApi(user?.customerCode as string, item.apiCode);
+                  }}
+                />
+              ))
+            ) : (
+              <>
+                <p>You Currently do not have any APIs</p>
+              </>
+            )}
           </AnimatePresence>
         </div>
       </div>

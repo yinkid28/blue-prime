@@ -6,6 +6,8 @@ import PriceView from "@/components/apiDiscovery/pricingView";
 
 import { BreadCrumbItems, BreadCrumbs } from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
+import { IComment } from "@/models/api.model";
+import APIServices from "@/services/api_services/api_service";
 import { Spinner } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
@@ -16,8 +18,14 @@ const ApiLayout = dynamic(() => import("@/components/Layout/layout"), {
 });
 export default function ApiProduct() {
   const router = useRouter();
-  const { setSidebar, loading, setLoading } = useOnboarding();
+  const { setSidebar, loading, setLoading, setApiErrorMessage } =
+    useOnboarding();
+  const [comments, setComments] = useState<IComment[]>([]);
 
+  const [offset, setOffset] = useState<number>(0);
+  const [pageCount, setPageCount] = useState<number>(0);
+  const [isLoadingComments, setIsLoadingComments] = useState<boolean>(false);
+  const limit = 10;
   const { id } = router.query;
   const [view, setView] = useState<string>("Endpoint");
   const breadCrumbs: BreadCrumbItems[] = [
@@ -26,10 +34,32 @@ export default function ApiProduct() {
       breadCrumbPath: "/api_discovery",
     },
   ];
+  const getApiComments = async (aco: string, limit: number, offset: number) => {
+    setIsLoadingComments(true);
+    try {
+      const res = await APIServices.getCommentsByApiCode(aco, limit, offset);
+      if (res.statusCode === 200) {
+        setIsLoadingComments(false);
+        setComments(res.data.list);
+        const count = Math.ceil(res.data.count / limit);
+        setPageCount(count);
+      }
+      // setLoading(false);
+    } catch (error: any) {
+      // setLoading(false);
+      setIsLoadingComments(false);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
+
   useEffect(() => {
-    setSidebar("api");
-    setLoading(false);
-  }, []);
+    if (id) {
+      getApiComments(id as string, limit, offset);
+      setSidebar("api");
+      setLoading(false);
+    }
+  }, [id]);
 
   return (
     <>
@@ -54,7 +84,7 @@ export default function ApiProduct() {
               >
                 <p>Endpoint</p>
               </div>
-              <div
+              {/* <div
                 className={`w-fit h-fit cursor-pointer px-5 py-2 ease-in-out duration-700 hover:border-primary rounded-xl hover:text-primary ${
                   view === "Documentation"
                     ? "text-primary border-primary "
@@ -65,7 +95,7 @@ export default function ApiProduct() {
                 }}
               >
                 <p>Documentation</p>
-              </div>
+              </div> */}
               <div
                 className={`w-fit h-fit cursor-pointer px-5 py-2 ease-in-out duration-700 hover:border-primary rounded-xl hover:text-primary ${
                   view === "Feedback"
@@ -99,9 +129,16 @@ export default function ApiProduct() {
           </div>
           <div className="my-5">
             {view === "Endpoint" ? <EndpointView /> : null}
-            {view === "Documentation" ? <DocumentationView /> : null}
+            {/* {view === "Documentation" ? <DocumentationView /> : null} */}
             {view === "Feedback" ? (
-              <FeedbackView commentButtonDisplay={true} />
+              <>
+                <FeedbackView
+                  isLoading={isLoadingComments}
+                  feedbacks={comments}
+                  // commentButtonDisplay
+                  // getComments={getApiComments}
+                />
+              </>
             ) : null}
             {view === "Pricing" ? <PriceView /> : null}
           </div>

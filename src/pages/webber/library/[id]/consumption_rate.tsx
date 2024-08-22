@@ -20,7 +20,7 @@ const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
 const breadCrumbs: BreadCrumbItems[] = [
   {
     breadCrumbText: "Library",
-    breadCrumbPath: "/weaver/library",
+    breadCrumbPath: "/webber/library",
   },
 ];
 
@@ -53,10 +53,10 @@ export default function ConsumptionRate() {
   return (
     <>
       <WeaverLayout>
-        <Navbar title={`${api?.title}`} />
+        <Navbar title={`${api?.name}`} />
         <BreadCrumbs
           breadCrumbItems={breadCrumbs}
-          breadCrumbActiveItem={`${api?.title}-Consumption Rate`}
+          breadCrumbActiveItem={`${api?.name}-Consumption Rate`}
         />
         {/* CONTENT */}
         <div className="mx-4 my-6">

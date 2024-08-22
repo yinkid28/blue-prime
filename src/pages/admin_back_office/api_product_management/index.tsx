@@ -274,7 +274,7 @@ function TableRow({ api }: any) {
       onClick={() => {
         // router.push(
         //   `/admin_back_office/api_management/${toTitleCase(
-        //     api.title,
+        //     api.name,
         //     true
         //   )}/overview`
         // );
@@ -283,7 +283,7 @@ function TableRow({ api }: any) {
       <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
         <div className="flex gap-2 items-center font-semibold">
           <Image src={api.img} width={20} height={20} alt="API Product Image" />
-          <p>{api.title}</p>
+          <p>{api.name}</p>
         </div>
       </td>
 

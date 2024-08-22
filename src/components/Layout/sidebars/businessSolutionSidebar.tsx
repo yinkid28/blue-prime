@@ -35,7 +35,13 @@ export default function APIProductDetailsSidebar() {
   return (
     <div className="w-full flex flex-col h-full gap-2">
       <div className="bg-white w-full rounded p-5 h-fit  flex flex-row items-center md:items-start md:flex-col justify-between md:justify-normal gap-4">
-        <p className="text-2xl">Logo</p>
+        <Image
+          src={"/icons/logo.svg"}
+          alt="logo"
+          width={200}
+          height={100}
+          className="w-[80%]"
+        />
         <IoMenu
           size={23}
           onClick={isOpen ? onClose : onOpen}
@@ -56,7 +62,7 @@ export default function APIProductDetailsSidebar() {
                   <div
                     className="flex items-center gap-2 cursor-pointer"
                     onClick={() => {
-                      router.push("/webber/dashboard");
+                      router.push("/weaver/dashboard");
                       setSidebar("webber");
                     }}
                   >
@@ -153,7 +159,7 @@ export default function APIProductDetailsSidebar() {
         <div
           className="hidden md:flex items-center gap-2 cursor-pointer"
           onClick={() => {
-            router.push("/webber/dashboard");
+            router.push("/weaver/dashboard");
             setSidebar("webber");
           }}
         >

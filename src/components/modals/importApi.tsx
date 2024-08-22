@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { Button } from "../utils";
 import ApiScratch from "../Webber/CreateAPI/createApiComponent";
+
 type addEndpointModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -23,7 +24,7 @@ export default function ImportAPi({ isOpen, onClose }: addEndpointModalProps) {
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody className="w-full  rounded-lg bg-white">
-          <ApiScratch />
+          {/* <ApiScratch /> */}
           <div className="flex mt-3 justify-end">
             <Button type="fit" text="Next" onClick={() => {}} />
           </div>

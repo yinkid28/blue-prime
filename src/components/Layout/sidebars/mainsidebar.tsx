@@ -15,7 +15,7 @@ import {
 import { FaFolder } from "react-icons/fa";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { Icon } from "@iconify/react";
+import Image from "next/image";
 
 export default function MainSidebar() {
   const router = useRouter();
@@ -34,9 +34,15 @@ export default function MainSidebar() {
     <>
       {/* <div className="w-full  flex flex-col h-full> - This was how I met it*/}
       <div className="w-full  flex flex-col h-full gap-2">
-        <div className="bg-white rounded p-5 h-fit flex flex-col gap-4 ">
-          <div className="flex justify-between">
-            <p className="text-2xl">Logo</p>
+        <div className="bg-white rounded p-2 h-fit flex flex-col gap-4 ">
+          <div className="flex justify-center items-center">
+            <Image
+              src={"/icons/logo.svg"}
+              alt="logo"
+              width={200}
+              height={100}
+              className="w-[60%] "
+            />
             <IoMenu
               size={23}
               onClick={isOpen ? onClose : onOpen}
@@ -61,47 +67,36 @@ export default function MainSidebar() {
                     <MdHomeFilled />
                     <p className="font-semibold">Home</p>
                   </div>
-                  <div
+                  {/* <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath == "" ? "text-primary" : "text-dark-grey"
                     }`}
                   >
                     <BsSearch />
                     <p className="font-semibold">Search</p>
-                  </div>
-                  <div
-                    className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                      router.asPath == "/weaver/api_product"
-                        ? "text-primary"
-                        : "text-dark-grey"
-                    }`}
-                    onClick={() => router.push("/weaver/api_product")}
-                  >
-                    <Icon icon="carbon:api-1" className="text-xl" />
-                    <p className="font-semibold">API Product</p>
-                  </div>
+                  </div> */}
                   {user !== null && (
                     <div
                       className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                        router.asPath == "/weaver/library"
+                        router.asPath == "/webber/library"
                           ? "text-primary"
                           : "text-dark-grey"
                       }`}
-                      onClick={() => router.push("/weaver/library")}
+                      onClick={() => router.push("/webber/library")}
                     >
                       <MdFolder size={18} />
                       <p className="font-semibold">Library</p>
                     </div>
                   )}
-                  <div
+                  {/* <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath == "" ? "text-primary" : "text-dark-grey"
                     }`}
                   >
                     <BsFilePlay />
                     <p className="font-semibold">How to Use</p>
-                  </div>
-                  {router.asPath == "/weaver/library" ? (
+                  </div> */}
+                  {router.asPath == "/webber/library" ? (
                     <div className="bg-white h-full pt-6 rounded flex flex-col gap-4">
                       <p className="text-base text-mid-grey font-bold">
                         Library
@@ -164,62 +159,58 @@ export default function MainSidebar() {
           </Show>
 
           <div
-            className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+            className={`md:flex hidden items-center p-2 hover:bg-gradient-to-r from-white hover:border-l-[2px] border-primary  to-primaryLightest cursor-pointer rounded-[8px] ease-in-out duration-700 hover:text-primary gap-3 w-full ${
               router.asPath == "/api_discovery"
-                ? "text-primary"
+                ? "text-primary border-l-[2px]  bg-gradient-to-r "
                 : "text-dark-grey"
             }`}
             onClick={() => router.push("/api_discovery")}
           >
             <MdHomeFilled />
-            <p className="font-semibold">Home</p>
+            <p className="font-semibold">Discovery</p>
           </div>
-          <div
+          {/* <div
             className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
               router.asPath == "" ? "text-primary" : "text-dark-grey"
             }`}
           >
             <BsSearch />
             <p className="font-semibold">Search</p>
-          </div>
-          <div
-            className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-              router.asPath == "/weaver/api_product"
-                ? "text-primary"
-                : "text-dark-grey"
-            }`}
-            onClick={() => router.push("/weaver/api_product")}
-          >
-            <Icon icon="carbon:api-1" className="" />
-            <p className="font-semibold">API Product</p>
-          </div>
+          </div> */}
           {user !== null && (
             <div
-              className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                router.asPath == "/weaver/library"
-                  ? "text-primary"
+              className={`md:flex hidden items-center p-2 hover:bg-gradient-to-r from-white hover:border-l-[2px] border-primary  to-primaryLightest cursor-pointer rounded-lg ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+                router.asPath == "/webber/library"
+                  ? "text-primary border-l-[2px]  bg-gradient-to-r"
                   : "text-dark-grey"
               }`}
-              onClick={() => router.push("/weaver/library")}
+              onClick={() => router.push("/webber/library")}
             >
               <MdFolder size={18} />
               <p className="font-semibold">Library</p>
             </div>
           )}
-          <div
+          {/* <div
             className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
               router.asPath == "" ? "text-primary" : "text-dark-grey"
             }`}
           >
             <BsFilePlay />
             <p className="font-semibold">How to Use</p>
-          </div>
+          </div> */}
         </div>
 
-        {router.asPath == "/weaver/library" ? (
+        {router.asPath == "/webber/library" ? (
           <div className="bg-white h-full rounded p-5 md:flex hidden flex-col gap-4">
             <p className="text-base text-mid-grey font-bold">Library</p>
-            <ul className="space-y-3 text-dark-grey">
+            <ul className="space-y-3 text-sm px-3 font-semibold text-dark-grey">
+              <li
+                onClick={() => setLibraryView("saved")}
+                className={`${"cursor-pointer"}
+                ${libraryView == "saved" ? "text-primary" : "text-dark-grey"}`}
+              >
+                Saved
+              </li>
               <li
                 onClick={() => setLibraryView("api-product")}
                 className={`cursor-pointer
@@ -231,26 +222,16 @@ export default function MainSidebar() {
               >
                 API Product
               </li>
-              <li
-                onClick={() =>
-                  bookmarkedAPIs.length === 0 ? null : setLibraryView("saved")
-                }
-                className={`${
-                  !(bookmarkedAPIs.length === 0) && "cursor-pointer"
-                }
-                ${libraryView == "saved" ? "text-primary" : "text-dark-grey"}`}
-              >
-                Saved
-              </li>
+
               {/* ↓ Would tackle this when I understand what Subscribed means */}
-              <li>Subscribed</li>
+              {/* <li>Subscribed</li> */}
             </ul>
           </div>
         ) : (
           <div className="bg-white h-full rounded p-5 md:flex hidden flex-col gap-4">
-            <p className="text-2xl text-mid-grey font-bold">Categories</p>
+            <p className="text-[18px] text-mid-grey font-bold">Categories</p>
             {cats?.map((cat, index) => (
-              <p className="text-dark-grey cursor-pointer" key={index}>
+              <p className="text-dark-grey p-2 cursor-pointer" key={index}>
                 {cat.name}
               </p>
             ))}

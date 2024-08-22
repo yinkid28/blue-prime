@@ -46,15 +46,13 @@ export default function AdminNavbar({ title }: NavbarProps) {
             <BiMessageRounded className="md:flex hidden" />
 
             <div className="w-[40px] h-[40px] rounded-full overflow-hidden md:flex hidden">
-              {userType !== "" && (
-                <Image
-                  className="w-[40px] h-[40px]"
-                  width={200}
-                  height={200}
-                  alt="avi"
-                  src={"/images/avatar.jpg"}
-                />
-              )}
+              <Image
+                className="w-[40px] h-[40px]"
+                width={200}
+                height={200}
+                alt="avi"
+                src={"/images/avatar.jpg"}
+              />
             </div>
             <Menu>
               <MenuButton>
@@ -156,7 +154,7 @@ export default function AdminNavbar({ title }: NavbarProps) {
                     if (userType === "weaver") {
                       setLoading(true);
                       setUserType("webber");
-                      router.push("/webber/dashboard");
+                      router.push("/weaver/dashboard");
                       setSidebar("webber");
                     } else {
                       setLoading(true);

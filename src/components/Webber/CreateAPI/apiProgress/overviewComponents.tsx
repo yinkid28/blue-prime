@@ -5,7 +5,7 @@ export function ApiDetailsCard() {
   return (
     <div className="w-full border-[1px] flex flex-col  gap-3 border-light-grey rounded-lg p-3">
       <div className="flex md:flex-row flex-col  justify-between">
-        <p className="md:text-xl font-bold">{api?.title}</p>
+        <p className="md:text-xl font-bold">{api?.name}</p>
 
         {/* add badge for created at */}
       </div>
@@ -21,22 +21,26 @@ export function ApiDetailsCard() {
       <div className="flex md:flex-row flex-col  justify-between">
         <p className="w-fit md:w-[30%] font-semibold text-mid-grey">Provider</p>
         <p className="w-fit md:w-[60%] font-normal text-mid-grey">
-          MajekFashek_
+          {api?.provider}
         </p>
       </div>
       <div className="flex md:flex-row flex-col  justify-between">
         <p className="w-fit md:w-[30%] font-semibold text-mid-grey">Context</p>
         <p className="w-fit md:w-[60%] font-normal text-mid-grey">
-          /sample/options
+          {api?.context}
         </p>
       </div>
       <div className="flex md:flex-row flex-col  justify-between">
         <p className="w-fit md:w-[30%] font-semibold text-mid-grey">Version</p>
-        <p className="w-fit md:w-[60%] font-normal text-mid-grey">V 1.01</p>
+        <p className="w-fit md:w-[60%] font-normal text-mid-grey">
+          V {api?.version}
+        </p>
       </div>
       <div className="flex md:flex-row flex-col  justify-between">
         <p className="w-fit md:w-[30%] font-semibold text-mid-grey">Type</p>
-        <p className="w-fit md:w-[60%] font-normal text-mid-grey">https</p>
+        <p className="w-fit md:w-[60%] font-normal text-mid-grey">
+          {api?.type}
+        </p>
       </div>
     </div>
   );
@@ -55,25 +59,46 @@ export function ApiConfigurationCard() {
         <p className="w-fit md:w-[30%] font-semibold text-mid-grey">
           Transports
         </p>
-        <p className="w-fit md:w-[60%] font-normal text-mid-grey">HTTPS</p>
+        <p className="w-fit md:w-[60%] font-normal text-mid-grey">
+          {api && api?.transport?.length > 0
+            ? api?.transport.map(
+                (item, index) =>
+                  `${item.toUpperCase()}${
+                    index !== api.transport.length - 1 ? "," : ""
+                  }`
+              )
+            : "HTTPS"}
+        </p>
       </div>
       <div className="flex md:flex-row flex-col  justify-between">
         <p className="w-fit md:w-[30%] font-semibold text-mid-grey">
           API Security
         </p>
-        <p className="w-fit md:w-[60%] font-normal text-mid-grey">OAuth2_</p>
+        <p className="w-fit md:w-[60%] font-normal text-mid-grey">
+          {" "}
+          {api && api?.securityScheme?.length > 0
+            ? api?.securityScheme.map(
+                (item, index) =>
+                  `${item}${index !== api.securityScheme.length - 1 ? "," : ""}`
+              )
+            : "OAuth2_"}
+        </p>
       </div>
       <div className="flex md:flex-row flex-col  justify-between">
         <p className="w-fit md:w-[30%] font-semibold text-mid-grey">
           Access Control
         </p>
-        <p className="w-fit md:w-[60%] font-normal text-mid-grey">None</p>
+        <p className="w-fit md:w-[60%] font-normal text-mid-grey">
+          {api?.accessControl}
+        </p>
       </div>
       <div className="flex md:flex-row flex-col  justify-between">
         <p className="w-fit md:w-[30%] font-semibold text-mid-grey">
           Visibility
         </p>
-        <p className="w-fit md:w-[60%] font-normal text-mid-grey">public</p>
+        <p className="w-fit md:w-[60%] font-normal text-mid-grey">
+          {api?.visibility}
+        </p>
       </div>
       <div className="flex md:flex-row flex-col  justify-between">
         <p className="w-fit md:w-[30%] font-semibold text-mid-grey">
@@ -85,7 +110,15 @@ export function ApiConfigurationCard() {
       </div>
       <div className="flex md:flex-row flex-col  justify-between">
         <p className="w-fit md:w-[30%] font-semibold text-mid-grey">Tags</p>
-        <p className="w-fit md:w-[60%] font-normal text-mid-grey">https</p>
+        <p className="w-fit md:w-[60%] font-normal text-mid-grey">
+          {" "}
+          {api && api?.tags?.length > 0
+            ? api?.tags.map(
+                (item, index) =>
+                  `${item}${index !== api.tags.length - 1 ? "," : ""}`
+              )
+            : "http"}
+        </p>
       </div>
     </div>
   );
@@ -105,7 +138,9 @@ export function ApiEndpointCard() {
           Production Endpoint
         </p>
         <p className="w-fit md:w-[60%] font-normal text-mid-grey">
-          https://loacalhost:8494/pg/sample/opinions
+          {api?.endpointConfig
+            ? api?.endpointConfig?.production_endpoints?.url
+            : ""}
         </p>
       </div>
       <div className="flex md:flex-row flex-col  justify-between">
@@ -113,7 +148,9 @@ export function ApiEndpointCard() {
           Sandbox Endpoint
         </p>
         <p className="w-fit md:w-[60%] font-normal text-mid-grey">
-          https://loacalhost:8494/pg/sample/opinions
+          {api?.endpointConfig
+            ? api?.endpointConfig?.sandbox_endpoints?.url
+            : ""}
         </p>
       </div>
       <div className="flex md:flex-row flex-col  justify-between">

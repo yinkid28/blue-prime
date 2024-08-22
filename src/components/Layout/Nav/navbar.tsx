@@ -42,47 +42,45 @@ export default function Navbar({ title }: NavbarProps) {
     }
   }, [router]);
   return (
-    <div className="w-full bg-transparent flex justify-between items-center p-5 ">
+    <div className="w-full bg-transparent bg-white sticky top-0  flex justify-between items-center p-4 ">
       <div>
-        <p className="md:text-xl font-semibold">{title}</p>
+        <p className="md:text-[18px] font-semibold">{title}</p>
       </div>
 
       <div className="flex items-center md:gap-3 lg:gap-8">
         {user !== null ? (
-          <div className="flex items-center md:gap-3 lg:gap-8">
+          <div className="flex items-center md:gap-3 lg:gap-5">
             <Button
               type="fit"
               className="md:flex hidden"
               text={
-                userType === "weaver" ? "Switch to Webber" : "Switch to Weaver"
+                userType === "webber" ? "Switch to Weaver" : "Switch to Webber"
               }
               onClick={() => {
                 if (userType === "weaver") {
                   setLoading(true);
                   setUserType("webber");
-                  router.push("/webber/dashboard");
-                  setSidebar("webber");
-                } else {
-                  setLoading(true);
-                  setUserType("weaver");
                   router.push("/api_discovery");
                   setSidebar("");
+                } else {
+                  setSidebar("webber");
+                  router.push("/weaver/dashboard");
+                  setLoading(true);
+                  setUserType("weaver");
                 }
               }}
             />
             <RiNotificationLine className="md:flex hidden" />
             <BiMessageRounded className="md:flex hidden" />
 
-            <div className="w-[40px] h-[40px] rounded-full overflow-hidden md:flex hidden">
-              {userType !== "" && (
-                <Image
-                  className="w-[40px] h-[40px]"
-                  width={200}
-                  height={200}
-                  alt="avi"
-                  src={"/images/avatar.jpg"}
-                />
-              )}
+            <div className="w-[24px] h-[24px] rounded-full overflow-hidden md:flex hidden">
+              <Image
+                className="w-[40px] h-[40px]"
+                width={200}
+                height={200}
+                alt="avi"
+                src={"/images/avatar.jpg"}
+              />
             </div>
             <Menu>
               <MenuButton>
@@ -191,7 +189,7 @@ export default function Navbar({ title }: NavbarProps) {
                     if (userType === "weaver") {
                       setLoading(true);
                       setUserType("webber");
-                      router.push("/webber/dashboard");
+                      router.push("/weaver/dashboard");
                       setSidebar("webber");
                     } else {
                       setLoading(true);

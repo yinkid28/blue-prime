@@ -42,6 +42,7 @@ const config: Config = {
         criteriaBg: "#E3E5FE",
         criteria: "#2548A0",
         primaryFade: "#424CF970",
+        primaryLightest: "#424CF940",
       },
     },
   },

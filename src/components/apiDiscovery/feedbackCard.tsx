@@ -6,11 +6,12 @@ import { FaMinus } from "react-icons/fa";
 import { TbMessageCircle } from "react-icons/tb";
 import { Dispatch, SetStateAction } from "react";
 import { IMockFeedback } from "./feedbackView";
+import { IComment } from "@/models/api.model";
 
 type FeedProp = {
-  item: IMockFeedback;
+  item: IComment;
   setView: Dispatch<SetStateAction<string>>;
-  setCurrentItem: Dispatch<SetStateAction<IMockFeedback>>;
+  setCurrentItem: Dispatch<SetStateAction<IComment>>;
 };
 export default function FeedbackCard({
   item,
@@ -36,9 +37,9 @@ export default function FeedbackCard({
               className="w-full h-full"
             />
           </div>
-          <p className="text-mid-grey text-sm">{item.name}</p>
+          <p className="text-mid-grey text-sm">{item.createdBy}</p>
         </div>
-        <div className="w-fit px-3 py-1 bg-light-grey rounded-xl flex items-center gap-3">
+        {/* <div className="w-fit px-3 py-1 bg-light-grey rounded-xl flex items-center gap-3">
           <IoMdAdd
             className="text-mid-grey cursor-pointer font-bold z-10"
             onClick={() => {
@@ -48,17 +49,17 @@ export default function FeedbackCard({
           />
           <p className="text-primary text-sm font-bold">12</p>
           <FaMinus className="text-mid-grey cursor-pointer" />
-        </div>
+        </div> */}
       </div>
-      <p className="text-dark-grey">{item.comment}</p>
+      <p className="text-dark-grey">{item.content}</p>
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-2">
           <TbMessageCircle className="text-mid-grey" />
           <p className="text-mid-grey text-sm font-semibold">
-            {item.replies} replies
+            {item.replies.list.length} replies
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <div className="w-[15px] h-[15px] rounded bg-mid-grey overflow-hidden">
             <Image
               src={img}
@@ -71,7 +72,7 @@ export default function FeedbackCard({
           <p className="text-mid-grey text-sm">
             Mr Majekodunmi <span className="font-semibold">replied</span>
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

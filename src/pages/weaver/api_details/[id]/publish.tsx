@@ -86,7 +86,7 @@ export default function Publish() {
               <div className="flex items-center gap-3 mb-5">
                 <div className="w-6 h-6 rounded bg-mid-grey overflow-hidden">
                   <Image
-                    src={api?.img as StaticImageData}
+                    src={"/images/apiMock.webp"}
                     alt="icon"
                     width={200}
                     height={200}
@@ -94,7 +94,7 @@ export default function Publish() {
                   />
                 </div>
                 <div className="">
-                  <p className="font-semibold text-base">{api?.title}</p>
+                  <p className="font-semibold text-base">{api?.name}</p>
                 </div>
               </div>
 

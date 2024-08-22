@@ -2,6 +2,9 @@ import { MdAdd } from "react-icons/md";
 import FeedbackCard from "./feedbackCard";
 import { Dispatch, SetStateAction, useState } from "react";
 import FeedBackCardDetails from "./feedbackDetails";
+import CreateComment from "../modals/createCommentModal";
+import { Skeleton, useDisclosure } from "@chakra-ui/react";
+import { IComment } from "@/models/api.model";
 export type IMockFeedback = {
   name: string;
   comment: string;
@@ -9,68 +12,72 @@ export type IMockFeedback = {
 };
 
 type FeedbackViewProps = {
-  commentButtonDisplay: boolean;
+  commentButtonDisplay?: boolean;
   ratingButton?: boolean;
+  feedbacks: IComment[];
+  isLoading: boolean;
+  canReply?: boolean;
+  // getComments: (aco: string, limit: number, offset: number) => void;
 };
 export default function FeedbackView({
   commentButtonDisplay,
   ratingButton,
-}: FeedbackViewProps) {
+  feedbacks,
+  isLoading,
+  canReply,
+}: // getComments,
+FeedbackViewProps) {
   const [view, setView] = useState<string>("all");
-  const [currentItem, setCurrentItem] = useState<IMockFeedback>();
-  const feedback: IMockFeedback[] = [
-    {
-      name: "CodewithSomya",
-      comment:
-        "Ask CDCR San Quintin State Prison 2008. We installed Purex dispensers throughout the prison to comba",
-      replies: 7,
-    },
-    {
-      name: "CodewithSomya",
-      comment:
-        "Ask GBOYEGA San Quintin State Prison 2008. We installed Purex dispensers throughout the prison to comba",
-      replies: 7,
-    },
-    {
-      name: "CodewithSomya",
-      comment:
-        "Ask CDCR San Quintin State Prison 2008. We installed Purex dispensers throughout the prison to comba",
-      replies: 7,
-    },
-    {
-      name: "CodewithSomya",
-      comment:
-        "Ask CDCR San Quintin State Prison 2008. We installed Purex dispensers throughout the prison to comba",
-      replies: 7,
-    },
-  ];
+  const [currentItem, setCurrentItem] = useState<IComment>();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isReplyOpen,
+    onOpen: onReplyOpen,
+    onClose: onReplyClose,
+  } = useDisclosure();
+
   return (
     <div className="w-full flex flex-col-reverse md:flex-row justify-between">
-      <div className="w-full md:w-[65%]">
+      <div className="w-full md:w-[65%] flex flex-col gap-2">
         {view === "all" ? (
           <>
-            {feedback.map((item, index) => (
-              <FeedbackCard
-                item={item}
-                setView={setView}
-                setCurrentItem={
-                  setCurrentItem as Dispatch<SetStateAction<IMockFeedback>>
-                }
-                key={index}
-              />
-            ))}
+            {isLoading ? (
+              [1, 2, 3, 4].map((item, index) => (
+                <Skeleton key={index} w={"100%"} borderRadius={12} h={100} />
+              ))
+            ) : feedbacks.length > 0 ? (
+              feedbacks.map((item, index) => (
+                <FeedbackCard
+                  item={item}
+                  setView={setView}
+                  setCurrentItem={
+                    setCurrentItem as Dispatch<SetStateAction<IComment>>
+                  }
+                  key={index}
+                />
+              ))
+            ) : (
+              <>
+                <p>No comments yet</p>
+              </>
+            )}
           </>
         ) : (
           <FeedBackCardDetails
             setView={setView}
-            feedback={currentItem as IMockFeedback}
+            onReplyOpen={onOpen}
+            feedback={currentItem as IComment}
+            canReply={canReply}
           />
         )}
       </div>
 
       <div className="md:w-[35%] w-full gap-2 flex justify-end">
         {commentButtonDisplay && (
-          <button className="flex gap-2 items-center rounded-lg text-primary w-fit h-fit border-2 border-light-grey px-3 py-1">
+          <button
+            onClick={onOpen}
+            className="flex gap-2 items-center rounded-lg text-primary w-fit h-fit border-2 border-light-grey px-3 py-1"
+          >
             <MdAdd />
             <p>Comment</p>
           </button>
@@ -82,6 +89,12 @@ export default function FeedbackView({
           </button>
         )}
       </div>
+      <CreateComment
+        isOpen={isOpen}
+        onClose={onClose}
+        to={currentItem ? currentItem.id : undefined}
+        // getComments={getComments}
+      />
     </div>
   );
 }

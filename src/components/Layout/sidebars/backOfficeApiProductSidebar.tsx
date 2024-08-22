@@ -1,4 +1,5 @@
 import { useOnboarding } from "@/context/OnboardingContext";
+import { IApi } from "@/models/api.model";
 import { IMockApi } from "@/models/apidiscovery.model";
 import { Badge } from "@chakra-ui/react";
 import Image from "next/image";
@@ -8,14 +9,20 @@ import { IoBookmarkOutline } from "react-icons/io5";
 import { MdHomeFilled } from "react-icons/md";
 
 type sideBarProps = {
-  api: IMockApi;
+  api: IApi;
 };
 export default function BackofficeApiProductSidebar({ api }: sideBarProps) {
   const router = useRouter();
   const { setSidebar } = useOnboarding();
   return (
     <div className="bg-white rounded p-5 h-full flex flex-col gap-4 ">
-      <p className="text-2xl">Logo</p>
+      <Image
+        src={"/icons/logo.svg"}
+        alt="logo"
+        width={200}
+        height={100}
+        className="w-[80%]"
+      />
       <div
         className="flex items-center gap-2 cursor-pointer"
         onClick={() => {
@@ -30,7 +37,7 @@ export default function BackofficeApiProductSidebar({ api }: sideBarProps) {
         <div className="flex items-center gap-2">
           <div className="w-[50px] h-[50px] rounded bg-mid-grey overflow-hidden">
             <Image
-              src={api.img}
+              src={"/images/api_icons/apiMock.webp"}
               alt="icon"
               width={200}
               height={200}
@@ -38,11 +45,11 @@ export default function BackofficeApiProductSidebar({ api }: sideBarProps) {
             />
           </div>
           <div className="">
-            <p className="font-semibold">{api.title}</p>
+            <p className="font-semibold">{api.name}</p>
             <div className="flex items-center gap-2">
               <div className="w-[10px] h-[10px] rounded-full bg-mid-grey overflow-hidden">
                 <Image
-                  src={api.img}
+                  src={"/images/api_icons/apiMock.webp"}
                   alt="icon"
                   width={200}
                   height={200}
@@ -64,7 +71,9 @@ export default function BackofficeApiProductSidebar({ api }: sideBarProps) {
         </div>
       </div>
       <div className="flex flex-col gap-3">
-        <p className="font-semibold text-primary text-sm">{api.category}</p>
+        <p className="font-semibold text-primary text-sm">
+          {api.categories[0]}
+        </p>
         <p className="text-sm text-dark-grey">{api.description}</p>
       </div>
 

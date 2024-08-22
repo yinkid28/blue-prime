@@ -60,6 +60,8 @@ export type IUser = {
   officeState: any;
   officeCountry: any;
   usageLocation: string;
+
+  customerCode: string;
   language: {
     id: number;
     languageName: string;

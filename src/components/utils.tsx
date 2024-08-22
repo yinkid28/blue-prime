@@ -1,6 +1,7 @@
+import { Spinner } from "@chakra-ui/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useState, createContext, useContext } from "react";
+import React, { useState, createContext, useContext, useEffect } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 import { MdSearch } from "react-icons/md";
@@ -9,20 +10,28 @@ import { MdSearch } from "react-icons/md";
 type ButtonProps = {
   type?: string;
   text: string;
-  onClick: () => void;
+  onClick: (e: any) => void;
   className?: string;
   Type?: "button" | "reset" | "submit";
+  loading?: boolean;
 };
-export function Button({ type, text, onClick, className, Type }: ButtonProps) {
+export function Button({
+  type,
+  text,
+  onClick,
+  className,
+  Type,
+  loading,
+}: ButtonProps) {
   return (
     <button
       className={`${
         type === "fit" ? "w-fit" : "w-full"
-      } px-4 py-2 text-center bg-primaryGradient hover:bg-secondaryGradient text-white rounded-lg ${className}`}
+      } px-4 py-2 text-center text-sm bg-primaryGradient hover:bg-secondaryGradient text-white rounded-lg ${className}`}
       onClick={onClick}
       type={Type}
     >
-      {text}
+      {loading ? <Spinner size={"sm"} /> : text}
     </button>
   );
 }
@@ -42,7 +51,7 @@ export function Input({
   const handleClick = () => setShow(!show);
 
   return (
-    <div className="w-full border border-light-grey rounded flex items-center justify-between p-2">
+    <div className="w-full border border-light-grey  rounded flex items-center justify-between p-2">
       <input
         type={
           secondaryElement && show
@@ -101,11 +110,13 @@ export function BreadCrumbs({
           key={index}
         >
           <FaChevronRight className="text-sm" />
-          <p className="text-mid-grey font-semibold">{item.breadCrumbText}</p>
+          <p className="text-mid-grey text-sm font-semibold">
+            {item.breadCrumbText}
+          </p>
         </div>
       ))}
       <FaChevronRight className="text-sm" />
-      <p className="text-black  font-semibold">{breadCrumbActiveItem}</p>
+      <p className="text-black text-sm font-semibold">{breadCrumbActiveItem}</p>
     </div>
   );
 }
@@ -220,3 +231,102 @@ function Body({ data, render }: TableTypes) {
 Table.Header = Header;
 Table.Heading = Heading;
 Table.Body = Body;
+
+type paginationProps = {
+  pageCount: number;
+  onPageClick: (page: number) => void;
+  inc?: boolean;
+};
+export default function GlobalPagination({
+  pageCount = 10,
+  onPageClick,
+  inc,
+}: paginationProps) {
+  const [activePage, setActivePage] = useState<number>(inc ? 1 : 0);
+
+  const handlePageClick = (page: number) => {
+    if (page != activePage) {
+      setActivePage(page);
+      onPageClick(page);
+    }
+  };
+  const handleNext = () => {
+    setActivePage((prevPage) => {
+      const nextPage = prevPage <= pageCount - 1 ? prevPage + 1 : prevPage;
+      if (nextPage !== prevPage) {
+        onPageClick(nextPage);
+      }
+      return nextPage;
+    });
+  };
+  const handlePrev = () => {
+    if (activePage > 0) {
+      const prevPage = activePage - 1;
+      console.log(prevPage, "going bsck");
+      setActivePage(prevPage);
+      onPageClick(prevPage);
+    }
+  };
+
+  useEffect(() => {
+    console.log(activePage);
+  }, [activePage]);
+
+  return (
+    <div
+      className="flex gap-2 items-center"
+      style={{
+        width: "fit-content",
+      }}
+    >
+      <div
+        className="bg-primary hover:bg-primaryFade px-3 py-1 rounded-lg text-white text-sm font-semibold w-fit h-fit"
+        style={{ cursor: "pointer" }}
+        onClick={() => handlePrev()}
+      >
+        <p className="mb-0">Previous</p>
+      </div>
+      <div className="flex gap-2 items-center" style={{ width: "fit-content" }}>
+        {Array.from({ length: pageCount }, (_, index) => {
+          const newIndex = inc ? index + 1 : index;
+          return (
+            <div
+              key={newIndex} // Key should be unique, so using newIndex + 1
+              className={`px-3 py-2 rounded-lg  text-sm font-semibold w-fit h-fit${
+                activePage === newIndex ? " text-primary" : "text-primary"
+              }`}
+              onClick={() => handlePageClick(newIndex)} // Handling click
+              style={{ cursor: "pointer" }}
+            >
+              <p className="mb-0">{index + 1}</p>
+            </div>
+          );
+        })}
+      </div>
+      <div
+        className="bg-primary hover:bg-primaryFade px-3 py-1 rounded-lg text-white text-sm font-semibold w-fit h-fit"
+        style={{ cursor: "pointer" }}
+        onClick={() => handleNext()}
+      >
+        <p className="mb-0">Next</p>
+      </div>
+    </div>
+  );
+}
+
+export type Base64<imageType extends string> =
+  `data:image/${imageType};base64,${string}`;
+
+export function dataURLtoFile(dataurl: any, filename: string) {
+  if (!dataurl) return;
+  if (!filename) return;
+  const arr = dataurl.split(",");
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[arr.length - 1]);
+  let n = bstr.length;
+  let u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], filename, { type: mime });
+}

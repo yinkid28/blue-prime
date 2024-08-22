@@ -10,6 +10,7 @@ import {
   Show,
 } from "@chakra-ui/react";
 import { IoMenu } from "react-icons/io5";
+import Image from "next/image";
 
 export default function BackOfficeSidebar() {
   const router = useRouter();
@@ -20,7 +21,13 @@ export default function BackOfficeSidebar() {
     <div className="w-full h-full rounded text-[14px] bg-white text-dark-txt p-5 md:p-6">
       <div className="flex flex-col gap-6">
         <div className="flex justify-between items-center">
-          <p className="text-2xl font-semibold md:mt-2">Logo</p>
+          <Image
+            src={"/icons/logo.svg"}
+            alt="logo"
+            width={200}
+            height={100}
+            className="w-[80%]"
+          />
           <IoMenu
             size={23}
             onClick={isOpen ? onClose : onOpen}

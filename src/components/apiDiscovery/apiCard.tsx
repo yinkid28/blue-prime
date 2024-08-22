@@ -34,12 +34,12 @@ export default function ApiCard({
       onClick={() => {
         setLoading(true);
         router.push(`/api_discovery/api_product/${title}`);
-        setApi({
-          img,
-          title,
-          description,
-          category,
-        });
+        // setApi({
+        //   img,
+        //   title,
+        //   description,
+        //   category,
+        // });
         setSidebar("api");
       }}
     >

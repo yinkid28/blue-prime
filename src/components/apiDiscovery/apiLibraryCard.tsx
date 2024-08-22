@@ -8,26 +8,25 @@ import { FaRegClock, FaRegEye, FaRegStar } from "react-icons/fa";
 import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
 import { motion } from "framer-motion";
 import { toTitleCase } from "../utils";
+import { IApi } from "@/models/api.model";
 
 // THE ONLY THING DIFFERENT HERE IS STYLING AND THE PROPS PASSED.
 
-type dataToBeUsed = {
-  id: number;
-  img: any;
+type ApiCardPropsd = {
+  img: string;
   title: string;
   description: string;
   category: string;
-  bookmarked: boolean;
+  api: IApi;
 };
-
 type ApiCardProps = {
-  img: StaticImageData;
+  img: string;
   title: string;
   description: string;
   category: string;
   bookmarked: boolean;
-  item: IMockApi;
-  onToggleBookmarked: (apiId: number, item: IMockApi) => void;
+  api: IApi;
+  onToggleBookmarked: () => void;
 
   // FROM FRAMER MOTION
   layout?: any;
@@ -44,7 +43,7 @@ export default function ApiCard({
   category,
   bookmarked,
   onToggleBookmarked,
-  item,
+  api,
   initial,
   animate,
   exit,
@@ -60,29 +59,23 @@ export default function ApiCard({
       animate={animate}
       exit={exit}
       transition={transition}
-      className="w-full border-[1px] cursor-pointer border-light-grey hover:shadow-md rounded-lg p-3 flex flex-col gap-3"
+      className="w-full border-[1px]  cursor-pointer border-light-grey hover:shadow-md rounded-lg p-3 flex flex-col justify-between gap-3"
       onClick={() => {
         setLoading(true);
         if (router.asPath === "/api_discovery") {
-          router.push(`/api_discovery/api_product/${title}`);
+          router.push(`/api_discovery/api_product/${api.apiCode}`);
           setSidebar("api");
         } else {
           setSidebar("apiProgressWeaver");
-          router.push(`/weaver/library/${toTitleCase(title, true)}/overview`);
+          router.push(`/webber/library/${api.apiCode}/overview`);
         }
-        // I would comment all these ones for now ↓
-        setApi({
-          img,
-          title,
-          description,
-          category,
-        });
+        setApi(api);
       }}
     >
-      <div className="w-full flex justify-between">
+      <div className="w-full  flex justify-between">
         <div className="w-[50px] h-[50px] rounded bg-mid-grey overflow-hidden">
           <Image
-            src={img}
+            src={"/images/api_icons/apiMock.webp"}
             alt="icon"
             width={200}
             height={200}
@@ -93,7 +86,7 @@ export default function ApiCard({
           className="hover:text-primary cursor-pointer"
           onClick={(e) => {
             e.stopPropagation();
-            onToggleBookmarked(item.id as number, item);
+            onToggleBookmarked();
           }}
         >
           {bookmarked ? <IoBookmark /> : <IoBookmarkOutline />}
@@ -101,26 +94,28 @@ export default function ApiCard({
       </div>
 
       <div className="flex flex-col gap-2">
-        <p className="font-semibold text-dark-grey">{title}</p>
-        <p className="text-sm text-dark-grey">{description}</p>
+        <p className="font-semibold text-sm  text-dark-grey">{title}</p>
+        <p className="text-xs text-dark-grey">{description}</p>
       </div>
-      <div className="w-fit px-4 py-1 rounded-full bg-category-fade text-category">
-        <p className="font-semibold text-sm">{category}</p>
+      <div className="w-fit px-2 py-[2px] rounded-full bg-category-fade text-category">
+        <p className="font-semibold text-xs">
+          {api.monetizationLabel || api.lifeCycleStatus}
+        </p>
       </div>
-      <div className="flex items-center text-xs justify-between">
+      {/* <div className="flex items-center text-xs justify-between">
         <div className="flex items-center gap-1">
           <FaRegEye className=" text-mid-grey" />
-          <p className="font-thin text-mid-grey">10k</p>
+          <p className="font-thin text-xs text-mid-grey">10k</p>
         </div>
         <div className="flex items-center gap-1">
           <FaRegStar className=" text-mid-grey" />
-          <p className="font-thin text-mid-grey">4.0/5</p>
+          <p className="font-thin text-xs  text-mid-grey">4.0/5</p>
         </div>
         <div className="flex items-center gap-1">
           <FaRegClock className=" text-mid-grey" />
-          <p className="font-thin text-mid-grey">100ms</p>
+          <p className="font-thin text-xs text-mid-grey">100ms</p>
         </div>
-      </div>
+      </div> */}
     </motion.div>
   );
 }

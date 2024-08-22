@@ -12,13 +12,13 @@ export function ApiInformationView() {
         <div className="space-y-[19px]">
           <div className="flex flex-col lg:flex-row gap-3">
             <Image
-              src={api?.img as StaticImageData}
+              src={"/images/api_icons/apiMock.webp"}
               alt="icon"
               width={42}
               height={42}
             />
             <div className="flex flex-col gap-[2px]">
-              <h3 className="text-sm font-semibold">{api?.title}</h3>
+              <h3 className="text-sm font-semibold">{api?.name}</h3>
               <div className="flex gap-2">
                 <Image
                   src={profileImage}
@@ -26,7 +26,7 @@ export function ApiInformationView() {
                   width={16}
                   height={16}
                 />
-                <p>Mr MajekFashek_</p>
+                <p>{api?.businessInformation.businessOwner}</p>
               </div>
             </div>
           </div>
@@ -35,26 +35,21 @@ export function ApiInformationView() {
               Created: 12th Dec 2024
             </p>
             <p className="bg-dark-grey-fade whitespace-nowrap text-xs text-blue-dark rounded-full px-2 py-[1.5px]">
-              Version 1
+              Version {api?.version}
             </p>
           </div>
-          <p className="text-blue-dark text-xs font-semibold">Entertainment</p>
+          <p className="text-blue-dark text-xs font-semibold">
+            {api?.monetizationLabel || api?.lifeCycleStatus}
+          </p>
         </div>
-        <p className="text-base text-dark-grey">
-          The app is a comprehensive resource that can help you stay up-to-date
-          on everything that&apos;s happening at the company. You can find news
-          articles, blog posts, videos, and presentations about company
-          initiatives, product launches, and employee successes. You can also
-          find information about upcoming events, training opportunities, and
-          resources for your work.
-        </p>
+        <p className="text-base text-dark-grey">{api?.description}</p>
         {/* resources and links section */}
-        <div className="space-y-2 p-4 bg-resources-bg rounded-lg border-light-grey border">
+        {/* <div className="space-y-2 p-4 bg-resources-bg rounded-lg border-light-grey border">
           <p className="text-blue-dark font-bold">Resources and Links</p>
           <p className="text-mid-grey font-bold">
             https://www.dnncw8h,com/dju/djvb
           </p>
-        </div>
+        </div> */}
       </div>
 
       <div className="border rounded-lg space-y-4 w-full md:w-[65%] p-4 h-fit lg:h-[70dvh]">
@@ -62,24 +57,45 @@ export function ApiInformationView() {
         <div className="flex flex-col items-start lg:grid lg:grid-cols-2 w-[50%] h-fit">
           <p className="font-semibold text-dark-grey">Base URL</p>
           <p className="whitespace-nowrap text-dark-txt">
-            https://howtocode.com
+            {api?.endpointConfig
+              ? api?.endpointConfig?.production_endpoints?.url
+              : ""}
           </p>
         </div>
         <div className="flex flex-col items-start lg:grid lg:grid-cols-2 w-[50%] h-fit">
           <p className="font-semibold text-dark-grey">Context</p>
-          <p className="whitespace-nowrap text-dark-txt">/specs</p>
+          <p className="whitespace-nowrap text-dark-txt">{api?.context}</p>
         </div>
         <div className="flex flex-col items-start lg:grid lg:grid-cols-2 w-[50%] h-fit">
           <p className="font-semibold text-dark-grey">Type</p>
-          <p className="whitespace-nowrap text-dark-txt">https</p>
+          <p className="whitespace-nowrap text-dark-txt">{api?.type}</p>
         </div>
         <div className="flex flex-col items-start lg:grid lg:grid-cols-2 w-[50%] h-fit">
           <p className="font-semibold text-dark-grey">Transports</p>
-          <p className="whitespace-nowrap text-dark-txt">HTTPS</p>
+          <p className="whitespace-nowrap text-dark-txt">
+            {" "}
+            {api && api?.transport?.length > 0
+              ? api?.transport.map(
+                  (item, index) =>
+                    `${item.toUpperCase()}${
+                      index !== api.transport.length - 1 ? "," : ""
+                    }`
+                )
+              : "HTTPS"}
+          </p>
         </div>
         <div className="flex flex-col items-start lg:grid lg:grid-cols-2 w-[50%] h-fit">
           <p className="font-semibold text-dark-grey">API Security</p>
-          <p className="whitespace-nowrap text-dark-txt">OAuth2_</p>
+          <p className="whitespace-nowrap text-dark-txt">
+            {api && api?.securityScheme?.length > 0
+              ? api?.securityScheme.map(
+                  (item, index) =>
+                    `${item}${
+                      index !== api.securityScheme.length - 1 ? "," : ""
+                    }`
+                )
+              : "OAuth2_"}
+          </p>
         </div>
         <div className="flex flex-col items-start lg:grid lg:grid-cols-2 w-[50%] h-fit">
           <p className="font-semibold text-dark-grey">Access Control</p>
@@ -88,13 +104,17 @@ export function ApiInformationView() {
         <div className="flex flex-col items-start lg:grid lg:grid-cols-2 w-[50%] h-fit">
           <p className="font-semibold text-dark-grey">Production Endpoint</p>
           <p className="md:whitespace-nowrap text-dark-txt">
-            https://loacalhost:8494/pg/sample/opinions
+            {api?.endpointConfig
+              ? api?.endpointConfig?.production_endpoints?.url
+              : ""}
           </p>
         </div>
         <div className="flex flex-col items-start lg:grid lg:grid-cols-2 w-[50%] h-fit">
           <p className="font-semibold text-dark-grey">Sandbox Endpoint</p>
           <p className="md:whitespace-nowrap text-dark-txt">
-            https://loacalhost:8494/pg/sample/opinions
+            {api?.endpointConfig
+              ? api?.endpointConfig?.sandbox_endpoints?.url
+              : ""}
           </p>
         </div>
       </div>

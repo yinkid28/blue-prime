@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { useApi } from "@/context/ApiDiscoveryContext";
+import { IApi } from "@/models/api.model";
 const AdminLayout = dynamic(() => import("@/components/Layout/adminLayout"), {
   ssr: false,
 });
@@ -131,12 +132,12 @@ export default function AdminApiManager() {
             <Table.Heading>Status</Table.Heading>
             <Table.Heading className="w-[5%]">Action</Table.Heading>
           </Table.Header>
-          <Table.Body
+          {/* <Table.Body
             data={apis}
             render={(item: IMockApi, index: number) => (
               <TableRow key={index} api={item} />
             )}
-          />
+          /> */}
         </Table>
       </div>
     </AdminLayout>
@@ -144,7 +145,7 @@ export default function AdminApiManager() {
 }
 
 type APIM = {
-  api: IMockApi;
+  api: IApi;
 };
 function TableRow({ api }: APIM) {
   const router = useRouter();
@@ -155,7 +156,7 @@ function TableRow({ api }: APIM) {
       onClick={() => {
         router.push(
           `/admin_back_office/api_management/${toTitleCase(
-            api.title,
+            api.name,
             true
           )}/overview`
         );
@@ -163,10 +164,10 @@ function TableRow({ api }: APIM) {
       }}
     >
       <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
-        {api.title}
+        {api.name}
       </td>
       <td className="px-6 py-4 text-sm border-t">v1</td>
-      <td className="px-6 py-4 text-sm border-t">{api.category}</td>
+      <td className="px-6 py-4 text-sm border-t">{api.categories[0]}</td>
       <td className="px-6 py-4 text-sm border-t">
         <div
           className={`w-fit bg-success-bg text-success px-3 py-1 rounded-full`}

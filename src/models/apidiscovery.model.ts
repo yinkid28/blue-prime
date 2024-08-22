@@ -1,4 +1,5 @@
 import { StaticImageData } from "next/image";
+import { IApi } from "./api.model";
 export type IMockApi = {
   id?: number;
   img: StaticImageData;
@@ -8,8 +9,8 @@ export type IMockApi = {
   bookmarked?: boolean;
 };
 export type ApiDiscoveryInititals = {
-  api: IMockApi | null;
-  bookmarkedAPIs: IMockApi[];
+  api: IApi | null;
+  bookmarkedAPIs: IApi[];
   libraryView: string;
   apiProduct: IMockapiProduct | null;
 };
