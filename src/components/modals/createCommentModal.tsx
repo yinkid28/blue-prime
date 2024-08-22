@@ -19,27 +19,32 @@ type addEndpointModalProps = {
   isOpen: boolean;
   onClose: () => void;
   to?: string;
+  // getComments: (aco: string, limit: number, offset: number) => void;
 };
 export default function CreateComment({
   isOpen,
   onClose,
   to,
-}: addEndpointModalProps) {
+}: // getComments,
+addEndpointModalProps) {
   const { api, setApi } = useApi();
   const toast = useToast();
   const router = useRouter();
   const { loading, setLoading, setApiErrorMessage } = useOnboarding();
   const [content, setContent] = useState<string>("");
+  const [isCreating, setIsCreating] = useState<boolean>(false);
 
   const createComment = async (aco: string, to?: string) => {
     const data = {
       content,
       category: "",
     };
+    setIsCreating(true);
     try {
       const res = await APIServices.createComment(data, aco, to);
       if (res.statusCode === 201) {
         // setComments(res.data);
+        setIsCreating(false);
         toast({
           title: "Feedback",
           description: "Feedback Saved",
@@ -48,10 +53,13 @@ export default function CreateComment({
           position: "bottom-right",
         });
         onClose();
+        // getComments(api?.apiCode as string, 10, 0);
+        router.reload();
       }
       setLoading(false);
     } catch (error: any) {
-      setLoading(false);
+      setIsCreating(false);
+      console.log(error);
       const errorMessage = error?.response?.data?.message;
       setApiErrorMessage(errorMessage, "error");
     }
@@ -83,8 +91,12 @@ export default function CreateComment({
                 type="fit"
                 text="Save"
                 onClick={() => {
-                  createComment(api?.apiCode as string, to);
+                  createComment(
+                    api?.apiCode as string,
+                    to !== undefined ? to : undefined
+                  );
                 }}
+                loading={isCreating}
               />
             </div>
           </div>

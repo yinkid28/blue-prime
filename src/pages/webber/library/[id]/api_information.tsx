@@ -6,6 +6,7 @@ import {
 import { BreadCrumbItems, BreadCrumbs } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
+import APIServices from "@/services/api_services/api_service";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -15,9 +16,11 @@ const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
 });
 
 export default function ApiOverview() {
-  const { api } = useApi();
+  const { api, setApi } = useApi();
   const router = useRouter();
-  const { loading, setLoading, setSidebar } = useOnboarding();
+  const { id } = router.query;
+  const { loading, setLoading, setSidebar, setApiErrorMessage } =
+    useOnboarding();
   useEffect(() => {
     setLoading(false);
     setSidebar("apiProgressWeaver");
@@ -30,7 +33,22 @@ export default function ApiOverview() {
   ];
 
   const [apiInfoView, setApiInfoView] = useState<string>("api-information");
-
+  const getApi = async (aco: string) => {
+    try {
+      const res = await APIServices.getSingleApiDev(aco);
+      console.log(res);
+      if (res.statusCode === 200) {
+        setApi(res.data);
+        // setSandBoxurl(res.data.endpointConfig.sandbox_endpoints.url);
+        // setProdurl(res.data.endpointConfig.production_endpoints.url);
+      }
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
   return (
     <>
       <WeaverLayout>

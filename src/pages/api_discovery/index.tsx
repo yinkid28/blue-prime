@@ -18,7 +18,7 @@ import icon9 from "../../../public/images/api_icons/icon9.jpg";
 
 import { useEffect, useState } from "react";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { Skeleton, Spinner } from "@chakra-ui/react";
+import { Skeleton, Spinner, useToast } from "@chakra-ui/react";
 import { RegisterUserDto } from "@/models/onboarding.model";
 import OnboardingServices from "@/services/onboarding_services/onboarding_services";
 import { IMockApi } from "@/models/apidiscovery.model";
@@ -28,7 +28,7 @@ import APIServices from "@/services/api_services/api_service";
 import { IApi } from "@/models/api.model";
 
 export default function ApiDiscoveryDashboard() {
-  const { setSidebar, loading, setLoading, setApiErrorMessage } =
+  const { setSidebar, loading, setLoading, setApiErrorMessage, user } =
     useOnboarding();
   const { setBookMarked, bookmarkedAPIs } = useApi();
   const [isfetchingApis, setIsLoading] = useState<boolean>(false);
@@ -148,6 +148,7 @@ export default function ApiDiscoveryDashboard() {
       bookmarked: false,
     },
   ];
+  const toast = useToast();
   const [allApis, setAllApis] = useState<IMockApi[]>(rec);
   const getApis = async (pageNo: number, pageSize: number) => {
     setIsLoading(true);
@@ -165,17 +166,28 @@ export default function ApiDiscoveryDashboard() {
       setApiErrorMessage(errorMessage, "error");
     }
   };
+  const bookmarkApis = async (cco: string, aco: string) => {
+    setIsLoading(true);
 
-  function toggleBookmarked(apiCode: string) {
-    // const itemsWithBookMarks = allApis.map((data) =>
-    //   data.id === apiId ? { ...data, bookmarked: !data.bookmarked } : data
-    // );
-    // const filteredApi = allApis.filter((api) => api.bookmarked === true);
-    // console.log(filteredApi, "filtered");
-    // setBookMarked([...bookmarkedAPIs, ...filteredApi]);
-    // setAllApis(itemsWithBookMarks);
-    console.log("first");
-  }
+    try {
+      const res = await APIServices.bookmarkApi(aco, cco);
+      if (res.statusCode === 201) {
+        toast({
+          description: "API added to bookmarks",
+          status: "success",
+          duration: 3000,
+          position: "bottom-left",
+        });
+        setIsLoading(false);
+      }
+    } catch (error: any) {
+      setIsLoading(false);
+
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
+
   useEffect(() => {
     setSidebar("");
     setLoading(false);
@@ -207,7 +219,9 @@ export default function ApiDiscoveryDashboard() {
                 description={item.description}
                 bookmarked={false}
                 api={item}
-                onToggleBookmarked={toggleBookmarked}
+                onToggleBookmarked={() => {
+                  bookmarkApis(user?.customerCode as string, item.apiCode);
+                }}
               />
             ))
           ) : (

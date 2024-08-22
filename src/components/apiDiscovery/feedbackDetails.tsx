@@ -9,11 +9,13 @@ type FeedProp = {
   feedback: IComment;
   setView: Dispatch<SetStateAction<string>>;
   onReplyOpen: () => void;
+  canReply?: boolean;
 };
 export default function FeedBackCardDetails({
   feedback,
   setView,
   onReplyOpen,
+  canReply,
 }: FeedProp) {
   return (
     <div className="flex flex-col w-full gap-5">
@@ -40,13 +42,15 @@ export default function FeedBackCardDetails({
           </div>
         </div>
         <p className="text-dark-grey">{feedback.content}</p>
-        <div
-          className="flex justify-end text-primary items-center"
-          onClick={onReplyOpen}
-        >
-          <TbMessageCircle />
-          <p className="font-semibold text-sm">Add Reply </p>
-        </div>
+        {canReply ? (
+          <div
+            className="flex justify-end cursor-pointer text-primary items-center"
+            onClick={onReplyOpen}
+          >
+            <TbMessageCircle />
+            <p className="font-semibold  text-sm">Add Reply </p>
+          </div>
+        ) : null}
       </div>
       <div className="flex flex-col w-full gap-3 items-center">
         {feedback.replies.list.map((item, index) => (

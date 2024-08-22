@@ -160,7 +160,7 @@ export default function ApiOverview() {
                                     `/weaver/api_details/${toTitleCase(
                                       api!.name,
                                       true
-                                    )}/endpoints?apicode=${apiCode}`
+                                    )}/endpoints?apiCode=${apiCode}`
                                   )
                                 }
                               >
@@ -181,7 +181,7 @@ export default function ApiOverview() {
                                   `/weaver/api_details/${toTitleCase(
                                     api!.name,
                                     true
-                                  )}/business_information?apicode=${apiCode}`
+                                  )}/business_information?apiCode=${apiCode}`
                                 )
                               }
                             >
@@ -230,13 +230,13 @@ export default function ApiOverview() {
                         <AccordionPanel p={4}>
                           <div className="flex flex-col pl-8 gap-3">
                             <div
-                              className="flex items-center gap-2"
+                              className="flex items-center cursor-pointer gap-2"
                               onClick={() =>
                                 router.push(
                                   `/weaver/api_details/${toTitleCase(
                                     api!.name,
                                     true
-                                  )}/deploy?apicode=${apiCode}`
+                                  )}/deploy?apiCode=${apiCode}`
                                 )
                               }
                             >

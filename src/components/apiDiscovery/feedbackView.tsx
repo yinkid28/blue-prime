@@ -12,17 +12,21 @@ export type IMockFeedback = {
 };
 
 type FeedbackViewProps = {
-  commentButtonDisplay: boolean;
+  commentButtonDisplay?: boolean;
   ratingButton?: boolean;
   feedbacks: IComment[];
   isLoading: boolean;
+  canReply?: boolean;
+  // getComments: (aco: string, limit: number, offset: number) => void;
 };
 export default function FeedbackView({
   commentButtonDisplay,
   ratingButton,
   feedbacks,
   isLoading,
-}: FeedbackViewProps) {
+  canReply,
+}: // getComments,
+FeedbackViewProps) {
   const [view, setView] = useState<string>("all");
   const [currentItem, setCurrentItem] = useState<IComment>();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -37,26 +41,33 @@ export default function FeedbackView({
       <div className="w-full md:w-[65%] flex flex-col gap-2">
         {view === "all" ? (
           <>
-            {!isLoading
-              ? feedbacks.map((item, index) => (
-                  <FeedbackCard
-                    item={item}
-                    setView={setView}
-                    setCurrentItem={
-                      setCurrentItem as Dispatch<SetStateAction<IComment>>
-                    }
-                    key={index}
-                  />
-                ))
-              : [1, 2, 3, 4].map((item, index) => (
-                  <Skeleton key={index} w={"100%"} borderRadius={12} h={100} />
-                ))}
+            {isLoading ? (
+              [1, 2, 3, 4].map((item, index) => (
+                <Skeleton key={index} w={"100%"} borderRadius={12} h={100} />
+              ))
+            ) : feedbacks.length > 0 ? (
+              feedbacks.map((item, index) => (
+                <FeedbackCard
+                  item={item}
+                  setView={setView}
+                  setCurrentItem={
+                    setCurrentItem as Dispatch<SetStateAction<IComment>>
+                  }
+                  key={index}
+                />
+              ))
+            ) : (
+              <>
+                <p>No comments yet</p>
+              </>
+            )}
           </>
         ) : (
           <FeedBackCardDetails
             setView={setView}
-            onReplyOpen={onReplyOpen}
+            onReplyOpen={onOpen}
             feedback={currentItem as IComment}
+            canReply={canReply}
           />
         )}
       </div>
@@ -78,11 +89,11 @@ export default function FeedbackView({
           </button>
         )}
       </div>
-      <CreateComment isOpen={isOpen} onClose={onClose} />
       <CreateComment
-        isOpen={isReplyOpen}
-        onClose={onReplyClose}
-        to={currentItem?.id}
+        isOpen={isOpen}
+        onClose={onClose}
+        to={currentItem ? currentItem.id : undefined}
+        // getComments={getComments}
       />
     </div>
   );
