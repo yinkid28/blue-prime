@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ApiInformationView } from "@/components/Weaver/apiInformationComponents";
 import ApiInfomationViewWeaver from "@/components/Webber/CreateAPI/apiProgress/ApiInformationView";
+import ApiPricingView from "@/components/Webber/CreateAPI/apiProgress/ApiPricing";
 
 const WebberLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
@@ -60,7 +61,7 @@ export default function ApiInformationWebber() {
                 <p>Resources and Links</p>
               </div>
               <div
-                className={`w-fit hidden h-fit cursor-pointer px-5 py-2 ease-in-out duration-700 hover:border-primary rounded-xl hover:text-primary ${
+                className={`w-fit  h-fit cursor-pointer px-5 py-2 ease-in-out duration-700 hover:border-primary rounded-xl hover:text-primary ${
                   view === "subscription"
                     ? "text-primary border-primary"
                     : "text-mid-grey border-mid-grey"
@@ -69,17 +70,22 @@ export default function ApiInformationWebber() {
                   setView("subscription");
                 }}
               >
-                <p>Subscription Billing</p>
+                <p>Pricing</p>
               </div>
             </div>
             <div className="w-fit h-fit cursor-pointer px-5 py-2 ease-in-out duration-700 border-[1px] border-mid-grey  rounded-xl  bg-transparent border-[1px]">
               <select className="border-none outline-none">
-                <option value="version-1"> Version 1</option>
+                <option value="version-1"> Version {api?.version}</option>
               </select>
             </div>
           </div>
           <div className="my-5 border border-light-grey rounded-lg p-5">
             {view === "info" ? <ApiInfomationViewWeaver /> : null}
+            {view === "subscription" ? (
+              <div className="w-full lg:w-[40%]">
+                <ApiPricingView />
+              </div>
+            ) : null}
           </div>
         </div>
       </WebberLayout>
