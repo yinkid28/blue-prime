@@ -2,7 +2,13 @@ import Navbar from "@/components/Layout/Nav/navbar";
 import { BreadCrumbItems, BreadCrumbs, Table } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
 import dynamic from "next/dynamic";
 import Image, { StaticImageData } from "next/image";
@@ -12,6 +18,7 @@ import { CiMenuKebab } from "react-icons/ci";
 import { UseToastOptions, useToast } from "@chakra-ui/react";
 import { getFormattedDate } from "@/helper_utils/helpers";
 import APIServices from "@/services/api_services/api_service";
+import AddApp from "@/components/modals/addApp";
 
 // remember to use static generation here but for now we will use context to get current api
 const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
@@ -35,9 +42,11 @@ const toastProps: UseToastOptions = {
 
 export default function ApiOverview() {
   const toast = useToast();
+  // const [modalOpen, setModalOpen] = useState<boolean>(false);
   const { api, setApi } = useApi();
   const router = useRouter();
   const { id } = router.query;
+  const { isOpen, onClose, onOpen } = useDisclosure();
   const { loading, setLoading, setSidebar, setApiErrorMessage } =
     useOnboarding();
   const [copied, setCopied] = useState<boolean>(false);
@@ -166,7 +175,10 @@ export default function ApiOverview() {
                   </div>
                 </div>
               </div>
-              <button className="border border-primaryFade text-sm py-2 px-[22px] rounded-lg font-semibold text-primary w-fit">
+              <button
+                onClick={onOpen}
+                className="border border-primaryFade text-sm py-2 px-[22px] rounded-lg font-semibold text-primary w-fit"
+              >
                 Add New App
               </button>
             </div>
@@ -214,6 +226,8 @@ export default function ApiOverview() {
             </Table>
           </div>
         </div>
+
+        <AddApp isOpen={isOpen} onClose={onClose} />
       </WeaverLayout>
     </>
   );
@@ -241,9 +255,21 @@ function TableRow({ name, calls, status, renewDate }: TableRowProps) {
           <MenuButton>
             <CiMenuKebab />
           </MenuButton>
-          <MenuList minW="0" w={"100px"} minH={"0"} h={"70px"}>
+          <MenuList minW="0" minH={"0"} h={"70px"}>
             <MenuItem>
-              <p>Block</p>
+              <p>View Production Keys</p>
+            </MenuItem>
+            <MenuItem>
+              <p>View Test Keys</p>
+            </MenuItem>
+            <MenuItem>
+              <p>Cancel Subscription</p>
+            </MenuItem>
+            <MenuItem>
+              <p>Edit Application</p>
+            </MenuItem>
+            <MenuItem>
+              <p>Delete Application</p>
             </MenuItem>
           </MenuList>
         </Menu>
