@@ -15,6 +15,7 @@ import { IApi } from "@/models/api.model";
 import WeaverProgressSidebar from "./sidebars/weaverProgressSidebar";
 import WebberSidebar from "./sidebars/webberSidebar";
 import ApiProductClientSidebar from "./sidebars/apiProductClientSidebar";
+import AppDetailsWebberSidebar from "./sidebars/appDetailsWebberSidebar";
 
 type LayoutProps = {
   children: React.ReactNode | React.ReactNode[];
@@ -57,6 +58,24 @@ export default function ApiLayout({ children }: LayoutProps) {
             <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[17%_1fr]  gap-2 bg-light-grey p-2">
               <div className="">
                 <MainSidebar />
+              </div>
+
+              <div className="bg-white rounded-t overflow-y-scroll">
+                {children}
+              </div>
+            </div>
+          )}
+        </>
+      );
+    case "appDetails":
+      return (
+        <>
+          {loading ? (
+            <Loader />
+          ) : (
+            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[23%_1fr]  gap-2 bg-light-grey p-2">
+              <div className="">
+                <AppDetailsWebberSidebar />
               </div>
 
               <div className="bg-white rounded-t overflow-y-scroll">

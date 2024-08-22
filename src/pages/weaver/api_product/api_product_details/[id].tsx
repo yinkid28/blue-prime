@@ -6,6 +6,7 @@ import PriceView from "@/components/apiDiscovery/pricingView";
 
 import { BreadCrumbItems, BreadCrumbs } from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
+import { IComment } from "@/models/api.model";
 import { Spinner } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
@@ -17,6 +18,8 @@ const ApiLayout = dynamic(() => import("@/components/Layout/layout"), {
 export default function APIproductDetails() {
   const router = useRouter();
   const { setSidebar, loading, setLoading } = useOnboarding();
+  const [isLoadingComments, setIsLoadingComments] = useState<boolean>(false);
+  const [comments, setComments] = useState<IComment[]>([]);
 
   const { id } = router.query;
   const [view, setView] = useState<string>("apiProduct");
@@ -76,7 +79,11 @@ export default function APIproductDetails() {
           {view === "Endpoint" ? <EndpointView /> : null}
 
           {view === "Feedback" ? (
-            <FeedbackView commentButtonDisplay={true} />
+            <FeedbackView
+              feedbacks={comments}
+              isLoading={isLoadingComments}
+              commentButtonDisplay={true}
+            />
           ) : null}
         </div>
       </div>

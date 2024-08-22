@@ -73,6 +73,7 @@ const useApiContext = () => {
       payload: api,
     });
   }, []);
+
   const setApiProduct = useCallback((api: IMockapiProduct) => {
     dispatch({
       type: "SET_APIPRODUCT",
