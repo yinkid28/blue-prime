@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { IApi } from "@/models/api.model";
 import WeaverProgressSidebar from "./sidebars/weaverProgressSidebar";
 import WebberSidebar from "./sidebars/webberSidebar";
+import ApiProductClientSidebar from "./sidebars/apiProductClientSidebar";
 
 type LayoutProps = {
   children: React.ReactNode | React.ReactNode[];

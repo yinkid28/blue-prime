@@ -8,7 +8,7 @@ import github from "../../../public/icons/githubIcon.svg";
 import { FaChevronLeft } from "react-icons/fa";
 import CookieManager from "@/helper_utils/cookie_manager";
 import OnboardingServices from "@/services/onboarding_services/onboarding_services";
-import { SignInDto } from "@/models/onboarding.model";
+import { Irole, SignInDto } from "@/models/onboarding.model";
 import {
   FormControl,
   FormErrorMessage,
@@ -72,9 +72,15 @@ export default function Login() {
       });
 
       setUser(loginres.data.user);
-      router.push({
-        pathname: "/api_discovery",
-      });
+      if (loginres.data.user.roles.some((r: Irole) => r.id === 1)) {
+        router.push({
+          pathname: "/api_discovery",
+        });
+      } else {
+        router.push({
+          pathname: "/admin_back_office/category_management",
+        });
+      }
     } catch (error: any) {
       console.log(error);
       actions.setSubmitting(false);
