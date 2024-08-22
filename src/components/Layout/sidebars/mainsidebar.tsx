@@ -203,7 +203,14 @@ export default function MainSidebar() {
         {router.asPath == "/webber/library" ? (
           <div className="bg-white h-full rounded p-5 md:flex hidden flex-col gap-4">
             <p className="text-base text-mid-grey font-bold">Library</p>
-            <ul className="space-y-3 text-dark-grey">
+            <ul className="space-y-3 text-sm px-3 font-semibold text-dark-grey">
+              <li
+                onClick={() => setLibraryView("saved")}
+                className={`${"cursor-pointer"}
+                ${libraryView == "saved" ? "text-primary" : "text-dark-grey"}`}
+              >
+                Saved
+              </li>
               <li
                 onClick={() => setLibraryView("api-product")}
                 className={`cursor-pointer
@@ -215,19 +222,9 @@ export default function MainSidebar() {
               >
                 API Product
               </li>
-              <li
-                onClick={() =>
-                  bookmarkedAPIs.length === 0 ? null : setLibraryView("saved")
-                }
-                className={`${
-                  !(bookmarkedAPIs.length === 0) && "cursor-pointer"
-                }
-                ${libraryView == "saved" ? "text-primary" : "text-dark-grey"}`}
-              >
-                Saved
-              </li>
+
               {/* ↓ Would tackle this when I understand what Subscribed means */}
-              <li>Subscribed</li>
+              {/* <li>Subscribed</li> */}
             </ul>
           </div>
         ) : (

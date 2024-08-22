@@ -115,6 +115,7 @@ export type IReply = {
   };
 };
 export type IApi = {
+  monetizationLabel?: string;
   monetization: {
     enabled: boolean;
     properties: {

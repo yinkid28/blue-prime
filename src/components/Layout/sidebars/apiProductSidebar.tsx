@@ -1,4 +1,5 @@
 import { useOnboarding } from "@/context/OnboardingContext";
+import { getFormattedDate } from "@/helper_utils/helpers";
 import { IApi } from "@/models/api.model";
 import { IMockApi } from "@/models/apidiscovery.model";
 import { Badge } from "@chakra-ui/react";
@@ -56,28 +57,30 @@ export default function ApiProductSidebar({ api }: sideBarProps) {
                   className="w-full h-full"
                 />
               </div>
-              <p className="font-thin text-sm text-dar-grey">Mr Majek Fashek</p>
+              <p className="font-thin text-sm text-dar-grey">
+                {api.businessInformation.businessOwner}
+              </p>
             </div>
           </div>
         </div>
         <IoBookmarkOutline className="hover:text-primary cursor-pointer" />
       </div>
       <div className="flex items-center justify-between w-full">
-        <p className="text-mid-grey font-thin text-sm">Created 12th Dec 2024</p>
+        {/* <p className="text-mid-grey font-thin text-sm">{getFormattedDate()}</p> */}
 
         <div className="bg-light-grey w-fit h-fit px-3 py-1 rounded-full text-sm text-primary">
           {" "}
-          <p>Version 1</p>{" "}
+          <p>Version {api.version}</p>{" "}
         </div>
       </div>
       <div className="flex flex-col gap-3">
         <p className="font-semibold text-primary text-sm">
-          {api.categories.length > 0 ? api.categories[0] : "API"}
+          {/* {api.categories.length > 0 ? api.categories[0] : "API"} */}
         </p>
         <p className="text-sm text-dark-grey">{api.description}</p>
       </div>
 
-      <div className="flex items-center text-xs justify-between">
+      {/* <div className="flex items-center text-xs justify-between">
         <div className="flex items-center gap-1">
           <FaRegEye className=" text-mid-grey" />
           <p className="font-thin text-mid-grey">10k</p>
@@ -90,7 +93,7 @@ export default function ApiProductSidebar({ api }: sideBarProps) {
           <FaRegClock className=" text-mid-grey" />
           <p className="font-thin text-mid-grey">100ms</p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

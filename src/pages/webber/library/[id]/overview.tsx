@@ -10,6 +10,8 @@ import { useRouter } from "next/router";
 import { Key, useEffect, useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
 import { UseToastOptions, useToast } from "@chakra-ui/react";
+import { getFormattedDate } from "@/helper_utils/helpers";
+import APIServices from "@/services/api_services/api_service";
 
 // remember to use static generation here but for now we will use context to get current api
 const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
@@ -33,14 +35,21 @@ const toastProps: UseToastOptions = {
 
 export default function ApiOverview() {
   const toast = useToast();
-  const { api } = useApi();
+  const { api, setApi } = useApi();
   const router = useRouter();
-  const { loading, setLoading, setSidebar } = useOnboarding();
+  const { id } = router.query;
+  const { loading, setLoading, setSidebar, setApiErrorMessage } =
+    useOnboarding();
   const [copied, setCopied] = useState<boolean>(false);
   useEffect(() => {
     setLoading(false);
     setSidebar("apiProgressWeaver");
   }, []);
+  useEffect(() => {
+    if (id) {
+      getApi(id as string);
+    }
+  }, [id]);
   const breadCrumbs: BreadCrumbItems[] = [
     {
       breadCrumbText: "Library",
@@ -68,6 +77,22 @@ export default function ApiOverview() {
       renewDate: "15th Apr, 2024",
     },
   ];
+  const getApi = async (aco: string) => {
+    try {
+      const res = await APIServices.getSingleApiDev(aco);
+      console.log(res);
+      if (res.statusCode === 200) {
+        setApi(res.data);
+        // setSandBoxurl(res.data.endpointConfig.sandbox_endpoints.url);
+        // setProdurl(res.data.endpointConfig.production_endpoints.url);
+      }
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
 
   function handleCopied() {
     navigator.clipboard
@@ -95,7 +120,7 @@ export default function ApiOverview() {
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center lg:gap-0 gap-6">
             <div className="flex items-center gap-3 h-[63px]">
               <Image
-                src={"/images/apiMock.webp"}
+                src={"/images/api_icons/apiMock.webp"}
                 alt="icon"
                 width={63}
                 height={63}
@@ -104,14 +129,14 @@ export default function ApiOverview() {
                 <div className="flex flex-col gap-2">
                   <h1 className="text-sm font-semibold">{api?.name}</h1>
                   <p className="text-xs text-blue-dark font-semibold">
-                    Entertainment
+                    {api?.monetizationLabel}
                   </p>
                   <div className="flex gap-[20%] sm:gap-20 items-center">
                     <p className="text-xs text-dark-grey whitespace-nowrap">
-                      Created: 12th Dec 2024
+                      {/* Created: {getFormattedDate(api?.createdTime)} */}
                     </p>
                     <p className="bg-dark-grey-fade whitespace-nowrap text-xs text-blue-dark rounded-full px-2 py-[1.5px]">
-                      Version 1
+                      Version {api?.version}
                     </p>
                   </div>
                 </div>
@@ -123,7 +148,11 @@ export default function ApiOverview() {
                 <p>Base URL</p>
                 <div className="flex items-center gap-2">
                   <div className="text-primary">
-                    http://www.codehow.com/specs
+                    {api?.endpointConfig?.production_endpoints?.url
+                      ? api?.endpointConfig?.production_endpoints?.url
+                      : api?.endpointConfig?.sandbox_endpoints?.url
+                      ? api?.endpointConfig?.sandbox_endpoints?.url
+                      : ""}
                   </div>
                   <div onClick={handleCopied} className="cursor-pointer">
                     {copied ? (
@@ -146,7 +175,9 @@ export default function ApiOverview() {
             <h3 className=" ">Price per Request</h3>
             <div className="flex justify-between text-dark-grey">
               <p className="text-sm font-semibold">N 0.01</p>
-              <p className="text-[10px] font-normal">2,000 Requests/ms</p>
+              <p className="text-[10px] font-normal">
+                {api?.policies[0]} Requests/ms
+              </p>
             </div>
           </div>
           <div>

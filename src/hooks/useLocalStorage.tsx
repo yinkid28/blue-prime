@@ -1,4 +1,5 @@
 import { useOnboarding } from "@/context/OnboardingContext";
+import { useUser } from "@/context/userContext";
 import CookieManager from "@/helper_utils/cookie_manager";
 import { useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -46,10 +47,12 @@ export function useLocalStorage(key: string, initialValue: any) {
 
 export function useLogout() {
   const { setUser } = useOnboarding();
+  const { setUserType } = useUser();
   const toast = useToast();
 
   return function logout() {
     setUser(null);
+    setUserType("webber");
     CookieManager.deleteCookie("jwt");
 
     toast({

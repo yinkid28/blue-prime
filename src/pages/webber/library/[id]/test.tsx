@@ -24,8 +24,7 @@ const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
   ssr: false, // Disable server-side rendering for this component
 });
 import "swagger-ui-react/swagger-ui.css";
-import { ImockEndpoint } from "@/pages/onboarding/weaver/api_details/[id]/modules";
-import { ImockTag } from "@/pages/onboarding/weaver/api_details/[id]/test";
+import { BiErrorCircle } from "react-icons/bi";
 const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
@@ -37,93 +36,13 @@ const breadCrumbs: BreadCrumbItems[] = [
   },
 ];
 
-const tags: ImockTag[] = [
-  {
-    name: "Pets",
-    id: 1,
-    endpoints: [
-      {
-        id: 1,
-        method: "POST",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
-      {
-        id: 2,
-        method: "PUT",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
-      {
-        id: 3,
-        method: "GET",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
-      {
-        id: 4,
-        method: "DELETE",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
-    ],
-  },
-  {
-    name: "Store",
-    id: 2,
-    endpoints: [
-      {
-        id: 5,
-        method: "POST",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
-
-      {
-        id: 6,
-        method: "GET",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
-      {
-        id: 7,
-        method: "DELETE",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
-    ],
-  },
-  {
-    name: "User",
-    id: 3,
-    endpoints: [
-      {
-        id: 8,
-        method: "POST",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
-      {
-        id: 9,
-        method: "PUT",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
-      {
-        id: 10,
-        method: "GET",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
-    ],
-  },
-];
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export default function WeaverTests() {
   const { api } = useApi();
   const router = useRouter();
+  const { id } = router.query;
   const [view, setView] = useState<string>("info");
-  const [selectedTag, setSelectedTag] = useState<ImockTag>();
   const { setLoading, setSidebar } = useOnboarding();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -134,9 +53,7 @@ export default function WeaverTests() {
   } = useDisclosure();
   useEffect(() => {
     setLoading(false);
-    setSelectedTag(tags[0]);
     setSidebar("apiProgressWeaver");
-    setView(tags[0].name);
   }, []);
 
   return (
@@ -147,32 +64,32 @@ export default function WeaverTests() {
         breadCrumbActiveItem={`${api?.name}-Test`}
       />
       <div className="flex flex-col h-screen md:flex-row gap-3 p-5 justify-between">
-        <div className="w-full md:w-[20%] h-full flex flex-col gap-2">
-          <div className="w-full text-mid-grey items-center border-bottom-[1px] border-light-grey py-2 flex justify-between">
-            <p className="">API Tags</p>
-            {/* <MdAdd className="cursor-pointer" onClick={onTagOpen} /> */}
-          </div>
-          <div className="w-full bg-light-grey rounded text-mid-grey flex flex-col gap-1">
-            {tags.map((item, index) => (
-              <div
-                className={`px-3 py-1 flex hover:bg-[#F8F8F8] ${
-                  view === item.name ? "bg-[#F8F8F8]" : "bg-transparent"
-                } items-center gap-2 cursor-pointer`}
-                key={index}
-                onClick={() => {
-                  setView(item.name);
-                  setSelectedTag(item);
-                }}
-              >
-                {view === item.name ? <FaChevronDown /> : <FaChevronRight />}
-                <p className="text-sm">{item.name}</p>
-              </div>
-            ))}
-          </div>
-        </div>
         <div className="w-full md:w-[80%] h-full overflow-y-scroll  flex flex-col gap-2">
+          <div className="w-full flex items-center justify-between">
+            {/* Notice or access token */}
+            <div className="">
+              <div className="bg-white rounded-lg shadow-md flex flex-col p-3 gap-3">
+                <div className="flex items-center gap-2">
+                  <BiErrorCircle className="text-primary" />{" "}
+                  <p className="text-sm text-mid-grey">
+                    You need an access token to try the API. Please log in and
+                    subscribe to the API to generate an access token. If you
+                    already have an access token, please provide it below.
+                  </p>
+                </div>
+              </div>
+              <div className=""></div>
+            </div>
+            {/* Test Security */}
+            <div className=""></div>
+          </div>
           <div className="flex flex-col gap-2">
-            <SwaggerUI url="https://petstore.swagger.io/v2/swagger.json" />
+            <SwaggerUI
+              url={
+                `${BASE_URL}/api-manager/api/v1/apim-api/get-trimmed-api-swagger-definition?aco=${id}`
+                // "https://raw.githubusercontent.com/quaddss52/portfoliomain/main/public/documents/output-onlineyamltools.txt?token=GHSAT0AAAAAACTRVRCEBHU5XH4LBF5XFNIEZV3K3UQ"
+              }
+            />
           </div>
         </div>
       </div>

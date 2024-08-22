@@ -31,7 +31,7 @@ export default function DeployRevision({
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [deployName, setDeployname] = useState<string>("Default");
-  const [vhost, setVhost] = useState<string>("localhost");
+  const [vhost, setVhost] = useState<string>("20.160.81.193");
   const [displayOnDevportal, setDisplayOnDevportal] = useState<boolean>(false);
   const { setApiErrorMessage } = useOnboarding();
   const toast = useToast();
@@ -126,7 +126,7 @@ export default function DeployRevision({
                 // onChange={(e) => setDesc(e.target.value)}
               />
             </div>
-            <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
+            {/* <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
               <p className="text-xs text-dark-grey">Gateway Url</p>
               <select
                 className="w-full bg-transparent border-none outline-none"
@@ -135,7 +135,7 @@ export default function DeployRevision({
               >
                 <option value="localhost">Localhost</option>
               </select>
-            </div>
+            </div> */}
             <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex  gap-2">
               <p className="text-xs text-dark-grey">Display on Dev Portal</p>
               <Switch

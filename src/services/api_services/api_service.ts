@@ -14,7 +14,7 @@ export default class APIServices {
   }
   static async getAllWebberApis(pageNo: number = 1, pageSize: number) {
     const response = await HTTPClient.get(
-      `api-manager/api/devportal/v3/get-apis?limit=${pageSize}&offset=${pageNo}`
+      `api-manager/apim/v1/webber/get-apis?limit=${pageSize}&offset=${pageNo}`
     );
     return response.data;
   }
@@ -31,6 +31,12 @@ export default class APIServices {
   static async getSingleApi(aco: string) {
     const response = await HTTPClient.get(
       `api-manager/api/v1/apim-api/get?aco=${aco}`
+    );
+    return response.data;
+  }
+  static async getSingleApiDev(aco: string) {
+    const response = await HTTPClient.get(
+      `api-manager/apim/v1/webber/apis/${aco}`
     );
     return response.data;
   }
@@ -68,13 +74,13 @@ export default class APIServices {
   }
   static async deleteCommentbyApicode(aco: string, commId: string) {
     const response = await HTTPClient.get(
-      `api-manager/api/publisher/v4/apis/${aco}/comments/${commId}/replies`
+      `api-manager/apim/v1/weaver/comment/delete?aco=${aco}&commentId=${commId}`
     );
     return response.data;
   }
   static async getRepliesToComment(aco: string, commId: string) {
     const response = await HTTPClient.get(
-      `api-manager/api/publisher/v4/apis/${aco}/comments/${commId}/replies`
+      `api-manager/apim/v1/weaver/comment/replies?aco=${aco}&commentId=${commId}`
     );
     return response.data;
   }
@@ -84,7 +90,7 @@ export default class APIServices {
     offset: number
   ) {
     const response = await HTTPClient.get(
-      `/api-manager/api/publisher/v4/apis/${aco}/comments?limit=${limit}&offset=${offset}&includeCommenterInfo=false`
+      `api-manager/apim/v1/weaver/comment/get-list?aco=${aco}&limit=${limit}&offset=${offset}&includeCommenterInfo=false`
     );
     return response.data;
   }
@@ -92,6 +98,26 @@ export default class APIServices {
     const response = await HTTPClient.post(
       `api-manager/api/v1/apim-api/create?cco=${cco}`,
       data
+    );
+    return response.data;
+  }
+  static async getbookmarkApi(cco: string) {
+    const response = await HTTPClient.get(
+      `api-manager/apim/v1/webber/bookmarks/get?cco=${cco}`
+    );
+    return response.data;
+  }
+  static async bookmarkApi(aco: string, cco: string) {
+    const response = await HTTPClient.post(
+      `api-manager/apim/v1/webber/bookmarks/add?cco=${cco}&aco=${aco}`,
+      undefined
+    );
+    return response.data;
+  }
+  static async removebookmarkApi(aco: string, cco: string) {
+    const response = await HTTPClient.post(
+      `api-manager/apim/v1/webber/bookmarks/remove?cco=${cco}&aco=${aco}`,
+      undefined
     );
     return response.data;
   }
@@ -104,8 +130,8 @@ export default class APIServices {
   }
   static async createComment(data: any, aco: string, to?: string) {
     const response = await HTTPClient.post(
-      `/api-manager/api/publisher/v4/apis/${aco}/comments${
-        to ? `?replyTo=${to}` : ""
+      `api-manager/apim/v1/weaver/comment/create?aco=${aco}${
+        to ? `&replyTo=${to}` : ""
       }`,
       data
     );

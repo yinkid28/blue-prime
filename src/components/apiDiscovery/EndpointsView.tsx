@@ -5,7 +5,11 @@ const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
   ssr: false, // Disable server-side rendering for this component
 });
 import yaml from "js-yaml";
+import { useRouter } from "next/router";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export default function EndpointView() {
+  const router = useRouter();
+  const { id } = router.query;
   // const [jsonData, setJsonData] = useState<any>({});
   // useEffect(() => {
   //   // This effect runs once on component mount
@@ -28,9 +32,7 @@ export default function EndpointView() {
       {/* <SwaggerUI url={"https://104.40.209.29:443/files/output-online.yaml"} /> */}
       {/* for testing purpoosees remove after */}
       <SwaggerUI
-        url={
-          "https://raw.githubusercontent.com/quaddss52/portfoliomain/main/public/documents/output-onlineyamltools.txt?token=GHSAT0AAAAAACHJAWWBQCVY6AQ6DTXR57UCZRA4WNA"
-        }
+        url={`${BASE_URL}/api-manager/api/v1/apim-api/get-trimmed-api-swagger-definition?aco=${id}`}
       />
     </div>
   );

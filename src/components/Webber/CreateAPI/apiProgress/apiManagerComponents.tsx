@@ -195,6 +195,7 @@ export function FeedbackManagementView() {
         isLoading={isLoadingComments}
         feedbacks={comments}
         commentButtonDisplay
+        canReply
       />
       <GlobalPagination
         onPageClick={handlePageClick}

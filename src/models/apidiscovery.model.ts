@@ -10,7 +10,7 @@ export type IMockApi = {
 };
 export type ApiDiscoveryInititals = {
   api: IApi | null;
-  bookmarkedAPIs: IMockApi[];
+  bookmarkedAPIs: IApi[];
   libraryView: string;
   apiProduct: IMockapiProduct | null;
 };
