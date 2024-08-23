@@ -1,15 +1,22 @@
 import CategoryCard from "@/components/Admin/CategoryCard";
 import AdminNavbar from "@/components/Layout/Nav/adminNavbar";
 import Navbar from "@/components/Layout/Nav/navbar";
-import { BreadCrumbs } from "@/components/utils";
+import { BreadCrumbs, Button } from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { Icon } from "@iconify/react";
+import { useDisclosure } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import CreateCategory from "@/components/modals/addNewCategory";
 const AdminLayout = dynamic(() => import("@/components/Layout/adminLayout"), {
   ssr: false,
 });
 export default function CategoryManager() {
+
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [view, setView] = useState<string>("advanced");
+
   const { setSidebar, loading, setLoading, setApiErrorMessage } =
     useOnboarding();
   useEffect(() => {
@@ -52,9 +59,20 @@ export default function CategoryManager() {
               className="font-medium text-sm md:text-base focus:outline-none w-full text-dark-txt"
             />
           </div>
-          <button className="border-2 text-primary py-2 px-2 font-semibold text-xs rounded-lg">
+          {/* <button className="border-2 text-primary py-2 px-2 font-semibold text-xs rounded-lg">
             Add New Category
-          </button>
+          </button> */}
+          <Button 
+          type="fit"
+          text={"Add New Category"} 
+           onClick={() => {
+            onOpen();
+          }}
+          />
+            {view !== "category" && (
+            <CreateCategory isOpen={isOpen} onClose={onClose} />
+          )}
+
         </div>
 
         {/* WHERE I WOULD RENDER THE CARDS */}
