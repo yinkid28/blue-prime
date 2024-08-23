@@ -22,6 +22,8 @@ type addEndpointModalProps = {
   api: IApi;
   revision: IRevision;
 };
+
+const vhosts = process.env.NEXT_PUBLIC_VHOST;
 export default function DeployRevision({
   isOpen,
   onClose,
@@ -31,7 +33,7 @@ export default function DeployRevision({
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [deployName, setDeployname] = useState<string>("Default");
-  const [vhost, setVhost] = useState<string>("20.160.81.193");
+  const [vhost, setVhost] = useState<string>(vhosts as string);
   const [displayOnDevportal, setDisplayOnDevportal] = useState<boolean>(false);
   const { setApiErrorMessage } = useOnboarding();
   const toast = useToast();

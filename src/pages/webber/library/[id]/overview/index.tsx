@@ -68,19 +68,19 @@ export default function ApiOverview() {
 
   const weaverOverviewTableData = [
     {
-      name: "Parse Generator",
+      name: "Edu Student Portal",
       calls: "60000".toLocaleString(),
       status: "Paid",
       renewDate: "27th Feb, 2024",
     },
     {
-      name: "Parse Generator",
+      name: "LAMATA",
       calls: "20000".toLocaleString(),
       status: "Failed",
       renewDate: "29th Feb, 2024",
     },
     {
-      name: "Parse Generator",
+      name: "DeerLight Ng",
       calls: "26865".toLocaleString(),
       status: "Awaiting Renewal",
       renewDate: "15th Apr, 2024",
@@ -193,7 +193,7 @@ export default function ApiOverview() {
             </div>
           </div>
           <div>
-            <h3 className="mb-4 text-mid-grey font-semibold">Subscriptions</h3>
+            <h3 className="mb-4 text-mid-grey font-semibold">Applications</h3>
             <Table>
               <Table.Header>
                 <th className="w-1/5 px-6 py-2 whitespace-nowrap">
@@ -234,6 +234,9 @@ export default function ApiOverview() {
 }
 
 function TableRow({ name, calls, status, renewDate }: TableRowProps) {
+  const router = useRouter();
+  const { id } = router.query;
+
   return (
     <tr>
       <td className="px-6 py-4 text-sm border-t whitespace-nowrap">{name}</td>
@@ -252,15 +255,23 @@ function TableRow({ name, calls, status, renewDate }: TableRowProps) {
       <td className="px-6 py-4 text-sm border-t">{renewDate}</td>
       <td className="px-6 py-4 text-sm border-t">
         <Menu>
-          <MenuButton>
+          <MenuButton onClick={() => console.log(name)}>
             <CiMenuKebab />
           </MenuButton>
           <MenuList minW="0" minH={"0"} h={"70px"}>
-            <MenuItem>
+            {/* <MenuItem>
               <p>View Production Keys</p>
             </MenuItem>
             <MenuItem>
               <p>View Test Keys</p>
+            </MenuItem> */}
+            {/* JUST MAKING IT VIEW DETAILS FOR NOW */}
+            <MenuItem
+              onClick={() =>
+                router.push(`/webber/library/${id}/overview/${name}`)
+              }
+            >
+              <p>View Details</p>
             </MenuItem>
             <MenuItem>
               <p>Cancel Subscription</p>
