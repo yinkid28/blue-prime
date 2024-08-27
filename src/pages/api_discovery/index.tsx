@@ -5,7 +5,7 @@ const DiscoveryLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
 
-import { BreadCrumbs } from "@/components/utils";
+import GlobalPagination, { BreadCrumbs } from "@/components/utils";
 import icon1 from "../../../public/images/api_icons/icon1.jpg";
 import icon2 from "../../../public/images/api_icons/icon2.png";
 import icon3 from "../../../public/images/api_icons/icon3.png";
@@ -33,7 +33,7 @@ export default function ApiDiscoveryDashboard() {
   const { setBookMarked, bookmarkedAPIs } = useApi();
   const [isfetchingApis, setIsLoading] = useState<boolean>(false);
   const [fetchedApis, setFetchedApis] = useState<IApi[]>([]);
-  const [pageNo, setPageNo] = useState<number>(1);
+  const [pageNo, setPageNo] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(12);
   const [dataCount, setDataCount] = useState(0);
   const [pageCount, setPageCount] = useState<number>(0);
@@ -157,8 +157,8 @@ export default function ApiDiscoveryDashboard() {
       const res = await APIServices.getAllWebberApis(pageNo, pageSize);
       if (res.statusCode === 200) {
         setIsLoading(false);
-        setFetchedApis(res.data.list);
-        setDataCount(res.data.count);
+        setFetchedApis(res.data.content);
+        setPageCount(res.data.totalPages);
       }
     } catch (error: any) {
       setLoading(false);
@@ -187,7 +187,11 @@ export default function ApiDiscoveryDashboard() {
       setApiErrorMessage(errorMessage, "error");
     }
   };
-
+  const handlePageClick = (page: number) => {
+    const newOffset = page;
+    setPageNo(newOffset);
+    getApis(page, pageSize);
+  };
   useEffect(() => {
     setSidebar("");
     setLoading(false);
@@ -217,7 +221,7 @@ export default function ApiDiscoveryDashboard() {
                 title={item.name}
                 category={item.lifeCycleStatus}
                 description={item.description}
-                bookmarked={false}
+                bookmarked={item.bookmarked as boolean}
                 api={item}
                 onToggleBookmarked={() => {
                   bookmarkApis(user?.customerCode as string, item.apiCode);
@@ -229,6 +233,12 @@ export default function ApiDiscoveryDashboard() {
               <p>You Currently do not have any APIs</p>
             </>
           )}
+        </div>
+        <div className="flex items-center my-5 justify-end">
+          <GlobalPagination
+            onPageClick={handlePageClick}
+            pageCount={pageCount <= 1 ? 1 : pageCount}
+          />
         </div>
       </div>
     </DiscoveryLayout>

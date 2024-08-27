@@ -51,101 +51,63 @@ export type ImockEndpoint = {
   criteria?: { name: string; description: string };
 };
 
-const tags: ImockTag[] = [
-  {
-    name: "Pets",
-    id: 1,
-    endpoints: [
-      {
-        id: 1,
-        method: "POST",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
-      {
-        id: 2,
-        method: "PUT",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
-      {
-        id: 3,
-        method: "GET",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
-      {
-        id: 4,
-        method: "DELETE",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
-    ],
-  },
-  {
-    name: "Store",
-    id: 2,
-    endpoints: [
-      {
-        id: 5,
-        method: "POST",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
+type RequestMethod =
+  | "get"
+  | "post"
+  | "put"
+  | "delete"
+  | "patch"
+  | "options"
+  | "head";
 
-      {
-        id: 6,
-        method: "GET",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
-      {
-        id: 7,
-        method: "DELETE",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
-    ],
-  },
-  {
-    name: "User",
-    id: 3,
-    endpoints: [
-      {
-        id: 8,
-        method: "POST",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
-      {
-        id: 9,
-        method: "PUT",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
-      {
-        id: 10,
-        method: "GET",
-        url: "/pet/ {petID}/uploadImage",
-        description: "uploads an image",
-      },
-    ],
-  },
-];
-const transformObject = (input: any) => {
-  return Object.keys(input).map((key) => {
-    return {
-      method: key,
-      ...input[key],
-    };
-  });
+type ApiOperation = {
+  tags?: string[];
+  operationId?: string;
+  parameters?: any[];
+  requestBody?: any;
+  responses?: any;
+  security?: any[];
+  [key: string]: any; // Allow additional properties
 };
+
+type ApiPathItem = {
+  [method in RequestMethod]?: ApiOperation;
+};
+
+type ApiPaths = {
+  [path: string]: ApiPathItem;
+};
+function getUniqueTags(apiPaths: ApiPaths): string[] {
+  const tagSet = new Set<string>();
+
+  for (const path in apiPaths) {
+    const pathItem = apiPaths[path];
+    for (const method in pathItem) {
+      const operation = pathItem[method as RequestMethod];
+
+      // Check if operation is defined before proceeding
+      if (operation) {
+        // If the tags property is missing, create it and assign ["*"]
+        if (!operation.tags) {
+          operation.tags = ["*"];
+        }
+
+        // Add the tags to the Set to ensure uniqueness
+        operation.tags.forEach((tag) => tagSet.add(tag));
+      }
+    }
+  }
+
+  return Array.from(tagSet);
+}
+
 export default function ApiModules() {
   const { api } = useApi();
   const router = useRouter();
   const toast = useToast();
   const { apiCode } = router.query;
   const [view, setView] = useState<string>("");
+  const [view2, setView2] = useState<string>("");
   const [selectedTag, setSelectedTag] = useState<ImockTag>();
   const { loading, setLoading, setApiErrorMessage } = useOnboarding();
   const [swagger, setSwagger] = useState<any>();
@@ -170,23 +132,44 @@ export default function ApiModules() {
     onOpen: onTagOpen,
     onClose: onTagClose,
   } = useDisclosure();
+  function getOperationsByTag(apiPaths: ApiPaths, tag: string) {
+    const operations = [];
 
+    // Iterate over each path in the apiPaths object
+    for (const path in apiPaths) {
+      const pathItem = apiPaths[path];
+
+      // Iterate over each method within the current path
+      for (const method in pathItem) {
+        // Ensure the method is a valid RequestMethod and convert it to lowercase
+        const methodLower = method.toLowerCase() as RequestMethod;
+
+        // Retrieve the operation associated with the current method
+        const operation = pathItem[methodLower];
+
+        // Check if the operation exists and includes the specified tag
+        if (operation && operation.tags && operation.tags.includes(tag)) {
+          operations.push({
+            path,
+            method: methodLower,
+            operation,
+          });
+        }
+      }
+    }
+
+    return operations;
+  }
   const getApiSwagger = async (aco: string) => {
     try {
       const res = await APIServices.getApiSwaggerDefition(aco);
-      // console.log(res);
       if (res.statusCode === 200) {
         setSwagger(res.data);
-        const paths = Object.keys(res.data?.paths);
-        // console.log(res.data.paths);
+        const paths = getUniqueTags(res.data.paths);
         setView(paths[0]);
         setTags(paths);
         setOperationsWithPath(res.data.paths);
-        console.log(res.data.paths);
-
-        setOperations(transformObject(res.data.paths[paths[0]]));
-        // setLifeStatus(res.data.lifeCycleStatus.toLowerCase());
-        // handleLifeCycle(res.data.lifeCycleStatus);
+        setOperations(getOperationsByTag(res.data.paths, paths[0]));
       }
       setLoading(false);
     } catch (error: any) {
@@ -234,29 +217,27 @@ export default function ApiModules() {
   const addEndpoint = (
     data: SwaggerOperation,
     swaggerPath: string,
-    requestMethod: string
+    requestMethod: string,
+    endpointPath: string
   ) => {
     setView(swaggerPath);
-    const getoperation = operationsWithPath[swaggerPath];
-    if (Object.keys(getoperation).includes(requestMethod)) {
-      toast({
-        description: "Resource already exists",
-        position: "bottom-right",
-        duration: 2000,
-        status: "warning",
-      });
-      return;
-    }
-    getoperation[requestMethod] = data;
-    console.log(getoperation, "oblee");
+    const updatedOperations = { ...operationsWithPath };
+    updatedOperations[endpointPath] = { [requestMethod]: data };
+    setOperationsWithPath(updatedOperations);
+    const newOps = getOperationsByTag(updatedOperations, swaggerPath);
+    console.log(newOps, "change");
 
-    setOperations(transformObject(getoperation));
+    // Set the new operations to state
+    setOperations(newOps);
   };
   const removeEndpoint = (swaggerPath: string, requestMethod: string) => {
-    setView(swaggerPath);
-    const getoperation = operationsWithPath[swaggerPath];
+    setView(view);
+    console.log(swaggerPath, "heheheheheh");
+    const updatedOperations = { ...operationsWithPath };
+    const getoperation = updatedOperations[swaggerPath];
     const { [requestMethod]: _, ...rest } = getoperation;
-    const finals = transformObject(getoperation).filter(
+
+    const finals = getOperationsByTag(updatedOperations, view).filter(
       (item) => item.method !== requestMethod
     );
     setOperations(finals);
@@ -285,9 +266,8 @@ export default function ApiModules() {
       });
       return;
     }
-    const existingPath = { ...operationsWithPath, [path]: {} };
-    setTags(Object.keys(existingPath));
-    setOperationsWithPath(existingPath);
+    setTags([...swaggerPaths, path]);
+    // setOperationsWithPath(existingPath);
   };
   useEffect(() => {
     getOutofTheBoxPolicies(policyLevel === "api" ? "api" : "subscription");
@@ -305,8 +285,11 @@ export default function ApiModules() {
 
     const inputs = [...item.parameters];
     inputs[index] = { ...inputs[index], [name]: valuer || value };
-    operationsWithPath[path][method].parameters = inputs;
-    setOperations(transformObject(operationsWithPath[path]));
+    const updatedOperations = { ...operationsWithPath };
+    updatedOperations[path][method].parameters = inputs;
+    const newOps = getOperationsByTag(updatedOperations, item.tags[0]);
+    console.log(newOps, "change");
+    setOperations(newOps);
     // setData((prev) => ({
     //   ...prev,
     //   parameters: inputs,
@@ -320,7 +303,9 @@ export default function ApiModules() {
   ) => {
     event.preventDefault();
 
-    const operation = operationsWithPath[path][method];
+    const updatedOperations = { ...operationsWithPath };
+    // console.log(path);
+    const operation = updatedOperations[path][method];
     console.log(operation);
     // Initialize parameters array if it doesn't exist
     if (!operation.parameters) {
@@ -339,8 +324,12 @@ export default function ApiModules() {
       },
     });
 
-    console.log(operationsWithPath, "while adding");
-    setOperations(transformObject(operationsWithPath[path]));
+    console.log(updatedOperations, "while adding");
+    const newOps = getOperationsByTag(updatedOperations, item.tags[0]);
+    console.log(newOps, "change");
+
+    // Set the new operations to state
+    setOperations(newOps);
     // Uncomment and complete the setData call if necessary
     // setData(prev => ({
     //   ...prev,
@@ -348,7 +337,7 @@ export default function ApiModules() {
     // }));
   };
 
-  const handleOperationchange = (
+  const handleOperationChange = (
     event: any, // Assuming you're using React
     item: any,
     path: string,
@@ -356,13 +345,24 @@ export default function ApiModules() {
   ) => {
     event.preventDefault();
 
-    const operation = operationsWithPath[path][method];
-    console.log(operation);
+    // Destructure operationsWithPath for immutability and better React state management
+    const updatedOperations = { ...operationsWithPath };
 
+    // Get the specific operation
+    const operation = updatedOperations[path][method];
+
+    // Update the operation with the new value from the event
     operation[event.target.name] = event.target.value;
 
-    console.log(operationsWithPath, "while handling operations");
-    setOperations(transformObject(operationsWithPath[path]));
+    // Log the updated operations for debugging
+    console.log(updatedOperations, "while handling operations");
+
+    // Get updated operations by tag
+    const newOps = getOperationsByTag(updatedOperations, item.tags[0]);
+    console.log(newOps, "change");
+
+    // Set the new operations to state
+    setOperations(newOps);
   };
   const removeParameter = (
     index: number,
@@ -370,7 +370,8 @@ export default function ApiModules() {
     path: string,
     method: string
   ) => {
-    const operation = operationsWithPath[path][method];
+    const updatedOperations = { ...operationsWithPath };
+    const operation = updatedOperations[path][method];
     console.log(operation);
     // Initialize parameters array if it doesn't exist
     if (!operation.parameters) {
@@ -378,7 +379,11 @@ export default function ApiModules() {
     }
 
     operation.parameters.splice(index, 1);
-    setOperations(transformObject(operationsWithPath[path]));
+    const newOps = getOperationsByTag(updatedOperations, item.tags[0]);
+    console.log(newOps, "change");
+
+    // Set the new operations to state
+    setOperations(newOps);
   };
   const updateSwaggerDocument = async (aco: string, deploy?: boolean) => {
     setIsUpdating(true);
@@ -459,16 +464,11 @@ export default function ApiModules() {
       console.log(res);
       if (res.statusCode === 200) {
         setSwagger(res.data);
-        // setLifeStatus(res.data.lifeCycleStatus.toLowerCase());
-        // handleLifeCycle(res.data.lifeCycleStatus);
-        const paths = Object.keys(res.data?.paths);
-        // console.log(res.data.paths);
+        const paths = getUniqueTags(res.data.paths);
         setView(paths[0]);
         setTags(paths);
         setOperationsWithPath(res.data.paths);
-        console.log(res.data.paths);
-
-        setOperations(transformObject(res.data.paths[paths[0]]));
+        setOperations(getOperationsByTag(res.data.paths, paths[0]));
       }
       setLoading(false);
     } catch (error: any) {
@@ -531,6 +531,9 @@ export default function ApiModules() {
   }, [apiCode]);
 
   useEffect(() => {
+    console.log(operations, "state");
+  }, [operations]);
+  useEffect(() => {
     if (current) {
       if (current.includes("API")) {
         getApiSwagger(apiCode as string);
@@ -539,12 +542,6 @@ export default function ApiModules() {
       }
     }
   }, [current, apiCode]);
-
-  const handleViewChange = (path: string, operations: any) => {
-    const pt = transformObject(operations[path]);
-    console.log(pt);
-    setOperations(pt);
-  };
 
   return (
     <WebberLayout>
@@ -619,7 +616,7 @@ export default function ApiModules() {
             <p className="">API Tags</p>
             <MdAdd className="cursor-pointer" onClick={onTagOpen} />
           </div>
-          <div className="w-full bg-light-grey rounded text-mid-grey flex flex-col gap-1">
+          <div className="w-full lg:h-[80vh] overflow-scroll bg-light-grey rounded text-mid-grey flex flex-col gap-1">
             {swaggerPaths.map((item, index) => (
               <div
                 className={`px-3 py-1 flex hover:bg-[#F8F8F8] ${
@@ -630,7 +627,8 @@ export default function ApiModules() {
                   setView(item);
                   // setSelectedTag(item);
 
-                  handleViewChange(item, operationsWithPath);
+                  const newPaths = getOperationsByTag(operationsWithPath, item);
+                  setOperations(newPaths);
                 }}
               >
                 {view === item ? <FaChevronDown /> : <FaChevronRight />}
@@ -639,7 +637,7 @@ export default function ApiModules() {
             ))}
           </div>
         </div>
-        <div className="w-full md:w-[80%] flex flex-col gap-2">
+        <div className="w-full md:w-[80%]  flex flex-col gap-2">
           <div className="py-2 flex items-center justify-end ">
             <button
               className="border-primaryFade px-3 font-semibold py-1 rounded-lg w-fit flex items-center gap-2 text-primary border"
@@ -649,7 +647,7 @@ export default function ApiModules() {
               <p className="text-sm">Add Endpoint</p>
             </button>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex lg:h-[80vh] overflow-scroll  flex-col gap-2">
             <Accordion allowToggle>
               {operations.map((item, index) => (
                 <AccordionItem key={index}>
@@ -672,10 +670,10 @@ export default function ApiModules() {
                           </button>
                           <div className="flex items-start flex-col gap-1">
                             <p className="text-sm font-semibold text-mid-grey">
-                              {view}
+                              {item?.path}
                             </p>
                             <p className="text-xs font-semibold text-dark-grey">
-                              {item.description || ""}
+                              {item.operation.description || ""}
                             </p>
                           </div>
                         </div>
@@ -708,12 +706,12 @@ export default function ApiModules() {
                               name="description"
                               id="endpointDescription"
                               rows={5}
-                              value={item.description || ""}
+                              value={item.operation.description || ""}
                               onChange={(e) => {
-                                handleOperationchange(
+                                handleOperationChange(
                                   e,
-                                  item,
-                                  view,
+                                  item.operation,
+                                  item?.path,
                                   item.method
                                 );
                               }}
@@ -726,12 +724,12 @@ export default function ApiModules() {
                               name="summary"
                               id="endpointDescription"
                               rows={5}
-                              value={item.summary || ""}
+                              value={item.operation.summary || ""}
                               onChange={(e) => {
-                                handleOperationchange(
+                                handleOperationChange(
                                   e,
-                                  item,
-                                  view,
+                                  item.operation,
+                                  item?.path,
                                   item.method
                                 );
                               }}
@@ -757,11 +755,11 @@ export default function ApiModules() {
                               name="x-throttling-tier"
                               id="rateLimit"
                               className="border-none outline-none"
-                              value={item["x-throttling-tier"]}
+                              value={item.operation["x-throttling-tier"]}
                               onChange={(e) =>
-                                handleOperationchange(
+                                handleOperationChange(
                                   e,
-                                  item,
+                                  item.operation,
                                   view,
                                   item.method
                                 )
@@ -812,11 +810,16 @@ export default function ApiModules() {
                             type="fit"
                             text="add"
                             onClick={(e) => {
-                              addnewParemeter(e, item, view, item.method);
+                              addnewParemeter(
+                                e,
+                                item.operation,
+                                item.path,
+                                item.method
+                              );
                             }}
                           />
                         </div>
-                        {item.parameters?.map(
+                        {item.operation.parameters?.map(
                           (it: SwaggerParam, index: number) => (
                             <div
                               className="flex w-full justify-between items-end gap-2"
@@ -834,8 +837,8 @@ export default function ApiModules() {
                                   onChange={(e: any) =>
                                     handleInputChange(
                                       index,
-                                      item,
-                                      view,
+                                      item.operation,
+                                      item.path,
                                       item.method,
                                       e
                                     )
@@ -854,8 +857,8 @@ export default function ApiModules() {
                                   onChange={(e: any) =>
                                     handleInputChange(
                                       index,
-                                      item,
-                                      view,
+                                      item.operation,
+                                      item.path,
                                       item.method,
                                       e
                                     )
@@ -885,8 +888,8 @@ export default function ApiModules() {
                                   onChange={(e: any) =>
                                     handleInputChange(
                                       index,
-                                      item,
-                                      view,
+                                      item.operation,
+                                      item.path,
                                       item.method,
                                       e,
                                       { type: e.target.value }
@@ -910,8 +913,8 @@ export default function ApiModules() {
                                 onClick={() =>
                                   removeParameter(
                                     index,
-                                    item,
-                                    view,
+                                    item.operation,
+                                    item.path,
                                     item.method
                                   )
                                 }
@@ -982,7 +985,7 @@ export default function ApiModules() {
         isOpen={isDeleteOpen}
         onClose={onDeleteClose}
         deleteEndpoint={() => {
-          removeEndpoint(view, selectedoperation.method);
+          removeEndpoint(selectedoperation.path, selectedoperation.method);
         }}
       />
       <AddTagModal isOpen={isTagOpen} onClose={onTagClose} addPath={addPath} />

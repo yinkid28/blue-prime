@@ -14,6 +14,7 @@ type ButtonProps = {
   className?: string;
   Type?: "button" | "reset" | "submit";
   loading?: boolean;
+  disabled?: boolean;
 };
 export function Button({
   type,
@@ -22,14 +23,20 @@ export function Button({
   className,
   Type,
   loading,
+  disabled,
 }: ButtonProps) {
   return (
     <button
       className={`${
         type === "fit" ? "w-fit" : "w-full"
-      } px-4 py-2 text-center text-sm bg-primaryGradient hover:bg-secondaryGradient text-white rounded-lg ${className}`}
+      } px-4 py-2 text-center text-sm ${
+        disabled === true
+          ? "bg-light-grey text-dark-grey"
+          : "bg-primaryGradient hover:bg-secondaryGradient text-white"
+      }  rounded-lg ${className}`}
       onClick={onClick}
       type={Type}
+      disabled={disabled !== undefined ? disabled : false}
     >
       {loading ? <Spinner size={"sm"} /> : text}
     </button>

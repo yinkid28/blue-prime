@@ -2,7 +2,7 @@ import Navbar from "@/components/Layout/Nav/navbar";
 import { BreadCrumbs, Button } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { Spinner, useDisclosure } from "@chakra-ui/react";
+import { Spinner, useDisclosure, useToast } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
@@ -22,9 +22,11 @@ const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
   ssr: false, // Disable server-side rendering for this component
 });
 import "swagger-ui-react/swagger-ui.css";
+import { IoCloudUploadOutline } from "react-icons/io5";
 export default function ApiDefinition() {
   const { api, setApi } = useApi();
   const router = useRouter();
+  const toast = useToast();
   const { apiCode } = router.query;
   const [view, setView] = useState<string>("info");
   const [code, setCode] = useState(JSON.stringify(SwaggerDefault));
@@ -32,7 +34,8 @@ export default function ApiDefinition() {
   const [revisions, setRevisions] = useState<IRevision[]>([]);
   const [swagger, setSwagger] = useState<any>();
   const [deployedrevisions, setDeployedRevisions] = useState<IRevision[]>([]);
-
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
+  const [file, setFile] = useState<any>(null);
   const { loading, setLoading, setSidebar, setApiErrorMessage } =
     useOnboarding();
   useEffect(() => {
@@ -46,11 +49,11 @@ export default function ApiDefinition() {
     }
   }, [apiCode]);
   useEffect(() => {
-    if (deployedrevisions.length > 0) {
-      getRevisionSwagger(deployedrevisions[0]?.revisionCode);
-    } else {
-      getApiSwagger(apiCode as string);
-    }
+    // if (deployedrevisions.length > 0) {
+    //   getRevisionSwagger(deployedrevisions[0]?.revisionCode);
+    // } else {
+    // }
+    getApiSwagger(apiCode as string);
   }, [deployedrevisions, apiCode]);
 
   const getApi = async (aco: string) => {
@@ -136,6 +139,57 @@ export default function ApiDefinition() {
       return false;
     }
   };
+  const updateSwaggerDocument = async (aco: string, file: any) => {
+    setIsUpdating(true);
+    const fin = new FormData();
+    fin.append("file", file);
+
+    try {
+      const res = await APIServices.updateApiSwaggerDefinitionFile(fin, aco);
+      console.log(res);
+      if (res.statusCode === 200) {
+        toast({
+          description: "Api definition successfully updated",
+          position: "bottom-right",
+          duration: 3000,
+          status: "success",
+        });
+      }
+      setLoading(false);
+      setIsUpdating(false);
+    } catch (error: any) {
+      setIsUpdating(false);
+      console.log(error);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
+  const updateRevisionSwaggerDocument = async (aco: string, file: any) => {
+    setIsUpdating(true);
+
+    const fin = new FormData();
+    fin.append("file", file);
+
+    try {
+      const res = await APIServices.updateRevisionSwaggerDefinition(fin, aco);
+      console.log(res);
+      if (res.statusCode === 200) {
+        toast({
+          description: "Api definition successfully updated",
+          position: "bottom-right",
+          duration: 3000,
+          status: "success",
+        });
+      }
+      setLoading(false);
+      setIsUpdating(false);
+    } catch (error: any) {
+      setIsUpdating(false);
+      console.log(error);
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
 
   useEffect(() => {
     setLoading(false);
@@ -149,12 +203,24 @@ export default function ApiDefinition() {
       )
       .join("\n");
   };
-  async function loadAndParseYaml(url: string) {
-    const response = await fetch(url);
-    const text = await response.text();
-    return yaml.load(text);
-  }
+  const hiddenFileInputTwo = useRef<HTMLInputElement>(null);
 
+  const handleClickTwo = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+
+    if (hiddenFileInputTwo.current) {
+      hiddenFileInputTwo.current?.click();
+      // setFile(event.target.value);
+    }
+  };
+  const handleChangeTwo = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files && event.target.files[0];
+
+    setFile(file);
+    updateSwaggerDocument(apiCode as string, file);
+    // setDisabled(false);
+    // setUrl("");
+  };
   return (
     <>
       <WebberLayout>
@@ -163,6 +229,30 @@ export default function ApiDefinition() {
           // breadCrumbItems={breadCrumbs}
           breadCrumbActiveItem={`${api?.name}-Endpoints`}
         />
+        <div className="flex items-center justify-end w-full">
+          {" "}
+          <div className="">
+            <input
+              type="file"
+              ref={hiddenFileInputTwo}
+              placeholder="click"
+              accept=""
+              onChange={(e) => handleChangeTwo(e)}
+              style={{ display: "none" }}
+            />
+            <button
+              className="flex gap-3 items-center w-fit  bg-primary border-[2px]   h-fit p-3 rounded-lg text-white"
+              onClick={(e) => {
+                handleClickTwo(e);
+              }}
+            >
+              <IoCloudUploadOutline />
+              <p className="text-sm font-semibold ">
+                Upload file to update Api definition
+              </p>
+            </button>
+          </div>
+        </div>
         <div className="p-5 overflow-y-scroll h-[80vh] ">
           <Editor
             value={JSON.stringify(swagger)}
