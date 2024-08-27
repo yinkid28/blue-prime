@@ -10,7 +10,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Button } from "../utils";
-import { IPolicy, SwaggerOperation } from "@/models/api.model";
+import { IPolicy, SwaggerOperation, SwaggerParam } from "@/models/api.model";
 import { FaCircleMinus } from "react-icons/fa6";
 import { useState } from "react";
 type addEndpointModalProps = {
@@ -19,7 +19,8 @@ type addEndpointModalProps = {
   addEndpoint: (
     data: SwaggerOperation,
     swaggerPath: string,
-    requestMethod: string
+    requestMethod: string,
+    endpointPath: string
   ) => void;
   swaggerPaths: string[];
   policyLevel: string;
@@ -35,6 +36,7 @@ export default function AddEndpointModal({
 }: addEndpointModalProps) {
   const toast = useToast();
   const [swaggerPath, setSwaggerPath] = useState<string>("");
+  const [endpointpath, setEndpointPath] = useState<string>("");
   const [requestMethod, setRequestMethod] = useState<string>("");
   const [data, setData] = useState<SwaggerOperation>({
     parameters: [
@@ -61,6 +63,7 @@ export default function AddEndpointModal({
         default: [],
       },
     ],
+    tags: [],
     "x-auth-type": "None",
     "x-throttling-tier": "Unlimited",
     "x-wso2-application-security": {
@@ -72,7 +75,7 @@ export default function AddEndpointModal({
     const name = event?.target?.name || ""; // Safely access name
     const value = event?.target?.value || ""; // Safely access value
 
-    const inputs = [...data.parameters];
+    const inputs = [...(data.parameters as SwaggerParam[])];
     inputs[index] = { ...inputs[index], [name]: valuer || value };
 
     setData((prev) => ({
@@ -86,7 +89,7 @@ export default function AddEndpointModal({
       return {
         ...prev,
         parameters: [
-          ...prev.parameters,
+          ...(prev.parameters as SwaggerParam[]),
           {
             name: "",
             in: "",
@@ -102,7 +105,7 @@ export default function AddEndpointModal({
     });
   };
   const removeSocialMediaInput = (index: number) => {
-    const inputs = [...data.parameters];
+    const inputs = [...(data.parameters as SwaggerParam[])];
     inputs.splice(index, 1);
     setData((prev) => {
       return {
@@ -134,7 +137,8 @@ export default function AddEndpointModal({
       return;
     }
 
-    addEndpoint(data, swaggerPath, requestMethod);
+    console.log(data, swaggerPath, requestMethod);
+    addEndpoint(data, swaggerPath, requestMethod, endpointpath);
 
     onClose();
   };
@@ -149,12 +153,31 @@ export default function AddEndpointModal({
         <ModalBody className="w-full  rounded-lg bg-white">
           <div className="flex flex-col gap-2">
             <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
+              <p className="text-xs text-dark-grey"> Endpoint Path</p>
+              <input
+                type="text"
+                name="path"
+                id="path"
+                value={endpointpath}
+                onChange={(e) => setEndpointPath(e.target.value)}
+              />
+            </div>
+            <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
               <p className="text-xs text-dark-grey"> API Tag</p>
               <select
-                name="rateLimit"
-                id="rateLimit"
+                name="tags"
+                id="tags"
                 className="border-none outline-none"
-                onChange={(e) => setSwaggerPath(e.target.value)}
+                onChange={(e) => {
+                  setSwaggerPath(e.target.value);
+
+                  setData((prev) => {
+                    return {
+                      ...prev,
+                      tags: [e.target.value],
+                    };
+                  });
+                }}
               >
                 <option value="">Chose a tag</option>
                 {swaggerPaths.map((item, index) => (
@@ -195,7 +218,7 @@ export default function AddEndpointModal({
                   }}
                 />
               </div>
-              {data.parameters.map((item, index) => (
+              {data.parameters?.map((item, index) => (
                 <div className="grid grid-cols-3 gap-2" key={index}>
                   <div className="flex flex-col gap-1">
                     <p className="text-xs font-semibold text-mid-grey">Name</p>

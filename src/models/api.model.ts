@@ -115,6 +115,7 @@ export type IReply = {
   };
 };
 export type IApi = {
+  bookmarked?: boolean;
   monetizationLabel?: string;
   monetization: {
     enabled: boolean;
@@ -192,6 +193,56 @@ export type corsConfig = {
   accessControlAllowHeaders: string[];
   accessControlAllowMethods: string[];
 };
+export type createApplication = {
+  name: string;
+  throttlingPolicy: string;
+  description: string;
+  tokenType: string;
+  groups: any[];
+  attributes: any;
+  subscriptionScopes: any[];
+};
+export type ISubscription = {
+  id: string;
+  createdBy: any;
+  createdDate: string;
+  lastModifiedBy: any;
+  lastModifiedDate: string;
+  subscriptionCode: string;
+  subscriptionId: string;
+  applicationId: string;
+  apiId: string;
+  throttlingPolicy: string;
+  requestedThrottlingPolicy: string;
+  status: string;
+  redirectionParams: any;
+  deleted: boolean;
+};
+
+export type IApplication = {
+  id: string;
+  createdBy: any;
+  createdDate: string;
+  lastModifiedBy: any;
+  lastModifiedDate: string;
+  appCode: string;
+  applicationId: string;
+  name: string;
+  throttlingPolicy: string;
+  description: string;
+  tokenType: string;
+  status: string;
+  groups: any[];
+  subscriptionCount: number;
+  keys: any[];
+  attributes: any;
+  subscriptionScopes: any;
+  owner: string;
+  hashEnabled: false;
+  createdTime: string;
+  updatedTime: string;
+  deleted: false;
+};
 export type SwaggerParam = {
   name: string;
   in: string;
@@ -203,27 +254,28 @@ export type SwaggerParam = {
   };
 };
 export type SwaggerOperation = {
-  parameters: SwaggerParam[];
-  description: string;
+  parameters?: SwaggerParam[];
+  description?: string;
 
-  summary: string;
+  summary?: string;
 
-  responses: {
+  responses?: {
     "200": {
       description: string;
     };
   };
-  security: [
+  security?: [
     {
       default: [];
     }
   ];
-  "x-auth-type": string;
-  "x-throttling-tier": string;
-  "x-wso2-application-security": {
-    "security-types": string[];
-    optional: boolean;
+  "x-auth-type"?: string;
+  "x-throttling-tier"?: string;
+  "x-wso2-application-security"?: {
+    "security-types"?: string[];
+    optional?: boolean;
   };
+  tags?: string[];
 };
 export type IPolicy = {
   name: string;

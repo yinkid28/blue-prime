@@ -47,7 +47,7 @@ export default function AppDetails() {
     },
     {
       breadCrumbText: `${api?.name}-Overview`,
-      breadCrumbPath: `/webber/library/${api?.name}/overview`,
+      breadCrumbPath: `/webber/library/${api?.apiCode}/overview`,
     },
   ];
 

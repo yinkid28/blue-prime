@@ -49,7 +49,6 @@ export default function ApiCardWebber({
             className="w-full h-full"
           />
         </div>
-        <IoBookmarkOutline className="hover:text-primary cursor-pointer" />
       </div>
 
       <div className="flex flex-col gap-2">

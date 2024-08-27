@@ -240,7 +240,7 @@ export default function LibraryDashboard() {
                   title={item.name}
                   category={item.lifeCycleStatus}
                   description={item.description}
-                  bookmarked={false}
+                  bookmarked={true}
                   api={item}
                   onToggleBookmarked={() => {
                     unbookmarkApi(user?.customerCode as string, item.apiCode);

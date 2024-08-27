@@ -3,7 +3,7 @@ import { useOnboarding } from "@/context/OnboardingContext";
 import { CreateAPI } from "@/models/api.model";
 import { FileType } from "@/models/apidiscovery.model";
 import APIServices from "@/services/api_services/api_service";
-import { useToast } from "@chakra-ui/react";
+import { Spinner, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { IoCloudUploadOutline } from "react-icons/io5";
@@ -282,8 +282,10 @@ export default function ApiScratch({ infor }: any) {
   const [apiType, setApiType] = useState("SOAP");
   const [firstName, setFirstName] = useState<any>();
   const [implementationType, setImplementationType] = useState<string>("");
+  const [disabled, setDisabled] = useState<boolean>(true);
   const [file, setFile] = useState<any>(null);
   const [url, setUrl] = useState<string>("");
+  const [isValidating, setIsValidating] = useState<boolean>(false);
   const [info, setInfo] = useState<any>(infor);
   const router = useRouter();
   const toast = useToast();
@@ -424,11 +426,56 @@ export default function ApiScratch({ infor }: any) {
         });
         router.push("/weaver/dashboard");
       }
-      console.log(res);
     } catch (error: any) {
       setFile(null);
       setUrl("");
       console.log(error);
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+      console.log(errorMessage, "ïyaayyaay");
+      toast({
+        title: "API Creation",
+        description: errorMessage,
+        position: "bottom-right",
+        status: "error",
+      });
+
+      // setApiErrorMessage(errorMessage, "error");
+    }
+  };
+  const validateApi = async (url: string) => {
+    setIsValidating(true);
+    const formData = new FormData();
+    if (file !== null) {
+      formData.append("file", file);
+    } else {
+      formData.append("url", url);
+    }
+    // formData.append("implementationType", implementationType);
+    try {
+      let res;
+      if (apiType === "SOAP") {
+        res = await APIServices.validateWsdl(formData);
+      } else {
+        res = await APIServices.validateOpenApi(formData);
+      }
+      console.log(res);
+      if (res.statusCode === 200) {
+        setIsValidating(false);
+        toast({
+          title: "API Creation",
+          description: "This url is valid",
+          status: "success",
+          duration: 3000,
+          position: "bottom-right",
+        });
+        setDisabled(false);
+        // router.push("/weaver/dashboard");
+      }
+    } catch (error: any) {
+      setIsValidating(false);
+      setFile(null);
+      setUrl("");
       setLoading(false);
       const errorMessage = error?.response?.data?.message;
       console.log(errorMessage, "ïyaayyaay");
@@ -453,16 +500,24 @@ export default function ApiScratch({ infor }: any) {
   };
   const handleChangeTwo = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
-    console.log(file);
 
     setFile(file);
+    setDisabled(false);
     setUrl("");
   };
-
+  useEffect(() => {
+    if (file === null && url === "") {
+      setDisabled(true);
+    }
+  }, [url, file]);
   const apis = [
     { name: "SOAP", id: 1 },
     { name: "REST", id: 2 },
   ];
+
+  useEffect(() => {
+    console.log(disabled, "des");
+  }, [disabled]);
   return (
     <div className="w-full flex flex-col gap-3">
       <div className="flex items-center w-full gap-3">
@@ -561,22 +616,32 @@ export default function ApiScratch({ infor }: any) {
 
       <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
         <p className="text-xs text-dark-grey"> URL</p>
-        <input
-          type="text"
-          name="url"
-          placeholder="Input API URL"
-          className="outline-none bg-transparent"
-          value={url}
-          disabled={file !== null ? true : false}
-          onChange={(e) => {
-            setFile(null);
-            setUrl(e.target.value);
-          }}
-        />
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            name="url"
+            placeholder="Input API URL"
+            className="outline-none bg-transparent w-full"
+            value={url}
+            disabled={file !== null ? true : false}
+            onChange={(e) => {
+              setFile(null);
+              setUrl(e.target.value);
+            }}
+            onBlur={(e) => {
+              if (e.target.value !== "") {
+                validateApi(e.target.value);
+              }
+            }}
+          />
+
+          {isValidating ? <Spinner color="blue" /> : null}
+        </div>
       </div>
       <Button
         text="Next"
         type="full"
+        disabled={disabled}
         onClick={() => {
           if (apiType === "SOAP") {
             importwsdl(user!.customerCode);

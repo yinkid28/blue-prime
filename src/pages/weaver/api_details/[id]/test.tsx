@@ -273,8 +273,8 @@ export default function ApiModulesTests() {
             <SwaggerUI
               url={
                 deployedrevisions.length > 0
-                  ? `${BASE_URL}/api-manager/api/v1/apim-api/get-trimmed-revision-swagger-definition?rco=${deployedrevisions[0]?.revisionCode}`
-                  : `${BASE_URL}/api-manager/api/v1/apim-api/get-trimmed-api-swagger-definition?aco=${apiCode}`
+                  ? `${BASE_URL}/api-manager/api/v1/weaver/api/get-trimmed-revision-swagger-definition?rco=${deployedrevisions[0]?.revisionCode}`
+                  : `${BASE_URL}/api-manager/api/v1/weaver/api/get-trimmed-api-swagger-definition?aco=${apiCode}`
                 // "https://raw.githubusercontent.com/quaddss52/portfoliomain/main/public/documents/output-onlineyamltools.txt?token=GHSAT0AAAAAACTRVRCEBHU5XH4LBF5XFNIEZV3K3UQ"
               }
             />

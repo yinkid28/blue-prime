@@ -34,15 +34,15 @@ export default function Navbar({ title }: NavbarProps) {
   const { setLoading, setSidebar, user, setUser } = useOnboarding();
   const router = useRouter();
   const logout = useLogout();
-  useEffect(() => {
-    if (router.asPath.includes("/webber")) {
-      setUserType("webber");
-    } else {
-      setUserType("weaver");
-    }
-  }, [router]);
+  // useEffect(() => {
+  //   if (router.asPath.includes("/webber")) {
+  //     setUserType("webber");
+  //   } else {
+  //     setUserType("weaver");
+  //   }
+  // }, [router]);
   return (
-    <div className="w-full bg-transparent bg-white sticky top-0  flex justify-between items-center p-4 ">
+    <div className="w-full bg-transparent bg-white sticky top-0 z-40  flex justify-between items-center p-4 ">
       <div>
         <p className="md:text-[18px] font-semibold">{title}</p>
       </div>
