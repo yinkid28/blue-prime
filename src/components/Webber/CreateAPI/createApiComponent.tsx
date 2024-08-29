@@ -449,13 +449,13 @@ export default function ApiScratch({ infor }: any) {
       // setApiErrorMessage(errorMessage, "error");
     }
   };
-  const validateApi = async (url: string) => {
+  const validateApi = async (file?: any, url?: string) => {
     setIsValidating(true);
     const formData = new FormData();
     if (file !== null) {
       formData.append("file", file);
     } else {
-      formData.append("url", url);
+      formData.append("url", url as string);
     }
     // formData.append("implementationType", implementationType);
     try {
@@ -466,17 +466,26 @@ export default function ApiScratch({ infor }: any) {
         res = await APIServices.validateOpenApi(formData);
       }
       console.log(res);
-      if (res.statusCode === 200) {
+      if (res.data.isValid) {
         setIsValidating(false);
         toast({
           title: "API Creation",
-          description: "This url is valid",
+          description: "Validation successful, go ahead and import your api",
           status: "success",
           duration: 3000,
           position: "bottom-right",
         });
         setDisabled(false);
         // router.push("/weaver/dashboard");
+      } else {
+        setIsValidating(false);
+        toast({
+          title: "API Creation",
+          description: "Unable to retrieve api definition from resource",
+          status: "error",
+          duration: 3000,
+          position: "bottom-right",
+        });
       }
     } catch (error: any) {
       setIsValidating(false);
@@ -508,7 +517,8 @@ export default function ApiScratch({ infor }: any) {
     const file = event.target.files && event.target.files[0];
 
     setFile(file);
-    setDisabled(false);
+    validateApi(file);
+    // setDisabled(false);
     setUrl("");
   };
   useEffect(() => {
@@ -537,6 +547,8 @@ export default function ApiScratch({ infor }: any) {
             key={index}
             onClick={() => {
               setApiType(item.name);
+              setFile(null);
+              setUrl("");
             }}
           >
             <p className="">{item.name}</p>
@@ -636,13 +648,14 @@ export default function ApiScratch({ infor }: any) {
             }}
             onBlur={(e) => {
               if (e.target.value !== "") {
-                validateApi(e.target.value);
+                validateApi(null, e.target.value);
               }
             }}
           />
-
-          {isValidating ? <Spinner color="blue" /> : null}
         </div>
+      </div>
+      <div className="flex w-full items-center justify-center">
+        {isValidating ? <Spinner color="blue" /> : null}
       </div>
       <Button
         text="Next"
