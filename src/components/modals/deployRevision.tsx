@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import APIServices from "@/services/api_services/api_service";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useEffect, useState } from "react";
+import { useApi } from "@/context/ApiDiscoveryContext";
 type addEndpointModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -36,8 +37,22 @@ export default function DeployRevision({
   const [vhost, setVhost] = useState<string>(vhosts as string);
   const [displayOnDevportal, setDisplayOnDevportal] = useState<boolean>(false);
   const { setApiErrorMessage } = useOnboarding();
+
   const toast = useToast();
   const deployRevivision = async (aco: string, rco: string) => {
+    if (
+      !api.endpointConfig?.sandbox_endpoints &&
+      !api.endpointConfig?.production_endpoints
+    ) {
+      toast({
+        description:
+          "Ensure you have configured your endpoints before you can proceed to deploy",
+        position: "bottom-right",
+        duration: 3000,
+        status: "warning",
+      });
+      return;
+    }
     setLoading(true);
     try {
       const data: DeployRevisionDto[] = [

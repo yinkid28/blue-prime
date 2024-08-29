@@ -64,7 +64,7 @@ export default function Login() {
 
       const loginres = await OnboardingServices.signInUser(loginData);
       actions.setSubmitting(false);
-      CookieManager.setCookie("jwt", loginres.data.jwt, 2);
+      CookieManager.setCookie("jwt", loginres.data.jwt, 12);
       toast({
         status: "success",
         description: "Welcome",

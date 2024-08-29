@@ -44,7 +44,7 @@ export default function ApiDefinition() {
       getApi(apiCode as string);
       getApiRevisions(apiCode as string);
       getDeployedApiRevisions(apiCode as string);
-      // getApiSwagger(apiCode as string);
+      getApiSwagger(apiCode as string);
       setSidebar("apiProgress");
     }
   }, [apiCode]);
@@ -53,7 +53,6 @@ export default function ApiDefinition() {
     //   getRevisionSwagger(deployedrevisions[0]?.revisionCode);
     // } else {
     // }
-    getApiSwagger(apiCode as string);
   }, [deployedrevisions, apiCode]);
 
   const getApi = async (aco: string) => {
@@ -240,17 +239,17 @@ export default function ApiDefinition() {
               onChange={(e) => handleChangeTwo(e)}
               style={{ display: "none" }}
             />
-            <button
-              className="flex gap-3 items-center w-fit  bg-primary border-[2px]   h-fit p-3 rounded-lg text-white"
+
+            <Button
+              type="fit"
+              text=" Upload file to update Api definition"
+              loading={isUpdating}
               onClick={(e) => {
                 handleClickTwo(e);
               }}
-            >
-              <IoCloudUploadOutline />
-              <p className="text-sm font-semibold ">
-                Upload file to update Api definition
-              </p>
-            </button>
+              icon={<IoCloudUploadOutline />}
+              className="flex items-center gap-2"
+            />
           </div>
         </div>
         <div className="p-5 overflow-y-scroll h-[80vh] ">
