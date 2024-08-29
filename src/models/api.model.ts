@@ -294,3 +294,13 @@ export type IPolicy = {
   stopOnQuotaReach: boolean;
   monetizationProperties: any;
 };
+
+export type UploadCSVModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+export type NewEndpointCriteriaModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+};

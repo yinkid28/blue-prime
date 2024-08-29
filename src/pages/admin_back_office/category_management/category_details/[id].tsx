@@ -1,18 +1,25 @@
 import CategoryCard from "@/components/Admin/CategoryCard";
 import AdminNavbar from "@/components/Layout/Nav/adminNavbar";
 import Navbar from "@/components/Layout/Nav/navbar";
-import { BreadCrumbItems, BreadCrumbs, Table } from "@/components/utils";
+import CreateEndpointCriteria from "@/components/modals/addEndpointCriteria";
+import UploadCSVModal from "@/components/modals/UploadCSVModal";
+import { BreadCrumbItems, BreadCrumbs, Button, Table } from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import { Menu, MenuButton, MenuItem, MenuList, useDisclosure } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { Key, useEffect } from "react";
+import { Key, useEffect, useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
 const AdminLayout = dynamic(() => import("@/components/Layout/adminLayout"), {
   ssr: false,
 });
+
+
 export default function CategoryDetail() {
+  const { isOpen: isUploadCSVOpen, onOpen: onOpenUploadCSV, onClose: onCloseUploadCSV } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [view, setView] = useState<string>("advanced");
   const {
     setSidebar,
     loading,
@@ -111,13 +118,26 @@ export default function CategoryDetail() {
             />
           </div>
           <div className="flex items-center gap-4">
-            <button className="border-2 flex items-center justify-center gap-2 h-fit rounded-xl text-primary py-[5px] px-[22px] font-semibold text-xs whitespace-nowrap">
-              <span className="text-base -translate-y-[1px]">+</span>{" "}
-              <p>Add Endpoint Criteria</p>
-            </button>
-            <button className="border-2 rounded-xl text-primary py-2 px-[22px] font-semibold text-xs whitespace-nowrap">
+            <button
+              onClick={onOpenUploadCSV}
+              className="border-2 rounded-xl text-primary py-2 px-[22px] font-semibold text-xs whitespace-nowrap"
+            >
               Upload CSV
             </button>
+            {view && (
+             <UploadCSVModal isOpen={isUploadCSVOpen} onClose={onCloseUploadCSV} />
+            )}
+
+            <Button
+              type="fit"
+              text={"Add Endpoint Criteria"}
+              onClick={() => {
+                onOpen();
+              }}
+            />
+            {view && (
+              <CreateEndpointCriteria isOpen={isOpen} onClose={onClose} />
+            )}
           </div>
         </div>
         <Table>
