@@ -58,7 +58,7 @@ export default function ApiProductSidebar({ api }: sideBarProps) {
                 />
               </div>
               <p className="font-thin text-sm text-dar-grey">
-                {api.businessInformation.businessOwner}
+                {api?.businessInformation?.businessOwner}
               </p>
             </div>
           </div>

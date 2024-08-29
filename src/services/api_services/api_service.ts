@@ -139,6 +139,13 @@ export default class APIServices {
     );
     return response.data;
   }
+  static async generateTokenWeaver(aco: string) {
+    const response = await HTTPClient.post(
+      `/api-manager/api/v1/weaver/api/generate-api-key?aco=${aco}`,
+      undefined
+    );
+    return response.data;
+  }
   static async removebookmarkApi(aco: string, cco: string) {
     const response = await HTTPClient.post(
       `api-manager/api/v1/webber/bookmarks/remove?cco=${cco}&aco=${aco}`,

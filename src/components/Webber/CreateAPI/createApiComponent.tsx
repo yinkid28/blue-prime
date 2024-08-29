@@ -34,7 +34,13 @@ export function ApiInformation({ setStep, setProgress, setTitle }: CreateProp) {
       });
       return;
     }
-    const obj = { name, version, category, context, description };
+    const obj = {
+      name,
+      version,
+      category,
+      context: `/${context}`,
+      description,
+    };
     localStorage.setItem("info1", JSON.stringify(obj));
     setStep(2);
     setProgress(100);
@@ -68,10 +74,10 @@ export function ApiInformation({ setStep, setProgress, setTitle }: CreateProp) {
         <input
           type="text"
           name="context"
-          placeholder="/specs"
+          placeholder="globally unique id"
           className="outline-none bg-transparent"
           value={context}
-          onChange={(e) => setContext(e.target.value)}
+          onChange={(e) => setContext(`${e.target.value}`)}
         />
       </div>
       <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">

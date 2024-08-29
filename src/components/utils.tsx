@@ -15,6 +15,7 @@ type ButtonProps = {
   Type?: "button" | "reset" | "submit";
   loading?: boolean;
   disabled?: boolean;
+  icon?: React.ReactNode | React.ReactNode[];
 };
 export function Button({
   type,
@@ -24,6 +25,7 @@ export function Button({
   Type,
   loading,
   disabled,
+  icon,
 }: ButtonProps) {
   return (
     <button
@@ -38,6 +40,7 @@ export function Button({
       type={Type}
       disabled={disabled !== undefined ? disabled : false}
     >
+      {icon && icon}
       {loading ? <Spinner size={"sm"} /> : text}
     </button>
   );
