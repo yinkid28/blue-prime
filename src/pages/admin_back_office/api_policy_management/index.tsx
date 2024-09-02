@@ -447,3 +447,32 @@ function TableRow3({ api }: any) {
     </tr>
   );
 }
+
+
+
+
+{/* <div
+              className={`border py-2 px-4 text-sm rounded-lg ${
+                activeApplication === 1 ? "text-primary border-primary" : "text-mid-grey"
+              } cursor-pointer`}
+              onClick={() => handleApplicationChange(1)}
+            >
+              Application Name 1
+            </div>
+            <div
+              className={`border py-2 px-4 text-sm rounded-lg ${
+                activeApplication === 2 ? "text-primary border-primary" : "text-mid-grey"
+              } cursor-pointer`}
+              onClick={() => handleApplicationChange(2)}
+            >
+              Application Name 2
+            </div>
+            <div
+              className={`border py-2 px-4 text-sm rounded-lg ${
+                activeApplication === 3 ? "text-primary border-primary" : "text-mid-grey"
+              } cursor-pointer`}
+              onClick={() => handleApplicationChange(3)}
+            >
+              Application Name 3
+            </div>
+          </div> */}

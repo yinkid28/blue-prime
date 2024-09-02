@@ -304,3 +304,4 @@ export type NewEndpointCriteriaModalProps = {
   isOpen: boolean;
   onClose: () => void;
 };
+
