@@ -238,7 +238,7 @@ export default function ApiBusinessInformation() {
                   <p className="text-xs text-dark-grey">Business Owner</p>
                   <input
                     type="text"
-                    name="url"
+                    name="businessOwner"
                     placeholder="Business Owner "
                     className="outline-none bg-transparent"
                     value={businessOwner}
@@ -249,7 +249,7 @@ export default function ApiBusinessInformation() {
                   <p className="text-xs text-dark-grey">Business Owner Email</p>
                   <input
                     type="email"
-                    name="url"
+                    name="businessOwnerEmail"
                     placeholder="Business Owner Email"
                     className="outline-none bg-transparent"
                     value={businessOwnerEmail}
@@ -260,8 +260,8 @@ export default function ApiBusinessInformation() {
                   <p className="text-xs text-dark-grey">Technical Owner</p>
                   <input
                     type="text"
-                    name="url"
-                    placeholder="Business Owner Email"
+                    name="technicalOwner"
+                    placeholder="technicalOwner"
                     className="outline-none bg-transparent"
                     value={technicalOwner}
                     onChange={(e) => setTechnicalOwner(e.target.value)}
@@ -271,8 +271,8 @@ export default function ApiBusinessInformation() {
                   <p className="text-xs text-dark-grey">Business Owner</p>
                   <input
                     type="email"
-                    name="url"
-                    placeholder="Business Owner Email"
+                    name="technicalOwnerEmail"
+                    placeholder="technicalOwnerEmail"
                     className="outline-none bg-transparent"
                     value={technicalOwnerEmail}
                     onChange={(e) => setTechnicalOwnerEmail(e.target.value)}

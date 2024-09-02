@@ -155,7 +155,7 @@ export default function ApiInfomationViewWeaver() {
       setLoading(false);
       console.log(error);
       const errorMessage = error?.response?.data?.message;
-      setApiErrorMessage(errorMessage, "error");
+      // setApiErrorMessage(errorMessage, "error");
     }
   };
 
