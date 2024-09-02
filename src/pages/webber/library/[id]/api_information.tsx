@@ -72,7 +72,7 @@ export default function ApiOverview() {
               API Information
             </div>
             <div
-              className={`border py-2 px-4 text-sm rounded-lg text-mid-grey cursor-pointer ${
+              className={`border py-2 px-4 text-sm rounded-lg text-mid-grey cursor-pointer hidden ${
                 apiInfoView === "documentation" && "text-primary border-primary"
               }`}
               onClick={() => setApiInfoView("documentation")}

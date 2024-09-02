@@ -4,15 +4,16 @@ import {
   BreadCrumbs,
   ProgressBar,
   Table,
+  Button,
 } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
+import { RequestCardProps } from "@/models/webber.model";
 import { Progress } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
-// remember to use static generation here but for now we will use context to get current api
 const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
@@ -44,11 +45,53 @@ export default function ConsumptionRate() {
     { date: "17th Jan 2024", calls: (895).toLocaleString(), price: "$2.90" },
   ];
 
+  const consumptionRateTableDataTwo: rateTypes[] = [
+    { date: "12th Jun 2024", calls: (400).toLocaleString(), price: "$3.90" },
+    { date: "13th Jun 2024", calls: (300).toLocaleString(), price: "$3.80" },
+    { date: "14th Jun 2024", calls: (675).toLocaleString(), price: "$3.90" },
+    { date: "15th Jun 2024", calls: (836).toLocaleString(), price: "$2.90" },
+    { date: "16th Jun 2024", calls: (1920).toLocaleString(), price: "$2.90" },
+    { date: "17th Jun 2024", calls: (895).toLocaleString(), price: "$2.90" },
+  ];
+
+  const consumptionRateTableDataThree: rateTypes[] = [
+    { date: "12th Aug 2024", calls: (400).toLocaleString(), price: "$7.90" },
+    { date: "13th Aug 2024", calls: (300).toLocaleString(), price: "$4.90" },
+    { date: "14th Aug 2024", calls: (675).toLocaleString(), price: "$7.90" },
+    { date: "15th Aug 2024", calls: (836).toLocaleString(), price: "$2.90" },
+    { date: "16th Aug 2024", calls: (1920).toLocaleString(), price: "$2.90" },
+    { date: "17th Aug 2024", calls: (895).toLocaleString(), price: "$2.90" },
+  ];
+
   const [searchedText, setSearchedText] = useState<string>("");
+  const [view, setView] = useState<string>("application1");
+
   useEffect(() => {
     setLoading(false);
     setSidebar("apiProgressWeaver");
   }, []);
+
+  const getCurrentTableData = () => {
+    switch (view) {
+      case "application1":
+        return consumptionRateTableData;
+      case "application2":
+        return consumptionRateTableDataTwo;
+      case "application3":
+        return consumptionRateTableDataThree;
+      default:
+        return consumptionRateTableData;
+    }
+  };
+
+  const getCurrentMonth = () => {
+    const currentData = getCurrentTableData();
+    if (currentData.length > 0) {
+      const dateParts = currentData[0].date.split(' ');
+      return `${dateParts[1]} ${dateParts[2]}`;
+    }
+    return "Jan 2024"; 
+  };
 
   return (
     <>
@@ -60,29 +103,54 @@ export default function ConsumptionRate() {
         />
         {/* CONTENT */}
         <div className="mx-4 my-6">
-          {/* VIEW CONTROLLERS - I would make the view controllers dummy for now*/}
-          <div className="flex gap-2 rounded mb-4">
-            <div
-              className={`border py-2 px-4 text-sm rounded-lg text-mid-grey cursor-pointer`}
+          {/* VIEW CONTROLLERS */}
+          <div className="overflow-x-auto scrollbar-hide scroll-smooth"
+           style={{
+            msOverflowStyle: 'none',  
+            scrollbarWidth: 'none',  
+          }}
+          >
+
+          <div className="flex gap-2 rounded mb-4 min-w-max">
+          <div
+              className={`px-4 py-2 border ${
+                view === "application1"
+                  ? "border-primary text-primary"
+                  : "text-mid-grey"
+              }  rounded-lg cursor-pointer`}
+              onClick={() => setView("application1")}
             >
-              Application Name 1
+              <p>Application Name 1</p>
             </div>
             <div
-              className={`border py-2 px-4 text-sm rounded-lg text-mid-grey cursor-pointer`}
+              className={`px-4 py-2 border ${
+                view === "application2"
+                  ? "border-primary text-primary"
+                  : "text-mid-grey"
+              }  rounded-lg cursor-pointer`}
+              onClick={() => setView("application2")}
             >
-              Application Name 2
+              <p>Application Name 2</p>
             </div>
+
             <div
-              className={`border py-2 px-4 text-sm rounded-lg text-mid-grey cursor-pointer`}
+              className={`px-4 py-2 border ${
+                view === "application3"
+                  ? "border-primary text-primary"
+                  : "text-mid-grey"
+              }  rounded-lg cursor-pointer`}
+              onClick={() => setView("application3")}
             >
-              Application Name 3
+              <p>Application Name 3</p>
             </div>
           </div>
+          </div>
+
           {/* API TOP CARDS */}
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <RequestCard title="Price per Request">
               <div className="flex flex-col items-start space-y-2">
-                <h3 className="font-semibold">N0.1</h3>
+                <h3 className="font-semibold">N0.{view.charAt(view.length - 1)}</h3>
                 <p className="text-xs">2,000 Requests/ms</p>
               </div>
             </RequestCard>
@@ -94,7 +162,6 @@ export default function ConsumptionRate() {
                   value="40"
                   height="18px"
                 />
-
                 <p className="text-xs">{(18750).toLocaleString()} Requests</p>
               </div>
             </RequestCard>
@@ -108,7 +175,7 @@ export default function ConsumptionRate() {
             <div className="flex items-center gap-2 md:gap-4 w-[80%]">
               <div className="text-dark-txt flex gap-1 border px-4 py-3 md:py-2 rounded-lg items-center">
                 <Icon icon="lets-icons:filter-big" />
-                <p className="hidden md:flex">Jan 2024</p>
+                <p className="hidden md:flex">{getCurrentMonth()}</p>
               </div>
               <div className="flex items-center border rounded-lg w-[50%] py-2 px-2 sm:px-4 gap-1">
                 <Icon
@@ -130,52 +197,6 @@ export default function ConsumptionRate() {
             </button>
           </div>
 
-          {/* TABLE - I had to say goodbye to the search functionality for now. */}
-          {/* <div className="rounded-lg border overflow-scroll w-full">
-            <table className="min-w-full">
-              <thead className="bg-[#f8f8f8] text-mid-grey">
-                <tr className="text-left text-sm">
-                  <th className="w-1/3 px-6 py-2 whitespace-nowrap">Date</th>
-                  <th className="w-1/3 px-6 py-2 whitespace-nowrap">
-                    Request Calls
-                  </th>
-                  <th className="w-1/3 px-6 py-2 whitespace-nowrap">Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                {consumptionRateTableData.filter((item) =>
-                  searchedText.length > 0
-                    ? item.date.includes(searchedText) ||
-                      item.calls.includes(searchedText)
-                    : item
-                ).length > 0 ? (
-                  consumptionRateTableData
-                    .filter((item) =>
-                      searchedText.length > 0
-                        ? item.date.includes(searchedText) ||
-                          item.calls.includes(searchedText)
-                        : item
-                    )
-                    .map((item, index) => (
-                      <TableRow
-                        key={index}
-                        date={item.date}
-                        calls={item.calls}
-                        price={item.price}
-                      />
-                    ))
-                ) : (
-                  <tr>
-                    <td colSpan={3} className="text-center py-4 text-dark-txt">
-                      &quot;{searchedText}&quot; doesn&apos;t match any
-                      consumption rate!
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div> */}
-
           <Table>
             <Table.Header>
               <Table.Heading>Date</Table.Heading>
@@ -183,7 +204,7 @@ export default function ConsumptionRate() {
               <Table.Heading>Price</Table.Heading>
             </Table.Header>
             <Table.Body
-              data={consumptionRateTableData}
+              data={getCurrentTableData()}
               render={(item: rateTypes, index: number) => (
                 <TableRow
                   key={index}
@@ -199,10 +220,8 @@ export default function ConsumptionRate() {
     </>
   );
 }
-type RequestCardProps = {
-  title: string;
-  children: React.ReactNode;
-};
+
+
 
 function RequestCard({ title, children }: RequestCardProps) {
   return (

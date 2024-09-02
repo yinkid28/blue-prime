@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { Key, useEffect } from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import { Table } from "@/components/utils";
+import { tableTypes } from "@/models/webber.model";
 const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
@@ -47,16 +48,33 @@ export default function WaverSubscriptions() {
       req: 2000,
       date: "15th Apr 2024",
     },
+    {
+      id: 1,
+      name: "Application 1",
+      amount: 4000,
+      req: 2000,
+      date: "15th Apr 2024",
+    },
+    {
+      id: 1,
+      name: "Application 2",
+      amount: 4000,
+      req: 2000,
+      date: "15th Apr 2024",
+    },
+    {
+      id: 1,
+      name: "Application 3",
+      amount: 4000,
+      req: 2000,
+      date: "15th Apr 2024",
+    },
+    
+    
+
+    
   ];
 
-  type tableTypes = {
-    date: string;
-    appName: string;
-    plan: string;
-    price: string;
-    paymentMethod: string;
-    paymentStatus: string;
-  };
 
   const tableData: tableTypes[] = [
     {
@@ -121,10 +139,18 @@ export default function WaverSubscriptions() {
           <p className=" font-semibold">Billing Cycle</p>
           <FaEllipsisV />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        
+        <div className="overflow-x-auto" 
+          style={{
+            msOverflowStyle: 'none',  
+            scrollbarWidth: 'none',  
+          }}
+        >
+        <div className="flex gap-3 min-w-max p-4">
           {apps.map((app, index) => (
+       
             <div
-              className="w-full p-2 rounded-lg bg-lightest-grey flex flex-col gap-3 shadow-md"
+              className="w-80 p-2 rounded-lg bg-lightest-grey flex flex-col gap-3 shadow-md"
               key={index}
             >
               <p className="text-mid-grey font-semibold text-sm">{app.name}</p>
@@ -139,7 +165,8 @@ export default function WaverSubscriptions() {
               </div>
             </div>
           ))}
-        </div>
+       </div>
+       </div>
         <div className="flex items-center">
           <SearchBar />
         </div>
