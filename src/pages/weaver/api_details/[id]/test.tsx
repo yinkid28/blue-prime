@@ -151,7 +151,9 @@ export default function ApiModulesTests() {
           : `${BASE_URL}/api-manager/api/v1/weaver/api/get-trimmed-api-swagger-definition?aco=${apiCode}`,
 
       requestInterceptor: (request: any) => {
-        request.headers["Authorization"] = `Bearer ${generatedToken}`;
+        request.headers[
+          `${api?.authorizationHeader}`
+        ] = `Bearer ${generatedToken}`;
         console.log(generatedToken, "tokenn");
         return request;
       },

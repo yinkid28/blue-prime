@@ -3,9 +3,9 @@ import {
   ApiUpload,
 } from "@/components/Webber/CreateAPI/createApiComponent";
 import OnboardingNavbar from "@/components/onboarding/onboardingNavbar";
-import { Loader } from "@/components/utils";
+import { Button, Loader } from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { Progress } from "@chakra-ui/react";
+import { Progress, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
@@ -16,6 +16,37 @@ export default function CreateApi() {
   const [progress, setProgress] = useState<number>(50);
   const [title, setTitle] = useState<string>("Build API");
   const [step, setStep] = useState<number>(1);
+  const [name, setName] = useState<string>("");
+  const [context, setContext] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [version, setVersion] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
+  const toast = useToast();
+  useEffect(() => {
+    setTitle("Build API");
+  });
+  const handleNext = () => {
+    if (name == "" || context == "" || version == "") {
+      toast({
+        title: "Create API",
+        description: "Kindly fill in all necessary details",
+        status: "warning",
+        position: "bottom-right",
+        duration: 3000,
+      });
+      return;
+    }
+    const obj = {
+      name,
+      version,
+      category,
+      context: `/${context}`,
+      description,
+    };
+    localStorage.setItem("info1", JSON.stringify(obj));
+    setStep(2);
+    setProgress(100);
+  };
   useEffect(() => {
     setLoading(false);
   }, []);
@@ -57,11 +88,73 @@ export default function CreateApi() {
               </div>
               <div className="flex flex-col gap-3 w-full md:w-[70%]">
                 {step === 1 ? (
-                  <ApiInformation
-                    setProgress={setProgress}
-                    setStep={setStep}
-                    setTitle={setTitle}
-                  />
+                  <>
+                    <div className="flex flex-col gap-3">
+                      {" "}
+                      <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
+                        <p className="text-xs text-dark-grey">Name</p>
+                        <input
+                          type="text"
+                          name="name"
+                          placeholder="PizzaSnaksApi"
+                          className="outline-none bg-transparent"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                        />
+                      </div>
+                      <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
+                        <p className="text-xs text-dark-grey">Description</p>
+                        <textarea
+                          name="description"
+                          placeholder="PizzaSnaksApiDescription"
+                          className="outline-none bg-transparent"
+                          value={description}
+                          onChange={(e) => setDescription(e.target.value)}
+                        />
+                      </div>
+                      <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
+                        <p className="text-xs text-dark-grey">Context</p>
+                        <input
+                          type="text"
+                          name="context"
+                          placeholder="globally unique id"
+                          className="outline-none bg-transparent"
+                          value={context}
+                          onChange={(e) => setContext(`${e.target.value}`)}
+                        />
+                      </div>
+                      <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
+                        <p className="text-xs text-dark-grey">Version</p>
+                        <input
+                          type="text"
+                          name="version"
+                          placeholder="V1.02"
+                          className="outline-none bg-transparent"
+                          value={version}
+                          onChange={(e) => setVersion(e.target.value)}
+                        />
+                      </div>
+                      {/* <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
+        <p className="text-xs text-dark-grey">Category</p>
+        <select
+          className="outline-none bg-transparent"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="">Please select category</option>
+          <option value="Finance">Finance</option>
+          <option value="Entertainment">Entertainment</option>
+        </select>
+      </div> */}
+                      <Button
+                        text="Next"
+                        type="full"
+                        onClick={() => {
+                          handleNext();
+                        }}
+                      />
+                    </div>
+                  </>
                 ) : (
                   <ApiUpload
                     setProgress={setProgress}

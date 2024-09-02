@@ -92,7 +92,16 @@ export default function Deploy() {
       getApi(apiCode as string);
     }
   }, [apiCode]);
-
+  const handleEndpointConfigCheck = (api: IApi) => {
+    if (
+      api.endpointConfig?.sandbox_endpoints ||
+      api.endpointConfig?.production_endpoints
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
   return (
     <>
       <WebberLayout>
@@ -143,6 +152,23 @@ export default function Deploy() {
                     position: "bottom-right",
                     duration: 3000,
                   });
+                  return;
+                }
+                if (!handleEndpointConfigCheck) {
+                  toast({
+                    title: "Create Revision",
+                    description:
+                      "Ensure you have provided either a sandbox or production url before creating a revision",
+                    status: "error",
+                    position: "bottom-right",
+                    duration: 3000,
+                  });
+                  router.push(
+                    `/weaver/api_details/${toTitleCase(
+                      api!.name,
+                      true
+                    )}/endpoints?apiCode=${apiCode}`
+                  );
                   return;
                 }
                 onOpen();

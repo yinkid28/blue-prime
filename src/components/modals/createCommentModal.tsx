@@ -15,6 +15,7 @@ import { useOnboarding } from "@/context/OnboardingContext";
 import { useState } from "react";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useRouter } from "next/router";
+import { useUser } from "@/context/userContext";
 type addEndpointModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -28,6 +29,7 @@ export default function CreateComment({
 }: // getComments,
 addEndpointModalProps) {
   const { api, setApi } = useApi();
+  const { userType } = useUser();
   const toast = useToast();
   const router = useRouter();
   const { loading, setLoading, setApiErrorMessage } = useOnboarding();

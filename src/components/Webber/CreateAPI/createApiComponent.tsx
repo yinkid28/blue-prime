@@ -7,6 +7,7 @@ import { Spinner, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { IoCloudUploadOutline } from "react-icons/io5";
+import { MdErrorOutline } from "react-icons/md";
 
 type CreateProp = {
   setStep: Dispatch<SetStateAction<number>>;
@@ -554,6 +555,19 @@ export default function ApiScratch({ infor }: any) {
             <p className="">{item.name}</p>
           </div>
         ))}
+      </div>
+      <div className="flex text-dark-grey items-center gap-2">
+        <MdErrorOutline />
+
+        <p className="text-xs">
+          Ensure your API strictly conforms with the{" "}
+          {apiType === "SOAP" ? (
+            <span className="font-semibold">SOAP 1.1 or 1.2 </span>
+          ) : (
+            <span className="font-semibold">OpenApi 3.0.1 </span>
+          )}{" "}
+          guidelines before importing
+        </p>
       </div>
       {apiType === "SOAP" && (
         <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">

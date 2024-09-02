@@ -460,7 +460,7 @@ export default function ApiProgressEndpoints() {
                     }}
                   />
                 </div>
-                <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
+                {/* <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
                   <p className="text-xs text-dark-grey">
                     General Endpoint Configuration
                   </p>
@@ -470,9 +470,8 @@ export default function ApiProgressEndpoints() {
                     className="border-none outline-none"
                   >
                     <option value="">Choose a Configuration</option>
-                    {/* <option value="entertainment">Entertainment</option> */}
                   </select>
-                </div>
+                </div> */}
                 <div className="bg-light-grey rounded-lg p-1 h-fit ease-in-out duration-500">
                   <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex gap-1 flex-col">
                     <p className="text-sm text-dark-grey font-semibold">

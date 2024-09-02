@@ -175,7 +175,7 @@ export default function ApiOverview() {
                               />
                             </div>
                             <div
-                              className="flex items-center gap-2"
+                              className="flex cursor-pointer items-center gap-2"
                               onClick={() =>
                                 router.push(
                                   `/weaver/api_details/${toTitleCase(
@@ -185,13 +185,18 @@ export default function ApiOverview() {
                                 )
                               }
                             >
-                              <p className="text-mid-grey font-bold text-sm">
+                              <p
+                                className={`text-mid-grey ${
+                                  api && api?.policies.length > 0
+                                    ? "font-bold"
+                                    : ""
+                                } text-sm`}
+                              >
                                 Business Details
                               </p>
                               <FaCheck
                                 className={
-                                  api?.businessInformation?.businessOwner !==
-                                  null
+                                  api && api?.policies.length > 0
                                     ? "text-success"
                                     : "text-mid-grey"
                                 }

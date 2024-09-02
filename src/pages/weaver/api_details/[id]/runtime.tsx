@@ -35,7 +35,7 @@ const WebberLayout = dynamic(() => import("@/components/Layout/layout"), {
 export default function ApiRuntime() {
   const { api, setApi } = useApi();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [corsConfig, setCorsConfig] = useState<boolean>(false);
+  const [corsConfig, setCorsConfig] = useState<boolean>();
   const [allowAllOrigins, setAllowallOrigins] = useState<boolean>(false);
   const [allowCredentials, setAllowCredentials] = useState<boolean>(false);
   const router = useRouter();
@@ -99,7 +99,7 @@ export default function ApiRuntime() {
   const getApi = async (aco: string) => {
     try {
       const res = await APIServices.getSingleApi(aco);
-      console.log(res);
+      console.log(res, "api");
       if (res.statusCode === 200) {
         setApi(res.data);
       }
@@ -176,6 +176,7 @@ export default function ApiRuntime() {
     }
     setLoading(false);
   }, [apiCode]);
+
   const createMultiOptions = (arr: any[]) => {
     return Array.from(arr, (item) => {
       return { label: item, value: item };
@@ -213,6 +214,7 @@ export default function ApiRuntime() {
       }
       setAllowCredentials(api.corsConfiguration.accessControlAllowCredentials);
       setCorsConfig(api.corsConfiguration.corsConfigurationEnabled);
+
       setSecurityScheme(api.securityScheme);
       setAuthorization(api.authorizationHeader as string);
       if (api.corsConfiguration.accessControlAllowOrigins.includes("*")) {
@@ -266,7 +268,7 @@ export default function ApiRuntime() {
                     >
                       HTTPS
                     </Checkbox>
-                    <Checkbox value={"SSL"}>SSL</Checkbox>
+                    {/* <Checkbox value={"SSL"}>SSL</Checkbox> */}
                   </div>
                 </AccordionPanel>
               </AccordionItem>
