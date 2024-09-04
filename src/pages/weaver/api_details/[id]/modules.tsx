@@ -32,6 +32,7 @@ import { ImockTag } from "./test";
 import APIServices from "@/services/api_services/api_service";
 import {
   DeployRevisionDto,
+  IApi,
   IPolicy,
   IRevision,
   SwaggerOperation,
@@ -132,6 +133,16 @@ export default function ApiModules() {
     onOpen: onTagOpen,
     onClose: onTagClose,
   } = useDisclosure();
+  const handleEndpointConfigCheck = (api: IApi) => {
+    if (
+      api.endpointConfig?.sandbox_endpoints ||
+      api.endpointConfig?.production_endpoints
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
   function getOperationsByTag(apiPaths: ApiPaths, tag: string) {
     const operations = [];
 
@@ -386,6 +397,15 @@ export default function ApiModules() {
     setOperations(newOps);
   };
   const updateSwaggerDocument = async (aco: string, deploy?: boolean) => {
+    if (!handleEndpointConfigCheck(api as IApi)) {
+      toast({
+        description:
+          "Ensure you have configured your endpoints before carrying out this action",
+        duration: 3000,
+        position: "bottom-right",
+        status: "error",
+      });
+    }
     setIsUpdating(true);
     const data = {
       ...swagger,
@@ -405,7 +425,8 @@ export default function ApiModules() {
           await createRevision(aco);
         }
         toast({
-          description: "Api definition successfully updated",
+          description:
+            "Api successfully updated, ensure you deploy a new revision before you test again",
           position: "bottom-right",
           duration: 3000,
           status: "success",
@@ -957,7 +978,7 @@ export default function ApiModules() {
                 >
                   Save
                 </MenuItem>
-                <MenuItem
+                {/* <MenuItem
                   onClick={() => {
                     if (current.includes("API")) {
                       updateSwaggerDocument(apiCode as string, true);
@@ -967,7 +988,7 @@ export default function ApiModules() {
                   }}
                 >
                   Save & Deploy
-                </MenuItem>
+                </MenuItem> */}
               </MenuList>
             </Menu>
           </div>

@@ -179,10 +179,32 @@ export default function ApiDiscoveryDashboard() {
           position: "bottom-left",
         });
         setIsLoading(false);
+        getApis(pageNo, pageSize);
       }
     } catch (error: any) {
       setIsLoading(false);
 
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
+  const unbookmarkApi = async (cco: string, aco: string) => {
+    setIsLoading(true);
+
+    try {
+      const res = await APIServices.removebookmarkApi(aco, cco);
+      if (res.statusCode === 200) {
+        setIsLoading(false);
+        toast({
+          description: "API removed from bookmarks",
+          status: "success",
+          duration: 3000,
+          position: "bottom-left",
+        });
+        getApis(pageNo, pageSize);
+      }
+    } catch (error: any) {
+      setIsLoading(false);
       const errorMessage = error?.response?.data?.message;
       setApiErrorMessage(errorMessage, "error");
     }
@@ -224,7 +246,9 @@ export default function ApiDiscoveryDashboard() {
                 bookmarked={item.bookmarked as boolean}
                 api={item}
                 onToggleBookmarked={() => {
-                  bookmarkApis(user?.customerCode as string, item.apiCode);
+                  item.bookmarked
+                    ? unbookmarkApi(user?.customerCode as string, item.apiCode)
+                    : bookmarkApis(user?.customerCode as string, item.apiCode);
                 }}
               />
             ))
