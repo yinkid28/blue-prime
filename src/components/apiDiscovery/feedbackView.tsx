@@ -1,3 +1,4 @@
+
 import { MdAdd } from "react-icons/md";
 import FeedbackCard from "./feedbackCard";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -17,7 +18,7 @@ type FeedbackViewProps = {
   feedbacks: IComment[];
   isLoading: boolean;
   canReply?: boolean;
-  // getComments: (aco: string, limit: number, offset: number) => void;
+  getComments: (aco: string, limit: number, offset: number) => void;
 };
 export default function FeedbackView({
   commentButtonDisplay,
@@ -35,6 +36,8 @@ FeedbackViewProps) {
     onOpen: onReplyOpen,
     onClose: onReplyClose,
   } = useDisclosure();
+
+
 
   return (
     <div className="w-full flex flex-col-reverse md:flex-row justify-between">
@@ -98,3 +101,9 @@ FeedbackViewProps) {
     </div>
   );
 }
+
+
+
+
+
+

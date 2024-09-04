@@ -84,6 +84,9 @@ export default class APIServices {
     );
     return response.data;
   }
+
+  
+
   static async getSingleApp(appco: string) {
     const response = await HTTPClient.get(
       `/api-manager/api/v1/webber/application/applications/${appco}`
@@ -176,6 +179,7 @@ export default class APIServices {
     );
     return response.data;
   }
+
   static async deployRevision(data: any, aco: string, revId: string) {
     const response = await HTTPClient.post(
       `api-manager/api/v1/weaver/revision/deploy?aco=${aco}&rco=${revId}`,
@@ -282,4 +286,43 @@ export default class APIServices {
     );
     return response.data;
   }
+
+  static async deleteWebberCommentbyApicode(aco: string, commId: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/vi/webber/comments/delete?aco=${aco}&commentId=${commId}`
+    );
+    return response.data;
+  }
+
+  static async getWebberRepliesToComment(aco: string, commId: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/comments/replies?aco=${aco}&commentId=${commId}`
+    );
+    return response.data;
+  }
+  
+  static async createWebberComment(data: any, aco: string, to?: string) {
+    const response = await HTTPClient.post(
+      `api-manager/api/v1/webber/comments/add?aco=${aco}${to ? `&replyTo=${to}` : ""}`,
+      data
+    );
+    return response.data;
+  }
+  
+  static async getWebberCommentsByApiCode(aco: string, limit: number, offset: number) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/comments/get-list?aco=${aco}&limit=${limit}&offset=${offset}`
+    );
+    return response.data;
+  }
+
+  static async getWebberCommentDetail(aco: string, commentId: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/comments/get-detail?aco=${aco}&commentId=${commentId}`
+    );
+    return response.data;
+  }
+  
 }
+
+  

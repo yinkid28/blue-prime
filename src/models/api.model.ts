@@ -93,17 +93,33 @@ export type IDeploymentInfo = {
   successDeployedTime: any;
 };
 
+// export type IComment = {
+//   id: string;
+//   content: string;
+//   createdTime: string;
+//   createdBy: string;
+//   updatedTime: string;
+//   category: string;
+//   entryPoint: string;
+//   replies: IReply;
+//   aco: string;
+// };
 export type IComment = {
-  id: string;
-  content: string;
-  createdTime: string;
-  createdBy: string;
-  updatedTime: string;
-  category: string;
-  entryPoint: string;
-  replies: IReply;
+id: string;
+content: string;
+createdTime: string;
+createdBy: string;
+updatedTime: string;
+category: string;
+entryPoint: string;
+replies: { list: IReply[] };
+aco?: string;
 };
+
 export type IReply = {
+  content: '';
+  createdBy: '';
+  aco(aco: any, id: string): unknown;
   count: number;
   list: IComment[];
   pagination: {

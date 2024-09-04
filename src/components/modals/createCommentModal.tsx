@@ -43,7 +43,7 @@ addEndpointModalProps) {
     };
     setIsCreating(true);
     try {
-      const res = await APIServices.createComment(data, aco, to);
+      const res = await APIServices.createWebberComment(data, aco, to);
       if (res.statusCode === 201) {
         // setComments(res.data);
         setIsCreating(false);

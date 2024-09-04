@@ -34,7 +34,7 @@ export function withErrorHandling(apiCall: Promise<AxiosResponse<any>>) {
 //   useEffect(() => {
 //     const interceptor = instance.interceptors.response.use(
 //       (res) => res,
-//       (err) => {
+//       (err) => {wea
 //         if (process.env.NODE_ENV === "production") {
 //           const status = err.response?.status;
 //           const statusText = err.response?.statusText;
