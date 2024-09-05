@@ -35,7 +35,9 @@ instance.interceptors.response.use(
     if (error.response?.status === 401) {
       // Handle 401 globally
       console.log("401 Unauthorized. Redirecting to login...");
-      window.location.href = "/onboarding/login"; // Redirect to login page
+      window.location.href = "/onboarding/login";
+      localStorage.removeItem("onb");
+      window.location.reload();
     }
     return Promise.reject(error); // Pass the error to be handled locally if needed
   }

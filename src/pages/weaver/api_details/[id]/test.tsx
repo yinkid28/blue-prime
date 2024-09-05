@@ -131,7 +131,7 @@ export default function ApiModulesTests() {
   const [generatedToken, setGenratedToken] = useState<string>("");
   const [validity, setValidity] = useState<number>(0);
   const [isgenerating, setIsGenerating] = useState<boolean>(false);
-  const [swaggerConfig, setSwaggerConfig] = useState<any>({});
+  const [swaggerSpec, setSwaggerSpec] = useState<any>({});
   const { loading, setLoading, setSidebar, setApiErrorMessage } =
     useOnboarding();
 
@@ -142,24 +142,6 @@ export default function ApiModulesTests() {
     onClose: onTagClose,
   } = useDisclosure();
 
-  useEffect(() => {
-    // Update Swagger configuration whenever generatedToken changes
-    setSwaggerConfig({
-      url:
-        deployedrevisions.length > 0
-          ? `${BASE_URL}/api-manager/api/v1/weaver/api/get-trimmed-revision-swagger-definition?rco=${deployedrevisions[0]?.revisionCode}`
-          : `${BASE_URL}/api-manager/api/v1/weaver/api/get-trimmed-api-swagger-definition?aco=${apiCode}`,
-
-      requestInterceptor: (request: any) => {
-        request.headers[
-          `${api?.authorizationHeader}`
-        ] = `Bearer ${generatedToken}`;
-        console.log(generatedToken, "tokenn");
-        return request;
-      },
-    });
-    console.log(generatedToken, "outsideS");
-  }, [generatedToken, deployedrevisions, apiCode]);
   const getApi = async (aco: string) => {
     try {
       const res = await APIServices.getSingleApi(aco);
@@ -207,6 +189,40 @@ export default function ApiModulesTests() {
     }
   };
 
+  const fetchSwaggerDefinition = async (rco: string) => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/api-manager/api/v1/weaver/api/get-trimmed-revision-swagger-definition?rco=${rco}`
+      );
+      const swaggerData = await response.json();
+
+      // Modify the servers array
+      (swaggerData.servers = [
+        {
+          url: `https://20.160.81.193:8243${api?.context}/${api?.version}`,
+          // description: "Sandbox Server",
+        },
+        {
+          url: `https://20.160.81.193:8243${api?.context}/${api?.version}`,
+          // description: "Production Server",
+        },
+      ]),
+        setSwaggerSpec(swaggerData);
+    } catch (error) {
+      console.error("Failed to fetch or modify the Swagger definition:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (deployedrevisions.length > 0) {
+      // Assuming you already have the deployedRevisions data populated
+      const revisionCode = deployedrevisions[0]?.revisionCode;
+      if (revisionCode) {
+        fetchSwaggerDefinition(revisionCode);
+      }
+    }
+  }, [apiCode, deployedrevisions]);
+  //
   const getDeployedApiRevisions = async (aco: string) => {
     try {
       const res = await APIServices.getApiRevisions(aco, true);
@@ -296,20 +312,14 @@ export default function ApiModulesTests() {
               </p>
             ) : (
               <SwaggerUI
-                // url={
-                //   deployedrevisions.length > 0
-                //     ? `${BASE_URL}/api-manager/api/v1/weaver/api/get-trimmed-revision-swagger-definition?rco=${deployedrevisions[0]?.revisionCode}`
-                //     : `${BASE_URL}/api-manager/api/v1/weaver/api/get-trimmed-api-swagger-definition?aco=${apiCode}`
-                //   // "https://raw.githubusercontent.com/quaddss52/portfoliomain/main/public/documents/output-onlineyamltools.txt?token=GHSAT0AAAAAACTRVRCEBHU5XH4LBF5XFNIEZV3K3UQ"
-                // }
-                // requestInterceptor={(request) => {
-                //   // Add your authorization token here
-                //   request.headers["Authorization"] = `Bearer ${generatedToken}`;
-
-                //   return request;
-                // }}
-                {...swaggerConfig}
-                // key={generatedToken}
+                requestInterceptor={(request: any) => {
+                  request.headers[
+                    `${api?.authorizationHeader}`
+                  ] = `Bearer ${generatedToken}`;
+                  console.log(generatedToken, "tokenn");
+                  return request;
+                }}
+                spec={swaggerSpec}
               />
             )}
           </div>
