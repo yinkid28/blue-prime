@@ -200,7 +200,8 @@ export default function ApiProgressEndpoints() {
             setIsLoading(false);
             toast({
               title: "Update Api",
-              description: "API successfully Updated",
+              description:
+                "Api successfully updated, ensure you deploy a new revision before you test again",
               duration: 3000,
               status: "success",
               position: "bottom-right",
@@ -276,7 +277,8 @@ export default function ApiProgressEndpoints() {
             setIsLoading(false);
             toast({
               title: "Update Api",
-              description: "API successfully Updated",
+              description:
+                "Api successfully updated, ensure you deploy a new revision before you test again",
               duration: 3000,
               status: "success",
               position: "bottom-right",
@@ -330,7 +332,8 @@ export default function ApiProgressEndpoints() {
             setIsLoading(false);
             toast({
               title: "Update Api",
-              description: "API successfully Updated",
+              description:
+                "Api successfully updated, ensure you deploy a new revision before you test again",
               duration: 3000,
               status: "success",
               position: "bottom-right",

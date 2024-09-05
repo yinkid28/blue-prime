@@ -1,4 +1,5 @@
 import Navbar from "@/components/Layout/Nav/navbar";
+import validator from "validator";
 
 import { BreadCrumbs, Button } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
@@ -98,6 +99,32 @@ export default function ApiBusinessInformation() {
   };
 
   const updateApi = async (aco: string) => {
+    if (businessOwner === "") {
+      setApiErrorMessage(
+        "Kindly provide a business owner before saving",
+        "error"
+      );
+      setIsLoading(false);
+      return;
+    }
+    if (technicalOwner === "") {
+      setApiErrorMessage(
+        "Kindly provide a technical owner before saving",
+        "error"
+      );
+      setIsLoading(false);
+      return;
+    }
+    // if (businessOwnerEmail !== "" || !validator.isEmail(businessOwnerEmail)) {
+    //   setApiErrorMessage("Ensure business owner email is valid", "error");
+    //   setIsLoading(false);
+    //   return;
+    // }
+    // if (technicalOwnerEmail !== "" || !validator.isEmail(technicalOwnerEmail)) {
+    //   setApiErrorMessage("Ensure technical owner email is valid", "error");
+    //   setIsLoading(false);
+    //   return;
+    // }
     setIsLoading(true);
     if (api) {
       const { apiCode, customerCode, ...restApiProps } = api;
@@ -119,7 +146,8 @@ export default function ApiBusinessInformation() {
           setIsLoading(false);
           toast({
             title: "Update Api",
-            description: "API successfully Updated",
+            description:
+              "Api successfully updated, ensure you deploy a new revision before you test again",
             duration: 3000,
             status: "success",
             position: "bottom-right",
@@ -268,7 +296,9 @@ export default function ApiBusinessInformation() {
                   />
                 </div>
                 <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
-                  <p className="text-xs text-dark-grey">Business Owner</p>
+                  <p className="text-xs text-dark-grey">
+                    Technical Owner Email
+                  </p>
                   <input
                     type="email"
                     name="technicalOwnerEmail"

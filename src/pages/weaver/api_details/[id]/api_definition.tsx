@@ -148,9 +148,9 @@ export default function ApiDefinition() {
       console.log(res);
       if (res.statusCode === 200) {
         toast({
-          description: "Api definition successfully updated",
+          description: "Api definition successfully updated, ensure you deploy a new revision before you test again",
           position: "bottom-right",
-          duration: 3000,
+          duration: 4000,
           status: "success",
         });
       }
