@@ -43,20 +43,31 @@ export default function ApiInfomationViewWeaver() {
   };
   const handleChangeTwo = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
-    const reader = new FileReader();
-    if (reader) {
-      var url = reader.readAsDataURL(file as File);
+
+    if (file) {
+      const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.svg|\.gif)$/i;
+
+      if (!allowedExtensions.exec(file.name)) {
+        setApiErrorMessage(
+          "Invalid file type. Please select a .jpg, .jpeg, .png, .svg, or .gif file.",
+          "error"
+        );
+
+        return;
+      }
+
+      const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result as string);
-        // setPic(true);
-
         console.log(reader.result);
       };
 
+      reader.readAsDataURL(file);
       updateApiImg(apiCode as string, file);
       setFile(file as FileType);
     }
   };
+
   const updateApi = async (aco: string) => {
     setIsLoading(true);
     if (api) {
@@ -83,7 +94,8 @@ export default function ApiInfomationViewWeaver() {
           setIsLoading(false);
           toast({
             title: "Update Api",
-            description: "API successfully Updated",
+            description:
+              "Api successfully updated, ensure you deploy a new revision before you test again",
             duration: 3000,
             status: "success",
             position: "bottom-right",
@@ -195,7 +207,10 @@ export default function ApiInfomationViewWeaver() {
                   <p className="text-sm font-semibold ">
                     Upload API Product Image/Logo
                   </p>
-                  {/* <p className="text-sm font-semibold ">JSON, X-YAML, YAML</p> */}
+                  <p className="text-sm font-semibold ">
+                    {" "}
+                    .jpg, .png, .jpeg, .svg and .gif
+                  </p>
                 </button>
               </div>
             ) : !Thumbnail && preview ? (
@@ -277,7 +292,7 @@ export default function ApiInfomationViewWeaver() {
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>
           </div>
-          <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
+          {/* <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
             <p className="text-xs text-dark-grey"> Category/Industry</p>
             <select
               name="apiCat"
@@ -289,7 +304,7 @@ export default function ApiInfomationViewWeaver() {
               <option value="">Choose a category</option>
               <option value="entertainment">Entertainment</option>
             </select>
-          </div>
+          </div> */}
         </div>
         <div className="w-full flex flex-col gap-3">
           <p className="text-xs text-dark-grey"> API Details</p>

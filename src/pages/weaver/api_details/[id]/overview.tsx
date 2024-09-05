@@ -143,7 +143,15 @@ export default function ApiOverview() {
                           >
                             <p>Develop</p>
                           </div>
-                          <FaCheckCircle className="text-success text-xl" />
+                          <FaCheckCircle
+                            className={`${
+                              api &&
+                              handleEndpointConfigCheck(api as IApi) &&
+                              api?.policies.length > 0
+                                ? "text-success"
+                                : "text-mid-grey"
+                            }  text-xl`}
+                          />
                         </AccordionButton>
 
                         <AccordionPanel p={4}>

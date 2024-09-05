@@ -554,6 +554,10 @@ export default function ApiModules() {
                 text={item}
               />
             ))}
+            {(api?.lifeCycleStatus.toLowerCase() === "created" ||
+              api?.lifeCycleStatus.toLowerCase() === "prototyped") && (
+              <Button onClick={() => {}} text="Request Publishing" type="fit" />
+            )}
           </div>
         </div>
       </div>

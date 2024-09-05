@@ -18,7 +18,7 @@ export default function Home() {
   const { progress } = useOnboarding();
   return (
     <div className="flex items-center h-screen justify-center">
-      <p className="text-5xl">{progress}</p>
+      {/* <p className="text-5xl">{progress}</p> */}
       <Button
         type="full"
         text="Hello"

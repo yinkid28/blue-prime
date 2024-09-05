@@ -33,7 +33,7 @@ export default function DeployRevision({
 }: addEndpointModalProps) {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
-  const [deployName, setDeployname] = useState<string>("Default");
+  const [deployName, setDeployname] = useState<string>(revision?.displayName);
   const [vhost, setVhost] = useState<string>(vhosts as string);
   const [displayOnDevportal, setDisplayOnDevportal] = useState<boolean>(false);
   const { setApiErrorMessage } = useOnboarding();
@@ -57,7 +57,7 @@ export default function DeployRevision({
     try {
       const data: DeployRevisionDto[] = [
         {
-          name: deployName,
+          name: "Default",
           vhost,
           displayOnDevportal,
         },
@@ -87,7 +87,7 @@ export default function DeployRevision({
     try {
       const data: DeployRevisionDto[] = [
         {
-          name: deployName,
+          name: "Default",
           vhost,
           displayOnDevportal,
         },

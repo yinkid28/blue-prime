@@ -57,7 +57,7 @@ export default function LibraryDashboard() {
 
     try {
       const res = await APIServices.removebookmarkApi(aco, cco);
-      if (res.statusCode === 201) {
+      if (res.statusCode === 200) {
         setIsLoading(false);
         toast({
           description: "API removed from bookmarks",

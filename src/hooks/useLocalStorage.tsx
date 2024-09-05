@@ -2,6 +2,7 @@ import { useOnboarding } from "@/context/OnboardingContext";
 import { useUser } from "@/context/userContext";
 import CookieManager from "@/helper_utils/cookie_manager";
 import { useToast } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export function useLocalStorage(key: string, initialValue: any) {
@@ -47,14 +48,16 @@ export function useLocalStorage(key: string, initialValue: any) {
 
 export function useLogout() {
   const { setUser } = useOnboarding();
-  const { setUserType } = useUser();
+  const { setUserType, userType } = useUser();
   const toast = useToast();
-
+  const router = useRouter();
   return function logout() {
     setUser(null);
     setUserType("webber");
     CookieManager.deleteCookie("jwt");
-
+    if (userType === "weaver") {
+      router.push("/onboarding/login");
+    }
     toast({
       description: "See you soon!!",
       position: "bottom-right",
