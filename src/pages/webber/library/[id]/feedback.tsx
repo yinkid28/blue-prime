@@ -82,7 +82,7 @@ export default function WeaverFeedback() {
           feedbacks={comments}
           commentButtonDisplay
           canReply
-          getComments={getApiComments}
+          // getComments={getApiComments}
         />
         {/* <GlobalPagination
         onPageClick={handlePageClick}

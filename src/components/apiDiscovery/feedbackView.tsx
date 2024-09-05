@@ -18,7 +18,7 @@ type FeedbackViewProps = {
   feedbacks: IComment[];
   isLoading: boolean;
   canReply?: boolean;
-  getComments: (aco: string, limit: number, offset: number) => void;
+  // getComments: (aco: string, limit: number, offset: number) => void;
 };
 export default function FeedbackView({
   commentButtonDisplay,
