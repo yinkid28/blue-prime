@@ -120,6 +120,7 @@ export default class APIServices {
     );
     return response.data;
   }
+
   static async subscribeApptoApi(
     aco: string,
     throttling: string,
@@ -132,13 +133,33 @@ export default class APIServices {
     return response.data;
   }
 
-  static async getsubcribedAppsbyApiCode(aco: string) {
-    const response = await HTTPClient.post(
-      `api-manager/api/v1/webber/subscriptions/get-all?apiId=${aco}&limit=25`,
-      undefined
+  static async getSubcribedAppsbyApiCode(aco: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/subscriptions/get-all?aco=${aco}&limit=25`,
+
     );
     return response.data;
   }
+
+  static async getSubscriptionsBySubco(subco: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/subscriptions/get?subco=${subco}`
+    );
+    return response.data;
+  }
+
+  static async getAdditionalSubscriptionInfo(
+    aco: string,
+    groupId: string,
+    limit: number = 25
+  ) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/subscriptions/additionalInfo?aco=${aco}&groupId=${groupId}&limit=${limit}`
+    );
+    return response.data;
+  }
+
+
   static async generateTokenWeaver(aco: string) {
     const response = await HTTPClient.post(
       `/api-manager/api/v1/weaver/api/generate-api-key?aco=${aco}`,
