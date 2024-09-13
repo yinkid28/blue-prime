@@ -80,7 +80,6 @@ addEndpointModalProps) {
     }
   };
 
-
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -89,7 +88,7 @@ addEndpointModalProps) {
           {to ? "New Reply" : "New Comment"}
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody className="w-full  rounded-lg bg-white">
+       <ModalBody className="w-full  rounded-lg bg-white">
           <div className="flex flex-col gap-2">
             <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
               <p className="text-xs text-dark-grey">Feedback</p>
