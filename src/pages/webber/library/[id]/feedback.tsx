@@ -38,7 +38,11 @@ export default function WeaverFeedback() {
   const getApiComments = async (aco: string, limit: number, offset: number) => {
     setIsLoadingComments(true);
     try {
-      const res = await APIServices.getCommentsByApiCode(aco, limit, offset);
+      const res = await APIServices.getWebberCommentsByApiCode(
+        aco,
+        limit,
+        offset
+      );
       if (res.statusCode === 200) {
         setIsLoadingComments(false);
         setComments(res.data.list);

@@ -36,38 +36,50 @@ addEndpointModalProps) {
   const [content, setContent] = useState<string>("");
   const [isCreating, setIsCreating] = useState<boolean>(false);
 
-  const createComment = async (aco: string, to?: string) => {
-    const data = {
-      content,
-      category: "",
-    };
+  const handleCreateComment = async () => {
+    if (!content.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter a comment",
+        status: "error",
+        duration: 3000,
+        position: "bottom-right",
+      });
+      return;
+    }
+
+    const data = { content, category: "" };
     setIsCreating(true);
+
     try {
-      const res = await APIServices.createComment(data, aco, to);
+      const createCommentFunction = userType === "webber" 
+        ? APIServices.createWebberComment 
+        : APIServices.createComment;
+
+      const res = await createCommentFunction(data, api?.apiCode as string, to);
+
       if (res.statusCode === 201) {
-        // setComments(res.data);
         setIsCreating(false);
         toast({
           title: "Feedback",
           description: "Feedback Saved",
-          duration: 3000,
           status: "success",
+          duration: 3000,
           position: "bottom-right",
         });
         onClose();
-        // getComments(api?.apiCode as string, 10, 0);  
         router.reload();
       }
-      setLoading(false);
     } catch (error: any) {
       setIsCreating(false);
-      console.log(error);
-      const errorMessage = error?.response?.data?.message;
+      console.error(error);
+      const errorMessage = error?.response?.data?.message || "An error occurred";
       setApiErrorMessage(errorMessage, "error");
+    } finally {
+      setLoading(false);
     }
   };
 
-  
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -76,7 +88,7 @@ addEndpointModalProps) {
           {to ? "New Reply" : "New Comment"}
         </ModalHeader>
         <ModalCloseButton />
-  wq      <ModalBody className="w-full  rounded-lg bg-white">
+       <ModalBody className="w-full  rounded-lg bg-white">
           <div className="flex flex-col gap-2">
             <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
               <p className="text-xs text-dark-grey">Feedback</p>
@@ -94,12 +106,7 @@ addEndpointModalProps) {
               <Button
                 type="fit"
                 text="Save"
-                onClick={() => {
-                  createComment(
-                    api?.apiCode as string,
-                    to !== undefined ? to : undefined
-                  );
-                }}
+                onClick={handleCreateComment}
                 loading={isCreating}
               />
             </div>
