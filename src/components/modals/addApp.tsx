@@ -1,3 +1,5 @@
+
+import React, { useState } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -13,7 +15,6 @@ import APIServices from "@/services/api_services/api_service";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { createApplication } from "@/models/api.model";
-import { useState } from "react";
 
 interface addAppProps {
   isOpen: boolean;
@@ -34,62 +35,59 @@ export default function AddApp({ isOpen, onClose }: addAppProps) {
   });
   const { name, throttlingPolicy, description } = state;
   const toast = useToast();
+
   const createApplication = async () => {
     setLoading(true);
-
+  
     const data: createApplication = state;
-    console.log(data, "damnn");
+    console.log(data, "application data");
     try {
       const res = await APIServices.createApplication(data);
       if (res.statusCode === 201) {
         console.log(res);
-        subscribeApplication(
-          api?.apiCode as string,
-          res.data.throttlingPolicy,
-          res.data.appCode
-        );
-        // setSandBoxurl(res.data.endpointConfig.sandbox_endpoints.url);
-        // setProdurl(res.data.endpointConfig.production_endpoints.url);
-      }
-    } catch (error: any) {
-      setLoading(false);
-      const errorMessage = error?.response?.data?.message;
-      setApiErrorMessage(errorMessage, "error");
-    }
-  };
-  const subscribeApplication = async (
-    aco: string,
-    thrott: string,
-    appco: string
-  ) => {
-    try {
-      const res = await APIServices.subscribeApptoApi(aco, thrott, appco);
-      console.log(res, "damnn");
-      if (res.statusCode === 201) {
         toast({
-          description:
-            "You have successfully created an application on this api",
-          position: "bottom-right",
+          title: "Application created successfully",
           status: "success",
           duration: 3000,
+          isClosable: true,
         });
+        onClose();
       }
+    } catch (error: any) {
       setLoading(false);
-      onClose();
+      const errorMessage = error?.response?.data?.message || "Failed to create application";
+      setApiErrorMessage(errorMessage, "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  const handlechange = (e: any) => {
+    const { name, value } = e.target;
+    setState((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (name === 'throttlingPolicy') {
+      fetchThrottlingPolicy(value);
+    }
+  };
+
+  const fetchThrottlingPolicy = async (policyName: string) => {
+    try {
+      setLoading(false);
+      const response = await APIServices.getAllWebberThrottlingPolicies('application', 25, 0);
+      setLoading(false);
     } catch (error: any) {
       setLoading(false);
       const errorMessage = error?.response?.data?.message;
       setApiErrorMessage(errorMessage, "error");
+      
     }
   };
-  const handlechange = (e: any) => {
-    setState((prev) => {
-      return {
-        ...prev,
-        [e.target.name]: e.target.value,
-      };
-    });
-  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -98,7 +96,7 @@ export default function AddApp({ isOpen, onClose }: addAppProps) {
           Add Application
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody className="w-full  rounded-lg bg-white">
+        <ModalBody className="w-full rounded-lg bg-white">
           <p className="my-3">Input details of your website</p>
 
           <div className="flex flex-col gap-4">
@@ -128,9 +126,12 @@ export default function AddApp({ isOpen, onClose }: addAppProps) {
                 value={throttlingPolicy}
                 onChange={handlechange}
               >
+                <option value="">Select a policy</option>
                 <option value={"10PerMin"}>10 per min</option>
                 <option value={"20PerMin"}>20 per min</option>
                 <option value={"50PerMin"}>50 per min</option>
+                <option value={"70PerMin"}>70 per min</option>
+                <option value={"80PerMin"}>80 per min</option>
                 <option value={"Unlimited"}>Unlimited</option>
               </select>
             </div>
@@ -145,12 +146,13 @@ export default function AddApp({ isOpen, onClose }: addAppProps) {
                 name="description"
                 value={description}
                 onChange={handlechange}
+                className="border-mid-grey p-2 border rounded-md"
               />
             </div>
 
             <Button
               text="Save"
-              onClick={() => createApplication()}
+              onClick={createApplication}
               className="w-20 ml-auto mt-2"
             />
           </div>
@@ -159,3 +161,10 @@ export default function AddApp({ isOpen, onClose }: addAppProps) {
     </Modal>
   );
 }
+
+
+
+
+
+
+
