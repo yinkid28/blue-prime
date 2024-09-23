@@ -203,11 +203,7 @@ function TableRow({
   const { api, setApi } = useApi();
   const toast = useToast();
   const router = useRouter();
-  const updateApiLifeCycle = async (
-    aco: string,
-    action: string,
-    life?: string
-  ) => {
+  const requestPublishing = async (aco: string) => {
     setLoading(true);
     // console.log(item);
     if (revision.deploymentInfo.length < 1) {
@@ -224,10 +220,10 @@ function TableRow({
     }
 
     if (api) {
-      const { apiCode, customerCode, ...restApiProps } = api;
+      // const { apiCode, customerCode, ...restApiProps } = api;
 
       try {
-        const res = await APIServices.updateApiLifeCycle(aco, action, life);
+        const res = await APIServices.requestPublishing(aco);
 
         if (res.statusCode === 200) {
           // setLoading(false);
@@ -235,8 +231,8 @@ function TableRow({
           // setStatus(item.toLowerCase());
 
           toast({
-            title: "Publish Revision",
-            description: "You have successfully published this revision",
+            // title: "Publish Revision",
+            description: "You have successfully submitted your request ",
             duration: 3000,
             status: "success",
             position: "bottom-right",
@@ -302,13 +298,15 @@ function TableRow({
             >
               {revision.deploymentInfo.length > 0 ? "Undeploy" : "Deploy"}
             </MenuItem>
-            <MenuItem
-            // onClick={() =>
-            //   // updateApiLifeCycle(api?.apiCode as string, "Publish")
-            // }
-            >
-              Request Publishing
-            </MenuItem>
+            {!api?.isPublishRequested ? (
+              <MenuItem
+                onClick={() => {
+                  requestPublishing(api?.apiCode as string);
+                }}
+              >
+                Request Publishing
+              </MenuItem>
+            ) : null}
             {/* <MenuItem>Restore</MenuItem> */}
             <MenuItem
               onClick={() => {

@@ -276,6 +276,13 @@ export default class APIServices {
     );
     return response.data;
   }
+  static async requestPublishing(aco: string) {
+    const response = await HTTPClient.post(
+      `api-manager/api/v1/weaver/lifecycle/request-publishing?aco=${aco}&request=true`,
+      undefined
+    );
+    return response.data;
+  }
   static async deleteApi(aco: string) {
     const response = await HTTPClient.delete(
       `api-manager/api/v1/weaver/api/delete?aco=${aco}`

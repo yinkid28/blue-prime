@@ -249,8 +249,9 @@ export default function ApiModules() {
     const { [requestMethod]: _, ...rest } = getoperation;
 
     const finals = getOperationsByTag(updatedOperations, view).filter(
-      (item) => item.method !== requestMethod
+      (item) => item.path !== swaggerPath
     );
+
     setOperations(finals);
     setOperationsWithPath((prev: any) => {
       return {

@@ -211,6 +211,7 @@ export function ApiUpload({ setStep, setProgress, setTitle }: CreateProp) {
       );
       if (res.statusCode === 201) {
         setLoading(false);
+
         toast({
           title: "API Creation",
           description: "Api successfully created",
@@ -218,7 +219,9 @@ export function ApiUpload({ setStep, setProgress, setTitle }: CreateProp) {
           duration: 3000,
           position: "bottom-right",
         });
-        router.push("/weaver/dashboard");
+        router.push(
+          `/weaver/api_details/${res.data.name}/overview?apiCode=${res.data.apiCode}`
+        );
       }
     } catch (error: any) {
       setLoading(false);
@@ -353,7 +356,9 @@ export default function ApiScratch({ infor }: any) {
           duration: 3000,
           position: "bottom-right",
         });
-        router.push("/weaver/dashboard");
+        router.push(
+          `/weaver/api_details/${res.data.name}/overview?apiCode=${res.data.apiCode}`
+        );
       }
       console.log(res);
     } catch (error: any) {
@@ -431,7 +436,9 @@ export default function ApiScratch({ infor }: any) {
           duration: 3000,
           position: "bottom-right",
         });
-        router.push("/weaver/dashboard");
+        router.push(
+          `/weaver/api_details/${res.data.name}/overview?apiCode=${res.data.apiCode}`
+        );
       }
     } catch (error: any) {
       setFile(null);

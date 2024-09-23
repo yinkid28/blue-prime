@@ -140,6 +140,50 @@ export default function ApiModules() {
       }
     }
   };
+  const requestPublishing = async (aco: string) => {
+    setLoading(true);
+    // console.log(item);
+    if (deployedrevisions.length < 1) {
+      setLoading(false);
+      toast({
+        title: "Publish",
+        description:
+          "You can not make this request as you do not have any revision deployed",
+        position: "bottom-right",
+        duration: 3000,
+        status: "error",
+      });
+      return;
+    }
+
+    if (api) {
+      // const { apiCode, customerCode, ...restApiProps } = api;
+
+      try {
+        const res = await APIServices.requestPublishing(aco);
+
+        if (res.statusCode === 200) {
+          // setLoading(false);
+          // updateStatusCycle();
+          // setStatus(item.toLowerCase());
+
+          toast({
+            // title: "Publish Revision",
+            description: "You have successfully submitted your request ",
+            duration: 3000,
+            status: "success",
+            position: "bottom-right",
+          });
+          // getApi(apiCode as string);
+          router.reload();
+        }
+      } catch (error: any) {
+        setLoading(false);
+        const errorMessage = error?.response?.data?.message;
+        setApiErrorMessage(errorMessage, "error");
+      }
+    }
+  };
   const getApi = async (aco: string) => {
     try {
       const res = await APIServices.getSingleApi(aco);
@@ -554,8 +598,7 @@ export default function ApiModules() {
                 text={item}
               />
             ))}
-            {(api?.lifeCycleStatus.toLowerCase() === "created" ||
-              api?.lifeCycleStatus.toLowerCase() === "prototyped") && (
+            {!api?.isPublishRequested && (
               <Button onClick={() => {}} text="Request Publishing" type="fit" />
             )}
           </div>

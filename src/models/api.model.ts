@@ -115,6 +115,7 @@ export type IReply = {
   };
 };
 export type IApi = {
+  isPublishRequested?: boolean;
   bookmarked?: boolean;
   monetizationLabel?: string;
   monetization: {
@@ -304,4 +305,3 @@ export type NewEndpointCriteriaModalProps = {
   isOpen: boolean;
   onClose: () => void;
 };
-

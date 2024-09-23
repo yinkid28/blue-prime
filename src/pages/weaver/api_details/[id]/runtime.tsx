@@ -121,7 +121,8 @@ export default function ApiRuntime() {
     setIsLoading(true);
 
     if (api) {
-      const { apiCode, customerCode, ...restApiProps } = api;
+      const { apiCode, customerCode, isPublishRequested, ...restApiProps } =
+        api;
       const data = {
         ...restApiProps,
         authorizationHeader: authorization,
