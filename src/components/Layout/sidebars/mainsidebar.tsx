@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "next/router";
 import { BsFilePlay, BsSearch } from "react-icons/bs";
-import { MdFolder, MdHomeFilled } from "react-icons/md";
+import { MdFolder, MdHomeFilled, MdPhoneAndroid } from "react-icons/md";
 import { FiFolder } from "react-icons/fi";
 import { IoMenu } from "react-icons/io5";
 import {
@@ -16,6 +16,7 @@ import { FaFolder } from "react-icons/fa";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
 import Image from "next/image";
+import { Icon } from "@iconify/react";
 
 export default function MainSidebar() {
   const router = useRouter();
@@ -30,9 +31,18 @@ export default function MainSidebar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { bookmarkedAPIs, libraryView, setLibraryView } = useApi();
   const { user } = useOnboarding();
+
+  // Extract the API code from the current route
+  const apiCode = router.query.apiCode as string;
+
+  const handleLibraryItem = (view: any) => {
+    setLibraryView(view);
+    router.push(`/webber/library/${apiCode}/${view}`);
+    isOpen && onClose();
+  };
+
   return (
     <>
-      {/* <div className="w-full  flex flex-col h-full> - This was how I met it*/}
       <div className="w-full  flex flex-col h-full gap-2">
         <div className="bg-white rounded p-2 h-fit flex flex-col gap-4 ">
           <div className="flex justify-center items-center">
@@ -54,7 +64,6 @@ export default function MainSidebar() {
             <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
               <DrawerOverlay />
               <DrawerContent>
-                {/* <DrawerHeader borderBottomWidth="1px"></DrawerHeader> */}
                 <DrawerBody className="space-y-4 mt-16">
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
@@ -67,18 +76,10 @@ export default function MainSidebar() {
                     <MdHomeFilled />
                     <p className="font-semibold">Home</p>
                   </div>
-                  {/* <div
-                    className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                      router.asPath == "" ? "text-primary" : "text-dark-grey"
-                    }`}
-                  >
-                    <BsSearch />
-                    <p className="font-semibold">Search</p>
-                  </div> */}
                   {user !== null && (
                     <div
                       className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                        router.asPath == "/webber/library"
+                        router.asPath.startsWith("/webber/library")
                           ? "text-primary"
                           : "text-dark-grey"
                       }`}
@@ -88,20 +89,22 @@ export default function MainSidebar() {
                       <p className="font-semibold">Library</p>
                     </div>
                   )}
-                  {/* <div
-                    className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                      router.asPath == "" ? "text-primary" : "text-dark-grey"
-                    }`}
-                  >
-                    <BsFilePlay />
-                    <p className="font-semibold">How to Use</p>
-                  </div> */}
-                  {router.asPath == "/webber/library" ? (
+                  {router.asPath.startsWith("/webber/library") ? (
                     <div className="bg-white h-full pt-6 rounded flex flex-col gap-4">
                       <p className="text-base text-mid-grey font-bold">
                         Library
                       </p>
                       <ul className="space-y-3 text-dark-grey">
+                        <li
+                          onClick={() => handleLibraryItem("application")}
+                          className={`cursor-pointer ${
+                            libraryView == "application"
+                              ? "text-primary"
+                              : "text-dark-grey"
+                          }`}
+                        >
+                          Application
+                        </li>
                         <li
                           onClick={() => {
                             setLibraryView("api-product");
@@ -132,9 +135,26 @@ export default function MainSidebar() {
                                     : "text-dark-grey"
                                 }`}
                         >
-                          Saved
+                          Saved APIs
                         </li>
-                        {/* ↓ Would tackle this when I understand what Subscribed means */}
+                        <li
+                          onClick={() => {
+                            bookmarkedAPIs.length === 0
+                              ? null
+                              : setLibraryView("Subscribed");
+                            isOpen && onClose();
+                          }}
+                          className={`${
+                            !(bookmarkedAPIs.length === 0) && "cursor-pointer"
+                          }
+                                ${
+                                  libraryView == "Subscribed"
+                                    ? "text-primary"
+                                    : "text-dark-grey"
+                                }`}
+                        >
+                          Subscribed APIs
+                        </li>
                         <li>Subscribed</li>
                       </ul>
                     </div>
@@ -166,21 +186,27 @@ export default function MainSidebar() {
             }`}
             onClick={() => router.push("/api_discovery")}
           >
-            <MdHomeFilled />
+            {/* <MdHomeFilled /> */}
             <p className="font-semibold">Discovery</p>
           </div>
-          {/* <div
-            className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-              router.asPath == "" ? "text-primary" : "text-dark-grey"
-            }`}
-          >
-            <BsSearch />
-            <p className="font-semibold">Search</p>
-          </div> */}
+           <div
+            className='md:flex hidden items-center p-2 hover:bg-gradient-to-r from-white hover:border-l-[2px] border-primary  to-primaryLightest cursor-pointer rounded-[8px] ease-in-out duration-700 hover:text-primary gap-3 w-full'>
+             <div className="flex items-center border rounded-lg py-2 px-4 gap-1">
+              <Icon
+                icon="lets-icons:search-alt-light"
+                className="text-mid-grey text-2xl"
+              />
+              <input
+                type="search"
+                placeholder="Search"
+                className="text-base font-semibold focus:outline-none w-full"
+              />
+            </div>
+          </div>
           {user !== null && (
             <div
               className={`md:flex hidden items-center p-2 hover:bg-gradient-to-r from-white hover:border-l-[2px] border-primary  to-primaryLightest cursor-pointer rounded-lg ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                router.asPath == "/webber/library"
+                router.asPath.startsWith("/webber/library")
                   ? "text-primary border-l-[2px]  bg-gradient-to-r"
                   : "text-dark-grey"
               }`}
@@ -190,26 +216,50 @@ export default function MainSidebar() {
               <p className="font-semibold">Library</p>
             </div>
           )}
-          {/* <div
-            className={`md:flex hidden items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-              router.asPath == "" ? "text-primary" : "text-dark-grey"
+
+          <div
+            className={`md:flex hidden items-center p-2 hover:bg-gradient-to-r from-white hover:border-l-[2px] border-primary  to-primaryLightest cursor-pointer rounded-[8px] ease-in-out duration-700 hover:text-primary gap-3 w-full ${
+              router.asPath == "/api_discovery"
+                ? "text-primary border-l-[2px]  bg-gradient-to-r "
+                : "text-dark-grey"
             }`}
           >
-            <BsFilePlay />
-            <p className="font-semibold">How to Use</p>
-          </div> */}
+            <MdPhoneAndroid size={18} />
+            <p className="font-semibold">How to use</p>
+          </div>
         </div>
 
-        {router.asPath == "/webber/library" ? (
+        {router.asPath.startsWith("/webber/library") ? (
           <div className="bg-white h-full rounded p-5 md:flex hidden flex-col gap-4">
             <p className="text-base text-mid-grey font-bold">Library</p>
             <ul className="space-y-3 text-sm px-3 font-semibold text-dark-grey">
+              <li
+                onClick={() => handleLibraryItem("application")}
+                className={`cursor-pointer ${
+                  libraryView == "application"
+                    ? "text-primary"
+                    : "text-dark-grey"
+                }`}
+              >
+                Application
+              </li>
               <li
                 onClick={() => setLibraryView("saved")}
                 className={`${"cursor-pointer"}
                 ${libraryView == "saved" ? "text-primary" : "text-dark-grey"}`}
               >
-                Saved
+                Saved APIs
+              </li>
+              <li
+                onClick={() => setLibraryView("Subscribed")}
+                className={`${"cursor-pointer"}
+                ${
+                  libraryView == "Subscribed"
+                    ? "text-primary"
+                    : "text-dark-grey"
+                }`}
+              >
+                Subscribed APIs
               </li>
               <li
                 onClick={() => setLibraryView("api-product")}
@@ -222,9 +272,6 @@ export default function MainSidebar() {
               >
                 API Product
               </li>
-
-              {/* ↓ Would tackle this when I understand what Subscribed means */}
-              {/* <li>Subscribed</li> */}
             </ul>
           </div>
         ) : (

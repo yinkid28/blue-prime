@@ -19,6 +19,7 @@ import { AnimatePresence } from "framer-motion";
 import { IApi } from "@/models/api.model";
 import APIServices from "@/services/api_services/api_service";
 import { Skeleton, useToast } from "@chakra-ui/react";
+
 const DiscoveryLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });

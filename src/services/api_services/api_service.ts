@@ -34,12 +34,15 @@ export default class APIServices {
     );
     return response.data;
   }
+
   static async getSingleApiDev(aco: string) {
     const response = await HTTPClient.get(
       `/api-manager/api/v1/webber/apis/get?aco=${aco}`
     );
     return response.data;
   }
+
+
   static async getApiThumbnail(aco: string) {
     const response = await HTTPClient.get(
       `api-manager/api/v1/weaver/api/get-thumbnail?aco=${aco}`
@@ -343,7 +346,53 @@ export default class APIServices {
     );
     return response.data;
   }
-  
+
+
+  static async getAllWebberThrottlingPolicies(
+    policyLevel: string, 
+    limit: number = 100, 
+    offset: number = 0
+  ) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/throttling-policy/get-all?policyLevel=${policyLevel}&limit=${limit}&offset=${offset}`
+    );
+    return response.data;
+  }
+
+
+  static async getWebberApplication(appco?: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/application/get${appco ? `?appco=${appco}` : ''}`
+    );
+    return response.data;
+  }
+
+  static async getAllWebberApplications(keyword?: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/application/get-all${keyword ? `?keyword=${keyword}` : ''}`
+    );
+    return response.data;
+  }
+
+  static async deleteWebberApplication(appco: string) {
+    const response = await HTTPClient.delete(
+      `api-manager/api/v1/webber/application/delete?appco=${appco}`
+    );
+    return response.data;
+  }
+
+  static async updateWebberApplication(appco: string, data: any,) {
+    const response = await HTTPClient.put(
+      `api-manager/api/v1/webber/application/update?appco=${appco}`,
+      data
+    );
+    return response.data;
+  }
+
+
 }
 
   
+
+
+
