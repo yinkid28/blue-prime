@@ -347,20 +347,10 @@ export default class APIServices {
     return response.data;
   }
 
-  static async getWebberAllThrottlingPolicies(
-    policyLevel: string,
-    limit: number = 25,
-    offset: number = 0
-  ) {
-    const response = await HTTPClient.get(
-      `api-manager/api/v1/webber/throttling-policy/get-all?policyLevel=${policyLevel}&limit=${limit}&offset=${offset}`
-    );
-    return response.data;
-  }
 
   static async getAllWebberThrottlingPolicies(
     policyLevel: string, 
-    limit: number = 25, 
+    limit: number = 100, 
     offset: number = 0
   ) {
     const response = await HTTPClient.get(
@@ -368,7 +358,6 @@ export default class APIServices {
     );
     return response.data;
   }
-
 
 
   static async getWebberApplication(appco?: string) {
@@ -385,14 +374,6 @@ export default class APIServices {
     return response.data;
   }
 
-  static async updateWebberApplication(appco: string, updateData: any) {
-    const response = await HTTPClient.put(
-      `api-manager/api/v1/webber/application/update?appco=${appco}`,
-      updateData
-    );
-    return response.data;
-  }
-
   static async deleteWebberApplication(appco: string) {
     const response = await HTTPClient.delete(
       `api-manager/api/v1/webber/application/delete?appco=${appco}`
@@ -400,6 +381,18 @@ export default class APIServices {
     return response.data;
   }
 
+  static async updateWebberApplication(appco: string, data: any,) {
+    const response = await HTTPClient.put(
+      `api-manager/api/v1/webber/application/update?appco=${appco}`,
+      data
+    );
+    return response.data;
+  }
+
+
 }
 
   
+
+
+
