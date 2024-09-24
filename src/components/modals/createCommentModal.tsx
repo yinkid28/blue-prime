@@ -52,9 +52,10 @@ addEndpointModalProps) {
     setIsCreating(true);
 
     try {
-      const createCommentFunction = userType === "webber" 
-        ? APIServices.createWebberComment 
-        : APIServices.createComment;
+      const createCommentFunction =
+        userType === "webber"
+          ? APIServices.createWebberComment
+          : APIServices.createComment;
 
       const res = await createCommentFunction(data, api?.apiCode as string, to);
 
@@ -73,7 +74,8 @@ addEndpointModalProps) {
     } catch (error: any) {
       setIsCreating(false);
       console.error(error);
-      const errorMessage = error?.response?.data?.message || "An error occurred";
+      const errorMessage =
+        error?.response?.data?.message || "An error occurred";
       setApiErrorMessage(errorMessage, "error");
     } finally {
       setLoading(false);
@@ -88,7 +90,7 @@ addEndpointModalProps) {
           {to ? "New Reply" : "New Comment"}
         </ModalHeader>
         <ModalCloseButton />
-       <ModalBody className="w-full  rounded-lg bg-white">
+        <ModalBody className="w-full  rounded-lg bg-white">
           <div className="flex flex-col gap-2">
             <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
               <p className="text-xs text-dark-grey">Feedback</p>

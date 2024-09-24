@@ -42,7 +42,6 @@ export default class APIServices {
     return response.data;
   }
 
-
   static async getApiThumbnail(aco: string) {
     const response = await HTTPClient.get(
       `api-manager/api/v1/weaver/api/get-thumbnail?aco=${aco}`
@@ -87,8 +86,6 @@ export default class APIServices {
     );
     return response.data;
   }
-
-  
 
   static async getSingleApp(appco: string) {
     const response = await HTTPClient.get(
@@ -141,8 +138,7 @@ export default class APIServices {
 
   static async getSubcribedAppsbyApiCode(aco: string) {
     const response = await HTTPClient.get(
-      `api-manager/api/v1/webber/subscriptions/get-all?aco=${aco}&limit=25`,
-
+      `api-manager/api/v1/webber/subscriptions/get-all?aco=${aco}&limit=25`
     );
     return response.data;
   }
@@ -164,7 +160,6 @@ export default class APIServices {
     );
     return response.data;
   }
-
 
   static async generateTokenWeaver(aco: string) {
     const response = await HTTPClient.post(
@@ -324,16 +319,22 @@ export default class APIServices {
     );
     return response.data;
   }
-  
+
   static async createWebberComment(data: any, aco: string, to?: string) {
     const response = await HTTPClient.post(
-      `api-manager/api/v1/webber/comments/add?aco=${aco}${to ? `&replyTo=${to}` : ""}`,
+      `api-manager/api/v1/webber/comments/add?aco=${aco}${
+        to ? `&replyTo=${to}` : ""
+      }`,
       data
     );
     return response.data;
   }
-  
-  static async getWebberCommentsByApiCode(aco: string, limit: number, offset: number) {
+
+  static async getWebberCommentsByApiCode(
+    aco: string,
+    limit: number,
+    offset: number
+  ) {
     const response = await HTTPClient.get(
       `api-manager/api/v1/webber/comments/get-list?aco=${aco}&limit=${limit}&offset=${offset}`
     );
@@ -347,10 +348,9 @@ export default class APIServices {
     return response.data;
   }
 
-
   static async getAllWebberThrottlingPolicies(
-    policyLevel: string, 
-    limit: number = 100, 
+    policyLevel: string,
+    limit: number = 100,
     offset: number = 0
   ) {
     const response = await HTTPClient.get(
@@ -359,17 +359,22 @@ export default class APIServices {
     return response.data;
   }
 
-
   static async getWebberApplication(appco?: string) {
     const response = await HTTPClient.get(
-      `api-manager/api/v1/webber/application/get${appco ? `?appco=${appco}` : ''}`
+      `api-manager/api/v1/webber/application/get${
+        appco ? `?appco=${appco}` : ""
+      }`
     );
     return response.data;
   }
 
-  static async getAllWebberApplications(keyword?: string) {
+  static async getAllWebberApplications(
+    pageNumber: number = 1,
+    pageSize: number ,
+    keyword?: string
+  ) {
     const response = await HTTPClient.get(
-      `api-manager/api/v1/webber/application/get-all${keyword ? `?keyword=${keyword}` : ''}`
+      `api-manager/api/v1/webber/application/get-all?keyword=${keyword}&pageSize=${pageSize}&pageNumber=${pageNumber}`
     );
     return response.data;
   }
@@ -381,18 +386,11 @@ export default class APIServices {
     return response.data;
   }
 
-  static async updateWebberApplication(appco: string, data: any,) {
+  static async updateWebberApplication(appco: string, data: any) {
     const response = await HTTPClient.put(
       `api-manager/api/v1/webber/application/update?appco=${appco}`,
       data
     );
     return response.data;
   }
-
-
 }
-
-  
-
-
-

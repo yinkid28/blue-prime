@@ -156,20 +156,6 @@ export default function AddApp({ isOpen, onClose, onSuccess }: addAppProps) {
                 className="border-mid-grey p-2 border rounded-md"
               />
             </div>
-
-            <div className=" flex-col gap-2 hidden">
-              <label htmlFor="url" className="text-xs">
-                CallBack URL
-              </label>
-              <input
-                type="text"
-                name="url"
-                id="url"
-                placeholder="https://localhost:8000/customersupport/1.0.0%7C"
-                className="border-mid-grey p-2 border rounded-md"
-              />
-            </div>
-
             <Button
               text="Save"
               onClick={createApplication}

@@ -150,6 +150,7 @@ export default function ApiDiscoveryDashboard() {
   ];
   const toast = useToast();
   const [allApis, setAllApis] = useState<IMockApi[]>(rec);
+  
   const getApis = async (pageNo: number, pageSize: number) => {
     setIsLoading(true);
 

@@ -8,6 +8,11 @@ import { FaEllipsisV } from "react-icons/fa";
 import { Table } from "@/components/utils";
 import { SubscribedApp, tableTypes } from "@/models/webber.model";
 import APIServices from "@/services/api_services/api_service";
+import { Icon } from "@iconify/react";
+import { useDisclosure } from "@chakra-ui/react";
+import AddSub from "@/components/modals/addSub";
+
+
 
 const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
@@ -18,10 +23,11 @@ const breadCrumbs: BreadCrumbItems[] = [
     breadCrumbText: "Library",
     breadCrumbPath: "/webber/library",
   },
-];
+];  
 
 export default function WaverSubscriptions() {
   const { api } = useApi();
+  const { isOpen, onClose, onOpen } = useDisclosure();
   const { setLoading, setApiErrorMessage, setSidebar } = useOnboarding();
   const [apps, setApps] = useState<SubscribedApp[]>([]);
   const [tableData, setTableData] = useState<tableTypes[]>([]);
@@ -91,45 +97,42 @@ export default function WaverSubscriptions() {
 
       <div className="flex flex-col gap-4 p-5">
         <div className="text-mid-grey flex w-full justify-between items-center">
-          <p className="font-semibold">Billing Cycle</p>
-          <FaEllipsisV />
-        </div>
-
-        <div
-          className="overflow-x-auto"
-          style={{
-            msOverflowStyle: "none",
-            scrollbarWidth: "none",
-          }}
-        >
-          <div className="flex gap-3 min-w-max p-4">
-            {apps.map((app, index) => (
-              <div
-                className="w-80 p-2 rounded-lg bg-lightest-grey flex flex-col gap-3 shadow-md"
-                key={index}
+          <p className="font-semibold">Application</p>
+          
+          <div className="flex justify-center items-center gap-3">
+              <button
+                onClick={onOpen}
+                className="border border-primaryFade text-sm py-2 px-[22px] rounded-lg font-semibold text-primary w-fit"
               >
-                <p className="text-mid-grey font-semibold text-sm">
-                  {app.name}
-                </p>
-                <div className="flex w-full items-center flex-col md:flex-row gap-2 justify-between">
-                  <p className="font-semibold">
-                    ${app.amount.toLocaleString()}
-                  </p>
-                  <p className="font-thin text-mid-grey">
-                    {app.req.toLocaleString()} requests/ms
-                  </p>
-                </div>
-                <div className="w-fit text-sm h-fit px-3 py-1 rounded-full text-primary bg-[#13229510]">
-                  <p>{app.date}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+                New Subscription
+              </button>
+              <FaEllipsisV />
+            </div>
         </div>
 
-        <div className="flex items-center">
+        <div className="flex items-center gap-2 md:gap-4 w-[80%]">
+              <div className="text-dark-txt flex gap-1 border px-4 py-3 md:py-2 rounded-lg items-center">
+                <Icon icon="lets-icons:filter-big" />
+                <p className="hidden md:flex">data.month</p>
+              </div>
+              <div className="flex items-center border rounded-lg w-[50%] py-2 px-2 sm:px-4 gap-1">
+                <Icon
+                  icon="lets-icons:search-alt-light"
+                  className="text-mid-grey text-2xl"
+                />
+                <input
+                  type="search"
+                  placeholder="Search"
+                  className="font-medium text-sm md:text-base focus:outline-none w-full text-dark-txt"
+                  // value={searchTerm}
+                  // onChange={handleSearch}
+                />
+              </div>
+            </div>
+
+        {/* <div className="flex items-center">
           <SearchBar />
-        </div>
+        </div> */}
 
         <Table>
           <Table.Header>
@@ -180,6 +183,13 @@ export default function WaverSubscriptions() {
           </Table.Body>
         </Table>
       </div>
+      <AddSub
+        isOpen={isOpen}
+        onClose={() => {
+          onClose();
+          fetchData(); 
+        }}
+      />
     </WeaverLayout>
   );
 }

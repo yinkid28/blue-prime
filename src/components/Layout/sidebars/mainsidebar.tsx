@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { BsFilePlay, BsSearch } from "react-icons/bs";
 import { MdFolder, MdHomeFilled, MdPhoneAndroid } from "react-icons/md";
@@ -31,13 +31,16 @@ export default function MainSidebar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { bookmarkedAPIs, libraryView, setLibraryView } = useApi();
   const { user } = useOnboarding();
+  const [activeItem, setActiveItem] = useState("saved");
+  
 
-  // Extract the API code from the current route
+
   const apiCode = router.query.apiCode as string;
 
   const handleLibraryItem = (view: any) => {
     setLibraryView(view);
-    router.push(`/webber/library/${apiCode}/${view}`);
+    setActiveItem(view);
+    router.push(`/webber/library/${view}`);
     isOpen && onClose();
   };
 
@@ -110,7 +113,7 @@ export default function MainSidebar() {
                             setLibraryView("api-product");
                             isOpen && onClose();
                           }}
-                          className={`cursor-pointer
+                          className={`cursor-pointer 
                                   ${
                                     libraryView == "api-product"
                                       ? "text-primary"
@@ -189,20 +192,7 @@ export default function MainSidebar() {
             {/* <MdHomeFilled /> */}
             <p className="font-semibold">Discovery</p>
           </div>
-           <div
-            className='md:flex hidden items-center p-2 hover:bg-gradient-to-r from-white hover:border-l-[2px] border-primary  to-primaryLightest cursor-pointer rounded-[8px] ease-in-out duration-700 hover:text-primary gap-3 w-full'>
-             <div className="flex items-center border rounded-lg py-2 px-4 gap-1">
-              <Icon
-                icon="lets-icons:search-alt-light"
-                className="text-mid-grey text-2xl"
-              />
-              <input
-                type="search"
-                placeholder="Search"
-                className="text-base font-semibold focus:outline-none w-full"
-              />
-            </div>
-          </div>
+       
           {user !== null && (
             <div
               className={`md:flex hidden items-center p-2 hover:bg-gradient-to-r from-white hover:border-l-[2px] border-primary  to-primaryLightest cursor-pointer rounded-lg ease-in-out duration-700 hover:text-primary gap-3 w-full ${
@@ -217,16 +207,7 @@ export default function MainSidebar() {
             </div>
           )}
 
-          <div
-            className={`md:flex hidden items-center p-2 hover:bg-gradient-to-r from-white hover:border-l-[2px] border-primary  to-primaryLightest cursor-pointer rounded-[8px] ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-              router.asPath == "/api_discovery"
-                ? "text-primary border-l-[2px]  bg-gradient-to-r "
-                : "text-dark-grey"
-            }`}
-          >
-            <MdPhoneAndroid size={18} />
-            <p className="font-semibold">How to use</p>
-          </div>
+        
         </div>
 
         {router.asPath.startsWith("/webber/library") ? (
@@ -246,7 +227,7 @@ export default function MainSidebar() {
               <li
                 onClick={() => setLibraryView("saved")}
                 className={`${"cursor-pointer"}
-                ${libraryView == "saved" ? "text-primary" : "text-dark-grey"}`}
+                ${activeItem === "saved" ? "text-primary" : "text-dark-grey"}`}
               >
                 Saved APIs
               </li>
