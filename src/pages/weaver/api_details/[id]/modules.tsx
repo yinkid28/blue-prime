@@ -246,6 +246,7 @@ export default function ApiModules() {
     console.log(swaggerPath, "heheheheheh");
     const updatedOperations = { ...operationsWithPath };
     const getoperation = updatedOperations[swaggerPath];
+    console.log(updatedOperations, "gettto");
     const { [requestMethod]: _, ...rest } = getoperation;
 
     const finals = getOperationsByTag(updatedOperations, view).filter(

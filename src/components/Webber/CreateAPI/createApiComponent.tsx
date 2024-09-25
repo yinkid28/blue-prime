@@ -145,7 +145,16 @@ export function ApiUpload({ setStep, setProgress, setTitle }: CreateProp) {
       context: info.context,
       version: info.version,
       policies: ["Unlimited"],
-      gatewayType: "wso2/synapse",
+      endpointConfig: {
+        endpoint_type: "http",
+        sandbox_endpoints: {
+          url: "https://pokeapi.co/api/v2",
+        },
+        production_endpoints: {
+          url: "https://pokeapi.co/api/v2",
+        },
+      },
+      // gatewayType: "wso2/synapse",
       // provider: "admin",
       // categories: [info.category],
       // lifeCycleStatus: "CREATED",
