@@ -23,6 +23,7 @@ import { IApi } from "@/models/api.model";
 type sideBarProps = {
   api: IApi;
 };
+
 export default function WeaverProgressSidebar({ api }: sideBarProps) {
   const router = useRouter();
   const { setSidebar } = useOnboarding();

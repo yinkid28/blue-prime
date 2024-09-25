@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   useToast,
@@ -12,70 +11,60 @@ import {
 import { Button } from "../utils";
 import APIServices from "@/services/api_services/api_service";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { useApi } from "@/context/ApiDiscoveryContext";
-import { createApplication } from "@/models/api.model";
 
-interface addAppProps {
+interface EditAppProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  appco: string;
 }
 
-export default function AddApp({ isOpen, onClose, onSuccess }: addAppProps) {
+interface UpdateApplication {
+  name: string;
+  throttlingPolicy: string;
+  description: string;
+}
+
+export default function EditApp({
+  isOpen,
+  onClose,
+  onSuccess,
+  appco,
+}: EditAppProps) {
   const { setApiErrorMessage, setLoading } = useOnboarding();
-  const { api, setApi } = useApi();
-  const [state, setState] = useState<createApplication>({
+  const [update, setUpdate] = useState<UpdateApplication>({
     name: "",
     throttlingPolicy: "",
     description: "",
-    tokenType: "JWT",
-    groups: [],
-    attributes: {},
-    subscriptionScopes: [],
   });
-  const { name, throttlingPolicy, description } = state;
+  const { name, throttlingPolicy, description } = update;
   const toast = useToast();
 
-  const createApplication = async () => {
-    setLoading(true);
+  useEffect(() => {
+    if (isOpen) {
+      fetchApplicationDetails();
+    }
+  }, [isOpen, appco]);
 
-    const data: createApplication = state;
-    console.log(data, "application data");
+  const fetchApplicationDetails = async () => {
     try {
-      const res = await APIServices.createApplication(data);
-      if (res.statusCode === 201) {
-        console.log(res);
-        toast({
-          title: "Application created successfully",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
-        onClose();
+      setLoading(true);
+      const response = await APIServices.getWebberApplication(appco);
+      if (response.statusCode === 200) {
+        setUpdate(response.data);
+      } else {
+        throw new Error("Failed to fetch application details");
       }
     } catch (error: any) {
-      setLoading(false);
       const errorMessage =
-        error?.response?.data?.message || "Failed to create application";
-      setApiErrorMessage(errorMessage, "error");
+        error?.response?.data?.message || "Failed to fetch application details";
+      setApiErrorMessage(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    setState((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    if (name === "throttlingPolicy") {
-      fetchThrottlingPolicy(value);
-    }
-  };
-
-  const fetchThrottlingPolicy = async (policyName: string) => {
+  const fetchThrottlingPolicies = async (policyName: string) => {
     try {
       setLoading(false);
       const response = await APIServices.getAllWebberThrottlingPolicies(
@@ -91,17 +80,52 @@ export default function AddApp({ isOpen, onClose, onSuccess }: addAppProps) {
     }
   };
 
+  const updateApplication = async (appco: string) => {
+    setLoading(false);
+    try {
+      const res = await APIServices.updateWebberApplication(appco, update);
+      if (res.statusCode === 200) {
+        toast({
+          title: "Application updated successfully",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        onSuccess();
+        onClose();
+      } else {
+        throw new Error("Failed to update application");
+      }
+    } catch (error: any) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed to update application";
+      setApiErrorMessage(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setUpdate((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (name === "throttlingPolicy") {
+      fetchThrottlingPolicies(value);
+    }
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent className="p-2 bg-light-grey" bg={"#F8F8F8"}>
         <ModalHeader className="text-mid-grey font-semibold">
-          Add Application
+          Edit Application
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody className="w-full rounded-lg bg-white">
-          <p className="my-3">Input details of your website</p>
-
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <label htmlFor="name" className="text-xs">
@@ -111,7 +135,6 @@ export default function AddApp({ isOpen, onClose, onSuccess }: addAppProps) {
                 type="text"
                 name="name"
                 id="name"
-                placeholder="New App"
                 value={name}
                 onChange={handleChange}
                 className="border-mid-grey p-2 border rounded-md"
@@ -142,14 +165,12 @@ export default function AddApp({ isOpen, onClose, onSuccess }: addAppProps) {
                 <option value={"Unlimited"}>Unlimited</option>
               </select>
             </div>
-
             <div className="flex flex-col gap-2">
               <label htmlFor="description" className="text-xs">
                 Descriptions
               </label>
               <textarea
-                rows={3}
-                placeholder="description"
+                rows={5}
                 name="description"
                 value={description}
                 onChange={handleChange}
@@ -157,23 +178,11 @@ export default function AddApp({ isOpen, onClose, onSuccess }: addAppProps) {
               />
             </div>
 
-            <div className=" flex-col gap-2 hidden">
-              <label htmlFor="url" className="text-xs">
-                CallBack URL
-              </label>
-              <input
-                type="text"
-                name="url"
-                id="url"
-                placeholder="https://localhost:8000/customersupport/1.0.0%7C"
-                className="border-mid-grey p-2 border rounded-md"
-              />
-            </div>
-
             <Button
-              text="Save"
-              onClick={createApplication}
+              text="Update"
+              onClick={() => updateApplication(appco)}
               className="w-20 ml-auto mt-2"
+              disabled={!name || !throttlingPolicy}
             />
           </div>
         </ModalBody>

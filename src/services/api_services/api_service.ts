@@ -34,12 +34,15 @@ export default class APIServices {
     );
     return response.data;
   }
+
   static async getSingleApiDev(aco: string) {
     const response = await HTTPClient.get(
       `/api-manager/api/v1/webber/apis/get?aco=${aco}`
     );
     return response.data;
   }
+
+
   static async getApiThumbnail(aco: string) {
     const response = await HTTPClient.get(
       `api-manager/api/v1/weaver/api/get-thumbnail?aco=${aco}`
@@ -84,6 +87,9 @@ export default class APIServices {
     );
     return response.data;
   }
+
+  
+
   static async getSingleApp(appco: string) {
     const response = await HTTPClient.get(
       `/api-manager/api/v1/webber/application/applications/${appco}`
@@ -120,6 +126,7 @@ export default class APIServices {
     );
     return response.data;
   }
+
   static async subscribeApptoApi(
     aco: string,
     throttling: string,
@@ -132,13 +139,33 @@ export default class APIServices {
     return response.data;
   }
 
-  static async getsubcribedAppsbyApiCode(aco: string) {
-    const response = await HTTPClient.post(
-      `api-manager/api/v1/webber/subscriptions/get-all?apiId=${aco}&limit=25`,
-      undefined
+  static async getSubcribedAppsbyApiCode(aco: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/subscriptions/get-all?aco=${aco}&limit=25`,
+
     );
     return response.data;
   }
+
+  static async getSubscriptionsBySubco(subco: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/subscriptions/get?subco=${subco}`
+    );
+    return response.data;
+  }
+
+  static async getAdditionalSubscriptionInfo(
+    aco: string,
+    groupId: string,
+    limit: number = 25
+  ) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/subscriptions/additionalInfo?aco=${aco}&groupId=${groupId}&limit=${limit}`
+    );
+    return response.data;
+  }
+
+
   static async generateTokenWeaver(aco: string) {
     const response = await HTTPClient.post(
       `/api-manager/api/v1/weaver/api/generate-api-key?aco=${aco}`,
@@ -176,6 +203,7 @@ export default class APIServices {
     );
     return response.data;
   }
+
   static async deployRevision(data: any, aco: string, revId: string) {
     const response = await HTTPClient.post(
       `api-manager/api/v1/weaver/revision/deploy?aco=${aco}&rco=${revId}`,
@@ -289,4 +317,89 @@ export default class APIServices {
     );
     return response.data;
   }
+
+  static async deleteWebberCommentbyApicode(aco: string, commId: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/vi/webber/comments/delete?aco=${aco}&commentId=${commId}`
+    );
+    return response.data;
+  }
+
+  static async getWebberRepliesToComment(aco: string, commId: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/comments/replies?aco=${aco}&commentId=${commId}`
+    );
+    return response.data;
+  }
+  
+  static async createWebberComment(data: any, aco: string, to?: string) {
+    const response = await HTTPClient.post(
+      `api-manager/api/v1/webber/comments/add?aco=${aco}${to ? `&replyTo=${to}` : ""}`,
+      data
+    );
+    return response.data;
+  }
+  
+  static async getWebberCommentsByApiCode(aco: string, limit: number, offset: number) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/comments/get-list?aco=${aco}&limit=${limit}&offset=${offset}`
+    );
+    return response.data;
+  }
+
+  static async getWebberCommentDetail(aco: string, commentId: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/comments/get-detail?aco=${aco}&commentId=${commentId}`
+    );
+    return response.data;
+  }
+
+
+  static async getAllWebberThrottlingPolicies(
+    policyLevel: string, 
+    limit: number = 100, 
+    offset: number = 0
+  ) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/throttling-policy/get-all?policyLevel=${policyLevel}&limit=${limit}&offset=${offset}`
+    );
+    return response.data;
+  }
+
+
+  static async getWebberApplication(appco?: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/application/get${appco ? `?appco=${appco}` : ''}`
+    );
+    return response.data;
+  }
+
+  static async getAllWebberApplications(keyword?: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/application/get-all${keyword ? `?keyword=${keyword}` : ''}`
+    );
+    return response.data;
+  }
+
+  static async deleteWebberApplication(appco: string) {
+    const response = await HTTPClient.delete(
+      `api-manager/api/v1/webber/application/delete?appco=${appco}`
+    );
+    return response.data;
+  }
+
+  static async updateWebberApplication(appco: string, data: any,) {
+    const response = await HTTPClient.put(
+      `api-manager/api/v1/webber/application/update?appco=${appco}`,
+      data
+    );
+    return response.data;
+  }
+
+
 }
+
+  
+
+
+

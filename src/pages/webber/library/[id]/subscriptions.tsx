@@ -1,12 +1,14 @@
+import React, { useEffect, useState, useCallback } from "react";
 import Navbar from "@/components/Layout/Nav/navbar";
 import { BreadCrumbItems, BreadCrumbs, SearchBar } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
 import dynamic from "next/dynamic";
-import { Key, useEffect } from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import { Table } from "@/components/utils";
-import { tableTypes } from "@/models/webber.model";
+import { SubscribedApp, tableTypes } from "@/models/webber.model";
+import APIServices from "@/services/api_services/api_service";
+
 const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
@@ -20,112 +22,65 @@ const breadCrumbs: BreadCrumbItems[] = [
 
 export default function WaverSubscriptions() {
   const { api } = useApi();
-  const { setLoading, setSidebar } = useOnboarding();
+  const { setLoading, setApiErrorMessage, setSidebar } = useOnboarding();
+  const [apps, setApps] = useState<SubscribedApp[]>([]);
+  const [tableData, setTableData] = useState<tableTypes[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    if (!api) {
+      setError("API configuration is missing");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const response = await APIServices.getSubcribedAppsbyApiCode(api.apiCode);
+
+      if (response?.data?.list) {
+        const transformedApps: SubscribedApp[] = response.data.list.map(
+          (app: any) => ({
+            id: app.id || 0,
+            name: app.name || "",
+            amount: app.amount || 0,
+            req: app.requests || 0,
+            date: app.date ? new Date(app.date).toLocaleDateString() : "",
+          })
+        );
+
+        const transformedTableData: tableTypes[] = response.data.list.map(
+          (sub: any) => ({
+            date: sub.date ? new Date(sub.date).toLocaleDateString() : "",
+            appName: sub.name || "",
+            plan: sub.plan || "",
+            price: (sub.price || 0).toFixed(2),
+            paymentMethod: sub.paymentMethod || "",
+            paymentStatus: sub.paymentStatus || "",
+          })
+        );
+
+        setApps(transformedApps);
+        setTableData(transformedTableData);
+      } else {
+        setError("Unexpected data structure in API response");
+      }
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    setLoading(false);
     setSidebar("apiProgressWeaver");
-  }, []);
+    fetchData();
+  }, [setSidebar, api]);
 
-  const apps = [
-    {
-      id: 1,
-      name: "Application 1",
-      amount: 4000,
-      req: 2000,
-      date: "15th Apr 2024",
-    },
-    {
-      id: 1,
-      name: "Application 2",
-      amount: 4000,
-      req: 2000,
-      date: "15th Apr 2024",
-    },
-    {
-      id: 1,
-      name: "Application 3",
-      amount: 4000,
-      req: 2000,
-      date: "15th Apr 2024",
-    },
-    {
-      id: 1,
-      name: "Application 1",
-      amount: 4000,
-      req: 2000,
-      date: "15th Apr 2024",
-    },
-    {
-      id: 1,
-      name: "Application 2",
-      amount: 4000,
-      req: 2000,
-      date: "15th Apr 2024",
-    },
-    {
-      id: 1,
-      name: "Application 3",
-      amount: 4000,
-      req: 2000,
-      date: "15th Apr 2024",
-    },
-    
-    
-
-    
-  ];
-
-
-  const tableData: tableTypes[] = [
-    {
-      date: "15th Apr 2024",
-      appName: "Trexapayment",
-      plan: "15th Apr 2024",
-      price: "2.90",
-      paymentMethod: "Card",
-      paymentStatus: "Success",
-    },
-    {
-      date: "15th Apr 2024",
-      appName: "Trexapayment",
-      plan: "15th Apr 2024",
-      price: "2.90",
-      paymentMethod: "Card",
-      paymentStatus: "Success",
-    },
-    {
-      date: "15th Apr 2024",
-      appName: "Trexapayment",
-      plan: "15th Apr 2024",
-      price: "2.90",
-      paymentMethod: "Card",
-      paymentStatus: "Failed",
-    },
-    {
-      date: "15th Apr 2024",
-      appName: "Trexapayment",
-      plan: "15th Apr 2024",
-      price: "2.90",
-      paymentMethod: "Card",
-      paymentStatus: "Success",
-    },
-    {
-      date: "15th Apr 2024",
-      appName: "Trexapayment",
-      plan: "15th Apr 2024",
-      price: "2.90",
-      paymentMethod: "Card",
-      paymentStatus: "Success",
-    },
-    {
-      date: "15th Apr 2024",
-      appName: "Trexapayment",
-      plan: "15th Apr 2024",
-      price: "2.90",
-      paymentMethod: "Card",
-      paymentStatus: "Success",
-    },
-  ];
   return (
     <WeaverLayout>
       <Navbar title={`${api?.name}`} />
@@ -135,38 +90,43 @@ export default function WaverSubscriptions() {
       />
 
       <div className="flex flex-col gap-4 p-5">
-        <div className="text-mid-grey flex  w-full justify-between items-center ">
-          <p className=" font-semibold">Billing Cycle</p>
+        <div className="text-mid-grey flex w-full justify-between items-center">
+          <p className="font-semibold">Billing Cycle</p>
           <FaEllipsisV />
         </div>
-        
-        <div className="overflow-x-auto" 
+
+        <div
+          className="overflow-x-auto"
           style={{
-            msOverflowStyle: 'none',  
-            scrollbarWidth: 'none',  
+            msOverflowStyle: "none",
+            scrollbarWidth: "none",
           }}
         >
-        <div className="flex gap-3 min-w-max p-4">
-          {apps.map((app, index) => (
-       
-            <div
-              className="w-80 p-2 rounded-lg bg-lightest-grey flex flex-col gap-3 shadow-md"
-              key={index}
-            >
-              <p className="text-mid-grey font-semibold text-sm">{app.name}</p>
-              <div className="flex w-full items-center flex-col md:flex-row gap-2 justify-between">
-                <p className="font-semibold">${app.amount.toLocaleString()}</p>
-                <p className="font-thin text-mid-grey">
-                  {app.req.toLocaleString()} requests/ms
+          <div className="flex gap-3 min-w-max p-4">
+            {apps.map((app, index) => (
+              <div
+                className="w-80 p-2 rounded-lg bg-lightest-grey flex flex-col gap-3 shadow-md"
+                key={index}
+              >
+                <p className="text-mid-grey font-semibold text-sm">
+                  {app.name}
                 </p>
+                <div className="flex w-full items-center flex-col md:flex-row gap-2 justify-between">
+                  <p className="font-semibold">
+                    ${app.amount.toLocaleString()}
+                  </p>
+                  <p className="font-thin text-mid-grey">
+                    {app.req.toLocaleString()} requests/ms
+                  </p>
+                </div>
+                <div className="w-fit text-sm h-fit px-3 py-1 rounded-full text-primary bg-[#13229510]">
+                  <p>{app.date}</p>
+                </div>
               </div>
-              <div className="w-fit text-sm h-fit px-3 py-1 rounded-full text-primary bg-[#13229510]">
-                <p>{app.date}</p>
-              </div>
-            </div>
-          ))}
-       </div>
-       </div>
+            ))}
+          </div>
+        </div>
+
         <div className="flex items-center">
           <SearchBar />
         </div>
@@ -186,9 +146,8 @@ export default function WaverSubscriptions() {
               Payment Status
             </th>
           </Table.Header>
-          <Table.Body
-            data={tableData}
-            render={(item: tableTypes, index: Key | null | undefined) => (
+          <Table.Body>
+            {tableData.map((item: tableTypes, index: number) => (
               <tr key={index}>
                 <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
                   {item.date}
@@ -217,8 +176,8 @@ export default function WaverSubscriptions() {
                   </div>
                 </td>
               </tr>
-            )}
-          />
+            ))}
+          </Table.Body>
         </Table>
       </div>
     </WeaverLayout>

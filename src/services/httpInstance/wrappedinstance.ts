@@ -28,6 +28,7 @@ export function withErrorHandling(apiCall: Promise<any>) {
   });
 }
 
+
 // Adding the 401 response interceptor to the Axios instance
 instance.interceptors.response.use(
   (response) => response, // Success case, just return the response
