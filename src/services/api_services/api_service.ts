@@ -370,7 +370,7 @@ export default class APIServices {
 
   static async getAllWebberApplications(
     pageNumber: number = 1,
-    pageSize: number ,
+    pageSize: number,
     keyword?: string
   ) {
     const response = await HTTPClient.get(

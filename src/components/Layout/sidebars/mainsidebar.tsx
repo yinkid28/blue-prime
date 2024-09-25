@@ -227,7 +227,7 @@ export default function MainSidebar() {
               <li
                 onClick={() => setLibraryView("saved")}
                 className={`${"cursor-pointer"}
-                ${activeItem === "saved" ? "text-primary" : "text-dark-grey"}`}
+                ${libraryView == "saved" ? "text-primary" : "text-dark-grey"}`}
               >
                 Saved APIs
               </li>
