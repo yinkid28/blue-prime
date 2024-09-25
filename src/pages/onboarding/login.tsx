@@ -18,6 +18,7 @@ import {
 import { useOnboarding } from "@/context/OnboardingContext";
 import { Formik, Field, Form } from "formik";
 import dynamic from "next/dynamic";
+import { useUser } from "@/context/userContext";
 const OnboardingLayout = dynamic(
   () => import("@/components/onboarding/layout"),
   {
@@ -29,6 +30,7 @@ export default function Login() {
   const router = useRouter();
   const toast = useToast();
   const [email, setEmail] = useState<string>("");
+  const { setUserType } = useUser();
   const { setLoading, setApiErrorMessage, setUser } = useOnboarding();
   const initialValues = {
     email: "",
@@ -76,6 +78,7 @@ export default function Login() {
         router.push({
           pathname: "/api_discovery",
         });
+        setUserType("webber");
       } else {
         router.push({
           pathname: "/admin_back_office/category_management",

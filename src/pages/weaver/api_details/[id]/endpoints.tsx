@@ -115,7 +115,8 @@ export default function ApiProgressEndpoints() {
     setIsLoading(true);
 
     if (api) {
-      const { apiCode, customerCode, ...restApiProps } = api;
+      const { apiCode, customerCode, isPublishRequested, ...restApiProps } =
+        api;
       let endPointConfigdata: endpointConfig;
       if (endpointType === "failover") {
         const prodFail =

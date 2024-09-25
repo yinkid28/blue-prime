@@ -17,9 +17,7 @@ import {
   Checkbox,
   useDisclosure,
 } from "@chakra-ui/react";
-import { GiPadlock } from "react-icons/gi";
-import AddEndpointModal from "@/components/modals/addEndpointModal";
-import AddTagModal from "@/components/modals/addTagModal";
+
 const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
   ssr: false, // Disable server-side rendering for this component
 });
@@ -119,6 +117,8 @@ const tags: ImockTag[] = [
   },
 ];
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const DEPLOYP_URL = process.env.NEXT_PUBLIC_DEPLOYP_URL;
+const DEPLOYS_URL = process.env.NEXT_PUBLIC_DEPLOYS_URL;
 export default function ApiModulesTests() {
   const { api, setApi } = useApi();
   const router = useRouter();
@@ -199,12 +199,14 @@ export default function ApiModulesTests() {
       // Modify the servers array
       (swaggerData.servers = [
         {
-          url: `https://20.160.81.193:8243${api?.context}/${api?.version}`,
-          // description: "Sandbox Server",
+          url: `${DEPLOYP_URL}${api?.context}/${api?.version}`,
+
+          description: "Production",
         },
         {
-          url: `https://20.160.81.193:8243${api?.context}/${api?.version}`,
-          // description: "Production Server",
+          url: `${DEPLOYS_URL}${api?.context}/${api?.version}`,
+
+          description: "Sandbox",
         },
       ]),
         setSwaggerSpec(swaggerData);
@@ -320,6 +322,13 @@ export default function ApiModulesTests() {
                   return request;
                 }}
                 spec={swaggerSpec}
+                // docExpansion="none"
+                defaultModelsExpandDepth={-1}
+                defaultModelExpandDepth={-1}
+                tryItOutEnabled={true}
+                layout="BaseLayout"
+                showExtensions={true}
+                showCommonExtensions={true}
               />
             )}
           </div>

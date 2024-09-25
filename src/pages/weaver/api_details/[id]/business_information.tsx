@@ -99,7 +99,7 @@ export default function ApiBusinessInformation() {
   };
 
   const updateApi = async (aco: string) => {
-    if (businessOwner === "") {
+    if (businessOwner === "" || businessOwner === undefined) {
       setApiErrorMessage(
         "Kindly provide a business owner before saving",
         "error"
@@ -107,7 +107,15 @@ export default function ApiBusinessInformation() {
       setIsLoading(false);
       return;
     }
-    if (technicalOwner === "") {
+    if (businessOwnerEmail === "" || businessOwnerEmail === undefined) {
+      setApiErrorMessage(
+        "Kindly provide a business owner email before saving",
+        "error"
+      );
+      setIsLoading(false);
+      return;
+    }
+    if (technicalOwner === "" || technicalOwner === undefined) {
       setApiErrorMessage(
         "Kindly provide a technical owner before saving",
         "error"
@@ -115,19 +123,28 @@ export default function ApiBusinessInformation() {
       setIsLoading(false);
       return;
     }
-    // if (businessOwnerEmail !== "" || !validator.isEmail(businessOwnerEmail)) {
-    //   setApiErrorMessage("Ensure business owner email is valid", "error");
-    //   setIsLoading(false);
-    //   return;
-    // }
-    // if (technicalOwnerEmail !== "" || !validator.isEmail(technicalOwnerEmail)) {
-    //   setApiErrorMessage("Ensure technical owner email is valid", "error");
-    //   setIsLoading(false);
-    //   return;
-    // }
+    if (technicalOwnerEmail === "" || technicalOwnerEmail === undefined) {
+      setApiErrorMessage(
+        "Kindly provide a technical owner Email before saving",
+        "error"
+      );
+      setIsLoading(false);
+      return;
+    }
+    if (!validator.isEmail(businessOwnerEmail)) {
+      setApiErrorMessage("Ensure business owner email is valid", "error");
+      setIsLoading(false);
+      return;
+    }
+    if (!validator.isEmail(technicalOwnerEmail)) {
+      setApiErrorMessage("Ensure technical owner email is valid", "error");
+      setIsLoading(false);
+      return;
+    }
     setIsLoading(true);
     if (api) {
-      const { apiCode, customerCode, ...restApiProps } = api;
+      const { apiCode, customerCode, isPublishRequested, ...restApiProps } =
+        api;
       const businessInformation: BusinessInformation = {
         businessOwner,
         businessOwnerEmail,
