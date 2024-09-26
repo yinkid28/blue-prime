@@ -76,7 +76,7 @@ export default function Application() {
             id: app.id,
             name: app.name,
             throttlingPolicy: app.throttlingPolicy || "N/A",
-            createdTime: app.renewDate ? getFormattedDate(app.renewDate) : "N/A",
+            // createdTime: app.renewDate ? getFormattedDate(app.renewDate) : "N/A",
           }));
         } 
         console.log("Formatted Applications:", formattedApplications);
