@@ -175,9 +175,9 @@ export default class APIServices {
     );
     return response.data;
   }
-  static async createApplication(data: any) {
+  static async createApplication(cco:string, data: any) {
     const response = await HTTPClient.post(
-      `/api-manager/api/v1/webber/application/create`,
+      `/api-manager/api/v1/webber/application/create?cco=${cco}`,
       data
     );
     return response.data;
@@ -357,11 +357,10 @@ export default class APIServices {
 
   static async getAllWebberThrottlingPolicies(
     policyLevel: string,
-    limit: number = 100,
-    offset: number = 0
+    policyName: string
   ) {
     const response = await HTTPClient.get(
-      `api-manager/api/v1/webber/throttling-policy/get-all?policyLevel=${policyLevel}&limit=${limit}&offset=${offset}`
+      `api-manager/api/v1/webber/throttling-policy/get-all?policyLevel=${policyLevel}&policyName=${policyName}`
     );
     return response.data;
   }
@@ -378,10 +377,11 @@ export default class APIServices {
   static async getAllWebberApplications(
     pageNumber: number = 1,
     pageSize: number,
-    keyword?: string
+    cco: string,
   ) {
     const response = await HTTPClient.get(
-      `api-manager/api/v1/webber/application/get-all?keyword=${keyword}&pageSize=${pageSize}&pageNumber=${pageNumber}`
+      `api-manager/api/v1/webber/application/get-all?cco=${cco}&pageSize=${pageSize}&pageNumber=${pageNumber}`
+
     );
     return response.data;
   }

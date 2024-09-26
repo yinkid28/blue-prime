@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { BsFilePlay, BsSearch } from "react-icons/bs";
 import { MdFolder, MdHomeFilled, MdPhoneAndroid } from "react-icons/md";
@@ -32,21 +32,38 @@ export default function MainSidebar() {
   const { bookmarkedAPIs, libraryView, setLibraryView } = useApi();
   const { user } = useOnboarding();
   const [activeItem, setActiveItem] = useState("saved");
-  
-
 
   const apiCode = router.query.apiCode as string;
+
+  useEffect(() => {
+  
+    if (!libraryView) {
+      setLibraryView("saved");
+    }
+  }, []);
 
   const handleLibraryItem = (view: any) => {
     setLibraryView(view);
     setActiveItem(view);
-    router.push(`/webber/library/${view}`);
+    // router.push(`/webber/library/${view}`);
+    // only application should navigate for now
+    if (view === "application") {
+      router.push(`/webber/library/${view}`);
+    }
     isOpen && onClose();
+  };
+
+
+  const getTextColor = (itemView: any) => {
+    if ( itemView === "saved") {
+      return "text-primary";
+    }
+    return libraryView === itemView ? "text-primary" : "text-dark-grey";
   };
 
   return (
     <>
-      <div className="w-full  flex flex-col h-full gap-2">
+      <div className="w-full flex flex-col h-full gap-2">
         <div className="bg-white rounded p-2 h-fit flex flex-col gap-4 ">
           <div className="flex justify-center items-center">
             <Image
@@ -100,65 +117,28 @@ export default function MainSidebar() {
                       <ul className="space-y-3 text-dark-grey">
                         <li
                           onClick={() => handleLibraryItem("application")}
-                          className={`cursor-pointer ${
-                            libraryView == "application"
-                              ? "text-primary"
-                              : "text-dark-grey"
-                          }`}
+                          className={`cursor-pointer ${getTextColor("application")}`}
                         >
                           Application
                         </li>
                         <li
-                          onClick={() => {
-                            setLibraryView("api-product");
-                            isOpen && onClose();
-                          }}
-                          className={`cursor-pointer 
-                                  ${
-                                    libraryView == "api-product"
-                                      ? "text-primary"
-                                      : "text-dark-grey"
-                                  }`}
+                          onClick={() => handleLibraryItem("api-product")}
+                          className={`cursor-pointer ${getTextColor("api-product")}`}
                         >
                           API Product
                         </li>
                         <li
-                          onClick={() => {
-                            bookmarkedAPIs.length === 0
-                              ? null
-                              : setLibraryView("saved");
-                            isOpen && onClose();
-                          }}
-                          className={`${
-                            !(bookmarkedAPIs.length === 0) && "cursor-pointer"
-                          }
-                                ${
-                                  libraryView == "saved"
-                                    ? "text-primary"
-                                    : "text-dark-grey"
-                                }`}
+                          onClick={() => handleLibraryItem("saved")}
+                          className={`cursor-pointer ${getTextColor("saved")}`}
                         >
                           Saved APIs
                         </li>
                         <li
-                          onClick={() => {
-                            bookmarkedAPIs.length === 0
-                              ? null
-                              : setLibraryView("Subscribed");
-                            isOpen && onClose();
-                          }}
-                          className={`${
-                            !(bookmarkedAPIs.length === 0) && "cursor-pointer"
-                          }
-                                ${
-                                  libraryView == "Subscribed"
-                                    ? "text-primary"
-                                    : "text-dark-grey"
-                                }`}
+                          onClick={() => handleLibraryItem("Subscribed")}
+                          className={`cursor-pointer ${getTextColor("Subscribed")}`}
                         >
                           Subscribed APIs
                         </li>
-                        <li>Subscribed</li>
                       </ul>
                     </div>
                   ) : (
@@ -189,7 +169,6 @@ export default function MainSidebar() {
             }`}
             onClick={() => router.push("/api_discovery")}
           >
-            {/* <MdHomeFilled /> */}
             <p className="font-semibold">Discovery</p>
           </div>
        
@@ -206,8 +185,6 @@ export default function MainSidebar() {
               <p className="font-semibold">Library</p>
             </div>
           )}
-
-        
         </div>
 
         {router.asPath.startsWith("/webber/library") ? (
@@ -216,40 +193,25 @@ export default function MainSidebar() {
             <ul className="space-y-3 text-sm px-3 font-semibold text-dark-grey">
               <li
                 onClick={() => handleLibraryItem("application")}
-                className={`cursor-pointer ${
-                  libraryView == "application"
-                    ? "text-primary"
-                    : "text-dark-grey"
-                }`}
+                className={`cursor-pointer ${getTextColor("application")}`}
               >
                 Application
               </li>
               <li
-                onClick={() => setLibraryView("saved")}
-                className={`${"cursor-pointer"}
-                ${libraryView == "saved" ? "text-primary" : "text-dark-grey"}`}
+                onClick={() => handleLibraryItem("saved")}
+                className={`cursor-pointer ${getTextColor("saved")}`}
               >
                 Saved APIs
               </li>
               <li
-                onClick={() => setLibraryView("Subscribed")}
-                className={`${"cursor-pointer"}
-                ${
-                  libraryView == "Subscribed"
-                    ? "text-primary"
-                    : "text-dark-grey"
-                }`}
+                onClick={() => handleLibraryItem("Subscribed")}
+                className={`cursor-pointer ${getTextColor("Subscribed")}`}
               >
                 Subscribed APIs
               </li>
               <li
-                onClick={() => setLibraryView("api-product")}
-                className={`cursor-pointer
-                  ${
-                    libraryView == "api-product"
-                      ? "text-primary"
-                      : "text-dark-grey"
-                  }`}
+                onClick={() => handleLibraryItem("api-product")}
+                className={`cursor-pointer ${getTextColor("api-product")}`}
               >
                 API Product
               </li>
@@ -269,3 +231,16 @@ export default function MainSidebar() {
     </>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

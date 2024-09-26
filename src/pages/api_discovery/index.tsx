@@ -189,6 +189,7 @@ export default function ApiDiscoveryDashboard() {
       setApiErrorMessage(errorMessage, "error");
     }
   };
+  
   const unbookmarkApi = async (cco: string, aco: string) => {
     setIsLoading(true);
 
