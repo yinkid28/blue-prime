@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Navbar from "@/components/Layout/Nav/navbar";
-import GlobalPagination, { BreadCrumbItems, BreadCrumbs, Table } from "@/components/utils";
+import GlobalPagination, {
+  BreadCrumbItems,
+  BreadCrumbs,
+  Table,
+} from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
 import {
   Menu,
@@ -22,7 +26,6 @@ const DiscoveryLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
 
-
 type Application = {
   id: string;
   name: string;
@@ -38,10 +41,12 @@ export default function Application() {
   const [isLoadingApps, setIsLoadingApps] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  
+
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
   const [pageSize, setPageSize] = useState<number>(3);
+
+
 
   const router = useRouter();
   

@@ -62,10 +62,11 @@ export default function MainSidebar() {
     isOpen && onClose();
   };
 
+  
   const getTextColor = (itemView: any) => {
-    // if (itemView === "saved") {
-    //   return "text-primary";
-    // }
+    if ( itemView === "saved") {
+      return "text-primary";
+    }
     return libraryView === itemView ? "text-primary" : "text-dark-grey";
   };
 
@@ -245,3 +246,16 @@ export default function MainSidebar() {
     </>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
