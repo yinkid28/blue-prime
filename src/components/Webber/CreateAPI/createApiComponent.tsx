@@ -145,7 +145,16 @@ export function ApiUpload({ setStep, setProgress, setTitle }: CreateProp) {
       context: info.context,
       version: info.version,
       policies: ["Unlimited"],
-      gatewayType: "wso2/synapse",
+      endpointConfig: {
+        endpoint_type: "http",
+        sandbox_endpoints: {
+          url: "https://pokeapi.co/api/v2",
+        },
+        production_endpoints: {
+          url: "https://pokeapi.co/api/v2",
+        },
+      },
+      // gatewayType: "wso2/synapse",
       // provider: "admin",
       // categories: [info.category],
       // lifeCycleStatus: "CREATED",
@@ -211,6 +220,7 @@ export function ApiUpload({ setStep, setProgress, setTitle }: CreateProp) {
       );
       if (res.statusCode === 201) {
         setLoading(false);
+
         toast({
           title: "API Creation",
           description: "Api successfully created",
@@ -218,7 +228,9 @@ export function ApiUpload({ setStep, setProgress, setTitle }: CreateProp) {
           duration: 3000,
           position: "bottom-right",
         });
-        router.push("/weaver/dashboard");
+        router.push(
+          `/weaver/api_details/${res.data.name}/overview?apiCode=${res.data.apiCode}`
+        );
       }
     } catch (error: any) {
       setLoading(false);
@@ -353,7 +365,9 @@ export default function ApiScratch({ infor }: any) {
           duration: 3000,
           position: "bottom-right",
         });
-        router.push("/weaver/dashboard");
+        router.push(
+          `/weaver/api_details/${res.data.name}/overview?apiCode=${res.data.apiCode}`
+        );
       }
       console.log(res);
     } catch (error: any) {
@@ -431,7 +445,9 @@ export default function ApiScratch({ infor }: any) {
           duration: 3000,
           position: "bottom-right",
         });
-        router.push("/weaver/dashboard");
+        router.push(
+          `/weaver/api_details/${res.data.name}/overview?apiCode=${res.data.apiCode}`
+        );
       }
     } catch (error: any) {
       setFile(null);

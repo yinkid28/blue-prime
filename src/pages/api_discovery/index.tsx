@@ -150,6 +150,7 @@ export default function ApiDiscoveryDashboard() {
   ];
   const toast = useToast();
   const [allApis, setAllApis] = useState<IMockApi[]>(rec);
+  
   const getApis = async (pageNo: number, pageSize: number) => {
     setIsLoading(true);
 
@@ -188,6 +189,7 @@ export default function ApiDiscoveryDashboard() {
       setApiErrorMessage(errorMessage, "error");
     }
   };
+  
   const unbookmarkApi = async (cco: string, aco: string) => {
     setIsLoading(true);
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { BsFilePlay, BsSearch } from "react-icons/bs";
 import { MdFolder, MdHomeFilled, MdPhoneAndroid } from "react-icons/md";
@@ -31,19 +31,47 @@ export default function MainSidebar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { bookmarkedAPIs, libraryView, setLibraryView } = useApi();
   const { user } = useOnboarding();
+  const [activeItem, setActiveItem] = useState("saved");
 
-  // Extract the API code from the current route
   const apiCode = router.query.apiCode as string;
+
+  useEffect(() => {
+    if (!libraryView) {
+      setLibraryView("saved");
+    }
+  }, []);
 
   const handleLibraryItem = (view: any) => {
     setLibraryView(view);
-    router.push(`/webber/library/${apiCode}/${view}`);
+    setActiveItem(view);
+    // router.push(`/webber/library/${view}`);
+    // only application should navigate for now
+    switch (view) {
+      case "application":
+        router.push(`/webber/library/${view}`);
+        break;
+      case "saved":
+        router.push(`/webber/library`);
+        break;
+      default:
+        break;
+    }
+    if (view === "application") {
+      router.push(`/webber/library/${view}`);
+    }
     isOpen && onClose();
+  };
+
+  const getTextColor = (itemView: any) => {
+    // if (itemView === "saved") {
+    //   return "text-primary";
+    // }
+    return libraryView === itemView ? "text-primary" : "text-dark-grey";
   };
 
   return (
     <>
-      <div className="w-full  flex flex-col h-full gap-2">
+      <div className="w-full flex flex-col h-full gap-2">
         <div className="bg-white rounded p-2 h-fit flex flex-col gap-4 ">
           <div className="flex justify-center items-center">
             <Image
@@ -96,66 +124,35 @@ export default function MainSidebar() {
                       </p>
                       <ul className="space-y-3 text-dark-grey">
                         <li
-                          onClick={() => handleLibraryItem("application")}
-                          className={`cursor-pointer ${
-                            libraryView == "application"
-                              ? "text-primary"
-                              : "text-dark-grey"
-                          }`}
-                        >
-                          Application
-                        </li>
-                        <li
-                          onClick={() => {
-                            setLibraryView("api-product");
-                            isOpen && onClose();
-                          }}
-                          className={`cursor-pointer
-                                  ${
-                                    libraryView == "api-product"
-                                      ? "text-primary"
-                                      : "text-dark-grey"
-                                  }`}
+                          onClick={() => handleLibraryItem("api-product")}
+                          className={`cursor-pointer ${getTextColor(
+                            "api-product"
+                          )}`}
                         >
                           API Product
                         </li>
                         <li
-                          onClick={() => {
-                            bookmarkedAPIs.length === 0
-                              ? null
-                              : setLibraryView("saved");
-                            isOpen && onClose();
-                          }}
-                          className={`${
-                            !(bookmarkedAPIs.length === 0) && "cursor-pointer"
-                          }
-                                ${
-                                  libraryView == "saved"
-                                    ? "text-primary"
-                                    : "text-dark-grey"
-                                }`}
+                          onClick={() => handleLibraryItem("application")}
+                          className={`cursor-pointer ${getTextColor(
+                            "application"
+                          )}`}
+                        >
+                          Application
+                        </li>
+                        <li
+                          onClick={() => handleLibraryItem("saved")}
+                          className={`cursor-pointer ${getTextColor("saved")}`}
                         >
                           Saved APIs
                         </li>
                         <li
-                          onClick={() => {
-                            bookmarkedAPIs.length === 0
-                              ? null
-                              : setLibraryView("Subscribed");
-                            isOpen && onClose();
-                          }}
-                          className={`${
-                            !(bookmarkedAPIs.length === 0) && "cursor-pointer"
-                          }
-                                ${
-                                  libraryView == "Subscribed"
-                                    ? "text-primary"
-                                    : "text-dark-grey"
-                                }`}
+                          onClick={() => handleLibraryItem("Subscribed")}
+                          className={`cursor-pointer ${getTextColor(
+                            "Subscribed"
+                          )}`}
                         >
                           Subscribed APIs
                         </li>
-                        <li>Subscribed</li>
                       </ul>
                     </div>
                   ) : (
@@ -186,23 +183,9 @@ export default function MainSidebar() {
             }`}
             onClick={() => router.push("/api_discovery")}
           >
-            {/* <MdHomeFilled /> */}
             <p className="font-semibold">Discovery</p>
           </div>
-           <div
-            className='md:flex hidden items-center p-2 hover:bg-gradient-to-r from-white hover:border-l-[2px] border-primary  to-primaryLightest cursor-pointer rounded-[8px] ease-in-out duration-700 hover:text-primary gap-3 w-full'>
-             <div className="flex items-center border rounded-lg py-2 px-4 gap-1">
-              <Icon
-                icon="lets-icons:search-alt-light"
-                className="text-mid-grey text-2xl"
-              />
-              <input
-                type="search"
-                placeholder="Search"
-                className="text-base font-semibold focus:outline-none w-full"
-              />
-            </div>
-          </div>
+
           {user !== null && (
             <div
               className={`md:flex hidden items-center p-2 hover:bg-gradient-to-r from-white hover:border-l-[2px] border-primary  to-primaryLightest cursor-pointer rounded-lg ease-in-out duration-700 hover:text-primary gap-3 w-full ${
@@ -216,17 +199,6 @@ export default function MainSidebar() {
               <p className="font-semibold">Library</p>
             </div>
           )}
-
-          <div
-            className={`md:flex hidden items-center p-2 hover:bg-gradient-to-r from-white hover:border-l-[2px] border-primary  to-primaryLightest cursor-pointer rounded-[8px] ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-              router.asPath == "/api_discovery"
-                ? "text-primary border-l-[2px]  bg-gradient-to-r "
-                : "text-dark-grey"
-            }`}
-          >
-            <MdPhoneAndroid size={18} />
-            <p className="font-semibold">How to use</p>
-          </div>
         </div>
 
         {router.asPath.startsWith("/webber/library") ? (
@@ -234,41 +206,26 @@ export default function MainSidebar() {
             <p className="text-base text-mid-grey font-bold">Library</p>
             <ul className="space-y-3 text-sm px-3 font-semibold text-dark-grey">
               <li
-                onClick={() => handleLibraryItem("application")}
-                className={`cursor-pointer ${
-                  libraryView == "application"
-                    ? "text-primary"
-                    : "text-dark-grey"
-                }`}
-              >
-                Application
-              </li>
-              <li
-                onClick={() => setLibraryView("saved")}
-                className={`${"cursor-pointer"}
-                ${libraryView == "saved" ? "text-primary" : "text-dark-grey"}`}
+                onClick={() => handleLibraryItem("saved")}
+                className={`cursor-pointer ${getTextColor("saved")}`}
               >
                 Saved APIs
               </li>
               <li
-                onClick={() => setLibraryView("Subscribed")}
-                className={`${"cursor-pointer"}
-                ${
-                  libraryView == "Subscribed"
-                    ? "text-primary"
-                    : "text-dark-grey"
-                }`}
+                onClick={() => handleLibraryItem("application")}
+                className={`cursor-pointer ${getTextColor("application")}`}
+              >
+                Application
+              </li>
+              <li
+                onClick={() => handleLibraryItem("Subscribed")}
+                className={`cursor-pointer ${getTextColor("Subscribed")}`}
               >
                 Subscribed APIs
               </li>
               <li
-                onClick={() => setLibraryView("api-product")}
-                className={`cursor-pointer
-                  ${
-                    libraryView == "api-product"
-                      ? "text-primary"
-                      : "text-dark-grey"
-                  }`}
+                onClick={() => handleLibraryItem("api-product")}
+                className={`cursor-pointer ${getTextColor("api-product")}`}
               >
                 API Product
               </li>

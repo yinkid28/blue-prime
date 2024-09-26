@@ -33,11 +33,15 @@ export default function DeployRevision({
 }: addEndpointModalProps) {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
-  const [deployName, setDeployname] = useState<string>(revision?.displayName);
+  const [deployName, setDeployname] = useState<string>("");
   const [vhost, setVhost] = useState<string>(vhosts as string);
   const [displayOnDevportal, setDisplayOnDevportal] = useState<boolean>(false);
   const { setApiErrorMessage } = useOnboarding();
-
+  useEffect(() => {
+    if (revision) {
+      setDeployname(revision?.displayName);
+    }
+  }, [revision]);
   const toast = useToast();
   const deployRevivision = async (aco: string, rco: string) => {
     if (
@@ -73,7 +77,7 @@ export default function DeployRevision({
           position: "bottom-right",
           status: "success",
         });
-        router.reload();
+        // router.reload();
       }
     } catch (error: any) {
       setLoading(false);

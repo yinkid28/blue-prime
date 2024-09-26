@@ -20,7 +20,7 @@ export default function WebberDashboard() {
   const { loading, setLoading, setSidebar, setApiErrorMessage, user } =
     useOnboarding();
   const [isfetchingApis, setIsLoading] = useState<boolean>(false);
-  const [fetchedApis, setFetchedApis] = useState<IApi[]>();
+  const [fetchedApis, setFetchedApis] = useState<IApi[]>([]);
   const [pageNo, setPageNo] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(12);
   const [dataCount, setDataCount] = useState(0);
@@ -45,6 +45,7 @@ export default function WebberDashboard() {
 
     setPageCount(Math.ceil(page));
   }, [dataCount]);
+  
   const getApis = async (cco: string, pageNo: number, pageSize: number) => {
     setIsLoading(true);
 
@@ -60,11 +61,15 @@ export default function WebberDashboard() {
         setDataCount(res.totalElements);
       }
     } catch (error: any) {
-      setLoading(false);
-      const errorMessage = error?.response?.data?.message;
-      setApiErrorMessage(errorMessage, "error");
+      setIsLoading(false);
+
+      // const errorMessage = error?.response?.data?.message;
+      // setApiErrorMessage(errorMessage, "error");
     }
   };
+  useEffect(() => {
+    console.log(isfetchingApis, "status");
+  }, [isfetchingApis]);
 
   return (
     <>
@@ -93,7 +98,7 @@ export default function WebberDashboard() {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
             {isfetchingApis ? (
               skels.map((item, index) => <Skeleton height={200} key={index} />)
-            ) : fetchedApis ? (
+            ) : fetchedApis.length > 0 ? (
               fetchedApis.map((item, index) => (
                 <ApiCardWebber
                   img={""}

@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Navbar from "@/components/Layout/Nav/navbar";
-import { BreadCrumbItems, BreadCrumbs, Table } from "@/components/utils";
-import { useApi } from "@/context/ApiDiscoveryContext";
+import GlobalPagination, { BreadCrumbItems, BreadCrumbs, Table } from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
 import {
   Menu,
@@ -9,7 +8,6 @@ import {
   MenuItem,
   MenuList,
   useDisclosure,
-  UseToastOptions,
   useToast,
 } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
@@ -19,56 +17,34 @@ import { CiMenuKebab } from "react-icons/ci";
 import { getFormattedDate } from "@/helper_utils/helpers";
 import APIServices from "@/services/api_services/api_service";
 import AddApp from "@/components/modals/addApp";
-import EditApp from "@/components/modals/editApp";
 
 const DiscoveryLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
 
-type TableRowProps = {
-  name: string;
-  tokenQuota: string;
-  createdTime: string;
-  appco: string;
-  onDelete: (appco: string) => void;
-  onEdit: (appco: string) => void;
-};
 
 type Application = {
+  id: string;
   name: string;
-  tokenQuota: string;
-  createdTime: string;
-  appco: string;
-};
-
-const toastProps: UseToastOptions = {
-  description: "successfully copied",
-  status: "success",
-  isClosable: true,
-  duration: 800,
-  position: "bottom-right",
+  throttlingPolicy: string;
+  createdDate: string;
 };
 
 export default function Application() {
   const toast = useToast();
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const {
-    isOpen: isEditOpen,
-    onClose: onEditClose,
-    onOpen: onEditOpen,
-  } = useDisclosure();
-  const { loading, setLoading, setSidebar, setApiErrorMessage } =
-    useOnboarding();
-  const [copied, setCopied] = useState<boolean>(false);
+  const { loading, setLoading, setSidebar, setApiErrorMessage, user } = useOnboarding();
   const [applications, setApplications] = useState<Application[]>([]);
   const [isLoadingApps, setIsLoadingApps] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredApplications, setFilteredApplications] = useState<
-    Application[]
-  >([]);
-  const [editingApp, setEditingApp] = useState<string | null>(null);
+  
+  const [pageCount, setPageCount] = useState(0);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [pageSize, setPageSize] = useState<number>(3);
 
+  const router = useRouter();
+  
   const breadCrumbs: BreadCrumbItems[] = [
     {
       breadCrumbText: "Library",
@@ -77,60 +53,67 @@ export default function Application() {
   ];
 
   const getAllApplications = useCallback(async () => {
+    if (!user?.customerCode) {
+      setError("User customer code not available");
+      return;
+    }
+
     setIsLoadingApps(true);
     setError(null);
     try {
-      const res = await APIServices.getAllWebberApplications();
+      console.log("Fetching applications with params:", { pageNumber: pageNumber + 1, pageSize, customerCode: user.customerCode });
+      const res = await APIServices.getAllWebberApplications(
+        pageNumber + 1,
+        pageSize,
+        user.customerCode
+      );
+      console.log("API Response:", res);
+
       if (res.statusCode === 200) {
-        const formattedApplications = res.data.list.map((app: any) => ({
-          name: app.name,
-          tokenQuota: app.throttlingPolicy || "N/A",
-          createdTime: app.renewDate ? getFormattedDate(app.renewDate) : "N/A",
-          appco: app.appCode || app.applicationId,
-        }));
+        let formattedApplications;
+        if (Array.isArray(res.data)) {
+          formattedApplications = res.data.map((app: any) => ({
+            id: app.id,
+            name: app.name,
+            throttlingPolicy: app.throttlingPolicy || "N/A",
+            // createdTime: app.renewDate ? getFormattedDate(app.renewDate) : "N/A",
+          }));
+        } 
+        console.log("Formatted Applications:", formattedApplications);
         setApplications(formattedApplications);
-        if (formattedApplications.length === 0) {
-          setError("No applications found.");
-        }
-      } else {
-        throw new Error("Invalid response structure");
-      }
+        setPageCount(res.totalPages || res.data.totalPages || 1);
+      } 
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to fetch applications";
-      setError(errorMessage);
+      console.error("Error fetching applications:", error);
+      const errorMessage = error?.response?.data?.message || error.message || "Failed to fetch applications";
       setApiErrorMessage(errorMessage);
+    
     } finally {
       setIsLoadingApps(false);
     }
-  }, [setApiErrorMessage]);
+  }, [pageNumber, pageSize, user, setApiErrorMessage]);
+
+  const handlePageClick = (page: number) => {
+    setPageNumber(page);
+  };
 
   useEffect(() => {
     setLoading(false);
     setSidebar("");
-    getAllApplications();
-  }, [getAllApplications, setLoading, setSidebar]);
+    if (user?.customerCode) {
+      getAllApplications();
+    }
+  }, [user, pageNumber, pageSize, searchTerm, getAllApplications, setLoading, setSidebar]);
 
-  useEffect(() => {
-    const filtered = applications.filter((app) =>
-      app.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredApplications(filtered);
-  }, [searchTerm, applications]);
-
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = (event: any) => {
     setSearchTerm(event.target.value);
+    setPageNumber(0);
   };
 
-  const handleEditApplication = (appco: string) => {
-    setEditingApp(appco);
-    onEditOpen();
-  };
-
-  const deleteApplication = async (appco: string) => {
+  const deleteApplication = async (id: string) => {
     setLoading(true);
     try {
-      const response = await APIServices.deleteWebberApplication(appco);
+      const response = await APIServices.deleteWebberApplication(id);
       if (response.statusCode === 200) {
         toast({
           title: "Delete Application",
@@ -142,23 +125,28 @@ export default function Application() {
         getAllApplications();
       }
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to delete application";
+      console.error("Error deleting application:", error);
+      const errorMessage = error?.response?.data?.message || "Failed to delete application";
       setApiErrorMessage(errorMessage);
+      toast({
+        title: "Error",
+        description: errorMessage,
+        status: "error",
+        duration: 3000,
+        position: "bottom-right",
+      });
     } finally {
       setLoading(false);
     }
   };
 
- 
-
   return (
     <DiscoveryLayout>
       <>
-        <Navbar title={`Library`} />
+        <Navbar title="Library" />
         <BreadCrumbs
           breadCrumbItems={breadCrumbs}
-          breadCrumbActiveItem={`Application`}
+          breadCrumbActiveItem="Application"
         />
         <div className="border rounded-xl p-4 mx-4 my-6 min-h-[80dvh]">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center lg:gap-0 gap-6">
@@ -189,8 +177,8 @@ export default function Application() {
             {isLoadingApps ? (
               <p>Loading applications...</p>
             ) : error ? (
-              <p>{error}</p>
-            ) : filteredApplications.length > 0 ? (
+              <p className="text-red-500">{error}</p>
+            ) : applications.length > 0 ? (
               <Table>
                 <Table.Header>
                   <th className="w-1/5 px-6 py-2 whitespace-nowrap">
@@ -205,15 +193,14 @@ export default function Application() {
                   <th className="w-[5%] px-6 py-2">Actions</th>
                 </Table.Header>
                 <Table.Body
-                  data={filteredApplications}
+                  data={applications}
                   render={(data: Application, index: number) => (
                     <TableRow
+                      id={data.id}
                       name={data.name}
-                      tokenQuota={data.tokenQuota}
-                      createdTime={data.createdTime}
-                      appco={data.appco}
+                      throttlingPolicy={data.throttlingPolicy}
+                      createdDate={data.createdDate}
                       onDelete={deleteApplication}
-                      onEdit={handleEditApplication}
                       key={index}
                     />
                   )}
@@ -223,6 +210,15 @@ export default function Application() {
               <p>No applications found.</p>
             )}
           </div>
+          {applications.length > 0 && (
+            <div className="flex items-center my-5 justify-end">
+              <GlobalPagination
+                onPageClick={handlePageClick}
+                pageCount={pageCount}
+                inc={false}
+              />
+            </div>
+          )}
         </div>
 
         <AddApp
@@ -232,49 +228,39 @@ export default function Application() {
             getAllApplications();
           }}
           onSuccess={getAllApplications}
+          cco={user?.customerCode || ""}
         />
-        {editingApp && (
-          <EditApp
-            isOpen={isEditOpen}
-            onClose={() => {
-              onEditClose();
-              setEditingApp(null);
-              getAllApplications();
-            }}
-            onSuccess={getAllApplications}
-            appco={editingApp}
-          />
-        )}
       </>
     </DiscoveryLayout>
   );
 }
 
 function TableRow({
+  id,
   name,
-  tokenQuota,
-  createdTime,
-  appco,
+  throttlingPolicy,
+  createdDate,
   onDelete,
-  onEdit,
-}: TableRowProps) {
+}: Application & {
+  onDelete: (id: string) => void;
+}) {
   const router = useRouter();
-  const { id } = router.query;
+  const { id: routerId } = router.query;
 
   return (
     <tr>
-      <td className="px-6 py-4 text-sm border-gukt whitespace-nowrap">{name}</td>
-      <td className="px-6 py-4 text-sm border-t">{tokenQuota}</td>
-      <td className="px-6 py-4 text-sm border-t">{createdTime}</td>
+      <td className="px-6 py-4 text-sm border-t whitespace-nowrap">{name}</td>
+      <td className="px-6 py-4 text-sm border-t">{throttlingPolicy}</td>
+      <td className="px-6 py-4 text-sm border-t">{createdDate}</td>
       <td className="px-6 py-4 text-sm border-t">
         <Menu>
-          <MenuButton onClick={() => console.log(name, appco)}>
+          <MenuButton>
             <CiMenuKebab />
           </MenuButton>
-          <MenuList minW="0" minH={"0"} h={"70px"}>
+          <MenuList minW="0" minH="0" h="70px">
             <MenuItem
               onClick={() =>
-                router.push(`/webber/library/${id}/application/${name}`)
+                router.push(`/webber/library/${routerId}/overview/${name}`)
               }
             >
               <p>View Details</p>
@@ -282,10 +268,7 @@ function TableRow({
             <MenuItem>
               <p>Cancel Subscription</p>
             </MenuItem>
-            <MenuItem onClick={() => onEdit(appco)}>
-              <p>Edit Application</p>
-            </MenuItem>
-            <MenuItem onClick={() => onDelete(appco)}>
+            <MenuItem onClick={() => onDelete(id)}>
               <p>Delete Application</p>
             </MenuItem>
           </MenuList>

@@ -15,13 +15,14 @@ import { useOnboarding } from "@/context/OnboardingContext";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { createApplication } from "@/models/api.model";
 
-interface addAppProps {
+interface AddAppProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  cco: string;
 }
 
-export default function AddApp({ isOpen, onClose, onSuccess }: addAppProps) {
+export default function AddApp({ isOpen, onClose, onSuccess, cco }: AddAppProps) {
   const { setApiErrorMessage, setLoading } = useOnboarding();
   const { api, setApi } = useApi();
   const [state, setState] = useState<createApplication>({
@@ -42,7 +43,7 @@ export default function AddApp({ isOpen, onClose, onSuccess }: addAppProps) {
     const data: createApplication = state;
     console.log(data, "application data");
     try {
-      const res = await APIServices.createApplication(data);
+      const res = await APIServices.createApplication(cco, data);
       if (res.statusCode === 201) {
         console.log(res);
         toast({
@@ -52,15 +53,31 @@ export default function AddApp({ isOpen, onClose, onSuccess }: addAppProps) {
           isClosable: true,
         });
         onClose();
+        onSuccess();
       }
     } catch (error: any) {
       setLoading(false);
       const errorMessage =
         error?.response?.data?.message || "Failed to create application";
-      setApiErrorMessage(errorMessage, "error");
+      setApiErrorMessage(errorMessage);
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchThrottlingPolicies = async (policyName: string) => {
+    try {
+      setLoading(false);
+      const response = await APIServices.getAllWebberThrottlingPolicies(
+        "application",
+         policyName
+      );
+      console.log("Throttling policies:", response);
+      
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || "Failed to fetch throttling policies";
+      setApiErrorMessage(errorMessage);
+    } 
   };
 
   const handleChange = (e: any) => {
@@ -71,23 +88,7 @@ export default function AddApp({ isOpen, onClose, onSuccess }: addAppProps) {
     }));
 
     if (name === "throttlingPolicy") {
-      fetchThrottlingPolicy(value);
-    }
-  };
-
-  const fetchThrottlingPolicy = async (policyName: string) => {
-    try {
-      setLoading(false);
-      const response = await APIServices.getAllWebberThrottlingPolicies(
-        "application",
-        25,
-        0
-      );
-      setLoading(false);
-    } catch (error: any) {
-      setLoading(false);
-      const errorMessage = error?.response?.data?.message;
-      setApiErrorMessage(errorMessage, "error");
+      fetchThrottlingPolicies(value);
     }
   };
 
@@ -145,31 +146,17 @@ export default function AddApp({ isOpen, onClose, onSuccess }: addAppProps) {
 
             <div className="flex flex-col gap-2">
               <label htmlFor="description" className="text-xs">
-                Descriptions
+                Description
               </label>
               <textarea
                 rows={3}
-                placeholder="description"
+                placeholder="Description"
                 name="description"
                 value={description}
                 onChange={handleChange}
                 className="border-mid-grey p-2 border rounded-md"
               />
             </div>
-
-            <div className=" flex-col gap-2 hidden">
-              <label htmlFor="url" className="text-xs">
-                CallBack URL
-              </label>
-              <input
-                type="text"
-                name="url"
-                id="url"
-                placeholder="https://localhost:8000/customersupport/1.0.0%7C"
-                className="border-mid-grey p-2 border rounded-md"
-              />
-            </div>
-
             <Button
               text="Save"
               onClick={createApplication}
