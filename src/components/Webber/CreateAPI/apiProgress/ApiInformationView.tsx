@@ -71,7 +71,8 @@ export default function ApiInfomationViewWeaver() {
   const updateApi = async (aco: string) => {
     setIsLoading(true);
     if (api) {
-      const { apiCode, customerCode, publishRequested, ...restApiProps } = api;
+      const { apiCode, customerCode, isPublishRequested, ...restApiProps } =
+        api;
 
       const data = {
         ...restApiProps,

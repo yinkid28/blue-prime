@@ -77,7 +77,7 @@ export default function DeployRevision({
           position: "bottom-right",
           status: "success",
         });
-        router.reload();
+        // router.reload();
       }
     } catch (error: any) {
       setLoading(false);

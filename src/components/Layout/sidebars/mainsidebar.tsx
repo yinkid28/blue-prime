@@ -36,7 +36,6 @@ export default function MainSidebar() {
   const apiCode = router.query.apiCode as string;
 
   useEffect(() => {
-  
     if (!libraryView) {
       setLibraryView("saved");
     }
@@ -47,17 +46,26 @@ export default function MainSidebar() {
     setActiveItem(view);
     // router.push(`/webber/library/${view}`);
     // only application should navigate for now
+    switch (view) {
+      case "application":
+        router.push(`/webber/library/${view}`);
+        break;
+      case "saved":
+        router.push(`/webber/library`);
+        break;
+      default:
+        break;
+    }
     if (view === "application") {
       router.push(`/webber/library/${view}`);
     }
     isOpen && onClose();
   };
 
-
   const getTextColor = (itemView: any) => {
-    if ( itemView === "saved") {
-      return "text-primary";
-    }
+    // if (itemView === "saved") {
+    //   return "text-primary";
+    // }
     return libraryView === itemView ? "text-primary" : "text-dark-grey";
   };
 
@@ -116,16 +124,20 @@ export default function MainSidebar() {
                       </p>
                       <ul className="space-y-3 text-dark-grey">
                         <li
-                          onClick={() => handleLibraryItem("application")}
-                          className={`cursor-pointer ${getTextColor("application")}`}
-                        >
-                          Application
-                        </li>
-                        <li
                           onClick={() => handleLibraryItem("api-product")}
-                          className={`cursor-pointer ${getTextColor("api-product")}`}
+                          className={`cursor-pointer ${getTextColor(
+                            "api-product"
+                          )}`}
                         >
                           API Product
+                        </li>
+                        <li
+                          onClick={() => handleLibraryItem("application")}
+                          className={`cursor-pointer ${getTextColor(
+                            "application"
+                          )}`}
+                        >
+                          Application
                         </li>
                         <li
                           onClick={() => handleLibraryItem("saved")}
@@ -135,7 +147,9 @@ export default function MainSidebar() {
                         </li>
                         <li
                           onClick={() => handleLibraryItem("Subscribed")}
-                          className={`cursor-pointer ${getTextColor("Subscribed")}`}
+                          className={`cursor-pointer ${getTextColor(
+                            "Subscribed"
+                          )}`}
                         >
                           Subscribed APIs
                         </li>
@@ -171,7 +185,7 @@ export default function MainSidebar() {
           >
             <p className="font-semibold">Discovery</p>
           </div>
-       
+
           {user !== null && (
             <div
               className={`md:flex hidden items-center p-2 hover:bg-gradient-to-r from-white hover:border-l-[2px] border-primary  to-primaryLightest cursor-pointer rounded-lg ease-in-out duration-700 hover:text-primary gap-3 w-full ${
@@ -192,16 +206,16 @@ export default function MainSidebar() {
             <p className="text-base text-mid-grey font-bold">Library</p>
             <ul className="space-y-3 text-sm px-3 font-semibold text-dark-grey">
               <li
-                onClick={() => handleLibraryItem("application")}
-                className={`cursor-pointer ${getTextColor("application")}`}
-              >
-                Application
-              </li>
-              <li
                 onClick={() => handleLibraryItem("saved")}
                 className={`cursor-pointer ${getTextColor("saved")}`}
               >
                 Saved APIs
+              </li>
+              <li
+                onClick={() => handleLibraryItem("application")}
+                className={`cursor-pointer ${getTextColor("application")}`}
+              >
+                Application
               </li>
               <li
                 onClick={() => handleLibraryItem("Subscribed")}
@@ -231,16 +245,3 @@ export default function MainSidebar() {
     </>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -64,21 +64,21 @@ export default function EditApp({
     }
   };
 
-  const fetchThrottlingPolicies = async (policyName: string) => {
-    try {
-      setLoading(false);
-      const response = await APIServices.getAllWebberThrottlingPolicies(
-        "application",
-        25,
-        0
-      );
-      setLoading(false);
-    } catch (error: any) {
-      setLoading(false);
-      const errorMessage = error?.response?.data?.message;
-      setApiErrorMessage(errorMessage, "error");
-    }
-  };
+  // const fetchThrottlingPolicies = async (policyName: string) => {
+  //   try {
+  //     setLoading(false);
+  //     const response = await APIServices.getAllWebberThrottlingPolicies(
+  //       "application",
+  //       25,
+  //       0
+  //     );
+  //     setLoading(false);
+  //   } catch (error: any) {
+  //     setLoading(false);
+  //     const errorMessage = error?.response?.data?.message;
+  //     setApiErrorMessage(errorMessage, "error");
+  //   }
+  // };
 
   const updateApplication = async (appco: string) => {
     setLoading(false);
@@ -112,9 +112,9 @@ export default function EditApp({
       [name]: value,
     }));
 
-    if (name === "throttlingPolicy") {
-      fetchThrottlingPolicies(value);
-    }
+    // if (name === "throttlingPolicy") {
+    //   fetchThrottlingPolicies(value);
+    // }
   };
 
   return (
