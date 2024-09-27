@@ -22,16 +22,18 @@ import { getFormattedDate } from "@/helper_utils/helpers";
 import APIServices from "@/services/api_services/api_service";
 import AddApp from "@/components/modals/addApp";
 import { IApplication } from "@/models/webber.model";
+import EditApp from "@/components/modals/editApp";
 
 const DiscoveryLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
 
 type Application = {
+  appco: string;
   id: string;
   name: string;
   throttlingPolicy: string;
-  createdDate: string;
+  createdTime: string;
 };
 
 export default function Application() {
@@ -39,14 +41,14 @@ export default function Application() {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const { loading, setLoading, setSidebar, setApiErrorMessage, user } =
     useOnboarding();
-  const [applications, setApplications] = useState<IApplication[]>([]);
+  const [applications, setApplications] = useState<Application[]>([]);
   const [isLoadingApps, setIsLoadingApps] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-
+  const [editingApp, setEditingApp] = useState<string | null>(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState<number>(12);
+  const [pageSize, setPageSize] = useState<number>(10);
 
   const router = useRouter();
 
@@ -67,15 +69,30 @@ export default function Application() {
       setIsLoadingApps(true);
       setError(null);
       try {
+        console.log("Fetching applications with params:", {
+          pageNumber: pageNumber + 1,
+          pageSize,
+          customerCode: user.customerCode,
+        });
         const res = await APIServices.getAllWebberApplications(
-          pageNumber,
+          pageNumber + 1,
           pageSize,
           user.customerCode
         );
         console.log("API Response:", res);
 
         if (res.statusCode === 200) {
-          setApplications(res.data);
+          let formattedApplications;
+          if (Array.isArray(res.data)) {
+            formattedApplications = res.data.map((app: any) => ({
+              id: app.id,
+              name: app.name,
+              throttlingPolicy: app.throttlingPolicy || "N/A",
+              // createdTime: app.renewDate ? getFormattedDate(app.renewDate) : "N/A",
+            }));
+          }
+          console.log("Formatted Applications:", formattedApplications);
+          setApplications(formattedApplications);
           setPageCount(res.totalPages || res.data.totalPages || 1);
         }
       } catch (error: any) {
@@ -114,13 +131,18 @@ export default function Application() {
 
   const handleSearch = (event: any) => {
     setSearchTerm(event.target.value);
-    setPageNumber(0);
+    setPageNumber(1);
   };
 
-  const deleteApplication = async (id: string) => {
+  const handleEditApplication = (appco: string) => {
+    setEditingApp(appco);
+    onEditOpen();
+  };
+
+  const deleteApplication = async (appco: string) => {
     setLoading(true);
     try {
-      const response = await APIServices.deleteWebberApplication(id);
+      const response = await APIServices.deleteWebberApplication(appco);
       if (response.statusCode === 200) {
         toast({
           title: "Delete Application",
@@ -136,13 +158,6 @@ export default function Application() {
       const errorMessage =
         error?.response?.data?.message || "Failed to delete application";
       setApiErrorMessage(errorMessage);
-      toast({
-        title: "Error",
-        description: errorMessage,
-        status: "error",
-        duration: 3000,
-        position: "bottom-right",
-      });
     } finally {
       setLoading(false);
     }
@@ -205,10 +220,12 @@ export default function Application() {
                   render={(data: Application, index: number) => (
                     <TableRow
                       id={data.id}
+                      appco={data.appco}
                       name={data.name}
                       throttlingPolicy={data.throttlingPolicy}
-                      createdDate={data.createdDate}
+                      createdTime={data.createdTime}
                       onDelete={deleteApplication}
+                      onEdit={handleEditApplication}
                       key={index}
                     />
                   )}
@@ -238,19 +255,33 @@ export default function Application() {
           onSuccess={() => getAllApplications(pageNumber)}
           cco={user?.customerCode || ""}
         />
+        {editingApp && (
+          <EditApp
+            isOpen={isEditOpen}
+            onClose={() => {
+              onEditClose();
+              setEditingApp(null);
+              getAllApplications();
+            }}
+            onSuccess={getAllApplications}
+            appco={editingApp}
+          />
+        )}
       </>
     </DiscoveryLayout>
   );
 }
 
 function TableRow({
-  id,
+  appco,
   name,
   throttlingPolicy,
-  createdDate,
+  createdTime,
   onDelete,
+  onEdit,
 }: Application & {
-  onDelete: (id: string) => void;
+  onDelete: (appco: string) => void;
+  onEdit: (appco: string) => void;
 }) {
   const router = useRouter();
 
@@ -275,7 +306,10 @@ function TableRow({
             <MenuItem>
               <p>Cancel Subscription</p>
             </MenuItem>
-            <MenuItem onClick={() => onDelete(id)}>
+            <MenuItem onClick={() => onEdit(appco)}>
+              <p>Edit Application</p>
+            </MenuItem>
+            <MenuItem onClick={() => onDelete(appco)}>
               <p>Delete Application</p>
             </MenuItem>
           </MenuList>
