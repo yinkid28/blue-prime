@@ -175,7 +175,7 @@ export default class APIServices {
     );
     return response.data;
   }
-  static async createApplication(cco:string, data: any) {
+  static async createApplication(cco: string, data: any) {
     const response = await HTTPClient.post(
       `/api-manager/api/v1/webber/application/create?cco=${cco}`,
       data
@@ -377,11 +377,10 @@ export default class APIServices {
   static async getAllWebberApplications(
     pageNumber: number = 1,
     pageSize: number,
-    cco: string,
+    cco: string
   ) {
     const response = await HTTPClient.get(
-      `api-manager/api/v1/webber/application/get-all?cco=${cco}&pageSize=${pageSize}&pageNumber=${pageNumber}`
-
+      `api-manager/api/v1/webber/application/get-all?cco=${cco}&pageSize=${pageSize}&pageNo=${pageNumber}`
     );
     return response.data;
   }

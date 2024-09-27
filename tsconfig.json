@@ -18,7 +18,13 @@
     "target": "es5",
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "./typings"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "./typings",
+    "src/pages/webber/library/application/[id]"
+  ],
   "typeRoots": ["./typings", "./node_modules/@types/"],
   "exclude": ["node_modules"]
 }

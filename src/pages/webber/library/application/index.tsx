@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Navbar from "@/components/Layout/Nav/navbar";
-import GlobalPagination, { BreadCrumbItems, BreadCrumbs, Table } from "@/components/utils";
+import GlobalPagination, {
+  BreadCrumbItems,
+  BreadCrumbs,
+  Table,
+} from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
 import {
   Menu,
@@ -17,11 +21,11 @@ import { CiMenuKebab } from "react-icons/ci";
 import { getFormattedDate } from "@/helper_utils/helpers";
 import APIServices from "@/services/api_services/api_service";
 import AddApp from "@/components/modals/addApp";
+import { IApplication } from "@/models/webber.model";
 
 const DiscoveryLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
-
 
 type Application = {
   id: string;
@@ -33,18 +37,19 @@ type Application = {
 export default function Application() {
   const toast = useToast();
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const { loading, setLoading, setSidebar, setApiErrorMessage, user } = useOnboarding();
-  const [applications, setApplications] = useState<Application[]>([]);
+  const { loading, setLoading, setSidebar, setApiErrorMessage, user } =
+    useOnboarding();
+  const [applications, setApplications] = useState<IApplication[]>([]);
   const [isLoadingApps, setIsLoadingApps] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  
+
   const [pageCount, setPageCount] = useState(0);
-  const [pageNumber, setPageNumber] = useState(0);
-  const [pageSize, setPageSize] = useState<number>(3);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState<number>(12);
 
   const router = useRouter();
-  
+
   const breadCrumbs: BreadCrumbItems[] = [
     {
       breadCrumbText: "Library",
@@ -52,46 +57,40 @@ export default function Application() {
     },
   ];
 
-  const getAllApplications = useCallback(async () => {
-    if (!user?.customerCode) {
-      setError("User customer code not available");
-      return;
-    }
+  const getAllApplications = useCallback(
+    async (pageNumber: number) => {
+      if (!user?.customerCode) {
+        setError("User customer code not available");
+        return;
+      }
 
-    setIsLoadingApps(true);
-    setError(null);
-    try {
-      console.log("Fetching applications with params:", { pageNumber: pageNumber + 1, pageSize, customerCode: user.customerCode });
-      const res = await APIServices.getAllWebberApplications(
-        pageNumber + 1,
-        pageSize,
-        user.customerCode
-      );
-      console.log("API Response:", res);
+      setIsLoadingApps(true);
+      setError(null);
+      try {
+        const res = await APIServices.getAllWebberApplications(
+          pageNumber,
+          pageSize,
+          user.customerCode
+        );
+        console.log("API Response:", res);
 
-      if (res.statusCode === 200) {
-        let formattedApplications;
-        if (Array.isArray(res.data)) {
-          formattedApplications = res.data.map((app: any) => ({
-            id: app.id,
-            name: app.name,
-            throttlingPolicy: app.throttlingPolicy || "N/A",
-            // createdTime: app.renewDate ? getFormattedDate(app.renewDate) : "N/A",
-          }));
-        } 
-        console.log("Formatted Applications:", formattedApplications);
-        setApplications(formattedApplications);
-        setPageCount(res.totalPages || res.data.totalPages || 1);
-      } 
-    } catch (error: any) {
-      console.error("Error fetching applications:", error);
-      const errorMessage = error?.response?.data?.message || error.message || "Failed to fetch applications";
-      setApiErrorMessage(errorMessage);
-    
-    } finally {
-      setIsLoadingApps(false);
-    }
-  }, [pageNumber, pageSize, user, setApiErrorMessage]);
+        if (res.statusCode === 200) {
+          setApplications(res.data);
+          setPageCount(res.totalPages || res.data.totalPages || 1);
+        }
+      } catch (error: any) {
+        console.error("Error fetching applications:", error);
+        const errorMessage =
+          error?.response?.data?.message ||
+          error.message ||
+          "Failed to fetch applications";
+        setApiErrorMessage(errorMessage);
+      } finally {
+        setIsLoadingApps(false);
+      }
+    },
+    [pageNumber, pageSize, user, setApiErrorMessage]
+  );
 
   const handlePageClick = (page: number) => {
     setPageNumber(page);
@@ -101,9 +100,17 @@ export default function Application() {
     setLoading(false);
     setSidebar("");
     if (user?.customerCode) {
-      getAllApplications();
+      getAllApplications(pageNumber);
     }
-  }, [user, pageNumber, pageSize, searchTerm, getAllApplications, setLoading, setSidebar]);
+  }, [
+    user,
+    pageNumber,
+    pageSize,
+    searchTerm,
+    getAllApplications,
+    setLoading,
+    setSidebar,
+  ]);
 
   const handleSearch = (event: any) => {
     setSearchTerm(event.target.value);
@@ -122,11 +129,12 @@ export default function Application() {
           duration: 3000,
           position: "bottom-right",
         });
-        getAllApplications();
+        getAllApplications(pageNumber);
       }
     } catch (error: any) {
       console.error("Error deleting application:", error);
-      const errorMessage = error?.response?.data?.message || "Failed to delete application";
+      const errorMessage =
+        error?.response?.data?.message || "Failed to delete application";
       setApiErrorMessage(errorMessage);
       toast({
         title: "Error",
@@ -215,7 +223,7 @@ export default function Application() {
               <GlobalPagination
                 onPageClick={handlePageClick}
                 pageCount={pageCount}
-                inc={false}
+                inc={true}
               />
             </div>
           )}
@@ -225,9 +233,9 @@ export default function Application() {
           isOpen={isOpen}
           onClose={() => {
             onClose();
-            getAllApplications();
+            getAllApplications(pageNumber);
           }}
-          onSuccess={getAllApplications}
+          onSuccess={() => getAllApplications(pageNumber)}
           cco={user?.customerCode || ""}
         />
       </>
@@ -245,13 +253,14 @@ function TableRow({
   onDelete: (id: string) => void;
 }) {
   const router = useRouter();
-  const { id: routerId } = router.query;
 
   return (
     <tr>
       <td className="px-6 py-4 text-sm border-t whitespace-nowrap">{name}</td>
       <td className="px-6 py-4 text-sm border-t">{throttlingPolicy}</td>
-      <td className="px-6 py-4 text-sm border-t">{createdDate}</td>
+      <td className="px-6 py-4 text-sm border-t">
+        {getFormattedDate(createdDate)}
+      </td>
       <td className="px-6 py-4 text-sm border-t">
         <Menu>
           <MenuButton>
@@ -259,9 +268,7 @@ function TableRow({
           </MenuButton>
           <MenuList minW="0" minH="0" h="70px">
             <MenuItem
-              onClick={() =>
-                router.push(`/webber/library/${routerId}/overview/${name}`)
-              }
+              onClick={() => router.push(`/webber/library/application/${id}`)}
             >
               <p>View Details</p>
             </MenuItem>

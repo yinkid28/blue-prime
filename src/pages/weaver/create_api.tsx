@@ -134,6 +134,11 @@ export default function CreateApi() {
                           onChange={(e) => setVersion(e.target.value)}
                         />
                       </div>
+                      {context !== "" && (
+                        <p className="text-xs text-mid-grey">
+                          Your api would be exposed in {`${context}/${version}`}
+                        </p>
+                      )}
                       {/* <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
         <p className="text-xs text-dark-grey">Category</p>
         <select

@@ -1,6 +1,6 @@
 export type RequestCardProps = {
-    title: string;
-    children: React.ReactNode;
+  title: string;
+  children: React.ReactNode;
 };
 
 export type tableTypes = {
@@ -20,7 +20,29 @@ export interface SubscribedApp {
   date: string;
 }
 
-
-
-
-
+export type IApplication = {
+  id: string;
+  createdBy: any;
+  createdDate: string;
+  lastModifiedBy: any;
+  lastModifiedDate: string;
+  applicationCode: string;
+  customerCode: string;
+  applicationId: string;
+  name: string;
+  throttlingPolicy: string;
+  description: string;
+  tokenType: string;
+  status: string;
+  groups: any[];
+  subscriptionCount: number;
+  keys: any[];
+  attributes: any[];
+  subscriptionScopes: any[];
+  owner: string;
+  hashEnabled: boolean;
+  createdTime: string;
+  updatedTime: string;
+  deleted: boolean;
+  
+};
