@@ -364,20 +364,23 @@ export default class APIServices {
     );
     return response.data;
   }
+  static async updateWebberApplication(appco: string, data: any) {
+    const response = await HTTPClient.put(
+      `api-manager/api/v1/webber/application/update?appco=${appco}`,
+      data
+    );
+    return response.data;
+  }
 
-  static async getWebberApplication(appco?: string) {
+  static async getWebberApplication(appco: string) {
     const response = await HTTPClient.get(
-      `api-manager/api/v1/webber/application/get${
-        appco ? `?appco=${appco}` : ""
-      }`
+      `api-manager/api/v1/webber/application/get?appco=${appco}`
     );
     return response.data;
   }
 
   static async getAllWebberApplications(
-    pageNumber: number = 1,
-    pageSize: number,
-    cco: string,
+pageNumber: number = 1, pageSize: number, cco: string, searchTerm: string,
   ) {
     const response = await HTTPClient.get(
       `api-manager/api/v1/webber/application/get-all?cco=${cco}&pageSize=${pageSize}&pageNumber=${pageNumber}`
@@ -386,6 +389,7 @@ export default class APIServices {
     return response.data;
   }
 
+  
   static async deleteWebberApplication(appco: string) {
     const response = await HTTPClient.delete(
       `api-manager/api/v1/webber/application/delete?appco=${appco}`
@@ -393,11 +397,5 @@ export default class APIServices {
     return response.data;
   }
 
-  static async updateWebberApplication(appco: string, data: any) {
-    const response = await HTTPClient.put(
-      `api-manager/api/v1/webber/application/update?appco=${appco}`,
-      data
-    );
-    return response.data;
-  }
+ 
 }
