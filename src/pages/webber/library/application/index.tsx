@@ -23,6 +23,7 @@ import APIServices from "@/services/api_services/api_service";
 import AddApp from "@/components/modals/addApp";
 import { IApplication } from "@/models/webber.model";
 import EditApp from "@/components/modals/editApp";
+import { useApi } from "@/context/ApiDiscoveryContext";
 
 const DiscoveryLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
@@ -39,9 +40,14 @@ type Application = {
 export default function Application() {
   const toast = useToast();
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const {
+    isOpen: isEditOpen,
+    onClose: onEditClose,
+    onOpen: onEditOpen,
+  } = useDisclosure();
   const { loading, setLoading, setSidebar, setApiErrorMessage, user } =
     useOnboarding();
-  const [applications, setApplications] = useState<Application[]>([]);
+  const [applications, setApplications] = useState<IApplication[]>([]);
   const [isLoadingApps, setIsLoadingApps] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -69,30 +75,15 @@ export default function Application() {
       setIsLoadingApps(true);
       setError(null);
       try {
-        console.log("Fetching applications with params:", {
-          pageNumber: pageNumber + 1,
-          pageSize,
-          customerCode: user.customerCode,
-        });
         const res = await APIServices.getAllWebberApplications(
-          pageNumber + 1,
+          pageNumber,
           pageSize,
           user.customerCode
         );
         console.log("API Response:", res);
 
         if (res.statusCode === 200) {
-          let formattedApplications;
-          if (Array.isArray(res.data)) {
-            formattedApplications = res.data.map((app: any) => ({
-              id: app.id,
-              name: app.name,
-              throttlingPolicy: app.throttlingPolicy || "N/A",
-              // createdTime: app.renewDate ? getFormattedDate(app.renewDate) : "N/A",
-            }));
-          }
-          console.log("Formatted Applications:", formattedApplications);
-          setApplications(formattedApplications);
+          setApplications(res.data);
           setPageCount(res.totalPages || res.data.totalPages || 1);
         }
       } catch (error: any) {
@@ -217,13 +208,9 @@ export default function Application() {
                 </Table.Header>
                 <Table.Body
                   data={applications}
-                  render={(data: Application, index: number) => (
+                  render={(data: IApplication, index: number) => (
                     <TableRow
-                      id={data.id}
-                      appco={data.appco}
-                      name={data.name}
-                      throttlingPolicy={data.throttlingPolicy}
-                      createdTime={data.createdTime}
+                      data={data}
                       onDelete={deleteApplication}
                       onEdit={handleEditApplication}
                       key={index}
@@ -261,9 +248,9 @@ export default function Application() {
             onClose={() => {
               onEditClose();
               setEditingApp(null);
-              getAllApplications();
+              getAllApplications(pageNumber);
             }}
-            onSuccess={getAllApplications}
+            onSuccess={() => getAllApplications(pageNumber)}
             appco={editingApp}
           />
         )}
@@ -273,24 +260,25 @@ export default function Application() {
 }
 
 function TableRow({
-  appco,
-  name,
-  throttlingPolicy,
-  createdTime,
+  data,
   onDelete,
   onEdit,
-}: Application & {
+}: {
+  data: IApplication;
   onDelete: (appco: string) => void;
   onEdit: (appco: string) => void;
 }) {
   const router = useRouter();
+  const { setCurrentApp } = useApi();
 
   return (
     <tr>
-      <td className="px-6 py-4 text-sm border-t whitespace-nowrap">{name}</td>
-      <td className="px-6 py-4 text-sm border-t">{throttlingPolicy}</td>
+      <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
+        {data.name}
+      </td>
+      <td className="px-6 py-4 text-sm border-t">{data.throttlingPolicy}</td>
       <td className="px-6 py-4 text-sm border-t">
-        {getFormattedDate(createdDate)}
+        {getFormattedDate(data.createdDate)}
       </td>
       <td className="px-6 py-4 text-sm border-t">
         <Menu>
@@ -299,17 +287,23 @@ function TableRow({
           </MenuButton>
           <MenuList minW="0" minH="0" h="70px">
             <MenuItem
-              onClick={() => router.push(`/webber/library/application/${id}`)}
+              onClick={() => {
+                router.push({
+                  pathname: `/webber/library/application/${data.name}`,
+                  query: { appCo: data.appCode },
+                });
+                setCurrentApp(data);
+              }}
             >
               <p>View Details</p>
             </MenuItem>
             <MenuItem>
               <p>Cancel Subscription</p>
             </MenuItem>
-            <MenuItem onClick={() => onEdit(appco)}>
+            <MenuItem onClick={() => onEdit(data.appCode)}>
               <p>Edit Application</p>
             </MenuItem>
-            <MenuItem onClick={() => onDelete(appco)}>
+            <MenuItem onClick={() => onDelete(data.appCode)}>
               <p>Delete Application</p>
             </MenuItem>
           </MenuList>

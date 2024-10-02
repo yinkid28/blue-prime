@@ -1,3 +1,4 @@
+import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -7,6 +8,7 @@ import { FaChevronLeft } from "react-icons/fa";
 export default function AppDetailsWebberSidebar() {
   const router = useRouter();
   const { setSidebar } = useOnboarding();
+  const { currentApplication } = useApi();
 
   return (
     <div className="bg-white rounded p-5 h-full flex flex-col gap-4 ">
@@ -28,7 +30,7 @@ export default function AppDetailsWebberSidebar() {
         <p className="text-mid-grey">Back</p>
       </div>
 
-      <p className="font-semibold">Edu Student</p>
+      <p className="font-semibold">{currentApplication!.name}</p>
     </div>
   );
 }

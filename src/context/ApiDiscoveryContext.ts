@@ -5,6 +5,7 @@ import {
   IMockApi,
   IMockapiProduct,
 } from "@/models/apidiscovery.model";
+import { IApplication } from "@/models/webber.model";
 import constate from "constate";
 import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 
@@ -17,6 +18,7 @@ export const initialState: ApiDiscoveryInititals = {
   bookmarkedAPIs: [],
   libraryView: "saved",
   apiProduct: null,
+  currentApplication: null,
 };
 
 const reducer = (state: any, action: any) => {
@@ -54,6 +56,11 @@ const reducer = (state: any, action: any) => {
         ...state,
         libraryView: action.payload,
       };
+    case "SET_CURRENTAPP":
+      return {
+        ...state,
+        currentApplication: action.payload,
+      };
   }
 };
 
@@ -64,7 +71,7 @@ const useApiContext = () => {
     setData(state);
   }, [state, setData]);
 
-  const { api, bookmarkedAPIs, libraryView, apiProduct } =
+  const { api, bookmarkedAPIs, libraryView, apiProduct, currentApplication } =
     state as ApiDiscoveryInititals;
 
   const setApi = useCallback((api: IApi) => {
@@ -94,6 +101,12 @@ const useApiContext = () => {
       payload: libraryView,
     });
   }, []);
+  const setCurrentApp = useCallback((currentApplication: IApplication) => {
+    dispatch({
+      type: "SET_CURRENTAPP",
+      payload: currentApplication,
+    });
+  }, []);
 
   return useMemo(
     () => ({
@@ -105,6 +118,8 @@ const useApiContext = () => {
       setBookMarked,
       libraryView,
       setLibraryView,
+      currentApplication,
+      setCurrentApp,
     }),
     [
       api,
@@ -115,6 +130,8 @@ const useApiContext = () => {
       setLibraryView,
       apiProduct,
       setApiProduct,
+      currentApplication,
+      setCurrentApp,
     ]
   );
 };
