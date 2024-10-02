@@ -290,7 +290,7 @@ function TableRow({
               onClick={() => {
                 router.push({
                   pathname: `/webber/library/application/${data.name}`,
-                  query: { appCo: data.appCode },
+                  query: { appCo: data.applicationCode },
                 });
                 setCurrentApp(data);
               }}
@@ -300,10 +300,10 @@ function TableRow({
             <MenuItem>
               <p>Cancel Subscription</p>
             </MenuItem>
-            <MenuItem onClick={() => onEdit(data.appCode)}>
+            <MenuItem onClick={() => onEdit(data.applicationCode as string)}>
               <p>Edit Application</p>
             </MenuItem>
-            <MenuItem onClick={() => onDelete(data.appCode)}>
+            <MenuItem onClick={() => onDelete(data.applicationCode as string)}>
               <p>Delete Application</p>
             </MenuItem>
           </MenuList>

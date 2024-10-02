@@ -420,7 +420,7 @@ export default function AppDetails() {
       {/* Fix the breadcrumbs before commiting. Use the commented code in api_manager.tsx as a guide */}
       <BreadCrumbs
         breadCrumbItems={breadCrumbs}
-        breadCrumbActiveItem={`${currentApplication?.appCode}`}
+        breadCrumbActiveItem={`${currentApplication?.applicationCode}`}
       />
 
       <div className="border rounded-xl p-4 mx-4 my-6 min-h-[80dvh] text-dark-txt">
