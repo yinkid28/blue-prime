@@ -56,16 +56,11 @@ export default function MainSidebar() {
       default:
         break;
     }
-    if (view === "application") {
-      router.push(`/webber/library/${view}`);
-    }
+
     isOpen && onClose();
   };
 
   const getTextColor = (itemView: any) => {
-    // if (itemView === "saved") {
-    //   return "text-primary";
-    // }
     return libraryView === itemView ? "text-primary" : "text-dark-grey";
   };
 
@@ -111,7 +106,10 @@ export default function MainSidebar() {
                           ? "text-primary"
                           : "text-dark-grey"
                       }`}
-                      onClick={() => router.push("/webber/library")}
+                      onClick={() => {
+                        router.push("/webber/library");
+                        setLibraryView("saved");
+                      }}
                     >
                       <MdFolder size={18} />
                       <p className="font-semibold">Library</p>
@@ -193,7 +191,10 @@ export default function MainSidebar() {
                   ? "text-primary border-l-[2px]  bg-gradient-to-r"
                   : "text-dark-grey"
               }`}
-              onClick={() => router.push("/webber/library")}
+              onClick={() => {
+                router.push("/webber/library");
+                setLibraryView("saved");
+              }}
             >
               <MdFolder size={18} />
               <p className="font-semibold">Library</p>
@@ -223,12 +224,12 @@ export default function MainSidebar() {
               >
                 Subscribed APIs
               </li>
-              <li
+              {/* <li
                 onClick={() => handleLibraryItem("api-product")}
                 className={`cursor-pointer ${getTextColor("api-product")}`}
               >
                 API Product
-              </li>
+              </li> */}
             </ul>
           </div>
         ) : (

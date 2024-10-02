@@ -64,6 +64,7 @@ export default function EditApp({
     }
   };
 
+  // <<<<<<< HEAD
   // const fetchThrottlingPolicies = async (policyName: string) => {
   //   try {
   //     setLoading(false);
@@ -79,6 +80,22 @@ export default function EditApp({
   //     setApiErrorMessage(errorMessage, "error");
   //   }
   // };
+  // =======
+  //   const fetchThrottlingPolicies = async (policyName: string) => {
+  //     try {
+  //       setLoading(false);
+  //       const response = await APIServices.getAllWebberThrottlingPolicies(
+  //         "application",
+  //          policyName
+  //       );
+  //       console.log("Throttling policies:", response);
+
+  //     } catch (error: any) {
+  //       const errorMessage = error?.response?.data?.message || "Failed to fetch throttling policies";
+  //       setApiErrorMessage(errorMessage);
+  //     }
+  //   };
+  // >>>>>>> b97c7e4 (update application)
 
   const updateApplication = async (appco: string) => {
     setLoading(false);

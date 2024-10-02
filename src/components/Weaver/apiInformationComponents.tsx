@@ -26,7 +26,7 @@ export function ApiInformationView() {
                   width={16}
                   height={16}
                 />
-                <p>{api?.businessInformation.businessOwner}</p>
+                <p>{api?.businessInformation?.businessOwner}</p>
               </div>
             </div>
           </div>
@@ -37,7 +37,6 @@ export function ApiInformationView() {
             <p className="bg-dark-grey-fade whitespace-nowrap text-xs text-blue-dark rounded-full px-2 py-[1.5px]">
               Version {api?.version}
             </p>
-
           </div>
           <p className="text-blue-dark text-xs font-semibold">
             {api?.monetizationLabel || api?.lifeCycleStatus}
@@ -46,15 +45,15 @@ export function ApiInformationView() {
         <p className="text-base text-dark-grey">{api?.description}</p>
 
         <div className="flex flex-col w-full gap-2 bg-[#f8f8f8] rounded-lg p-4 my-6">
-            <h3 className=" ">Price per Request</h3>
-            <div className="flex justify-between text-dark-grey">
-              <p className="text-sm font-semibold">N 0.01</p>
-              <p className="text-[10px] font-normal">
-                {api?.policies[0]} Requests/ms
-              </p>
-            </div>
+          <h3 className=" ">Price per Request</h3>
+          <div className="flex justify-between text-dark-grey">
+            <p className="text-sm font-semibold">N 0.01</p>
+            <p className="text-[10px] font-normal">
+              {api?.policies[0]} Requests/ms
+            </p>
           </div>
-        
+        </div>
+
         {/* resources and links section */}
         {/* <div className="space-y-2 p-4 bg-resources-bg rounded-lg border-light-grey border">
           <p className="text-blue-dark font-bold">Resources and Links</p>
@@ -63,7 +62,6 @@ export function ApiInformationView() {
           </p>
         </div> */}
       </div>
-     
 
       <div className="border rounded-lg space-y-4 w-full md:w-[65%] p-4 h-fit lg:h-[70dvh]">
         <h2 className="text-mid-grey font-bold">Basic Information</h2>
@@ -131,7 +129,6 @@ export function ApiInformationView() {
           </p>
         </div>
       </div>
-     
     </div>
   );
 }

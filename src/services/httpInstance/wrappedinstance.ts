@@ -28,7 +28,6 @@ export function withErrorHandling(apiCall: Promise<any>) {
   });
 }
 
-
 // Adding the 401 response interceptor to the Axios instance
 instance.interceptors.response.use(
   (response) => response, // Success case, just return the response
@@ -38,7 +37,9 @@ instance.interceptors.response.use(
       console.log("401 Unauthorized. Redirecting to login...");
       window.location.href = "/onboarding/login";
       localStorage.removeItem("onb");
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     }
     return Promise.reject(error); // Pass the error to be handled locally if needed
   }

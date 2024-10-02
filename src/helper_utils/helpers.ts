@@ -1,4 +1,4 @@
-export function getFormattedDate(date: Date) {
+export function getFormattedDate(date: string) {
   // Array of weekday names
   const weekdays = [
     "Sunday",
@@ -28,10 +28,11 @@ export function getFormattedDate(date: Date) {
   //  Get the current date
   // const now = new Date();
   // Get the day of the week, day of the month, month, and year
-  const weekday = weekdays[date.getDay()];
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = months[date.getMonth()];
-  const year = date.getFullYear();
+  const newdate = new Date(date);
+  const weekday = weekdays[newdate.getDay()];
+  const day = String(newdate.getDate()).padStart(2, "0");
+  const month = months[newdate.getMonth()];
+  const year = newdate.getFullYear();
 
   // Format the date
   const formattedDate = `${weekday} ${day} ${month}, ${year}`;

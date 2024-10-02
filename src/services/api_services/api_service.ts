@@ -1,5 +1,6 @@
 import { CreateAPI } from "@/models/api.model";
 import HTTPClient from "../httpInstance/wrappedinstance";
+import { editOauthDto, GenerateAppOauthKeys } from "@/models/webber.model";
 
 export default class APIServices {
   static async getAllApibyCustomerCode(
@@ -175,7 +176,7 @@ export default class APIServices {
     );
     return response.data;
   }
-  static async createApplication(cco:string, data: any) {
+  static async createApplication(cco: string, data: any) {
     const response = await HTTPClient.post(
       `/api-manager/api/v1/webber/application/create?cco=${cco}`,
       data
@@ -364,12 +365,56 @@ export default class APIServices {
     );
     return response.data;
   }
+  static async updateWebberApplication(appco: string, data: any) {
+    const response = await HTTPClient.put(
+      `api-manager/api/v1/webber/application/update?appco=${appco}`,
+      data
+    );
+    return response.data;
+  }
 
-  static async getWebberApplication(appco?: string) {
+  static async getWebberApplication(appco: string) {
     const response = await HTTPClient.get(
-      `api-manager/api/v1/webber/application/get${
-        appco ? `?appco=${appco}` : ""
-      }`
+      `api-manager/api/v1/webber/application/get?appco=${appco}`
+    );
+    return response.data;
+  }
+  static async deleteOauthKeysforApplication(appco: string, kmco: string) {
+    const response = await HTTPClient.delete(
+      `/api-manager/api/v1/webber/applications/delete?appco=${appco}&kmco=${kmco}`
+    );
+    return response.data;
+  }
+  static async editOauthKeysforApplication(
+    appco: string,
+    kmco: string,
+    data: editOauthDto
+  ) {
+    const response = await HTTPClient.put(
+      `/api-manager/api/v1/webber/applications/update?appco=${appco}&kmco=${kmco}`,
+      data
+    );
+    return response.data;
+  }
+  static async getOauthKeysforApplication(appco: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/applications/oauth-keys?appco=${appco}`
+    );
+    return response.data;
+  }
+  static async generataOauthKeysforApplication(
+    appco: string,
+    data: GenerateAppOauthKeys
+  ) {
+    const response = await HTTPClient.post(
+      `api-manager/api/v1/webber/applications/generate?appco=${appco}`,
+      data
+    );
+    return response.data;
+  }
+  static async getAllKeyManagers() {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/key-managers/get-all`
     );
     return response.data;
   }
@@ -377,11 +422,10 @@ export default class APIServices {
   static async getAllWebberApplications(
     pageNumber: number = 1,
     pageSize: number,
-    cco: string,
+    cco: string
   ) {
     const response = await HTTPClient.get(
-      `api-manager/api/v1/webber/application/get-all?cco=${cco}&pageSize=${pageSize}&pageNumber=${pageNumber}`
-
+      `api-manager/api/v1/webber/application/get-all?cco=${cco}&pageSize=${pageSize}&pageNo=${pageNumber}`
     );
     return response.data;
   }
@@ -389,14 +433,6 @@ export default class APIServices {
   static async deleteWebberApplication(appco: string) {
     const response = await HTTPClient.delete(
       `api-manager/api/v1/webber/application/delete?appco=${appco}`
-    );
-    return response.data;
-  }
-
-  static async updateWebberApplication(appco: string, data: any) {
-    const response = await HTTPClient.put(
-      `api-manager/api/v1/webber/application/update?appco=${appco}`,
-      data
     );
     return response.data;
   }

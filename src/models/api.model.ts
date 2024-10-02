@@ -105,20 +105,20 @@ export type IDeploymentInfo = {
 //   aco: string;
 // };
 export type IComment = {
-id: string;
-content: string;
-createdTime: string;
-createdBy: string;
-updatedTime: string;
-category: string;
-entryPoint: string;
-replies: { list: IReply[] };
-aco?: string;
+  id: string;
+  content: string;
+  createdTime: string;
+  createdBy: string;
+  updatedTime: string;
+  category: string;
+  entryPoint: string;
+  replies: { list: IReply[] };
+  aco?: string;
 };
 
 export type IReply = {
-  content: '';
-  createdBy: '';
+  content: "";
+  createdBy: "";
   aco(aco: any, id: string): unknown;
   count: number;
   list: IComment[];
@@ -236,30 +236,6 @@ export type ISubscription = {
   deleted: boolean;
 };
 
-export type IApplication = {
-  id: string;
-  createdBy: any;
-  createdDate: string;
-  lastModifiedBy: any;
-  lastModifiedDate: string;
-  appCode: string;
-  applicationId: string;
-  name: string;
-  throttlingPolicy: string;
-  description: string;
-  tokenType: string;
-  status: string;
-  groups: any[];
-  subscriptionCount: number;
-  keys: any[];
-  attributes: any;
-  subscriptionScopes: any;
-  owner: string;
-  hashEnabled: false;
-  createdTime: string;
-  updatedTime: string;
-  deleted: false;
-};
 export type SwaggerParam = {
   name: string;
   in: string;

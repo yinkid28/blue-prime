@@ -67,7 +67,8 @@ export default function ApiCard({
           setSidebar("api");
         } else {
           setSidebar("apiProgressWeaver");
-          router.push(`/webber/library/${api.apiCode}/overview`);
+          // router.push(`/webber/library/${api.apiCode}/ApiOverview`);
+          router.push(`/webber/library/${api.apiCode}/ApiOverview`);
         }
         setApi(api);
       }}

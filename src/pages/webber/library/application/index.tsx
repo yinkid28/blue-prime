@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Navbar from "@/components/Layout/Nav/navbar";
-import GlobalPagination, { BreadCrumbItems, BreadCrumbs, Table } from "@/components/utils";
+import GlobalPagination, {
+  BreadCrumbItems,
+  BreadCrumbs,
+  Table,
+} from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
 import {
   Menu,
@@ -17,34 +21,43 @@ import { CiMenuKebab } from "react-icons/ci";
 import { getFormattedDate } from "@/helper_utils/helpers";
 import APIServices from "@/services/api_services/api_service";
 import AddApp from "@/components/modals/addApp";
+import { IApplication } from "@/models/webber.model";
+import EditApp from "@/components/modals/editApp";
+import { useApi } from "@/context/ApiDiscoveryContext";
 
 const DiscoveryLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
 
-
 type Application = {
+  appco: string;
   id: string;
   name: string;
   throttlingPolicy: string;
-  createdDate: string;
+  createdTime: string;
 };
 
 export default function Application() {
   const toast = useToast();
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const { loading, setLoading, setSidebar, setApiErrorMessage, user } = useOnboarding();
-  const [applications, setApplications] = useState<Application[]>([]);
+  const {
+    isOpen: isEditOpen,
+    onClose: onEditClose,
+    onOpen: onEditOpen,
+  } = useDisclosure();
+  const { loading, setLoading, setSidebar, setApiErrorMessage, user } =
+    useOnboarding();
+  const [applications, setApplications] = useState<IApplication[]>([]);
   const [isLoadingApps, setIsLoadingApps] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  
+  const [editingApp, setEditingApp] = useState<string | null>(null);
   const [pageCount, setPageCount] = useState(0);
-  const [pageNumber, setPageNumber] = useState(0);
-  const [pageSize, setPageSize] = useState<number>(3);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState<number>(10);
 
   const router = useRouter();
-  
+
   const breadCrumbs: BreadCrumbItems[] = [
     {
       breadCrumbText: "Library",
@@ -52,46 +65,40 @@ export default function Application() {
     },
   ];
 
-  const getAllApplications = useCallback(async () => {
-    if (!user?.customerCode) {
-      setError("User customer code not available");
-      return;
-    }
+  const getAllApplications = useCallback(
+    async (pageNumber: number) => {
+      if (!user?.customerCode) {
+        setError("User customer code not available");
+        return;
+      }
 
-    setIsLoadingApps(true);
-    setError(null);
-    try {
-      console.log("Fetching applications with params:", { pageNumber: pageNumber + 1, pageSize, customerCode: user.customerCode });
-      const res = await APIServices.getAllWebberApplications(
-        pageNumber + 1,
-        pageSize,
-        user.customerCode
-      );
-      console.log("API Response:", res);
+      setIsLoadingApps(true);
+      setError(null);
+      try {
+        const res = await APIServices.getAllWebberApplications(
+          pageNumber,
+          pageSize,
+          user.customerCode
+        );
+        console.log("API Response:", res);
 
-      if (res.statusCode === 200) {
-        let formattedApplications;
-        if (Array.isArray(res.data)) {
-          formattedApplications = res.data.map((app: any) => ({
-            id: app.id,
-            name: app.name,
-            throttlingPolicy: app.throttlingPolicy || "N/A",
-            // createdTime: app.renewDate ? getFormattedDate(app.renewDate) : "N/A",
-          }));
-        } 
-        console.log("Formatted Applications:", formattedApplications);
-        setApplications(formattedApplications);
-        setPageCount(res.totalPages || res.data.totalPages || 1);
-      } 
-    } catch (error: any) {
-      console.error("Error fetching applications:", error);
-      const errorMessage = error?.response?.data?.message || error.message || "Failed to fetch applications";
-      setApiErrorMessage(errorMessage);
-    
-    } finally {
-      setIsLoadingApps(false);
-    }
-  }, [pageNumber, pageSize, user, setApiErrorMessage]);
+        if (res.statusCode === 200) {
+          setApplications(res.data);
+          setPageCount(res.totalPages || res.data.totalPages || 1);
+        }
+      } catch (error: any) {
+        console.error("Error fetching applications:", error);
+        const errorMessage =
+          error?.response?.data?.message ||
+          error.message ||
+          "Failed to fetch applications";
+        setApiErrorMessage(errorMessage);
+      } finally {
+        setIsLoadingApps(false);
+      }
+    },
+    [pageNumber, pageSize, user, setApiErrorMessage]
+  );
 
   const handlePageClick = (page: number) => {
     setPageNumber(page);
@@ -101,19 +108,32 @@ export default function Application() {
     setLoading(false);
     setSidebar("");
     if (user?.customerCode) {
-      getAllApplications();
+      getAllApplications(pageNumber);
     }
-  }, [user, pageNumber, pageSize, searchTerm, getAllApplications, setLoading, setSidebar]);
+  }, [
+    user,
+    pageNumber,
+    pageSize,
+    searchTerm,
+    getAllApplications,
+    setLoading,
+    setSidebar,
+  ]);
 
   const handleSearch = (event: any) => {
     setSearchTerm(event.target.value);
-    setPageNumber(0);
+    setPageNumber(1);
   };
 
-  const deleteApplication = async (id: string) => {
+  const handleEditApplication = (appco: string) => {
+    setEditingApp(appco);
+    onEditOpen();
+  };
+
+  const deleteApplication = async (appco: string) => {
     setLoading(true);
     try {
-      const response = await APIServices.deleteWebberApplication(id);
+      const response = await APIServices.deleteWebberApplication(appco);
       if (response.statusCode === 200) {
         toast({
           title: "Delete Application",
@@ -122,19 +142,13 @@ export default function Application() {
           duration: 3000,
           position: "bottom-right",
         });
-        getAllApplications();
+        getAllApplications(pageNumber);
       }
     } catch (error: any) {
       console.error("Error deleting application:", error);
-      const errorMessage = error?.response?.data?.message || "Failed to delete application";
+      const errorMessage =
+        error?.response?.data?.message || "Failed to delete application";
       setApiErrorMessage(errorMessage);
-      toast({
-        title: "Error",
-        description: errorMessage,
-        status: "error",
-        duration: 3000,
-        position: "bottom-right",
-      });
     } finally {
       setLoading(false);
     }
@@ -194,13 +208,11 @@ export default function Application() {
                 </Table.Header>
                 <Table.Body
                   data={applications}
-                  render={(data: Application, index: number) => (
+                  render={(data: IApplication, index: number) => (
                     <TableRow
-                      id={data.id}
-                      name={data.name}
-                      throttlingPolicy={data.throttlingPolicy}
-                      createdDate={data.createdDate}
+                      data={data}
                       onDelete={deleteApplication}
+                      onEdit={handleEditApplication}
                       key={index}
                     />
                   )}
@@ -215,7 +227,7 @@ export default function Application() {
               <GlobalPagination
                 onPageClick={handlePageClick}
                 pageCount={pageCount}
-                inc={false}
+                inc={true}
               />
             </div>
           )}
@@ -225,33 +237,49 @@ export default function Application() {
           isOpen={isOpen}
           onClose={() => {
             onClose();
-            getAllApplications();
+            getAllApplications(pageNumber);
           }}
-          onSuccess={getAllApplications}
+          onSuccess={() => getAllApplications(pageNumber)}
           cco={user?.customerCode || ""}
         />
+        {editingApp && (
+          <EditApp
+            isOpen={isEditOpen}
+            onClose={() => {
+              onEditClose();
+              setEditingApp(null);
+              getAllApplications(pageNumber);
+            }}
+            onSuccess={() => getAllApplications(pageNumber)}
+            appco={editingApp}
+          />
+        )}
       </>
     </DiscoveryLayout>
   );
 }
 
 function TableRow({
-  id,
-  name,
-  throttlingPolicy,
-  createdDate,
+  data,
   onDelete,
-}: Application & {
-  onDelete: (id: string) => void;
+  onEdit,
+}: {
+  data: IApplication;
+  onDelete: (appco: string) => void;
+  onEdit: (appco: string) => void;
 }) {
   const router = useRouter();
-  const { id: routerId } = router.query;
+  const { setCurrentApp } = useApi();
 
   return (
     <tr>
-      <td className="px-6 py-4 text-sm border-t whitespace-nowrap">{name}</td>
-      <td className="px-6 py-4 text-sm border-t">{throttlingPolicy}</td>
-      <td className="px-6 py-4 text-sm border-t">{createdDate}</td>
+      <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
+        {data.name}
+      </td>
+      <td className="px-6 py-4 text-sm border-t">{data.throttlingPolicy}</td>
+      <td className="px-6 py-4 text-sm border-t">
+        {getFormattedDate(data.createdDate)}
+      </td>
       <td className="px-6 py-4 text-sm border-t">
         <Menu>
           <MenuButton>
@@ -259,16 +287,23 @@ function TableRow({
           </MenuButton>
           <MenuList minW="0" minH="0" h="70px">
             <MenuItem
-              onClick={() =>
-                router.push(`/webber/library/${routerId}/overview/${name}`)
-              }
+              onClick={() => {
+                router.push({
+                  pathname: `/webber/library/application/${data.name}`,
+                  query: { appCo: data.appCode },
+                });
+                setCurrentApp(data);
+              }}
             >
               <p>View Details</p>
             </MenuItem>
             <MenuItem>
               <p>Cancel Subscription</p>
             </MenuItem>
-            <MenuItem onClick={() => onDelete(id)}>
+            <MenuItem onClick={() => onEdit(data.appCode)}>
+              <p>Edit Application</p>
+            </MenuItem>
+            <MenuItem onClick={() => onDelete(data.appCode)}>
               <p>Delete Application</p>
             </MenuItem>
           </MenuList>

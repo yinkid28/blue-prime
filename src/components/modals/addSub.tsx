@@ -8,28 +8,33 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { Button } from "../utils";
+import { useApi } from "@/context/ApiDiscoveryContext";
 
 interface NewSubscriptionProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function NewSubscription({ isOpen, onClose }: NewSubscriptionProps) {
+export default function NewSubscription({
+  isOpen,
+  onClose,
+}: NewSubscriptionProps) {
   const [application, setApplication] = useState("");
   const [subscriptionPlan, setSubscriptionPlan] = useState("");
+  const { api } = useApi();
 
   const handleNext = () => {
-    
     console.log("Application:", application);
     console.log("Subscription Plan:", subscriptionPlan);
-   
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent className="p-2 bg-white rounded-lg" maxWidth="400px">
-        <ModalHeader className="text-lg font-semibold">New Subscription</ModalHeader>
+        <ModalHeader className="text-lg font-semibold">
+          New Subscription
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <p className="my-3 text-sm text-gray-600">
@@ -64,7 +69,11 @@ export default function NewSubscription({ isOpen, onClose }: NewSubscriptionProp
                 className="p-2 border border-gray-300 rounded-md"
               >
                 <option value="">Select a plan</option>
-                <option value="Gold">Gold</option>
+                {api?.policies.map((item, index) => (
+                  <option value={item} key={index}>
+                    {item}
+                  </option>
+                ))}
                 {/* Add more options as needed */}
               </select>
             </div>
