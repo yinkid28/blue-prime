@@ -51,6 +51,8 @@ const allGrants = [
     value: "urn:ietf:params:oauth:grant-type:token-exchange",
   },
 ];
+
+// USE appCO
 export default function AppDetails() {
   const { api, setApi, currentApplication } = useApi();
   const [loading, setLoading] = useState<boolean>(false);
@@ -118,6 +120,8 @@ export default function AppDetails() {
       breadCrumbPath: `/webber/library/application`,
     },
   ];
+
+  //   Endpoint to fetch application
   const fetchApplicationDetails = async (appco: string) => {
     try {
       setLoading(true);
@@ -136,6 +140,8 @@ export default function AppDetails() {
       setLoading(false);
     }
   };
+
+  //   Fetching oauth keys, can return a list of oauth keys for test and production environment
   const fetchOauthKeysbyAppco = async (appco: string) => {
     try {
       setLoading(true);
@@ -178,6 +184,7 @@ export default function AppDetails() {
       setLoading(false);
     }
   };
+  //   deleting oath keys by key mapping code
   const deleteOauthKeysbyAppco = async (appco: string, kmco: string) => {
     try {
       setLoading(true);
@@ -224,6 +231,8 @@ export default function AppDetails() {
       setLoading(false);
     }
   };
+
+  //   This is to generate application keys
   const generateApplicationOauthKeys = async (appCo: string) => {
     try {
       setLoading(true);
@@ -285,6 +294,8 @@ export default function AppDetails() {
       setLoading(false);
     }
   };
+
+  //   This is to edit information on the application keys , be it test or prod env......needs to be completed , awaiting api modification
   const editApplicationOauthKeys = async (appCo: string, kmco: string) => {
     try {
       setLoading(true);
@@ -347,6 +358,8 @@ export default function AppDetails() {
       setLoading(false);
     }
   };
+
+  //   This needs to be integrated , awaiting api
   const generateAccessToken = async (appCo: string) => {
     try {
       setLoading(true);
@@ -420,7 +433,7 @@ export default function AppDetails() {
       {/* Fix the breadcrumbs before commiting. Use the commented code in api_manager.tsx as a guide */}
       <BreadCrumbs
         breadCrumbItems={breadCrumbs}
-        breadCrumbActiveItem={`${currentApplication?.appCode}`}
+        breadCrumbActiveItem={`${currentApplication?.applicationCode}`}
       />
 
       <div className="border rounded-xl p-4 mx-4 my-6 min-h-[80dvh] text-dark-txt">
@@ -429,7 +442,7 @@ export default function AppDetails() {
           <Icon icon="fluent:edit-20-regular" className="text-mid-grey" />
           <Icon icon="fluent:delete-24-regular" className="text-mid-grey" />
         </div>
-
+        {/* You can use this button to toggle between the production and sandbox interface */}
         <div className="flex gap-2 rounded mb-4">
           <div
             onClick={() => setView("PRODUCTION")}
@@ -457,6 +470,8 @@ export default function AppDetails() {
               <>
                 {productionApplicationKeys.length > 0 ? (
                   <>
+
+                  {/* This tab shows both the consumer key and secret for the current view (production in this case ) */}
                     <div className="flex gap-4">
                       <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
                         <label
@@ -510,7 +525,7 @@ export default function AppDetails() {
                         </div>
                       </div>
                     </div>
-
+                          {/* This container houses the button to generate access token for production as well as removing application oauth keys  */}
                     <div className="w-full flex gap-3 items-center">
                       <button className="mt-4 border-2 border-primaryFade text-sm py-2 px-5 rounded-lg font-semibold text-primary w-fit">
                         Generate Access Token

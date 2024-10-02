@@ -26,7 +26,8 @@ export type IApplication = {
   createdDate: string;
   lastModifiedBy: any;
   lastModifiedDate: string;
-  appCode: string;
+  appCode?: string;
+  applicationCode?: string;
   customerCode: string;
   applicationId: string;
   name: string;
