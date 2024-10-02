@@ -1,6 +1,10 @@
 import { CreateAPI } from "@/models/api.model";
 import HTTPClient from "../httpInstance/wrappedinstance";
-import { editOauthDto, GenerateAppOauthKeys } from "@/models/webber.model";
+import {
+  editOauthDto,
+  GenerateAccessToken,
+  GenerateAppOauthKeys,
+} from "@/models/webber.model";
 
 export default class APIServices {
   static async getAllApibyCustomerCode(
@@ -408,6 +412,17 @@ export default class APIServices {
   ) {
     const response = await HTTPClient.post(
       `api-manager/api/v1/webber/applications/generate?appco=${appco}`,
+      data
+    );
+    return response.data;
+  }
+  static async generateAccessTokenforApplication(
+    appco: string,
+    kmco: string,
+    data: GenerateAccessToken
+  ) {
+    const response = await HTTPClient.post(
+      `/api-manager/api/v1/webber/applications/generate-token?appco=${appco}&kmco=${kmco}`,
       data
     );
     return response.data;

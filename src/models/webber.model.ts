@@ -64,6 +64,14 @@ export type GenerateAppOauthKeys = {
   validityTime: number;
   scopes: string[];
 };
+export type GenerateAccessToken = {
+  consumerSecret: string;
+  validityPeriod: 3600;
+  // you can pass null
+  revokeToken: any;
+  scopes: string[];
+  additionalProperties: IAddProperties;
+};
 
 export type OauthKeys = {
   id: string;

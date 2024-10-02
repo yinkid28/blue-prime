@@ -19,6 +19,7 @@ import APIServices from "@/services/api_services/api_service";
 import CopyIcon from "../../../../../../public/icons/copyicon";
 import {
   editOauthDto,
+  GenerateAccessToken,
   GenerateAppOauthKeys,
   IApplication,
   OauthKeys,
@@ -359,31 +360,47 @@ export default function AppDetails() {
     }
   };
 
-  //   This needs to be integrated , awaiting api
-  const generateAccessToken = async (appCo: string) => {
+  //   This needs to be integrated , api provided and semi integrated, kindly complete
+  const generateAccessToken = async (appCo: string, kmco: string) => {
     try {
       setLoading(true);
-      const data: GenerateAppOauthKeys = {
-        keyType: view,
-        grantTypesToBeSupported: selectedGrants,
-        callbackUrl: "",
+      const data: GenerateAccessToken = {
+        consumerSecret:
+          view === "PRODUCTION"
+            ? productionApplicationKeys[0].consumerSecret
+            : sandboxApplicationKeys[0].consumerSecret,
+        validityPeriod: 3600,
+
+        revokeToken: null,
+        scopes: [],
         additionalProperties: {
-          application_access_token_expiry_time: appTokenExpiryTime,
-          user_access_token_expiry_time: userAccessTokenExpiryTime,
-          refresh_token_expiry_time: refreshTokenExpiryTime,
-          id_token_expiry_time: idTokenExpiryTime,
-          pkceMandatory: pkce,
-          pkceSupportPlain: pckcePlain,
-          bypassClientCredentials: publicClient,
+          application_access_token_expiry_time:
+            view === "PRODUCTION"
+              ? appTokenExpiryTime
+              : sandboxappTokenExpiryTime,
+          user_access_token_expiry_time:
+            view === "PRODUCTION"
+              ? userAccessTokenExpiryTime
+              : sandboxuserAccessTokenExpiryTime,
+          refresh_token_expiry_time:
+            view === "PRODUCTION"
+              ? refreshTokenExpiryTime
+              : sandboxrefreshTokenExpiryTime,
+          id_token_expiry_time:
+            view === "PRODUCTION"
+              ? idTokenExpiryTime
+              : sandboxidTokenExpiryTime,
+          pkceMandatory: view === "PRODUCTION" ? pkce : sandboxpkce,
+          pkceSupportPlain: view === "PRODUCTION" ? pckcePlain : sandboxpkce,
+          bypassClientCredentials:
+            view === "PRODUCTION" ? publicClient : sandboxpublicClient,
         },
-        keyManager: defaultKeyManager.id,
-        validityTime: 3600,
-        scopes: ["default"],
       };
 
       console.log(data);
-      const response = await APIServices.generataOauthKeysforApplication(
+      const response = await APIServices.generateAccessTokenforApplication(
         appCo,
+        kmco,
         data
       );
       if (response.statusCode === 200) {
@@ -470,8 +487,7 @@ export default function AppDetails() {
               <>
                 {productionApplicationKeys.length > 0 ? (
                   <>
-
-                  {/* This tab shows both the consumer key and secret for the current view (production in this case ) */}
+                    {/* This tab shows both the consumer key and secret for the current view (production in this case ) */}
                     <div className="flex gap-4">
                       <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
                         <label
@@ -525,7 +541,7 @@ export default function AppDetails() {
                         </div>
                       </div>
                     </div>
-                          {/* This container houses the button to generate access token for production as well as removing application oauth keys  */}
+                    {/* This container houses the button to generate access token for production as well as removing application oauth keys  */}
                     <div className="w-full flex gap-3 items-center">
                       <button className="mt-4 border-2 border-primaryFade text-sm py-2 px-5 rounded-lg font-semibold text-primary w-fit">
                         Generate Access Token
