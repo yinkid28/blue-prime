@@ -389,6 +389,8 @@ export default class APIServices {
     );
     return response.data;
   }
+
+  
   static async editOauthKeysforApplication(
     appco: string,
     kmco: string,
@@ -400,6 +402,7 @@ export default class APIServices {
     );
     return response.data;
   }
+  
   static async getOauthKeysforApplication(appco: string) {
     const response = await HTTPClient.get(
       `api-manager/api/v1/webber/applications/oauth-keys?appco=${appco}`
