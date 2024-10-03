@@ -98,6 +98,8 @@ export default function AppDetails() {
     useState<boolean>(false);
   const [sandboxpkce, setsandboxPkce] = useState<boolean>(false);
   const [sandboxpckcePlain, setsandboxPkcePlain] = useState<boolean>(false);
+  const [accessToken, setAccessToken] = useState<string>("");
+  const [showAccessToken, setShowAccessToken] = useState<boolean>(false);
 
   useEffect(() => {
     setSidebar("appDetails");
@@ -107,6 +109,7 @@ export default function AppDetails() {
       fetchOauthKeysbyAppco(appCo as string);
     }
   }, [appCo, view]);
+
   useEffect(() => {
     console.log(sandboxApplicationKeys);
   }, [sandboxApplicationKeys]);
@@ -341,7 +344,7 @@ export default function AppDetails() {
       if (response.statusCode === 200) {
         // router.reload();
         toast({
-          description: "Application keys successfully generated",
+          description: "Application keys successfully updated",
           status: "success",
           duration: 3000,
         });
@@ -424,6 +427,11 @@ export default function AppDetails() {
       setLoading(false);
     }
   };
+
+
+
+
+
 
   const handleGrantSelect = (grant: string) => {
     const spreadedGrants = [...selectedGrants];
@@ -543,7 +551,15 @@ export default function AppDetails() {
                     </div>
                     {/* This container houses the button to generate access token for production as well as removing application oauth keys  */}
                     <div className="w-full flex gap-3 items-center">
-                      <button className="mt-4 border-2 border-primaryFade text-sm py-2 px-5 rounded-lg font-semibold text-primary w-fit">
+                      <button 
+                      className="mt-4 border-2 border-primaryFade text-sm py-2 px-5 rounded-lg font-semibold text-primary w-fit"
+                      onClick={() => {
+                        generateAccessToken(
+                          application?.appCode as string,
+                          productionApplicationKeys[0]?.keyMappingCode || sandboxApplicationKeys[0]?.keyMappingCode
+                        );
+                      }}
+                      >
                         Generate Access Token
                       </button>
                       <button
@@ -551,7 +567,7 @@ export default function AppDetails() {
                           deleteOauthKeysbyAppco(
                             application?.appCode as string,
                             productionApplicationKeys[0]?.keyMappingCode
-                          );
+                           );
                         }}
                         className="mt-4 bg-error-bg text-error text-sm py-2 px-5 rounded-lg font-semibold w-fit"
                       >
@@ -652,7 +668,12 @@ export default function AppDetails() {
                           : "Generate Keys"
                       }
                       onClick={() => {
-                        generateApplicationOauthKeys(appCo as string);
+                        if(sandboxApplicationKeys.length > 0){
+                          editApplicationOauthKeys(appCo as string, sandboxApplicationKeys[0].keyMappingCode)
+                         
+                        }else{
+                          generateApplicationOauthKeys(appCo as string)
+                        }
                       }}
                     />
                   </div>
@@ -824,7 +845,9 @@ export default function AppDetails() {
                     </div>
 
                     <div className="w-full flex gap-3 items-center">
-                      <button className="mt-4 border-2 border-primaryFade text-sm py-2 px-5 rounded-lg font-semibold text-primary w-fit">
+                      <button 
+                      className="mt-4 border-2 border-primaryFade text-sm py-2 px-5 rounded-lg font-semibold text-primary w-fit"
+                      >
                         Generate Access Token
                       </button>
                       <button
