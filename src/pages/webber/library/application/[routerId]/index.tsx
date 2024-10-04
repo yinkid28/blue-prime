@@ -13,7 +13,13 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { Key, useEffect, useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
-import { Spinner, Switch, UseToastOptions, useToast } from "@chakra-ui/react";
+import {
+  Spinner,
+  Switch,
+  UseToastOptions,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import { getFormattedDate } from "@/helper_utils/helpers";
 import APIServices from "@/services/api_services/api_service";
 import CopyIcon from "../../../../../../public/icons/copyicon";
@@ -25,6 +31,7 @@ import {
   OauthKeys,
 } from "@/models/webber.model";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import ApplicationAccessToken from "@/components/modals/ApplicationAccessToken";
 
 // remember to use static generation here but for now we will use context to get current api
 const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
@@ -61,6 +68,7 @@ export default function AppDetails() {
   const toast = useToast();
   const { appCo } = router.query;
   const { setSidebar, setApiErrorMessage } = useOnboarding();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [view, setView] = useState<string>("PRODUCTION");
   const [application, setApplication] = useState<IApplication>();
   const [defaultKeyManager, setDefaultKeyManager] = useState<any>();
@@ -99,7 +107,7 @@ export default function AppDetails() {
   const [sandboxpkce, setsandboxPkce] = useState<boolean>(false);
   const [sandboxpckcePlain, setsandboxPkcePlain] = useState<boolean>(false);
   const [accessToken, setAccessToken] = useState<string>("");
-  const [showAccessToken, setShowAccessToken] = useState<boolean>(false);
+  const [validity, setValidity] = useState<number>(0);
 
   useEffect(() => {
     setSidebar("appDetails");
@@ -408,6 +416,9 @@ export default function AppDetails() {
       );
       if (response.statusCode === 200) {
         // router.reload();
+        setAccessToken(response.data.accessToken);
+        setValidity(response.data.validityTime);
+        onOpen();
         toast({
           description: "Application keys successfully generated",
           status: "success",
@@ -427,11 +438,6 @@ export default function AppDetails() {
       setLoading(false);
     }
   };
-
-
-
-
-
 
   const handleGrantSelect = (grant: string) => {
     const spreadedGrants = [...selectedGrants];
@@ -464,8 +470,8 @@ export default function AppDetails() {
       <div className="border rounded-xl p-4 mx-4 my-6 min-h-[80dvh] text-dark-txt">
         <div className="flex gap-4 items-center mb-6">
           <p className="font-semibold">{application?.name}</p>
-          <Icon icon="fluent:edit-20-regular" className="text-mid-grey" />
-          <Icon icon="fluent:delete-24-regular" className="text-mid-grey" />
+          {/* <Icon icon="fluent:edit-20-regular" className="text-mid-grey" />
+          <Icon icon="fluent:delete-24-regular" className="text-mid-grey" /> */}
         </div>
         {/* You can use this button to toggle between the production and sandbox interface */}
         <div className="flex gap-2 rounded mb-4">
@@ -486,7 +492,12 @@ export default function AppDetails() {
             Test Keys
           </div>
         </div>
-
+        <ApplicationAccessToken
+          isOpen={isOpen}
+          onClose={onClose}
+          accessToken={accessToken}
+          validity={validity}
+        />
         {view === "PRODUCTION" ? (
           <>
             {loading ? (
@@ -551,14 +562,15 @@ export default function AppDetails() {
                     </div>
                     {/* This container houses the button to generate access token for production as well as removing application oauth keys  */}
                     <div className="w-full flex gap-3 items-center">
-                      <button 
-                      className="mt-4 border-2 border-primaryFade text-sm py-2 px-5 rounded-lg font-semibold text-primary w-fit"
-                      onClick={() => {
-                        generateAccessToken(
-                          application?.appCode as string,
-                          productionApplicationKeys[0]?.keyMappingCode || sandboxApplicationKeys[0]?.keyMappingCode
-                        );
-                      }}
+                      <button
+                        className="mt-4 border-2 border-primaryFade text-sm py-2 px-5 rounded-lg font-semibold text-primary w-fit"
+                        onClick={() => {
+                          generateAccessToken(
+                            application?.appCode as string,
+                            productionApplicationKeys[0]?.keyMappingCode ||
+                              sandboxApplicationKeys[0]?.keyMappingCode
+                          );
+                        }}
                       >
                         Generate Access Token
                       </button>
@@ -567,7 +579,7 @@ export default function AppDetails() {
                           deleteOauthKeysbyAppco(
                             application?.appCode as string,
                             productionApplicationKeys[0]?.keyMappingCode
-                           );
+                          );
                         }}
                         className="mt-4 bg-error-bg text-error text-sm py-2 px-5 rounded-lg font-semibold w-fit"
                       >
@@ -668,11 +680,13 @@ export default function AppDetails() {
                           : "Generate Keys"
                       }
                       onClick={() => {
-                        if(sandboxApplicationKeys.length > 0){
-                          editApplicationOauthKeys(appCo as string, sandboxApplicationKeys[0].keyMappingCode)
-                         
-                        }else{
-                          generateApplicationOauthKeys(appCo as string)
+                        if (sandboxApplicationKeys.length > 0) {
+                          editApplicationOauthKeys(
+                            appCo as string,
+                            sandboxApplicationKeys[0].keyMappingCode
+                          );
+                        } else {
+                          generateApplicationOauthKeys(appCo as string);
                         }
                       }}
                     />
@@ -845,9 +859,7 @@ export default function AppDetails() {
                     </div>
 
                     <div className="w-full flex gap-3 items-center">
-                      <button 
-                      className="mt-4 border-2 border-primaryFade text-sm py-2 px-5 rounded-lg font-semibold text-primary w-fit"
-                      >
+                      <button className="mt-4 border-2 border-primaryFade text-sm py-2 px-5 rounded-lg font-semibold text-primary w-fit">
                         Generate Access Token
                       </button>
                       <button

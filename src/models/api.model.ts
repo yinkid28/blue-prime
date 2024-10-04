@@ -236,6 +236,12 @@ export type ISubscription = {
   deleted: boolean;
 };
 
+export type CreatePricingDto = {
+  pricingModel: string;
+  currency: string;
+  price: number;
+  billingCycle: string;
+};
 export type SwaggerParam = {
   name: string;
   in: string;

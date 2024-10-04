@@ -1,4 +1,4 @@
-import { CreateAPI } from "@/models/api.model";
+import { CreateAPI, CreatePricingDto } from "@/models/api.model";
 import HTTPClient from "../httpInstance/wrappedinstance";
 import {
   editOauthDto,
@@ -390,7 +390,6 @@ export default class APIServices {
     return response.data;
   }
 
-  
   static async editOauthKeysforApplication(
     appco: string,
     kmco: string,
@@ -402,7 +401,7 @@ export default class APIServices {
     );
     return response.data;
   }
-  
+
   static async getOauthKeysforApplication(appco: string) {
     const response = await HTTPClient.get(
       `api-manager/api/v1/webber/applications/oauth-keys?appco=${appco}`
@@ -451,6 +450,26 @@ export default class APIServices {
   static async deleteWebberApplication(appco: string) {
     const response = await HTTPClient.delete(
       `api-manager/api/v1/webber/application/delete?appco=${appco}`
+    );
+    return response.data;
+  }
+  static async createApiPricing(aco: string, data: CreatePricingDto) {
+    const response = await HTTPClient.post(
+      `api-manager/api/v1/weaver/api-pricing-plan/create?aco=${aco}`,
+      data
+    );
+    return response.data;
+  }
+  static async updateApiPricing(aco: string, data: CreatePricingDto) {
+    const response = await HTTPClient.post(
+      `api-manager/api/v1/weaver/api-pricing-plan/update?aco=${aco}`,
+      data
+    );
+    return response.data;
+  }
+  static async getApiPricing(aco: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/weaver/api-pricing-plan/get?aco=${aco}`
     );
     return response.data;
   }
