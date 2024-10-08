@@ -1,8 +1,10 @@
 import { Button, dataURLtoFile } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
+import { ICategory } from "@/models/admin.model";
 import { IApi } from "@/models/api.model";
 import { FileType } from "@/models/apidiscovery.model";
+import AdminServices from "@/services/admin_services/admin_services";
 import APIServices from "@/services/api_services/api_service";
 import { useToast } from "@chakra-ui/react";
 import Image from "next/image";
@@ -24,6 +26,8 @@ export default function ApiInfomationViewWeaver() {
   const [preview, setPreview] = useState<string>();
   const [Thumbnail, setThumbnail] = useState();
   const [context, setContext] = useState<string>(api?.context as string);
+  const [categories, setCategories] = useState<ICategory[]>([]);
+
   const [version, setVersion] = useState<string>(api?.version as string);
   const router = useRouter();
   const { apiCode } = router.query;
@@ -78,6 +82,7 @@ export default function ApiInfomationViewWeaver() {
         ...restApiProps,
 
         description,
+        categories: [category],
 
         monetization: {
           enabled: false,
@@ -145,11 +150,38 @@ export default function ApiInfomationViewWeaver() {
       console.log(res);
       if (res.statusCode === 200) {
         setApi(res.data);
+        setName(res.data.name);
+        setDescription(res.data.description);
+        setCategory(res.data.categories[0]);
+        setContext(res.data.context);
       }
       setLoading(false);
     } catch (error: any) {
       setLoading(false);
       const errorMessage = error?.response?.data?.message;
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
+  const getCategories = async () => {
+    setLoading(true);
+
+    try {
+      const res = await AdminServices.getCategories();
+      console.log(res);
+      if (res.statusCode === 200) {
+        setLoading(false);
+        setCategories(res.data.list);
+        //   getApiPricing(api.apiCode);
+        // router.reload();
+      }
+    } catch (error: any) {
+      setLoading(false);
+      console.log(error);
+      console.error("Caught error:", error);
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.message ||
+        "An unknown error occurred";
       setApiErrorMessage(errorMessage, "error");
     }
   };
@@ -176,11 +208,9 @@ export default function ApiInfomationViewWeaver() {
     if (apiCode) {
       getApi(apiCode as string);
       getApiThumbnail(apiCode as string);
+      getCategories();
     }
   }, [apiCode]);
-  useEffect(() => {
-    console.log(Thumbnail, "Thumby");
-  }, [Thumbnail]);
 
   return (
     <>
@@ -293,7 +323,7 @@ export default function ApiInfomationViewWeaver() {
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>
           </div>
-          {/* <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
+          <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
             <p className="text-xs text-dark-grey"> Category/Industry</p>
             <select
               name="apiCat"
@@ -303,9 +333,13 @@ export default function ApiInfomationViewWeaver() {
               onChange={(e) => setCategory(e.target.value)}
             >
               <option value="">Choose a category</option>
-              <option value="entertainment">Entertainment</option>
+              {categories.map((item, index) => (
+                <option value={item.name} key={index}>
+                  {item.name}
+                </option>
+              ))}
             </select>
-          </div> */}
+          </div>
         </div>
         <div className="w-full flex flex-col gap-3">
           <p className="text-xs text-dark-grey"> API Details</p>

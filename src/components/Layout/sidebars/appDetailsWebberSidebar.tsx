@@ -11,8 +11,8 @@ export default function AppDetailsWebberSidebar() {
   const { currentApplication } = useApi();
   const [activeItem, setActiveItem] = useState("oauth");
 
-  const handleNavigation = (path: string, item: string) => {
-    router.push(path);
+  const handleNavigation = (path: string, item: string, query?: any) => {
+    router.push({ pathname: path, query });
     setActiveItem(item);
   };
 
@@ -35,7 +35,7 @@ export default function AppDetailsWebberSidebar() {
       <div
         className="flex items-center gap-2 cursor-pointer"
         onClick={() => {
-          router.back();
+          router.push("/library/application");
           setSidebar("");
         }}
       >
@@ -46,18 +46,31 @@ export default function AppDetailsWebberSidebar() {
       {currentApplication && (
         <div
           className={getItemStyle("oauth")}
-          onClick={() => handleNavigation(`/webber/library/application/${currentApplication.name}`, "oauth")}
+          onClick={() =>
+            handleNavigation(
+              `/webber/library/application/${currentApplication.name}`,
+              "oauth",
+              { appCo: currentApplication.applicationCode }
+            )
+          }
         >
           <p className="font-semibold">OAuth API Keys</p>
         </div>
       )}
-
-      <div
-        className={getItemStyle("subscriptions")}
-        onClick={() => handleNavigation(`/webber/library/${currentApplication?.apiCode}/subscriptions`, "subscriptions")}
-      >
-        <p className="font-semibold">Subscriptions</p>
-      </div>
+      {currentApplication && (
+        <div
+          className={getItemStyle("subscriptions")}
+          onClick={() =>
+            handleNavigation(
+              `/webber/library/application/${currentApplication.name}/subscription`,
+              "subscriptions",
+              { appCo: currentApplication.applicationCode }
+            )
+          }
+        >
+          <p className="font-semibold">Subscriptions</p>
+        </div>
+      )}
     </div>
   );
 }

@@ -4,41 +4,50 @@ import Navbar from "@/components/Layout/Nav/navbar";
 import { BreadCrumbs, Button } from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { Icon } from "@iconify/react";
-import { useDisclosure } from "@chakra-ui/react";
+import { useDisclosure, useToast } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import CreateCategory from "@/components/modals/addNewCategory";
+import AdminServices from "@/services/admin_services/admin_services";
+import { ICategory } from "@/models/admin.model";
 const AdminLayout = dynamic(() => import("@/components/Layout/adminLayout"), {
   ssr: false,
 });
 export default function CategoryManager() {
-
-
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [view, setView] = useState<string>("advanced");
-
+  const [categories, setCategories] = useState<ICategory[]>([]);
+  const toast = useToast();
   const { setSidebar, loading, setLoading, setApiErrorMessage } =
     useOnboarding();
   useEffect(() => {
     setSidebar("backOffice");
     setLoading(false);
+    getCategories();
   }, []);
+  const getCategories = async () => {
+    setLoading(true);
 
-  const categories = [
-    { title: "Entertainment" },
-    { title: "Agriculture" },
-    { title: "Sports" },
-    { title: "User Authentication" },
-    { title: "Banking and Finance" },
-    { title: "Gaming" },
-    { title: "Education" },
-    { title: "Logistics" },
-    { title: "Visual Recognition" },
-    { title: "Text Analysis" },
-    { title: "Payments" },
-    { title: "E-Commerce" },
-    { title: "Data Analysis" },
-  ];
+    try {
+      const res = await AdminServices.getCategories();
+      console.log(res);
+      if (res.statusCode === 200) {
+        setLoading(false);
+        setCategories(res.data.list);
+        //   getApiPricing(api.apiCode);
+        // router.reload();
+      }
+    } catch (error: any) {
+      setLoading(false);
+      console.log(error);
+      console.error("Caught error:", error);
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.message ||
+        "An unknown error occurred";
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
 
   return (
     <AdminLayout>
@@ -62,23 +71,22 @@ export default function CategoryManager() {
           {/* <button className="border-2 text-primary py-2 px-2 font-semibold text-xs rounded-lg">
             Add New Category
           </button> */}
-          <Button 
-          type="fit"
-          text={"Add New Category"} 
-           onClick={() => {
-            onOpen();
-          }}
+          <Button
+            type="fit"
+            text={"Add New Category"}
+            onClick={() => {
+              onOpen();
+            }}
           />
-            {view !== "category" && (
+          {view !== "category" && (
             <CreateCategory isOpen={isOpen} onClose={onClose} />
           )}
-
         </div>
 
         {/* WHERE I WOULD RENDER THE CARDS */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mt-6 gap-4">
           {categories.map((item, index) => (
-            <CategoryCard key={index} title={item.title} />
+            <CategoryCard key={index} category={item} />
           ))}
         </div>
       </div>

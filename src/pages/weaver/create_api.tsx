@@ -5,6 +5,8 @@ import {
 import OnboardingNavbar from "@/components/onboarding/onboardingNavbar";
 import { Button, Loader } from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
+import { ICategory } from "@/models/admin.model";
+import AdminServices from "@/services/admin_services/admin_services";
 import { Progress, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -12,7 +14,7 @@ import { FaChevronLeft } from "react-icons/fa";
 
 export default function CreateApi() {
   const router = useRouter();
-  const { loading, setLoading } = useOnboarding();
+  const { loading, setLoading, setApiErrorMessage } = useOnboarding();
   const [progress, setProgress] = useState<number>(50);
   const [title, setTitle] = useState<string>("Build API");
   const [step, setStep] = useState<number>(1);
@@ -21,6 +23,8 @@ export default function CreateApi() {
   const [description, setDescription] = useState<string>("");
   const [version, setVersion] = useState<string>("");
   const [category, setCategory] = useState<string>("");
+  const [categories, setCategories] = useState<ICategory[]>([]);
+
   const toast = useToast();
   useEffect(() => {
     setTitle("Build API");
@@ -49,7 +53,31 @@ export default function CreateApi() {
   };
   useEffect(() => {
     setLoading(false);
+    getCategories();
   }, []);
+  const getCategories = async () => {
+    setLoading(true);
+
+    try {
+      const res = await AdminServices.getCategories();
+      console.log(res);
+      if (res.statusCode === 200) {
+        setLoading(false);
+        setCategories(res.data.list);
+        //   getApiPricing(api.apiCode);
+        // router.reload();
+      }
+    } catch (error: any) {
+      setLoading(false);
+      console.log(error);
+      console.error("Caught error:", error);
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.message ||
+        "An unknown error occurred";
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
   return (
     <>
       {loading ? (
@@ -139,18 +167,21 @@ export default function CreateApi() {
                           Your api would be exposed in {`${context}/${version}`}
                         </p>
                       )}
-                      {/* <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
-        <p className="text-xs text-dark-grey">Category</p>
-        <select
-          className="outline-none bg-transparent"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          <option value="">Please select category</option>
-          <option value="Finance">Finance</option>
-          <option value="Entertainment">Entertainment</option>
-        </select>
-      </div> */}
+                      <div className="w-full rounded-lg border-light-grey border-[1px] p-2 flex flex-col">
+                        <p className="text-xs text-dark-grey">Category</p>
+                        <select
+                          className="outline-none bg-transparent"
+                          value={category}
+                          onChange={(e) => setCategory(e.target.value)}
+                        >
+                          <option value="">Please select category</option>
+                          {categories.map((item, index) => (
+                            <option value={item.name} key={index}>
+                              {item.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
                       <Button
                         text="Next"
                         type="full"

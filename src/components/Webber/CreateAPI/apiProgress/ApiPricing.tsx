@@ -1,9 +1,17 @@
+import RequestPriceUpdate from "@/components/modals/requestPriceUpdate";
 import { Button } from "@/components/utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { CreatePricingDto } from "@/models/api.model";
 import APIServices from "@/services/api_services/api_service";
-import { Checkbox, Radio, RadioGroup, Stack, useToast } from "@chakra-ui/react";
+import {
+  Checkbox,
+  Radio,
+  RadioGroup,
+  Stack,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 export default function ApiPricingView() {
@@ -18,6 +26,7 @@ export default function ApiPricingView() {
   const { api } = useApi();
   const { setApiErrorMessage } = useOnboarding();
   const toast = useToast();
+  const { onOpen, isOpen, onClose } = useDisclosure();
   const createPrice = async (aco: string) => {
     setLoading(true);
     if (api) {
@@ -31,11 +40,11 @@ export default function ApiPricingView() {
       try {
         const res = await APIServices.createApiPricing(aco, data);
         console.log(res);
-        if (res === 201) {
+        if (res.statusCode === 201) {
           setLoading(false);
           toast({
             title: "Update Api",
-            description: "API Thumbnail successfully Updated",
+            description: "API Pricing Created",
             duration: 3000,
             position: "bottom-right",
           });
@@ -61,6 +70,9 @@ export default function ApiPricingView() {
       if (res.data.id !== undefined) {
         // setApi(res.data);
         setPriceSet(true);
+        setPricingModel(res.data.pricingModel);
+        setCurrency(res.data.currency);
+        setPrice(res.data.price);
       }
       // setLoading(false);
     } catch (error: any) {
@@ -84,6 +96,7 @@ export default function ApiPricingView() {
         <select
           className="outline-none border w-full p-2 rounded-lg"
           onChange={(e) => setPricingModel(e.target.value)}
+          value={pricingModel}
         >
           <option value="FREE">Free</option>
           <option value="BASIC">Basic</option>
@@ -96,6 +109,7 @@ export default function ApiPricingView() {
         <select
           className="outline-none border w-full p-2 rounded-lg"
           onChange={(e) => setCurrency(e.target.value)}
+          value={currency}
         >
           <option value="NGR">NGR</option>
           <option value="USD">USD</option>
@@ -124,11 +138,12 @@ export default function ApiPricingView() {
           loading={loading}
           onClick={() => {
             if (api) {
-              !priceSet && createPrice(api?.apiCode);
+              !priceSet ? createPrice(api?.apiCode) : onOpen();
             }
           }}
         />
       </div>
+      <RequestPriceUpdate isOpen={isOpen} onClose={onClose} />
     </div>
   );
 }

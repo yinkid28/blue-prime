@@ -1,3 +1,4 @@
+import { createCategory } from "@/models/admin.model";
 import HTTPClient from "../httpInstance/wrappedinstance";
 
 export default class AdminServices {
@@ -23,6 +24,33 @@ export default class AdminServices {
   static async deleteIndividualSubscriptionPolicy(policyId: string) {
     const response = await HTTPClient.get(
       `api-manager/api/v1/back-office/throttling/policies/subscription/delete?policyId=${policyId}`
+    );
+    return response.data;
+  }
+  static async createCategory(data: createCategory, approvalCriteria?: string) {
+    const response = await HTTPClient.post(
+      `api-manager/api/v1/back-office/api-categories/create${
+        approvalCriteria ? "?apiApprovalCriteria=${approvalCriteria}" : ""
+      }`,
+      data
+    );
+    return response.data;
+  }
+  static async getCategories() {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/back-office/api-categories/get`
+    );
+    return response.data;
+  }
+  static async getCategory(catCo: string) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/back-office/api-categories/get-category?catco=${catCo}`
+    );
+    return response.data;
+  }
+  static async deleteCategories(catCo: string) {
+    const response = await HTTPClient.delete(
+      `api-manager/api/v1/back-office/api-categories/delete?catco=${catCo}`
     );
     return response.data;
   }

@@ -156,7 +156,7 @@ export function ApiUpload({ setStep, setProgress, setTitle }: CreateProp) {
       },
       // gatewayType: "wso2/synapse",
       // provider: "admin",
-      // categories: [info.category],
+      categories: [info.category],
       // lifeCycleStatus: "CREATED",
       // responseCachingEnabled: false,
       // hasThumbnail: false,

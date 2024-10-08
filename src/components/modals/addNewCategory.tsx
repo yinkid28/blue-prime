@@ -6,8 +6,14 @@ import {
   ModalCloseButton,
   ModalBody,
   Select,
+  useToast,
 } from "@chakra-ui/react";
 import { Button } from "../utils";
+import APIServices from "@/services/api_services/api_service";
+import { useState } from "react";
+import AdminServices from "@/services/admin_services/admin_services";
+import { createCategory } from "@/models/admin.model";
+import { useOnboarding } from "@/context/OnboardingContext";
 
 type NewCategoryModalProps = {
   isOpen: boolean;
@@ -18,6 +24,43 @@ export default function NewCategory({
   isOpen,
   onClose,
 }: NewCategoryModalProps) {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [name, setName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const toast = useToast();
+  const { setApiErrorMessage } = useOnboarding();
+  const createCategory = async (criteria?: string) => {
+    setLoading(true);
+    const data: createCategory = {
+      name,
+      description,
+    };
+    try {
+      const res = await AdminServices.createCategory(data, criteria);
+      console.log(res);
+      if (res.statusCode === 201) {
+        setLoading(false);
+        toast({
+          title: "Create Category",
+          description: "New category added",
+          duration: 3000,
+          position: "bottom-right",
+          status: "success",
+        });
+        //   getApiPricing(api.apiCode);
+        // router.reload();
+      }
+    } catch (error: any) {
+      setLoading(false);
+      console.log(error);
+      console.error("Caught error:", error);
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.message ||
+        "An unknown error occurred";
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -47,6 +90,8 @@ export default function NewCategory({
                 type="text"
                 placeholder="Data Analysis"
                 className="outline-none border-none"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
 
@@ -60,6 +105,8 @@ export default function NewCategory({
                 id="categoryDescription"
                 rows={3}
                 className="outline-none text-border-blue"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               ></textarea>
             </div>
 
@@ -74,7 +121,14 @@ export default function NewCategory({
             </div>
 
             <div className="flex justify-end mt-4">
-              <Button type="fit" text="Save" onClick={() => {}} />
+              <Button
+                type="fit"
+                text="Save"
+                onClick={() => {
+                  createCategory();
+                }}
+                loading={loading}
+              />
             </div>
           </div>
         </ModalBody>
