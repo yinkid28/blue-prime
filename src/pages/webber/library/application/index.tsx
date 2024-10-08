@@ -297,9 +297,6 @@ function TableRow({
             >
               <p>View Details</p>
             </MenuItem>
-            <MenuItem>
-              <p>Cancel Subscription</p>
-            </MenuItem>
             <MenuItem onClick={() => onEdit(data.applicationCode as string)}>
               <p>Edit Application</p>
             </MenuItem>

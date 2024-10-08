@@ -3,23 +3,35 @@ export type RequestCardProps = {
   children: React.ReactNode;
 };
 
-export type tableTypes = {
-  date: string;
-  appName: string;
-  plan: string;
-  price: string;
-  paymentMethod: string;
-  paymentStatus: string;
+// export type tableTypes = {
+//   date: string;
+//   appName: string;
+//   plan: string;
+//   price: string;
+//   paymentMethod: string;
+//   paymentStatus: string;
+// };
+
+export type ISubscription = {
+  applicationId: string;
+  apiCode: string;
+  apiId: string;
+  throttlingPolicy: string;
+  applicationInfo: {
+    applicationId: string;
+    name: string;
+    throttlingPolicy: string;
+    description: string;
+    status: string;
+    groups: string[];
+    subscriptionCount: number;
+    attributes: Record<string, unknown>;
+    owner: string;
+    tokenType: string;
+    createdTime: string;
+    updatedTime: string;
+  };
 };
-
-export interface SubscribedApp {
-  id: number;
-  name: string;
-  amount: number;
-  req: number;
-  date: string;
-}
-
 export type IApplication = {
   id: string;
   createdBy: any;
@@ -27,6 +39,7 @@ export type IApplication = {
   lastModifiedBy: any;
   lastModifiedDate: string;
   appCode?: string;
+  apiCode: string;
   applicationCode?: string;
   customerCode: string;
   applicationId: string;

@@ -10,6 +10,20 @@ export default function AppDetailsWebberSidebar() {
   const { setSidebar } = useOnboarding();
   const { currentApplication } = useApi();
 
+
+  const handleNavigation = (path: string) => {
+    router.push(path);
+  };
+
+  const getItemStyle = (path: string) => {
+    const isActive = router.asPath === path;
+    return `md:flex hidden items-center cursor-pointer hover:text-primary gap-3 w-full ${
+      isActive
+        ? "text-primary"
+        : "text-dark-grey"
+    }`;
+  };
+
   return (
     <div className="bg-white rounded p-5 h-full flex flex-col gap-4 ">
       <Image
@@ -30,7 +44,23 @@ export default function AppDetailsWebberSidebar() {
         <p className="text-mid-grey">Back</p>
       </div>
 
+      <div        
+      >
       <p className="font-semibold">{currentApplication!.name}</p>
+      </div>
+
+      <div
+        className={getItemStyle("")}
+       
+      >
+        <p className="font-semibold">OAuth API Keys</p>
+      </div>
+      <div
+        className={getItemStyle("webber/library")}
+        onClick={() => handleNavigation("/webber/library/${api.apiCode}/subscriptions")}
+      >
+        <p className="font-semibold">Subscriptions</p>
+      </div>
     </div>
   );
 }

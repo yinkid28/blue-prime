@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -6,27 +6,127 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
+  useToast,
+  Spinner,
 } from "@chakra-ui/react";
 import { Button } from "../utils";
 import { useApi } from "@/context/ApiDiscoveryContext";
+import APIServices from "@/services/api_services/api_service";
+import { useOnboarding } from "@/context/OnboardingContext";
+import { ISubscription } from "@/models/api.model";
 
 interface NewSubscriptionProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+interface Application {
+  name: string;
+  appco: string;
+}
+
 export default function NewSubscription({
   isOpen,
   onClose,
 }: NewSubscriptionProps) {
-  const [application, setApplication] = useState("");
+  const { loading, setLoading, setApiErrorMessage, user } = useOnboarding();
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [isLoadingApps, setIsLoadingApps] = useState(false);
+  const [selectedApplication, setSelectedApplication] = useState("");
   const [subscriptionPlan, setSubscriptionPlan] = useState("");
   const { api } = useApi();
+  const toast = useToast();
 
-  const handleNext = () => {
-    console.log("Application:", application);
-    console.log("Subscription Plan:", subscriptionPlan);
+  useEffect(() => {
+    if (isOpen && user?.customerCode) {
+      fetchApplications();
+    }
+  }, [isOpen, user?.customerCode]);
+
+  const fetchApplications = async () => {
+    if (!user?.customerCode) {
+      setApiErrorMessage("Customer code not available");
+      return;
+    }
+    setIsLoadingApps(false);
+    try {
+      const response = await APIServices.getAllWebberApplications(1, 10, user.customerCode);
+      console.log("API Response:", response);
+
+      if (response.statusCode === 200) {
+        const applicationData = response.data.map((app: any) => ({
+          name: app.name,
+          appco: app.applicationCode,
+        }));
+        setApplications(applicationData);
+      }
+    } catch (error: any) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed to fetch applications";
+      setApiErrorMessage(errorMessage);
+    } finally {
+      setIsLoadingApps(false);
+    }
   };
+
+  const handleCreateSubscription = async () => {
+    if (!api || !api.apiCode) {
+      toast({
+        title: "API information is not available",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+    if (!subscriptionPlan || !selectedApplication) {
+      toast({
+        title: "Please select both an application and a subscription plan",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const selectedApp = applications.find(app => app.name === selectedApplication);
+      if (!selectedApp) {
+        throw new Error("Selected application not found");
+      }
+
+      const data = {
+        apiCode: api.apiCode,
+        applicationCode: selectedApp.appco,
+        throttlingPolicy: subscriptionPlan,
+      };
+      console.log(data, "application data");
+
+      await APIServices.createSubscription(
+        api.apiCode, 
+        selectedApp.appco,  
+        subscriptionPlan,  
+        data 
+      );
+      toast({
+        title: "Subscription created successfully",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      onClose();
+    } catch (error: any) {
+      console.error("Error creating subscription:", error);
+      const errorMessage =
+      error?.response?.data?.message ||
+      error.message ||
+      "Failed to fetch subscription";
+    setApiErrorMessage(errorMessage);
+    setLoading(false);
+    }
+  };
+
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -46,16 +146,24 @@ export default function NewSubscription({
               <label htmlFor="application" className="text-sm font-medium">
                 Application
               </label>
-              <select
-                id="application"
-                value={application}
-                onChange={(e) => setApplication(e.target.value)}
-                className="p-2 border border-gray-300 rounded-md"
-              >
-                <option value="">Select an application</option>
-                <option value="Edu App">Edu App</option>
-                {/* Add more options as needed */}
-              </select>
+              {isLoadingApps ? (
+                <Spinner size="sm" />
+              ) : (
+                <select
+                  id="application"
+                  value={selectedApplication}
+                  onChange={(e) => setSelectedApplication(e.target.value)}
+                  className="p-2 border border-gray-300 rounded-md"
+                  disabled={applications.length === 0}
+                >
+                  <option value="">Select an application</option>
+                  {applications.map((app, index) => (
+                    <option key={index} value={app.name}>
+                      {app.name}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -67,21 +175,22 @@ export default function NewSubscription({
                 value={subscriptionPlan}
                 onChange={(e) => setSubscriptionPlan(e.target.value)}
                 className="p-2 border border-gray-300 rounded-md"
+                disabled={!api?.policies || api.policies.length === 0}
               >
                 <option value="">Select a plan</option>
-                {api?.policies.map((item, index) => (
-                  <option value={item} key={index}>
+                {api?.policies?.map((item, index) => (
+                  <option key={index} value={item}>
                     {item}
                   </option>
                 ))}
-                {/* Add more options as needed */}
               </select>
             </div>
 
             <Button
-              text="Next"
-              onClick={handleNext}
+              text="Create Subscription"
+              onClick={handleCreateSubscription}
               className="w-full mt-4 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700"
+              disabled={loading || isLoadingApps || !subscriptionPlan || !selectedApplication}
             />
           </div>
         </ModalBody>
@@ -89,3 +198,4 @@ export default function NewSubscription({
     </Modal>
   );
 }
+

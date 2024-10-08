@@ -111,33 +111,7 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
 
                     <p>Overview</p>
                   </div>
-                  <div
-                    className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-                      router.asPath ==
-                      `/webber/library/${toTitleCase(
-                        api.name,
-                        true
-                      )}/api_information`
-                        ? "text-primary font-semibold"
-                        : "text-dark-grey"
-                    }`}
-                    // I am going to hard code the route to be pushed to for a brief while!
-                    onClick={() => {
-                      router.push(
-                        `/webber/library/${toTitleCase(
-                          api.name,
-                          true
-                        )}/api_information`
-                      );
-                    }}
-                  >
-                    <Icon
-                      icon="material-symbols-light:list-alt-outline"
-                      className="text-xl"
-                    />
-
-                    <p>API Information</p>
-                  </div>
+                 
                   <div
                     className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
                       router.asPath ==
@@ -276,24 +250,6 @@ export default function WeaverProgressSidebar({ api }: sideBarProps) {
           <Icon icon="lets-icons:widget-light" className="text-xl" />
 
           <p>Overview</p>
-        </div>
-        <div
-          className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${
-            router.asPath == `/webber/library/${api.apiCode}/api_information`
-              ? "text-primary font-semibold"
-              : "text-dark-grey"
-          }`}
-          // I am going to hard code the route to be pushed to for a brief while!
-          onClick={() => {
-            router.push(`/webber/library/${api.apiCode}/api_information`);
-          }}
-        >
-          <Icon
-            icon="material-symbols-light:list-alt-outline"
-            className="text-xl"
-          />
-
-          <p>API Information</p>
         </div>
         <div
           className={`flex items-center cursor-pointer ease-in-out duration-700 hover:text-primary gap-3 w-full ${

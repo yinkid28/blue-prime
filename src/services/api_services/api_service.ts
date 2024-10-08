@@ -148,6 +148,22 @@ export default class APIServices {
     return response.data;
   }
 
+  static async getAllSubscriptions(code: string, type: string, groupId?: string, limit: number = 25) {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/webber/subscriptions/get-all?code=${code}&type=${type}&limit=${limit}${
+        groupId ? `&groupId=${groupId}` : ''
+      }`
+    );
+    return response.data;
+  }
+
+  // static async getAllSubscriptions(code: string, type: string) {
+  //   const response = await HTTPClient.get(
+  //     `api-manager/api/v1/webber/subscriptions/get-all?code=${code}&type=${type}&limit=25`
+  //   );
+  //   return response.data;
+  // }
+
   static async getSubscriptionsBySubco(subco: string) {
     const response = await HTTPClient.get(
       `api-manager/api/v1/webber/subscriptions/get?subco=${subco}`
@@ -436,13 +452,9 @@ export default class APIServices {
     return response.data;
   }
 
-  static async getAllWebberApplications(
-    pageNumber: number = 1,
-    pageSize: number,
-    cco: string
-  ) {
+  static async getAllWebberApplications(pageNumber: number, pageSize: number, cco: string) {
     const response = await HTTPClient.get(
-      `api-manager/api/v1/webber/application/get-all?cco=${cco}&pageSize=${pageSize}&pageNo=${pageNumber}`
+      `api-manager/api/v1/webber/application/get-all?pageNumber=${pageNumber}&pageSize=${pageSize}&cco=${cco}`
     );
     return response.data;
   }
@@ -473,4 +485,14 @@ export default class APIServices {
     );
     return response.data;
   }
+
+  static async createSubscription(aco: string, appco: string, throttlingPolicy: string, data:any) {
+    const response = await HTTPClient.post(
+      `/api-manager/api/v1/webber/subscriptions/create?aco=${aco}&appco=${appco}&throttlingPolicy=${throttlingPolicy}`,
+      data
+    );
+    return response.data;
+  }
+  
+  
 }

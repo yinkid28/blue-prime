@@ -144,8 +144,10 @@ export type IApi = {
   };
   authorizationHeader?: string;
   customerCode?: string;
+  applicationCode: string;
   wso2ApiId: string;
   apiCode: string;
+  code: string;
   id: string;
   name: string;
   description: string;
@@ -219,21 +221,47 @@ export type createApplication = {
   attributes: any;
   subscriptionScopes: any[];
 };
+// export type ISubscription = {
+//   id: string;
+//   code:string;
+//   name:string;
+//   price: number;
+//   paymentMethod: string;
+//   createdBy: any;
+//   createdDate: string;
+//   lastModifiedBy: any;
+//   lastModifiedDate: string;
+//   subscriptionCode: string;
+//   subscriptionId: string;
+//   applicationId: string;
+//   apiId: string;
+//   groups: any[];
+//   throttlingPolicy: string;
+//   requestedThrottlingPolicy: string;
+//   status: string;
+//   redirectionParams: any;
+//   deleted: boolean;
+// };
+
 export type ISubscription = {
-  id: string;
-  createdBy: any;
-  createdDate: string;
-  lastModifiedBy: any;
-  lastModifiedDate: string;
-  subscriptionCode: string;
-  subscriptionId: string;
   applicationId: string;
+  apiCode: string;
   apiId: string;
   throttlingPolicy: string;
-  requestedThrottlingPolicy: string;
-  status: string;
-  redirectionParams: any;
-  deleted: boolean;
+  applicationInfo: {
+    applicationId: string;
+    name: string;
+    throttlingPolicy: string;
+    description: string;
+    status: string;
+    groups: string[];
+    subscriptionCount: number;
+    attributes: Record<string, unknown>;
+    owner: string;
+    tokenType: string;
+    createdTime: string;
+    updatedTime: string;
+  };
 };
 
 export type CreatePricingDto = {

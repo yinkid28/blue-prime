@@ -15,7 +15,7 @@ const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
 });
 
-export default function ApiOverview() {
+export default function Overview() {
   const { api, setApi } = useApi();
   const router = useRouter();
   const { id } = router.query;
@@ -56,7 +56,7 @@ export default function ApiOverview() {
         {/* Fix the breadcrumbs before commiting. Use the commented code in api_manager.tsx as a guide */}
         <BreadCrumbs
           breadCrumbItems={breadCrumbs}
-          breadCrumbActiveItem={`${api?.name}-API Information`}
+          breadCrumbActiveItem={`${api?.name}-Overview`}
         />
         {/* CONTENT */}
         <div className="mx-4 my-6">
