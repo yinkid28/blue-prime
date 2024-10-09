@@ -223,7 +223,7 @@ function Heading({ children, className }: TableTypes) {
 }
 
 function Body({ data, render }: TableTypes) {
-  if (!data?.length)
+  if (data && data?.length < 1)
     return (
       <tbody>
         <tr>

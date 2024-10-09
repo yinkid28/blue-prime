@@ -1,4 +1,7 @@
-import { createCategory } from "@/models/admin.model";
+import {
+  CreateApplicationPolicyDTO,
+  createCategory,
+} from "@/models/admin.model";
 import HTTPClient from "../httpInstance/wrappedinstance";
 
 export default class AdminServices {
@@ -8,10 +11,22 @@ export default class AdminServices {
     );
     return response.data;
   }
+  static async getAdvancedPolicies() {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/back-office/throttling/policies/application/get-all`
+    );
+    return response.data;
+  }
 
   static async deleteApplicationThrottlingPolicy(policyId: string) {
     const response = await HTTPClient.get(
       `api-manager/api/v1/back-office/throttling/policies/application/delete?policyId=${policyId}`
+    );
+    return response.data;
+  }
+  static async getAllSubscriptionPolicies() {
+    const response = await HTTPClient.get(
+      `api-manager/api/v1/back-office/throttling/policies/subscription/get-all`
     );
     return response.data;
   }
@@ -32,6 +47,13 @@ export default class AdminServices {
       `api-manager/api/v1/back-office/api-categories/create${
         approvalCriteria ? "?apiApprovalCriteria=${approvalCriteria}" : ""
       }`,
+      data
+    );
+    return response.data;
+  }
+  static async createApplicationPolicy(data: CreateApplicationPolicyDTO) {
+    const response = await HTTPClient.post(
+      `api-manager/api/v1/back-office/throttling/policies/application/add`,
       data
     );
     return response.data;

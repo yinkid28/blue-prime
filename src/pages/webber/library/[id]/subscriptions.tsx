@@ -8,6 +8,7 @@ import { ISubscription } from "@/models/api.model";
 import APIServices from "@/services/api_services/api_service";
 import { useDisclosure } from "@chakra-ui/react";
 import AddSub from "@/components/modals/addSub";
+import { getFormattedDate } from "@/helper_utils/helpers";
 
 const WeaverLayout = dynamic(() => import("@/components/Layout/layout"), {
   ssr: false,
@@ -23,35 +24,35 @@ const breadCrumbs: BreadCrumbItems[] = [
 export default function WaverSubscriptions() {
   const { api } = useApi();
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const { loading, setLoading, errorMessage, setApiErrorMessage } = useOnboarding();
-  const [subscriptions, setSubscriptions] = useState<ISubscription[] | null>(null);
+  const { loading, setLoading, setApiErrorMessage } = useOnboarding();
+  const [subscriptions, setSubscriptions] = useState<ISubscription[]>([]);
 
-  const getAllSubscriptions = useCallback(async (code:string, type:string) => {
+  const getAllSubscriptions = useCallback(
+    async (code: string, type: string) => {
+      // setLoading(true);
+      setApiErrorMessage(null);
+      try {
+        const res = await APIServices.getAllSubscriptions(code, type);
+        console.log("API Response:", res);
 
-    // setLoading(true);
-    setApiErrorMessage(null);
-    try {
-    
-
-      const res = await APIServices.getAllSubscriptions(code, type);
-      console.log("API Response:", res);
-
-      if (res.statusCode === 200 ) {
-        setSubscriptions(res.data.list);
-      } else {
-        setApiErrorMessage("Unexpected response format");
+        if (res.statusCode === 200) {
+          setSubscriptions(res.data.list);
+        } else {
+          setApiErrorMessage("Unexpected response format");
+        }
+      } catch (error: any) {
+        console.error("Error fetching subscriptions:", error);
+        const errorMessage =
+          error?.response?.data?.message ||
+          error.message ||
+          "Failed to fetch subscriptions";
+        setApiErrorMessage(errorMessage);
+      } finally {
+        setLoading(false);
       }
-    } catch (error: any) {
-      console.error("Error fetching subscriptions:", error);
-      const errorMessage =
-        error?.response?.data?.message ||
-        error.message ||
-        "Failed to fetch subscriptions";
-      setApiErrorMessage(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  }, [api, setLoading, setApiErrorMessage]);
+    },
+    [api, setLoading, setApiErrorMessage]
+  );
 
   useEffect(() => {
     if (api) {
@@ -59,10 +60,11 @@ export default function WaverSubscriptions() {
     }
   }, [api, getAllSubscriptions]);
 
-  useEffect(()=>{
+  useEffect(() => {
     // setLoading(false)
-    console.log(subscriptions, "lst of sub")
-  },[subscriptions])
+    console.log(new Date().toISOString(), "lst of sub");
+    getFormattedDate(new Date(1713455826000).toISOString());
+  }, [subscriptions]);
 
   return (
     <WeaverLayout>
@@ -86,23 +88,38 @@ export default function WaverSubscriptions() {
         <div className="mt-4">
           {loading ? (
             <p>Loading subscriptions...</p>
-          ) : errorMessage ? (
-            <p className="text-error">{errorMessage}</p>
-          ) : subscriptions && subscriptions.length > 0 ? (
+          ) : subscriptions.length > 0 ? (
             <Table>
               <Table.Header>
-                <th className="w-1/6 px-6 py-2 whitespace-nowrap">Date</th>
-                <th className="w-1/6 px-6 py-2 whitespace-nowrap">Application Name</th>
-                <th className="w-1/6 px-6 py-2 whitespace-nowrap">Plan</th>
-                <th className="w-1/6 px-6 py-2 whitespace-nowrap">Price</th>
-                <th className="w-1/6 px-6 py-2 whitespace-nowrap">Payment Method</th>
-                <th className="w-1/6 px-6 py-2 whitespace-nowrap">Status</th>
+                <Table.Heading className="w-1/6 px-6 py-2 whitespace-nowrap">
+                  Date
+                </Table.Heading>
+                <Table.Heading className="w-1/6 px-6 py-2 whitespace-nowrap">
+                  Application Name
+                </Table.Heading>
+                <Table.Heading className="w-1/6 px-6 py-2 whitespace-nowrap">
+                  Plan
+                </Table.Heading>
+                <Table.Heading className="w-1/6 px-6 py-2 whitespace-nowrap">
+                  Price
+                </Table.Heading>
+                <Table.Heading className="w-1/6 px-6 py-2 whitespace-nowrap">
+                  Payment Method
+                </Table.Heading>
+                <Table.Heading className="w-1/6 px-6 py-2 whitespace-nowrap">
+                  Status
+                </Table.Heading>
               </Table.Header>
-              <Table.Body>
-                {subscriptions.map((item: ISubscription, index: number) => (
+              <Table.Body
+                data={subscriptions}
+                render={(item: ISubscription, index: number) => (
                   <tr key={index}>
                     <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
-                      {item.applicationInfo?.createdTime || "N/A"}
+                      {getFormattedDate(
+                        new Date(
+                          parseInt(item.applicationInfo.createdTime)
+                        ).toISOString()
+                      ) || "N/A"}
                     </td>
                     <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
                       {item.applicationInfo?.name || "N/A"}
@@ -120,18 +137,20 @@ export default function WaverSubscriptions() {
                       <div
                         className={`rounded-full w-fit px-3 whitespace-nowrap 
                           ${
-                          item.applicationInfo?.status && item.applicationInfo.status.toLowerCase() === "active"
-                            ? "bg-success-bg text-success"
-                            : "bg-error-bg text-error"
-                        }
+                            item.applicationInfo?.status &&
+                            item.applicationInfo.status.toLowerCase() ===
+                              "approved"
+                              ? "bg-success-bg text-success"
+                              : "bg-error-bg text-error"
+                          }
                         `}
                       >
                         {item.applicationInfo?.status || "N/A"}
                       </div>
                     </td>
                   </tr>
-                ))}
-              </Table.Body>
+                )}
+              />
             </Table>
           ) : (
             <p>No subscriptions available.</p>
@@ -148,6 +167,3 @@ export default function WaverSubscriptions() {
     </WeaverLayout>
   );
 }
-
-
-

@@ -28,6 +28,8 @@ import {
   Show,
 } from "@chakra-ui/react";
 import { CiMenuKebab } from "react-icons/ci";
+import AdminServices from "@/services/admin_services/admin_services";
+import { IApplicationPolicy } from "@/models/admin.model";
 
 const AdminLayout = dynamic(() => import("@/components/Layout/adminLayout"), {
   ssr: false,
@@ -37,7 +39,10 @@ export default function ApiPolicyManager() {
   const { setSidebar, loading, setLoading, setApiErrorMessage } =
     useOnboarding();
   const [searchedText, setSearchedText] = useState<string>("");
-
+  const [subscriptionPoliciess, setSubscriptionPolicies] = useState<any>();
+  const [applicationPoliciess, setApplicationPolicies] = useState<
+    IApplicationPolicy[]
+  >([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [view, setView] = useState<string>("advanced");
@@ -170,6 +175,83 @@ export default function ApiPolicyManager() {
       timeUnit: "--",
     },
   ];
+  useEffect(() => {
+    if (view === "advanced") {
+    } else if (view === "application") {
+      getApplicationPolicies();
+    } else {
+      getSubscriptionPolicies();
+    }
+  }, [view]);
+  const getSubscriptionPolicies = async () => {
+    setLoading(true);
+
+    try {
+      const res = await AdminServices.getAllSubscriptionPolicies();
+      console.log(res);
+      if (res.statusCode === 200) {
+        setLoading(false);
+        setSubscriptionPolicies(res.data.list);
+        //   getApiPricing(api.apiCode);
+        // router.reload();
+      }
+    } catch (error: any) {
+      setLoading(false);
+      console.log(error);
+      console.error("Caught error:", error);
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.message ||
+        "An unknown error occurred";
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
+  const getApplicationPolicies = async () => {
+    // setLoading(true);
+
+    try {
+      const res = await AdminServices.getApplicationThrottlingPolicies();
+      console.log(res);
+      if (res.statusCode === 200) {
+        // setLoading(false);
+        setApplicationPolicies(res.data.list);
+        //   getApiPricing(api.apiCode);
+        // router.reload();
+      }
+    } catch (error: any) {
+      // setLoading(false);
+      console.log(error);
+      console.error("Caught error:", error);
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.message ||
+        "An unknown error occurred";
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
+  const getApdvancedPolicies = async () => {
+    setLoading(true);
+
+    try {
+      const res = await AdminServices.getApplicationThrottlingPolicies();
+      console.log(res);
+      if (res.statusCode === 200) {
+        setLoading(false);
+        setSubscriptionPolicies(res.data.list);
+        //   getApiPricing(api.apiCode);
+        // router.reload();
+      }
+    } catch (error: any) {
+      setLoading(false);
+      console.log(error);
+      console.error("Caught error:", error);
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.message ||
+        "An unknown error occurred";
+      setApiErrorMessage(errorMessage, "error");
+    }
+  };
 
   return (
     <AdminLayout>
@@ -288,8 +370,8 @@ export default function ApiPolicyManager() {
                 <Table.Heading>Action</Table.Heading>
               </Table.Header>
               <Table.Body
-                data={applicationPolicies}
-                render={(item: any, index: number) => (
+                data={applicationPoliciess}
+                render={(item: IApplicationPolicy, index: number) => (
                   <TableRow2 key={index} api={item} />
                 )}
               />
@@ -365,7 +447,7 @@ function TableRow({ api }: any) {
   );
 }
 
-function TableRow2({ api }: any) {
+function TableRow2({ api }: { api: IApplicationPolicy }) {
   const router = useRouter();
 
   return (
@@ -381,10 +463,14 @@ function TableRow2({ api }: any) {
       }}
     >
       <td className="px-6 py-4 text-sm border-t whitespace-nowrap">
-        <p>{api.name}</p>
+        <p>{api.displayName}</p>
       </td>
-      <td className="px-6 py-4 text-sm border-t">{api.quota}</td>
-      <td className="px-6 py-4 text-sm border-t">{api.unitTime}</td>
+      <td className="px-6 py-4 text-sm border-t">{api.defaultLimit.type}</td>
+      <td className="px-6 py-4 text-sm border-t">
+        {api.defaultLimit.type.toLowerCase() === "requestcountlimit"
+          ? `${api.defaultLimit.requestCount?.requestCount} per ${api.defaultLimit.requestCount?.unitTime}${api.defaultLimit.requestCount?.timeUnit}`
+          : `${api.defaultLimit.bandwidth?.dataAmount}${api.defaultLimit.bandwidth?.dataUnit} per ${api.defaultLimit.bandwidth?.unitTime}${api.defaultLimit.bandwidth?.timeUnit}`}
+      </td>
       <td className="px-6 py-4 text-sm border-t">
         <Menu>
           <MenuButton>
@@ -448,10 +534,8 @@ function TableRow3({ api }: any) {
   );
 }
 
-
-
-
-{/* <div
+{
+  /* <div
               className={`border py-2 px-4 text-sm rounded-lg ${
                 activeApplication === 1 ? "text-primary border-primary" : "text-mid-grey"
               } cursor-pointer`}
@@ -475,4 +559,5 @@ function TableRow3({ api }: any) {
             >
               Application Name 3
             </div>
-          </div> */}
+          </div> */
+}
