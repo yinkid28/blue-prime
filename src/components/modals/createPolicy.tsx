@@ -20,10 +20,12 @@ import { useOnboarding } from "@/context/OnboardingContext";
 type addEndpointModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  fetchAppPolicies: () => Promise<void>;
 };
 export default function CreatePolicy({
   isOpen,
   onClose,
+  fetchAppPolicies,
 }: addEndpointModalProps) {
   const [value, setValue] = useState("1");
   const [policyName, setPolicyName] = useState<string>("");
@@ -65,19 +67,27 @@ export default function CreatePolicy({
     };
 
     console.log(data, "data");
-    setLoading(false);
-    // try {
-    //   const res = await AdminServices.createApplicationPolicy(data);
-    //   setLoading(false);
-    // } catch (error: any) {
-    //   console.log(error);
-    //   console.error("Caught error:", error);
-    //   const errorMessage =
-    //     error?.response?.data?.message ||
-    //     error?.message ||
-    //     "An unknown error occurred";
-    //   setApiErrorMessage(errorMessage, "error");
-    // }
+    try {
+      const res = await AdminServices.createApplicationPolicy(data);
+      if (res.statusCode === 201) {
+        toast({
+          description: "Application policy successfully added",
+          status: "success",
+          duration: 3000,
+          position: "bottom-right",
+        });
+        await fetchAppPolicies();
+        onClose();
+      }
+    } catch (error: any) {
+      console.log(error);
+      console.error("Caught error:", error);
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.message ||
+        "An unknown error occurred";
+      setApiErrorMessage(errorMessage, "error");
+    }
   };
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -185,7 +195,14 @@ export default function CreatePolicy({
             </div>
 
             <div className="flex justify-end">
-              <Button type="fit" text="Save" onClick={() => {}} />
+              <Button
+                type="fit"
+                text="Save"
+                onClick={() => {
+                  createApplicationPolicy();
+                }}
+                loading={loading}
+              />
             </div>
           </div>
         </ModalBody>
