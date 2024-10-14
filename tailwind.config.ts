@@ -19,6 +19,7 @@ const config: Config = {
       },
       fontFamily: {
         urban: "Urbanist",
+        inter: "Inter",
         manrope: ["Manrope", "sans-serif"],
       },
       colors: {
@@ -38,10 +39,12 @@ const config: Config = {
         warning: "#FA642E",
         info: "#3FBDF3",
         category: "#B54708",
-        primary: "#424CF9",
+        primary: "#007A3D",
+        secondaryBg: "#E3F1F9",
+        secondary: "#0085C8",
         criteriaBg: "#E3E5FE",
         criteria: "#2548A0",
-        primaryFade: "#424CF970",
+        primaryFade: "#E4FBEF",
         primaryLightest: "#424CF940",
       },
     },

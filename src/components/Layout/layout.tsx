@@ -9,7 +9,7 @@ import { IMockApi } from "@/models/apidiscovery.model";
 import ApiProgressSidebar from "./sidebars/apiProgressSideBar";
 // import WeaverProgressSidebar from "./sidebars/webberProgressSidebar";
 import { Spinner, UseToastOptions, useToast } from "@chakra-ui/react";
-import { Loader } from "../utils";
+import { Loader, SearchBar } from "../utils";
 import { useEffect } from "react";
 import { IApi } from "@/models/api.model";
 import WeaverProgressSidebar from "./sidebars/weaverProgressSidebar";
@@ -19,6 +19,7 @@ import AppDetailsWebberSidebar from "./sidebars/appDetailsWebberSidebar";
 
 type LayoutProps = {
   children: React.ReactNode | React.ReactNode[];
+  page: string;
 };
 const toastProps: UseToastOptions = {
   description: "",
@@ -27,7 +28,7 @@ const toastProps: UseToastOptions = {
   isClosable: true,
   position: "bottom-right",
 };
-export default function ApiLayout({ children }: LayoutProps) {
+export default function Layout({ children, page }: LayoutProps) {
   const toast = useToast();
   const { sidebar, loading, setApiErrorMessage, errorMessage, errorStatus } =
     useOnboarding();
@@ -48,117 +49,22 @@ export default function ApiLayout({ children }: LayoutProps) {
       setApiErrorMessage(message, status);
     });
   }, [setApiErrorMessage, toast]);
-  switch (sidebar) {
-    case "":
-      return (
-        <>
-          {loading ? (
-            <Loader />
-          ) : (
-            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[17%_1fr]  gap-2 bg-light-grey p-2">
-              <div className="">
-                <MainSidebar />
-              </div>
 
-              <div className="bg-white rounded-t overflow-y-scroll">
-                {children}
-              </div>
+  return (
+    <>
+      <div className="grid grid-cols-1 font-inter h-screen md:grid-cols-[17%_1fr]   gap-2 bg-[#F5F5F5] ">
+        <MainSidebar />
+
+        <div className="flex flex-col h-full overflow-scroll pt-5 sm:pt-8 gap-5 w-full">
+          <div className="flex items-center px-3 justify-between w-full">
+            <p className="font-bold w-full text-[32px]">{page}</p>
+            <div className="w-[30%] flex justify-end">
+              <SearchBar />
             </div>
-          )}
-        </>
-      );
-    case "appDetails":
-      return (
-        <>
-          {loading ? (
-            <Loader />
-          ) : (
-            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[23%_1fr]  gap-2 bg-light-grey p-2">
-              <div className="">
-                <AppDetailsWebberSidebar />
-              </div>
-
-              <div className="bg-white rounded-t overflow-y-scroll">
-                {children}
-              </div>
-            </div>
-          )}
-        </>
-      );
-    case "api":
-      return (
-        <>
-          {loading ? (
-            <Loader />
-          ) : (
-            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[23%_1fr]  gap-2 bg-light-grey p-2">
-              <div className="">
-                <ApiProductSidebar api={api as IApi} />
-              </div>
-
-              <div className="bg-white rounded-t overflow-y-scroll">
-                {children}
-              </div>
-            </div>
-          )}
-        </>
-      );
-    case "apiProgress":
-      return (
-        <>
-          {loading ? (
-            <Loader />
-          ) : (
-            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[17%_1fr]  gap-2 bg-lightest-grey p-2">
-              <div className="">
-                <ApiProgressSidebar api={api as IApi} />
-              </div>
-
-              <div className="bg-white rounded-t overflow-y-scroll">
-                {children}
-              </div>
-            </div>
-          )}
-        </>
-      );
-    case "apiProgressWeaver":
-      return (
-        <>
-          {loading ? (
-            <Loader />
-          ) : (
-            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[17%_1fr]  gap-2 bg-light-grey p-2">
-              <div className="">
-                <WeaverProgressSidebar api={api as IApi} />
-              </div>
-
-              <div className="bg-white rounded-t overflow-y-scroll">
-                {children}
-              </div>
-            </div>
-          )}
-        </>
-      );
-    case "weaver":
-      return (
-        <>
-          {loading ? (
-            <Loader />
-          ) : (
-            <div className="grid grid-cols-1 font-urban h-screen md:grid-cols-[17%_1fr]  gap-2 bg-light-grey p-2">
-              <div className="">
-                <WebberSidebar />
-              </div>
-
-              <div className="bg-white rounded-t overflow-y-scroll">
-                {children}
-              </div>
-            </div>
-          )}
-        </>
-      );
-
-    default:
-      break;
-  }
+          </div>
+          <div className="bg-white p-5 rounded-tl-xl h-full ">{children}</div>
+        </div>
+      </div>
+    </>
+  );
 }

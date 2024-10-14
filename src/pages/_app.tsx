@@ -11,13 +11,9 @@ import { useEffect } from "react";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider>
-      <UserProvider>
-        <OnApiProvider>
-          <OnboardingProvider>
-            <Component {...pageProps} />
-          </OnboardingProvider>
-        </OnApiProvider>
-      </UserProvider>
+      <OnboardingProvider>
+        <Component {...pageProps} />
+      </OnboardingProvider>
     </ChakraProvider>
   );
 }

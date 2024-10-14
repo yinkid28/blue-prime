@@ -70,3 +70,13 @@ pre[class*="language-"] {
   -ms-hyphens: none;
   hyphens: none;
 }
+
+.onboardingBg {
+  height: 100vh;
+  background: linear-gradient(#00000090, #00000030),
+    url("/images/nlngbg.png") center center no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -15,7 +15,6 @@ import "swagger-ui-react/swagger-ui.css";
 // protected routes implementation
 
 export default function Home() {
-  const { progress } = useOnboarding();
   return (
     <div className="flex items-center h-screen justify-center">
       {/* <p className="text-5xl">{progress}</p> */}
