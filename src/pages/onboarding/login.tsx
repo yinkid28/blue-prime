@@ -1,7 +1,9 @@
 import OnboardingLayout from "@/components/Layout/onboardingLayout";
 import { Button, Input } from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
+import CookieManager from "@/helper_utils/cookie_manager";
 import { SignInDto } from "@/models/onboarding.model";
+import OnboardingServices from "@/services/onboarding_services/onboarding_services";
 import {
   FormControl,
   FormErrorMessage,
@@ -12,21 +14,22 @@ import { Field, Form, Formik } from "formik";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { FaChevronLeft } from "react-icons/fa";
 
 export default function Login() {
   const router = useRouter();
   const toast = useToast();
   const [email, setEmail] = useState<string>("");
-
-  const { setLoading, setApiErrorMessage, setUser } = useOnboarding();
+  const [loading, setLoading] = useState<boolean>(false);
+  const { errorMessage, setApiErrorMessage, setUser, setLayout } =
+    useOnboarding();
   const initialValues = {
     email: "",
     password: "",
   };
   useEffect(() => {
     setLoading(false);
-  }, []);
+    console.log(errorMessage, "login");
+  }, [errorMessage]);
 
   function validate(values: any) {
     // setErrorMessage("");
@@ -52,26 +55,18 @@ export default function Login() {
         password: values.password,
       };
 
-      //   const loginres = await OnboardingServices.signInUser(loginData);
-      //   actions.setSubmitting(false);
-      //   CookieManager.setCookie("jwt", loginres.data.jwt, 12);
-      //   toast({
-      //     status: "success",
-      //     description: "Welcome",
-      //     position: "bottom-right",
-      //   });
+      const loginres = await OnboardingServices.signInUser(loginData);
+      actions.setSubmitting(false);
+      CookieManager.setCookie("jwt", loginres.data.jwt, 12);
+      toast({
+        status: "success",
+        description: "Welcome",
+        position: "bottom-right",
+      });
 
-      //   setUser(loginres.data.user);
-      //   if (loginres.data.user.roles.some((r: Irole) => r.id === 1)) {
-      //     router.push({
-      //       pathname: "/api_discovery",
-      //     });
-      //     setUserType("webber");
-      //   } else {
-      //     router.push({
-      //       pathname: "/admin_back_office/category_management",
-      //     });
-      //   }
+      setUser(loginres.data.user);
+      router.push("/dashboard");
+      setLayout(1);
     } catch (error: any) {
       console.log(error);
       actions.setSubmitting(false);
@@ -122,8 +117,17 @@ export default function Login() {
                         type="text"
                         placeholder="Enter Your Email"
                         field={{ ...field }}
+                        onBlur={() => {
+                          setApiErrorMessage(null);
+                        }}
                       />
-
+                      {errorMessage &&
+                        errorMessage != "" &&
+                        form.values.email === "" && (
+                          <div className="bg-error-bg p-2 w-full">
+                            <p className="text-sm text-error">{errorMessage}</p>
+                          </div>
+                        )}
                       <FormErrorMessage>{form.errors.email}</FormErrorMessage>
                     </FormControl>
                   )}
@@ -157,6 +161,7 @@ export default function Login() {
                     Type="submit"
                     className="font-semibold"
                     text="CONTINUE"
+                    loading={loading}
                     type="full"
                     onClick={() => {}}
                   />

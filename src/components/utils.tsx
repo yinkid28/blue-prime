@@ -34,7 +34,7 @@ export function Button({
       } px-4 py-2 text-center ease-in-out duration-500 text-sm flex items-center gap-2 ${
         disabled === true
           ? "bg-light-grey text-dark-grey"
-          : "bg-primary hover:bg-primaryFade hover:text-primary hover:border-primary hover:border text-white"
+          : "bg-primary hover:bg-primaryFade flex items-center justify-center hover:text-primary hover:border-primary hover:border text-white"
       }  rounded-lg ${className} `}
       onClick={onClick}
       type={Type}
@@ -50,12 +50,14 @@ type InputProps = {
   placeholder: string;
   secondaryElement?: boolean;
   field: any;
+  onBlur?: () => void;
 };
 export function Input({
   type,
   placeholder,
   secondaryElement,
   field,
+  onBlur,
 }: InputProps) {
   const [show, setShow] = useState<boolean>(false);
   const handleClick = () => setShow(!show);
@@ -73,6 +75,7 @@ export function Input({
         {...field}
         placeholder={placeholder}
         className="bg-transparent w-[90%] outline-none border-none"
+        onBlur={onBlur}
       />
       {secondaryElement && (
         <>
@@ -133,7 +136,7 @@ export function BreadCrumbs({
 
 export function SearchBar() {
   return (
-    <div className="w-full p-2 flex border-light-grey border-[1px] border-[#D5D5D5] bg-white rounded-2xl flex items-center gap-2">
+    <div className="w-fit p-2 flex border-light-grey border-[1px] border-[#D5D5D5] bg-white rounded-2xl flex items-center gap-2">
       <MdSearch />
       <input
         className="border-none outline-none w-full bg-transparent"
@@ -368,31 +371,41 @@ export default function GlobalPagination({
       }}
     >
       <div
-        className="bg-primary hover:bg-primaryFade px-3 py-1 rounded-lg text-white text-sm font-semibold w-fit h-fit"
-        style={{ cursor: "pointer" }}
-        onClick={() => handlePrev()}
+        className="tex-sm text-[#959595]"
+        // style={{ cursor: "pointer" }}
+        // onClick={() => handlePrev()}
       >
-        <p className="mb-0">Previous</p>
+        <p className="mb-0">Page</p>
       </div>
-      <div className="flex gap-2 items-center" style={{ width: "fit-content" }}>
+      <select
+        name="page"
+        id="page"
+        onChange={(e) => {
+          handlePageClick(parseInt(e.target.value));
+        }}
+        className={`px-3 p-2 rounded-lg border   text-sm font-semibold w-fit h-fit`}
+      >
         {Array.from({ length: pageCount }, (_, index) => {
           const newIndex = inc ? index + 1 : index;
           return (
-            <div
+            <option
               key={newIndex} // Key should be unique, so using newIndex + 1
-              className={`px-3 py-2 rounded-lg  text-sm font-semibold w-fit h-fit${
-                activePage === newIndex ? " text-primary" : "text-primary"
-              }`}
-              onClick={() => handlePageClick(newIndex)} // Handling click
-              style={{ cursor: "pointer" }}
+              value={index + 1}
             >
-              <p className="mb-0">{index + 1}</p>
-            </div>
+              {index + 1}
+            </option>
           );
         })}
+      </select>
+      <div
+        className="tex-sm text-[#959595]"
+        // style={{ cursor: "pointer" }}
+        // onClick={() => handlePrev()}
+      >
+        <p className="mb-0">of {pageCount}</p>
       </div>
       <div
-        className="bg-primary hover:bg-primaryFade px-3 py-1 rounded-lg text-white text-sm font-semibold w-fit h-fit"
+        className="px-3 py-1 rounded-lg text-secondary text-sm font-semibold w-fit h-fit"
         style={{ cursor: "pointer" }}
         onClick={() => handleNext()}
       >

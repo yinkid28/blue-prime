@@ -1,21 +1,17 @@
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import {
-  ErrorStatusEnum,
-  IUser,
-  OnboardingInitials,
-} from "@/models/onboarding.model";
+import { ErrorStatusEnum, OnboardingInitials } from "@/models/onboarding.model";
+import { IUser } from "@/models/user.model";
+import { layout } from "@chakra-ui/react";
 import constate from "constate";
 import { useCallback, useEffect, useMemo, useReducer } from "react";
 
 export const initialState: OnboardingInitials = {
   progress: 0,
   stage: 0,
-  sidebar: "",
-  loading: true,
+  layout: 0,
   errorMessage: "",
   errorStatus: "error",
   user: null,
-  apiCategory: "Entertainment",
 };
 
 const reducer = (state: any, action: any) => {
@@ -30,10 +26,10 @@ const reducer = (state: any, action: any) => {
         ...state,
         stage: action.payload,
       };
-    case "SET_SIDEBAR":
+    case "SET_LAYOUT":
       return {
         ...state,
-        sidebar: action.payload,
+        layout: action.payload,
       };
     case "SET_LOADING":
       return {
@@ -65,16 +61,8 @@ const useOnboardingContext = () => {
   useEffect(() => {
     setData(state);
   }, [state, setData]);
-  const {
-    progress,
-    stage,
-    sidebar,
-    loading,
-    errorMessage,
-    errorStatus,
-    user,
-    apiCategory,
-  } = state as OnboardingInitials;
+  const { progress, stage, layout, errorMessage, errorStatus, user } =
+    state as OnboardingInitials;
 
   const setProgress = useCallback((progress: number) => {
     dispatch({
@@ -82,33 +70,18 @@ const useOnboardingContext = () => {
       payload: progress,
     });
   }, []);
-  const setApiCategory = useCallback((apiCategory: string) => {
-    dispatch({
-      type: "SET_CATEGORY",
-      payload: apiCategory,
-    });
-  }, []);
+
   const setStage = useCallback((stage: number) => {
     dispatch({
       type: "SET_STAGE",
       payload: stage,
     });
   }, []);
-  const setLoading = useCallback(
-    (loading: boolean) => {
-      dispatch({
-        type: "SET_LOADING",
-        payload: loading,
-      });
-    },
 
-    []
-  );
-
-  const setSidebar = useCallback((sidebar: string) => {
+  const setLayout = useCallback((layout: number) => {
     dispatch({
-      type: "SET_SIDEBAR",
-      payload: sidebar,
+      type: "SET_LAYOUT",
+      payload: layout,
     });
   }, []);
   const setUser = useCallback((user: IUser | null) => {
@@ -132,36 +105,31 @@ const useOnboardingContext = () => {
     () => ({
       progress,
       stage,
-      sidebar,
-      loading,
-      apiCategory,
+      layout,
+
       setProgress,
       user,
       setStage,
-      setSidebar,
-      setLoading,
+      setLayout,
       errorMessage,
       errorStatus,
       setApiErrorMessage,
       setUser,
-      setApiCategory,
     }),
     [
       user,
       progress,
-      apiCategory,
+
       setProgress,
       stage,
       setStage,
-      sidebar,
-      setSidebar,
-      setLoading,
-      loading,
+      layout,
+      setLayout,
+
       errorMessage,
       errorStatus,
       setApiErrorMessage,
       setUser,
-      setApiCategory,
     ]
   );
 };

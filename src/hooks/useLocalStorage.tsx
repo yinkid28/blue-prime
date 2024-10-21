@@ -47,17 +47,15 @@ export function useLocalStorage(key: string, initialValue: any) {
 // export default useLocalStorage;
 
 export function useLogout() {
-  const { setUser } = useOnboarding();
-  const { setUserType, userType } = useUser();
+  const { setUser, setLayout } = useOnboarding();
   const toast = useToast();
   const router = useRouter();
   return function logout() {
     setUser(null);
-    setUserType("webber");
+    setLayout(0);
     CookieManager.deleteCookie("jwt");
-    if (userType === "weaver") {
-      router.push("/onboarding/login");
-    }
+    router.push("/onboarding/login");
+
     toast({
       description: "See you soon!!",
       position: "bottom-right",

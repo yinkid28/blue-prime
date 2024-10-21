@@ -69,14 +69,14 @@ class HTTPClient {
     return withErrorHandling(instance.post(endpoint, data, { headers }));
   }
 
-  static async delete(endpoint: string) {
+  static async delete(endpoint: string, data?: any) {
     const headers = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET",
       "Content-Type": "application/json",
       Authorization: getJWT(),
     };
-    return withErrorHandling(instance.delete(endpoint, { headers }));
+    return withErrorHandling(instance.delete(endpoint, { headers, data }));
   }
 
   static async put(endpoint: string, data: any) {

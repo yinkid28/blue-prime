@@ -1,12 +1,17 @@
-import Layout from "@/components/Layout/layout";
-import NewRole from "@/components/modals/addNewRole";
-import NewUser from "@/components/modals/addNewUser";
+const Layout = dynamic(() => import("@/components/Layout/layout"), {
+  ssr: false,
+});
+import NewRole from "@/components/modals/userManagement/addNewRole";
+import NewUser from "@/components/modals/userManagement/addNewUser";
 import RolesView from "@/components/userManagement/RolesView";
 import UsersView from "@/components/userManagement/UsersView";
-import { Button, EmptyState } from "@/components/utils";
-import { IMockRole, IMockUser } from "@/models/user.model";
+import GlobalPagination, { Button, EmptyState } from "@/components/utils";
+import { useOnboarding } from "@/context/OnboardingContext";
+import { IMockRole, IMockUser, IRole, IUser } from "@/models/user.model";
+import OnboardingServices from "@/services/onboarding_services/onboarding_services";
 import { useDisclosure, useToast } from "@chakra-ui/react";
-import { ChangeEvent, useState } from "react";
+import dynamic from "next/dynamic";
+import { ChangeEvent, useEffect, useState } from "react";
 import { GrFilter } from "react-icons/gr";
 import { MdAdd, MdOutlineFilterAltOff } from "react-icons/md";
 import { RxCross1 } from "react-icons/rx";
@@ -18,8 +23,8 @@ type filterArrayObject = {
 export default function ManageUsers() {
   const toast = useToast();
   const [view, setView] = useState<string>("users");
-  const [users, setUsers] = useState<IMockUser[]>([]);
-  const [roles, setRoles] = useState<IMockRole[]>([]);
+  const [users, setUsers] = useState<IUser[]>([]);
+  const [roles, setRoles] = useState<IRole[]>([]);
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
   const [filterApplied, setFilterApplied] = useState<boolean>(false);
   const [filterOptions, setFilterOptions] = useState({
@@ -27,8 +32,14 @@ export default function ManageUsers() {
     status: "",
     sort: "",
   });
+  const [loading, setLoading] = useState<boolean>(false);
   const [appliedFilters, setAppliedFilters] = useState<filterArrayObject[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { setApiErrorMessage, user } = useOnboarding();
+  const [offset, setOffset] = useState<number>(0);
+  const [pageCount, setPageCount] = useState<number>(0);
+  const [totalCount, setTotalCount] = useState<number>(0);
+  const limit = 10;
   const {
     isOpen: isRoleOpen,
     onOpen: onRoleOpen,
@@ -59,66 +70,57 @@ export default function ManageUsers() {
       setAppliedFilters([...appliedFilters, appliedFilter]);
     }
   };
-  const mockUsers: IMockUser[] = [
-    {
-      fullname: "Bright Bassey",
-      email: "example@gmail.com",
-      role: "CMM",
-      status: "Active",
-    },
-    {
-      fullname: "Naruto Uzumaki",
-      email: "example2@gmail.com",
-      role: "CMM",
-      status: "Active",
-    },
-    {
-      fullname: "Monkey D. Luffy",
-      email: "example3@gmail.com",
-      role: "CMM",
-      status: "Inactive",
-    },
-    {
-      fullname: "Roronoa Zoro",
-      email: "example4@gmail.com",
-      role: "CMM",
-      status: "Active",
-    },
-    {
-      fullname: "vinsmoke Sanji",
-      email: "example5@gmail.com",
-      role: "CMM",
-      status: "Active",
-    },
-    {
-      fullname: "Bright Bassey",
-      email: "example6@gmail.com",
-      role: "CMM",
-      status: "Active",
-    },
-    {
-      fullname: "Bright Bassey",
-      email: "example7@gmail.com",
-      role: "CMM",
-      status: "Active",
-    },
-    {
-      fullname: "Bright Bassey",
-      email: "example8@gmail.com",
-      role: "CMM",
-      status: "Active",
-    },
-  ];
-  const mockRoles: IMockRole[] = [
-    { title: "System Administratorrreerwrwrwwrwrr", noU: 20, noP: 12 },
-    { title: "CCM", noU: 20, noP: 12 },
-    { title: "CMD", noU: 20, noP: 12 },
-    { title: "System Administrator", noU: 20, noP: 12 },
-    { title: "System Administrator", noU: 20, noP: 12 },
-    { title: "System Administrator", noU: 20, noP: 12 },
-    { title: "System Administrator", noU: 20, noP: 12 },
-    { title: "System Administrator", noU: 20, noP: 12 },
-  ];
+  useEffect(() => {
+    if (view === "users") {
+      getAllUsers(offset, limit);
+    } else {
+      getAllRoles(offset, limit);
+    }
+  }, [view]);
+  const handlePageClick = (page: number) => {
+    const newOffset = page;
+    setOffset(newOffset);
+    if (view === "users") {
+      getAllUsers(page, limit);
+    } else {
+      getAllRoles(page, limit);
+    }
+  };
+  const getAllUsers = async (pageNo: number, pageSize: number) => {
+    setLoading(true);
+    try {
+      const res = await OnboardingServices.getAllUsers(pageNo, pageSize);
+      setUsers(res.data.users);
+      setLoading(false);
+      setPageCount(res.data.totalPages);
+      setTotalCount(res.data.totalItems);
+    } catch (error: any) {
+      console.log(error);
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+
+      setApiErrorMessage(errorMessage, "error");
+      return;
+    }
+  };
+  const getAllRoles = async (pageNo: number, pageSize: number) => {
+    setLoading(true);
+    try {
+      const res = await OnboardingServices.getAllRoles(pageNo, pageSize);
+      setRoles(res.data.roles);
+      setLoading(false);
+      setPageCount(res.data.totalPages);
+      setTotalCount(res.data.totalItems);
+    } catch (error: any) {
+      console.log(error);
+
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+
+      setApiErrorMessage(errorMessage, "error");
+      return;
+    }
+  };
   return (
     <Layout page="Manage Users">
       <div className="flex flex-col gap-8 h-full w-full">
@@ -159,10 +161,10 @@ export default function ManageUsers() {
               type="fit"
               onClick={() => {
                 if (view === "users") {
-                  setUsers(mockUsers);
                   onOpen();
                 } else {
-                  setRoles(mockRoles);
+                  // setRoles(mockRoles);
+                  onRoleOpen();
                 }
               }}
               icon={<MdAdd />}
@@ -170,11 +172,21 @@ export default function ManageUsers() {
           </div>
         </div>
         {view === "users" ? (
-          <p className="text-xl text-[#052113]">
-            Showing {users.length} of 24 users
-          </p>
+          <>
+            {users.length > 0 ? (
+              <p className="text-xl text-[#052113]">
+                Showing {users.length} users of {totalCount}
+              </p>
+            ) : null}
+          </>
         ) : (
-          <p className="text-xl text-[#052113]">Showing {roles.length} roles</p>
+          <>
+            {roles.length > 0 ? (
+              <p className="text-xl text-[#052113]">
+                Showing {roles.length} roles {totalCount}
+              </p>
+            ) : null}
+          </>
         )}
         {filterOpen ? (
           <>
@@ -308,10 +320,29 @@ export default function ManageUsers() {
             )}
           </>
         ) : null}
-        {view === "users" ? <UsersView users={users} /> : null}
-        {view === "roles" ? <RolesView roles={roles} /> : null}
+        {view === "users" ? (
+          <UsersView
+            users={users}
+            openUserModal={onOpen}
+            openRoleModal={onRoleOpen}
+            loading={loading}
+          />
+        ) : null}
+        {view === "roles" ? (
+          <RolesView
+            roles={roles}
+            openRoleModal={onRoleOpen}
+            loading={loading}
+          />
+        ) : null}
         <NewUser isOpen={isOpen} onClose={onClose} onRoleOpen={onRoleOpen} />
         <NewRole isOpen={isRoleOpen} onClose={onRoleClose} />
+        <div className="flex justify-end">
+          <GlobalPagination
+            onPageClick={handlePageClick}
+            pageCount={pageCount}
+          />
+        </div>
       </div>
     </Layout>
   );

@@ -11,15 +11,15 @@ import {
   FormLabel,
   useToast,
 } from "@chakra-ui/react";
-import OnboardingLayout from "@/components/Layout/onboardingLayout";
 import { Button, Input } from "@/components/utils";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { SignInDto } from "@/models/onboarding.model";
 import { Field, Form, Formik } from "formik";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { FaChevronLeft } from "react-icons/fa";
+
+import OnboardingServices from "@/services/onboarding_services/onboarding_services";
+import { CreateUser, IRole } from "@/models/user.model";
 type NewCategoryModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -34,24 +34,45 @@ export default function NewUser({
   const [loading, setLoading] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+  const [roles, setRoles] = useState<IRole[]>([]);
   const toast = useToast();
   const router = useRouter();
   const [email, setEmail] = useState<string>("");
 
-  const { setApiErrorMessage } = useOnboarding();
+  const { setApiErrorMessage, user } = useOnboarding();
   const initialValues = {
-    email: "",
     name: "",
-    role: "",
+    jobTitle: "",
+    officeEmail: "",
+    officePhoneNumber: "",
+    createdBy: "",
+    password: "",
+    roleIds: "",
   };
   useEffect(() => {
     setLoading(false);
+    getAllRoles();
   }, []);
+
+  const getAllRoles = async () => {
+    try {
+      const res = await OnboardingServices.getAllRoles();
+      setRoles(res.data.roles);
+    } catch (error: any) {
+      console.log(error);
+
+      setLoading(false);
+      const errorMessage = error?.response?.data?.message;
+
+      setApiErrorMessage(errorMessage, "error");
+      return;
+    }
+  };
 
   function validate(values: any) {
     // setErrorMessage("");
     const errors: any = {};
-    if (!values.email) {
+    if (!values.officeEmail) {
       errors.email = "This field is required";
     }
     if (!values.name) {
@@ -62,6 +83,15 @@ export default function NewUser({
     if (!values.role) {
       errors.role = "This field is required";
     }
+    if (!values.officePhoneNumber) {
+      errors.officePhoneNumber = "This field is required";
+    }
+    if (!values.password) {
+      errors.password = "This field is required";
+    }
+    if (!values.jobTitle) {
+      errors.jobTitle = "This field is required";
+    }
     //
 
     return errors;
@@ -70,32 +100,26 @@ export default function NewUser({
   async function onSubmit(values: any, actions: any) {
     setLoading(true);
     try {
-      const loginData = {
-        email: values.email,
-        role: values.role,
+      const Data: CreateUser = {
+        officeEmail: values.officeEmail,
+        roleIds: [parseInt(values.role)],
         name: values.name,
+        jobTitle: values.jobTitle,
+        officePhoneNumber: values.officePhoneNumber,
+        createdBy: user?.name as string,
+        password: values.password,
       };
 
-      //   const loginres = await OnboardingServices.signInUser(loginData);
-      //   actions.setSubmitting(false);
-      //   CookieManager.setCookie("jwt", loginres.data.jwt, 12);
-      //   toast({
-      //     status: "success",
-      //     description: "Welcome",
-      //     position: "bottom-right",
-      //   });
-
-      //   setUser(loginres.data.user);
-      //   if (loginres.data.user.roles.some((r: Irole) => r.id === 1)) {
-      //     router.push({
-      //       pathname: "/api_discovery",
-      //     });
-      //     setUserType("webber");
-      //   } else {
-      //     router.push({
-      //       pathname: "/admin_back_office/category_management",
-      //     });
-      //   }
+      const res = await OnboardingServices.CreateUser(Data);
+      if (res.status === "OK") {
+        actions.setSubmitting(false);
+        toast({
+          status: "success",
+          description: `User ${res.data.name} has been added successfully`,
+          position: "bottom-right",
+        });
+        onClose();
+      }
     } catch (error: any) {
       console.log(error);
       actions.setSubmitting(false);
@@ -114,7 +138,7 @@ export default function NewUser({
         <ModalHeader className="">
           <div className="flex flex-col ">
             <p className="text-[24px] font-bold">New User</p>
-            <p className="text-[16px] text-mid-grey">
+            <p className="text-[16px] text-[#757575]">
               A mail will be sent to the user to complete their account setup
             </p>
           </div>
@@ -132,7 +156,7 @@ export default function NewUser({
           }}
         />
         <ModalBody className="w-full rounded-lg bg-white">
-          <div className=" rounded-xl flex flex-col gap-3 p-5 ">
+          <div className=" rounded-xl flex flex-col gap-3  ">
             <div className="w-full">
               <Formik
                 initialValues={initialValues}
@@ -141,11 +165,13 @@ export default function NewUser({
               >
                 {(props) => (
                   <Form>
-                    <Field name="email">
+                    <Field name="officeEmail">
                       {({ field, form }: { field: any; form: any }) => (
                         <FormControl
                           mt={3}
-                          isInvalid={form.errors.email && form.touched.email}
+                          isInvalid={
+                            form.errors.officeEmail && form.touched.officeEmail
+                          }
                         >
                           <FormLabel fontSize="14px" fontWeight={500} mb={1}>
                             Email Address
@@ -158,7 +184,7 @@ export default function NewUser({
                           />
 
                           <FormErrorMessage>
-                            {form.errors.email}
+                            {form.errors.officeEmail}
                           </FormErrorMessage>
                         </FormControl>
                       )}
@@ -185,6 +211,80 @@ export default function NewUser({
                         </FormControl>
                       )}
                     </Field>
+                    <Field name="jobTitle">
+                      {({ field, form }: { field: any; form: any }) => (
+                        <FormControl
+                          mt={3}
+                          isInvalid={
+                            form.errors.jobTitle && form.touched.jobTitle
+                          }
+                        >
+                          <FormLabel fontSize="14px" fontWeight={500} mb={1}>
+                            Job Title
+                          </FormLabel>
+                          <Input
+                            // secondaryElement
+                            type="text"
+                            placeholder="Your name (Jane Foster)"
+                            field={{ ...field }}
+                          />
+
+                          <FormErrorMessage>
+                            {form.errors.jobTitle}
+                          </FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+                    <Field name="officePhoneNumber">
+                      {({ field, form }: { field: any; form: any }) => (
+                        <FormControl
+                          mt={3}
+                          isInvalid={
+                            form.errors.officePhoneNumber &&
+                            form.touched.officePhoneNumber
+                          }
+                        >
+                          <FormLabel fontSize="14px" fontWeight={500} mb={1}>
+                            Phone number
+                          </FormLabel>
+                          <Input
+                            // secondaryElement
+                            type="text"
+                            placeholder="Enter Phone number"
+                            field={{ ...field }}
+                          />
+
+                          <FormErrorMessage>
+                            {form.errors.officePhoneNumber}
+                          </FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+                    <Field name="password">
+                      {({ field, form }: { field: any; form: any }) => (
+                        <FormControl
+                          mt={3}
+                          isInvalid={
+                            form.errors.password && form.touched.password
+                          }
+                        >
+                          <FormLabel fontSize="14px" fontWeight={500} mb={1}>
+                            Password
+                          </FormLabel>
+                          <Input
+                            // secondaryElement
+                            type="text"
+                            placeholder="Insert Password"
+                            field={{ ...field }}
+                            secondaryElement
+                          />
+
+                          <FormErrorMessage>
+                            {form.errors.password}
+                          </FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
 
                     <Field name="role">
                       {({ field, form }: { field: any; form: any }) => (
@@ -202,7 +302,11 @@ export default function NewUser({
                             className="p-2 w-full rounded-lg border"
                           >
                             <option value="">Assign a role to the user</option>
-                            <option value="CCM">CCM</option>
+                            {roles.map((item, index) => (
+                              <option value={item.id} key={index}>
+                                {item.roleName}
+                              </option>
+                            ))}
                           </select>
 
                           <FormErrorMessage>
@@ -211,7 +315,7 @@ export default function NewUser({
                         </FormControl>
                       )}
                     </Field>
-                    <div
+                    {/* <div
                       className="mt-2 flex items-center cursor-pointer gap-2"
                       onClick={onRoleOpen}
                     >
@@ -230,7 +334,7 @@ export default function NewUser({
                       <p className="text-[#474A57]">
                         Can’t find the role? Create a user role
                       </p>
-                    </div>
+                    </div> */}
 
                     <div className="my-5 flex gap-2 items-center justify-end">
                       <button

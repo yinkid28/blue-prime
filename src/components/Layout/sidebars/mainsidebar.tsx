@@ -17,6 +17,10 @@ import {
   DrawerContent,
   useDisclosure,
   Show,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
 import { FaFileSignature, FaFolder } from "react-icons/fa";
 import { useApi } from "@/context/ApiDiscoveryContext";
@@ -26,12 +30,14 @@ import { Icon } from "@iconify/react";
 import { IoIosList, IoMdNotificationsOutline } from "react-icons/io";
 import { RiUserSettingsLine } from "react-icons/ri";
 import { AiOutlineUser } from "react-icons/ai";
+import { useLogout } from "@/hooks/useLocalStorage";
 export default function MainSidebar() {
   const router = useRouter();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { bookmarkedAPIs, libraryView, setLibraryView } = useApi();
   const { user } = useOnboarding();
+  const logout = useLogout();
   const [activeItem, setActiveItem] = useState("saved");
 
   return (
@@ -61,11 +67,11 @@ export default function MainSidebar() {
                   <DrawerBody className="space-y-4 mt-16">
                     <div
                       className={`px-5 py-1 rounded-xl flex items-center cursor-pointer ease-in-out duration-700 hover:text-secondary hover:bg-secondaryBg gap-3 w-full ${
-                        router.asPath == "/api_discovery"
+                        router.asPath.includes("/dashboard")
                           ? "text-secondary bg-secondaryBg font-semibold"
                           : "text-dark-grey"
                       }`}
-                      onClick={() => router.push("/api_discovery")}
+                      // onClick={() => router.push("/api_discovery")}
                     >
                       <MdOutlineMapsHomeWork />
                       <p className="">Home</p>
@@ -73,40 +79,40 @@ export default function MainSidebar() {
 
                     <div
                       className={`px-5 py-1 rounded-xl flex items-center cursor-pointer ease-in-out duration-700 hover:text-secondary hover:bg-secondaryBg gap-3 w-full ${
-                        router.asPath == "/api_discovery"
+                        router.asPath.includes("/manage_users")
                           ? "text-secondary bg-secondaryBg font-semibold"
                           : "text-dark-grey"
                       }`}
-                      onClick={() => router.push("/api_discovery")}
+                      // onClick={() => router.push("/api_discovery")}
                     >
                       <MdInsertChartOutlined />
                       <p className="">Reports</p>
                     </div>
                     <div
                       className={`px-5 py-1 rounded-xl flex items-center cursor-pointer ease-in-out duration-700 hover:text-secondary hover:bg-secondaryBg gap-3 w-full ${
-                        router.asPath == "/api_discovery"
+                        router.asPath.includes("/manage_users")
                           ? "text-secondary bg-secondaryBg font-semibold"
                           : "text-dark-grey"
                       }`}
-                      onClick={() => router.push("/api_discovery")}
+                      // onClick={() => router.push("/api_discovery")}
                     >
                       <FaFileSignature />
                       <p className="">Delivery Plans</p>
                     </div>
                     <div
                       className={`px-5 py-1 rounded-xl flex items-center cursor-pointer ease-in-out duration-700 hover:text-secondary hover:bg-secondaryBg gap-3 w-full ${
-                        router.asPath == "/api_discovery"
+                        router.asPath.includes("/manage_users")
                           ? "text-secondary bg-secondaryBg font-semibold"
                           : "text-dark-grey"
                       }`}
-                      onClick={() => router.push("/api_discovery")}
+                      // onClick={() => router.push("/api_discovery")}
                     >
                       <IoIosList />
                       <p className="">Change Log</p>
                     </div>
                     <div
                       className={`px-5 py-1 rounded-xl flex items-center cursor-pointer ease-in-out duration-700 hover:text-secondary hover:bg-secondaryBg gap-3 w-full ${
-                        router.asPath == "/manage_users"
+                        router.asPath.includes("/manage_users")
                           ? "text-secondary bg-secondaryBg font-semibold"
                           : "text-dark-grey"
                       }`}
@@ -121,7 +127,7 @@ export default function MainSidebar() {
                           ? "text-secondary bg-secondaryBg font-semibold"
                           : "text-dark-grey"
                       }`}
-                      onClick={() => router.push("/api_discovery")}
+                      // onClick={() => router.push("/api_discovery")}
                     >
                       <IoMdNotificationsOutline />
                       <p className="">Notifications</p>
@@ -133,11 +139,11 @@ export default function MainSidebar() {
             <div className="flex flex-col gap-4">
               <div
                 className={`px-5 py-1 rounded-xl flex items-center cursor-pointer ease-in-out duration-700 hover:text-secondary hover:bg-secondaryBg gap-3 w-full ${
-                  router.asPath == "/api_discovery"
+                  router.asPath.includes("/dashboard")
                     ? "text-secondary bg-secondaryBg font-semibold"
                     : "text-dark-grey"
                 }`}
-                onClick={() => router.push("/api_discovery")}
+                onClick={() => router.push("/dashboard")}
               >
                 <MdOutlineMapsHomeWork />
                 <p className="">Home</p>
@@ -145,40 +151,40 @@ export default function MainSidebar() {
 
               <div
                 className={`px-5 py-1 rounded-xl flex items-center cursor-pointer ease-in-out duration-700 hover:text-secondary hover:bg-secondaryBg gap-3 w-full ${
-                  router.asPath == "/api_discovery"
+                  router.asPath.includes("/gg")
                     ? "text-secondary bg-secondaryBg font-semibold"
                     : "text-dark-grey"
                 }`}
-                onClick={() => router.push("/api_discovery")}
+                // onClick={() => router.push("/api_discovery")}
               >
                 <MdInsertChartOutlined />
                 <p className="">Reports</p>
               </div>
               <div
                 className={`px-5 py-1 rounded-xl flex items-center cursor-pointer ease-in-out duration-700 hover:text-secondary hover:bg-secondaryBg gap-3 w-full ${
-                  router.asPath == "/api_discovery"
+                  router.asPath.includes("/gg")
                     ? "text-secondary bg-secondaryBg font-semibold"
                     : "text-dark-grey"
                 }`}
-                onClick={() => router.push("/api_discovery")}
+                // onClick={() => router.push("/api_discovery")}
               >
                 <FaFileSignature />
                 <p className="">Delivery Plans</p>
               </div>
               <div
                 className={`px-5 py-1 rounded-xl flex items-center cursor-pointer ease-in-out duration-700 hover:text-secondary hover:bg-secondaryBg gap-3 w-full ${
-                  router.asPath == "/api_discovery"
+                  router.asPath.includes("/gg")
                     ? "text-secondary bg-secondaryBg font-semibold"
                     : "text-dark-grey"
                 }`}
-                onClick={() => router.push("/api_discovery")}
+                // onClick={() => router.push("/api_discovery")}
               >
                 <IoIosList />
                 <p className="">Change Log</p>
               </div>
               <div
                 className={`px-5 py-1 rounded-xl flex items-center cursor-pointer ease-in-out duration-700 hover:text-secondary hover:bg-secondaryBg gap-3 w-full ${
-                  router.asPath == "/manage_users"
+                  router.asPath.includes("/manage_users")
                     ? "text-secondary bg-secondaryBg font-semibold"
                     : "text-dark-grey"
                 }`}
@@ -189,11 +195,11 @@ export default function MainSidebar() {
               </div>
               <div
                 className={`px-5 py-1 rounded-xl flex items-center cursor-pointer ease-in-out duration-700 hover:text-secondary hover:bg-secondaryBg gap-3 w-full ${
-                  router.asPath == "/api_discovery"
+                  router.asPath.includes("/gg")
                     ? "text-secondary bg-secondaryBg font-semibold"
                     : "text-dark-grey"
                 }`}
-                onClick={() => router.push("/api_discovery")}
+                // onClick={() => router.push("/api_discovery")}
               >
                 <IoMdNotificationsOutline />
                 <p className="">Notifications</p>
@@ -204,46 +210,54 @@ export default function MainSidebar() {
             <div className="flex items-center gap-2">
               <AiOutlineUser className="text-secondary text-xl" />
               <div className="flex text-sm flex-col">
-                <p className="font-semibold">Amos Adamu</p>
-                <p className="text-mid-grey">CDM</p>
+                <p className="font-semibold">{user?.name}</p>
+                <p className="text-mid-grey">{user?.roles[0].roleName}</p>
               </div>
             </div>
-            <svg
-              width="10"
-              height="16"
-              viewBox="0 0 10 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M4.99957 1.25L1.30957 5.25"
-                stroke="#959595"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M5 1.25L8.69 5.25"
-                stroke="#959595"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M4.99957 14.75L1.30957 10.75"
-                stroke="#959595"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M5 14.75L8.69 10.75"
-                stroke="#959595"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <Menu>
+              <MenuButton>
+                <svg
+                  width="10"
+                  height="16"
+                  viewBox="0 0 10 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  cursor={"pointer"}
+                >
+                  <path
+                    d="M4.99957 1.25L1.30957 5.25"
+                    stroke="#959595"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M5 1.25L8.69 5.25"
+                    stroke="#959595"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M4.99957 14.75L1.30957 10.75"
+                    stroke="#959595"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M5 14.75L8.69 10.75"
+                    stroke="#959595"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </MenuButton>
+              <MenuList>
+                <MenuItem onClick={logout}>Logout</MenuItem>
+              </MenuList>
+            </Menu>
           </div>
         </div>
       </div>

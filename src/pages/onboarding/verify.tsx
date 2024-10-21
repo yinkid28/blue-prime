@@ -19,13 +19,10 @@ export default function VerifyLogin() {
   const toast = useToast();
   const [email, setEmail] = useState<string>("");
 
-  const { setLoading, setApiErrorMessage, setUser } = useOnboarding();
+  const { setApiErrorMessage, setUser } = useOnboarding();
   const initialValues = {
     loginCode: "",
   };
-  useEffect(() => {
-    setLoading(false);
-  }, []);
 
   function validate(values: any) {
     // setErrorMessage("");
@@ -44,7 +41,6 @@ export default function VerifyLogin() {
   }
 
   async function onSubmit(values: any, actions: any) {
-    setLoading(true);
     try {
       const loginData: SignInDto = {
         email: values.email,
@@ -75,7 +71,6 @@ export default function VerifyLogin() {
       console.log(error);
       actions.setSubmitting(false);
 
-      setLoading(false);
       const errorMessage = error?.response?.data?.message;
 
       setApiErrorMessage(errorMessage, "error");

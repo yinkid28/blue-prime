@@ -38,3 +38,24 @@ export function getFormattedDate(date: string) {
   const formattedDate = `${weekday} ${day} ${month}, ${year}`;
   return formattedDate;
 }
+
+export const handleLastModified = (file: File) => {
+  const lastModified = new Date(file.lastModified);
+  const today = new Date();
+  const timeDiff = today.getTime() - lastModified.getTime();
+
+  const sec = Math.floor((timeDiff / 1000) % 60);
+  const mins = Math.floor((timeDiff / (1000 * 60)) % 60);
+  const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
+  const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+  if (days > 0) {
+    return `${days} day${days > 1 ? "s" : ""} ago`;
+  } else if (hours > 0) {
+    return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+  } else if (mins > 0) {
+    return `${mins} minute${mins > 1 ? "s" : ""} ago`;
+  } else {
+    return `${sec} second${sec > 1 ? "s" : ""} ago`;
+  }
+};

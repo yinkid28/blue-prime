@@ -1,13 +1,19 @@
+import { IRole } from "@/models/user.model";
+import { Dispatch, SetStateAction } from "react";
 import { RxDividerVertical } from "react-icons/rx";
 
 type roleCardProps = {
-  title: string;
-  noU: number;
-  noP: number;
+  role: IRole;
+  openEdit: () => void;
+  setSelected: Dispatch<SetStateAction<IRole | undefined>>;
 };
-export default function RoleCard({ title, noU, noP }: roleCardProps) {
+export default function RoleCard({
+  role,
+  openEdit,
+  setSelected,
+}: roleCardProps) {
   return (
-    <div className="h-[150px] border-l-[3px] rounded-lg p-2 border-secondary bg-[#FAFAFACC] flex flex-col justify-between">
+    <div className="h-[150px] border-l-[3px] hover:shadow-md cursor-pointer rounded-lg p-2 border-secondary bg-[#FAFAFACC] flex flex-col justify-between">
       <svg
         width="40"
         height="40"
@@ -34,25 +40,39 @@ export default function RoleCard({ title, noU, noP }: roleCardProps) {
         </defs>
       </svg>
       <p className="text-[#474A57] font-[500] max-w-[200px] text-nowrap text-ellipsis overflow-hidden">
-        {title}
+        {role?.roleName}
       </p>
       <div className="flex items-center gap-1">
         <p className="text-xs text-[#757575]">
-          Users <span className="text-[#474A57] font-semibold">{noU}</span>
+          Users <span className="text-[#474A57] font-semibold"></span>
         </p>
         <RxDividerVertical className="text-[#D5D5D5]" />
         <p className="text-xs text-[#757575]">
           Permissions{" "}
-          <span className="text-[#474A57] font-semibold">{noP}</span>
+          <span className="text-[#474A57] font-semibold">
+            {role.policies.length}
+          </span>
         </p>
       </div>
       <div className="flex items-center gap-2">
-        <button className="text-xs text-secondary border-b-[1px] border-primary">
+        <button
+          className="text-xs text-secondary border-b-[1px] border-primary"
+          onClick={() => {
+            openEdit();
+            setSelected(role);
+          }}
+        >
           Edit
         </button>
         <RxDividerVertical className="text-[#D5D5D5]" />
-        <button className="text-xs text-secondary border-b-[1px] border-primary">
-          Delete
+        <button
+          className="text-xs text-secondary border-b-[1px] border-primary"
+          onClick={() => {
+            // openEdit();
+            setSelected(role);
+          }}
+        >
+          Disable
         </button>
       </div>
     </div>
