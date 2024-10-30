@@ -143,7 +143,7 @@ export default function UsersView({
               data={users}
               render={(item: IUser, index: number) => (
                 <tr key={index}>
-                  <th className="text-left px-6">
+                  <td className="text-left px-6">
                     <Checkbox
                       name={`user-${index}`}
                       isChecked={selectedUsers.some(
@@ -151,8 +151,8 @@ export default function UsersView({
                       )}
                       onChange={(e) => handleSelectedUsers(e, index)}
                     />
-                  </th>
-                  <th className="p-2">
+                  </td>
+                  <td className="p-2">
                     <div className="flex items-center gap-2">
                       <div className="w-[30px] h-[30px] bg-light-grey rounded-lg flex items-center text-[#052113] justify-center font-semibold ">
                         {item.name.charAt(0)}
@@ -166,16 +166,16 @@ export default function UsersView({
                         </p> */}
                       </div>
                     </div>
-                  </th>
-                  <th className="p-2">
+                  </td>
+                  <td className="p-2">
                     <p className="text-sm text-left">{item.officeEmail}</p>
-                  </th>
-                  <th className="p-2">
+                  </td>
+                  <td className="p-2">
                     <p className="text-sm font-semibold text-left">
                       {item.roles[0]?.roleName}
                     </p>
-                  </th>
-                  <th className="p-2">
+                  </td>
+                  <td className="p-2">
                     <div
                       className={`w-fit h-fit px-3 py-1 border-[1px] text-sm rounded-full ${
                         item.onboardingCompleted && !item.deleted
@@ -187,8 +187,8 @@ export default function UsersView({
                         ? "Active"
                         : "Inactive"}
                     </div>
-                  </th>
-                  <th className="p-2">
+                  </td>
+                  <td className="p-2">
                     <div className="flex items-center gap-2">
                       <RiEyeLine
                         className="cursor-pointer hover:text-secondary"
@@ -211,7 +211,7 @@ export default function UsersView({
                         }}
                       />
                     </div>
-                  </th>
+                  </td>
                 </tr>
               )}
             ></Table.Body>

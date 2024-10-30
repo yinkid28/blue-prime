@@ -232,3 +232,27 @@ export const defaultData = [
     Amount: "5284.87",
   },
 ];
+
+export const MockADP = [
+  {
+    name: "ADP 2022",
+    lastModified: "last updated 2 days ago",
+    Author: "Amos Adamu",
+    product: "LNG",
+    status: "Paused Editing",
+  },
+  {
+    name: "ADP 2023",
+    lastModified: "last updated 2 days ago",
+    Author: "Amos Adamu",
+    product: "LNG",
+    status: "Paused Editing",
+  },
+  {
+    name: "ADP 2024",
+    lastModified: "last updated 2 days ago",
+    Author: "Amos Adamu",
+    product: "LNG",
+    status: "Paused Editing",
+  },
+];

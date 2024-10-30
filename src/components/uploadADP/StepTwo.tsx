@@ -11,49 +11,170 @@ import {
   CellDirective,
   ColumnDirective,
   UsedRangeModel,
+  BeforeSaveEventArgs,
+  SaveCompleteEventArgs,
 } from "@syncfusion/ej2-react-spreadsheet";
 import { SpreadsheetComponent } from "@syncfusion/ej2-react-spreadsheet";
+import {
+  DataManager,
+  Query,
+  UrlAdaptor,
+  WebApiAdaptor,
+} from "@syncfusion/ej2-data";
 import { defaultData } from "../../../constants";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { handleLastModified } from "@/helper_utils/helpers";
 import { RxCross2 } from "react-icons/rx";
 import { MdCheck } from "react-icons/md";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import { useRouter } from "next/router";
+import { getJWT } from "@/services/httpInstance/wrappedinstance";
+import ADPServices from "@/services/adp_services/adp_services";
+import { useOnboarding } from "@/context/OnboardingContext";
+import { Skeleton, Spinner, useToast } from "@chakra-ui/react";
+import CustomWebApiAdaptor from "@/helper_utils/customApiAdaptor";
+import { IUploadError } from "@/models/adp.model";
+import { BiError } from "react-icons/bi";
 type steponeProps = {
   setStep: Dispatch<SetStateAction<number>>;
   step: number;
   file: File | null;
   onClose: () => void;
 };
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+
 export default function StepTwo({
   setStep,
   step,
   file,
   onClose,
 }: steponeProps) {
+  const router = useRouter();
+  const toast = useToast();
+  const { year, product } = router.query;
   const [disabled, setDisabled] = useState<boolean>(true);
   const [preclose, setPreclose] = useState<boolean>(false);
   const [showValidations, setShowValidations] = useState<boolean>(true);
-  let spreadsheet: any;
+  const [loading, setLoading] = useState<boolean>(false);
+  const [data, setData] = useState<any[]>([]);
+  const [errors, setErrors] = useState<IUploadError[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const { setApiErrorMessage, user } = useOnboarding();
+  const spreadsheetRef = useRef<SpreadsheetComponent | null>(null);
+
   const boldRight = { fontWeight: "bold", textAlign: "right" };
   const bold = { fontWeight: "bold" };
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "PUT",
+    "Content-Type": "application/json",
+    Authorization: getJWT(),
+  };
+  // const remoteData = new DataManager({
+  //   url: `${baseURL}/upload/api/excel/records/${templateId}`,
+  //   adaptor: new CustomWebApiAdaptor(),
+  //   crossDomain: true,
+  //   headers: [
+  //     { Authorization: `${getJWT()}` },
+  //     { "Content-Type": "application/json" },
+  //     { "Access-Control-Allow-Origin": "*" },
+  //   ],
+  //   // Remove all default queries and manually control them
+  //   // Set up query parameters (optional if only reading data)
+  // });
+
+  // console.log(remoteData);
+  const uploadFile = async (
+    year: number,
+    product: string,
+    uploadedBy: string,
+    file: File
+  ) => {
+    setLoading(true);
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file as File);
+      formData.append("templateYear", year.toString());
+      formData.append("product", product);
+      formData.append("uploadedBy", uploadedBy);
+
+      try {
+        const res = await ADPServices.UploadAdp(formData);
+        if (res.templateId !== undefined) {
+          setLoading(false);
+          handlesetNextStep();
+          router.push(
+            {
+              pathname: router.pathname,
+              query: { templateId: res.templateId },
+            },
+            undefined,
+            { shallow: true }
+          );
+        }
+      } catch (error: any) {
+        console.log(error);
+        router.push(
+          {
+            pathname: router.pathname,
+            query: { year, product },
+          },
+          undefined,
+          { shallow: true }
+        );
+        setLoading(false);
+        const errors = error?.response?.data?.errors;
+        setErrors(errors);
+        return;
+      }
+    }
+  };
+  // const getExcelRecords = async (id: number) => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await ADPServices.getExcelRecordsById(id);
+  //     if (res) {
+  //       setData(res);
+  //       setLoading(false);
+  //     }
+  //   } catch (error: any) {
+  //     console.log(error);
+
+  //     setLoading(false);
+  //     const errorMessage = error?.response?.data?.message;
+
+  //     setApiErrorMessage(errorMessage, "error");
+  //     return;
+  //   }
+  // };
+
   const onCreated = () => {
-    // Apply styles to the specified range in the active sheet.
-    spreadsheet.cellFormat(
-      { fontWeight: "bold", textAlign: "center", verticalAlign: "middle" },
-      "A1:F1"
-    );
-    // Apply format to the specified range in the active sheet.
-    spreadsheet.numberFormat("$#,##0.00", "F2:F31");
-    // The default format code for the date format is 'm/d/yyyy'.
-    spreadsheet.numberFormat("m/d/yyyy", "E2:E30");
-    // let usedRange: UsedRangeModel = spreadsheet.sheets[0].usedRange;
-    // let sheetHeight: number =
-    //   spreadsheet.element.querySelector(".e-main-panel").clientHeight;
-    // if (usedRange.rowIndex) {
-    //   let height: number = Math.floor(sheetHeight / usedRange.rowIndex);
-    //   spreadsheet.setRowsHeight(height);
-    // }
+    setIsInitialized(true);
+    const spreadsheet = spreadsheetRef.current;
+    if (spreadsheet) {
+      // Apply styles to the specified range in the active sheet.
+      spreadsheet.cellFormat(
+        { fontWeight: "bold", textAlign: "center", verticalAlign: "middle" },
+        "A1:Z1"
+      );
+      spreadsheet.open({ file: file as File });
+      setLoading(false);
+      // spreadsheet.numberFormat("m/d/yyyy hh:mm AM/PM", "A2:A500");
+      // spreadsheet.numberFormat("m/d/yyyy hh:mm AM/PM", "C2:C500");
+      // spreadsheet.numberFormat("m/d/yyyy hh:mm AM/PM", "D2:D500");
+      // spreadsheet.numberFormat("m/d/yyyy hh:mm AM/PM", "I2:I500");
+      // Apply format to the specified range in the active sheet.
+      // spreadsheet.numberFormat("$#,##0.00", "F2:F31");
+      // The default format code for the date format is 'm/d/yyyy'.
+      // spreadsheet.numberFormat("m/d/yyyy", "E2:E30");
+      // let usedRange: UsedRangeModel = spreadsheet.sheets[0].usedRange;
+      // let sheetHeight: number =
+      //   spreadsheet.element.querySelector(".e-main-panel").clientHeight;
+      // if (usedRange.rowIndex) {
+      //   let height: number = Math.floor(sheetHeight / usedRange.rowIndex);
+      //   spreadsheet.setRowsHeight(height);
+      // }
+    }
   };
   const handlesetNextStep = () => {
     const nextStep = step + 1;
@@ -65,9 +186,56 @@ export default function StepTwo({
     localStorage.setItem("step", `${prevStep}`);
     setStep(prevStep);
   };
-  setTimeout(() => {
-    setDisabled(false);
-  }, 2000);
+  // useEffect(() => {
+  //   if (templateId) {
+  //     getExcelRecords(parseInt(templateId));
+  //   }
+  // }, [templateId]);
+  const beforeSave = (args: BeforeSaveEventArgs): void => {
+    args.needBlobData = true; // To trigger the saveComplete event.
+    args.isFullPost = false; // Get the spreadsheet data as blob data in the saveComplete event.
+  };
+  const triggerSave = () => {
+    if (spreadsheetRef.current) {
+      spreadsheetRef.current.save({
+        fileName: "modified.xlsx",
+        saveType: "Xlsx", // Choose the desired format
+      });
+      setLoading(true);
+    }
+  };
+  useEffect(() => {
+    const err =
+      typeof window != undefined
+        ? JSON.parse(localStorage.getItem("errors") as string)
+        : null;
+    if (err) {
+      setErrors(err);
+    }
+  }, []);
+  const saveComplete = (args: SaveCompleteEventArgs): void => {
+    // To obtain the blob data.
+    console.log("Spreadsheet BlobData :", args.blobData);
+    const file = new File([args.blobData], "modified.xlsx", {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    uploadFile(
+      parseInt(year as string),
+      product as string,
+      user?.name as string,
+      file
+    );
+  };
+  const onDataBound = () => {
+    const spreadsheet = spreadsheetRef.current;
+
+    // if (spreadsheet && isInitialized) {
+    //   spreadsheet.numberFormat("m/d/yyyy hh:mm AM/PM", "A2:A500");
+    //   spreadsheet.numberFormat("m/d/yyyy hh:mm AM/PM", "C2:C500");
+    //   spreadsheet.numberFormat("m/d/yyyy hh:mm AM/PM", "D2:D500");
+    //   spreadsheet.numberFormat("m/d/yyyy hh:mm AM/PM", "I2:I500");
+    // }
+  };
   return (
     <div className="w-full">
       <div className="flex flex-col w-full">
@@ -111,7 +279,7 @@ export default function StepTwo({
               xmlns="http://www.w3.org/2000/svg"
             >
               <rect width="40" height="40" rx="10" fill="#F5F5F5" />
-              <g clip-path="url(#clip0_129_1435)">
+              <g clipPath="url(#clip0_129_1435)">
                 <path
                   d="M10.859 10.877L23.429 9.08197C23.5 9.07179 23.5723 9.07699 23.641 9.0972C23.7098 9.11741 23.7734 9.15216 23.8275 9.1991C23.8817 9.24605 23.9251 9.30408 23.9549 9.36928C23.9846 9.43447 24 9.5053 24 9.57697V30.423C24 30.4945 23.9846 30.5653 23.9549 30.6304C23.9252 30.6955 23.8819 30.7535 23.8279 30.8004C23.7738 30.8473 23.7103 30.8821 23.6417 30.9024C23.5731 30.9227 23.5009 30.928 23.43 30.918L10.858 29.123C10.6196 29.089 10.4015 28.9702 10.2437 28.7883C10.0859 28.6065 9.99903 28.3738 9.99902 28.133V11.867C9.99903 11.6262 10.0859 11.3935 10.2437 11.2116C10.4015 11.0297 10.6196 10.9109 10.858 10.877H10.859ZM12 12.735V27.265L22 28.694V11.306L12 12.735ZM25 27H28V13H25V11H29C29.2652 11 29.5196 11.1053 29.7071 11.2929C29.8947 11.4804 30 11.7348 30 12V28C30 28.2652 29.8947 28.5195 29.7071 28.7071C29.5196 28.8946 29.2652 29 29 29H25V27ZM18.2 20L21 24H18.6L17 21.714L15.4 24H13L15.8 20L13 16H15.4L17 18.286L18.6 16H21L18.2 20Z"
                   fill="#007A3D"
@@ -138,12 +306,21 @@ export default function StepTwo({
           <div className="flex items-center gap-3 ">
             <button
               className={`w-fit h-fit flex px-3 py-1 items-center gap-2 rounded-full ${
-                disabled ? "bg-[#D5D5D5]" : "bg-primary"
+                !isInitialized ? "bg-[#D5D5D5]" : "bg-primary"
               }`}
-              onClick={handlesetNextStep}
+              disabled={!isInitialized}
+              onClick={() => {
+                triggerSave();
+              }}
             >
-              <MdCheck />
-              Submit
+              {loading ? (
+                <Spinner />
+              ) : (
+                <>
+                  <MdCheck />
+                  Submit
+                </>
+              )}
             </button>
             <RxCross2
               className="text-2xl cursor-pointer"
@@ -156,22 +333,26 @@ export default function StepTwo({
         <div className="flex ">
           <div
             className={`${
-              showValidations ? "w-[80%]" : "w-full"
-            } ease-in-out duration-700`}
+              showValidations ? " w-[70%]" : "w-full"
+            }  ease-in-out duration-700`}
           >
             <SpreadsheetComponent
               openUrl="https://services.syncfusion.com/react/production/api/spreadsheet/open"
               saveUrl="https://services.syncfusion.com/react/production/api/spreadsheet/save"
-              ref={(ssObj) => {
-                spreadsheet = ssObj;
-              }}
+              ref={spreadsheetRef}
               created={onCreated}
+              dataBound={onDataBound}
+              key={data.length}
+              beforeSave={beforeSave}
+              saveComplete={saveComplete}
+              allowSave
+
               //   style={{ height: "100%" }}
             >
               <SheetsDirective>
-                <SheetDirective name="Car Sales Report">
+                <SheetDirective name={file?.name}>
                   <RangesDirective>
-                    <RangeDirective dataSource={defaultData}></RangeDirective>
+                    <RangeDirective></RangeDirective>
                   </RangesDirective>
                   <RowsDirective>
                     <RowDirective index={30}>
@@ -202,8 +383,8 @@ export default function StepTwo({
           </div>
           <div
             className={`${
-              showValidations ? "w-[20%]" : "w-[5%]"
-            } ease-in-out d ration-700 flex bg-white p-5 flex-col gap-4`}
+              showValidations ? "w-[30%]" : "w-[5%]"
+            } ease-in-out text-[#353535] duration-700 flex bg-white p-5 flex-col gap-4`}
           >
             <div className=" text-[#353535] flex items-center justify-between">
               <p
@@ -231,6 +412,46 @@ export default function StepTwo({
                 />
               )}
             </div>
+            <p
+              className={`ease-in-out duration-700 ${
+                showValidations
+                  ? "block text-ellipsis overflow-hidden text-nowrap w-[60%]"
+                  : "hidden "
+              } `}
+            >
+              {errors.length} error{errors.length > 1 ? "s" : ""} found
+            </p>
+
+            {errors.map((item, index) => (
+              <div className="flex  gap-2 p-2 text-sm" key={index}>
+                <BiError className="text-red-600 mt-2" />
+                <div className="flex flex-col ">
+                  <p
+                    className={`ease-in-out font-[700] duration-700 ${
+                      showValidations ? "" : "hidden "
+                    } `}
+                  >
+                    {item.Message}
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <p
+                      className={`ease-in-out  duration-700 ${
+                        showValidations ? "" : "hidden "
+                      } `}
+                    >
+                      column: {item.ColumnName}
+                    </p>
+                    <p
+                      className={`ease-in-out duration-700 ${
+                        showValidations ? "" : "hidden "
+                      } `}
+                    >
+                      row: {item.Row}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

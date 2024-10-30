@@ -23,7 +23,6 @@ import {
   MenuItem,
 } from "@chakra-ui/react";
 import { FaFileSignature, FaFolder } from "react-icons/fa";
-import { useApi } from "@/context/ApiDiscoveryContext";
 import { useOnboarding } from "@/context/OnboardingContext";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
@@ -35,7 +34,6 @@ export default function MainSidebar() {
   const router = useRouter();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { bookmarkedAPIs, libraryView, setLibraryView } = useApi();
   const { user } = useOnboarding();
   const logout = useLogout();
   const [activeItem, setActiveItem] = useState("saved");
@@ -90,11 +88,11 @@ export default function MainSidebar() {
                     </div>
                     <div
                       className={`px-5 py-1 rounded-xl flex items-center cursor-pointer ease-in-out duration-700 hover:text-secondary hover:bg-secondaryBg gap-3 w-full ${
-                        router.asPath.includes("/manage_users")
+                        router.asPath.includes("/delivery_plans")
                           ? "text-secondary bg-secondaryBg font-semibold"
                           : "text-dark-grey"
                       }`}
-                      // onClick={() => router.push("/api_discovery")}
+                      onClick={() => router.push("/delivery_plans")}
                     >
                       <FaFileSignature />
                       <p className="">Delivery Plans</p>
@@ -162,11 +160,11 @@ export default function MainSidebar() {
               </div>
               <div
                 className={`px-5 py-1 rounded-xl flex items-center cursor-pointer ease-in-out duration-700 hover:text-secondary hover:bg-secondaryBg gap-3 w-full ${
-                  router.asPath.includes("/gg")
+                  router.asPath.includes("/delivery_plans")
                     ? "text-secondary bg-secondaryBg font-semibold"
                     : "text-dark-grey"
                 }`}
-                // onClick={() => router.push("/api_discovery")}
+                onClick={() => router.push("/delivery_plans")}
               >
                 <FaFileSignature />
                 <p className="">Delivery Plans</p>
