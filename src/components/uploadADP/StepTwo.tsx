@@ -1,4 +1,3 @@
-"use client";
 import {
   SheetsDirective,
   SheetDirective,
@@ -56,34 +55,13 @@ export default function StepTwo({
   const [preclose, setPreclose] = useState<boolean>(false);
   const [showValidations, setShowValidations] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
-  const [data, setData] = useState<any[]>([]);
   const [errors, setErrors] = useState<IUploadError[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [draft, setDraft] = useState(false);
+  const [isSavingdraft, setIsSavingDraft] = useState(false);
   const { setApiErrorMessage, user } = useOnboarding();
   const spreadsheetRef = useRef<SpreadsheetComponent | null>(null);
 
-  const boldRight = { fontWeight: "bold", textAlign: "right" };
-  const bold = { fontWeight: "bold" };
-  const headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "PUT",
-    "Content-Type": "application/json",
-    Authorization: getJWT(),
-  };
-  // const remoteData = new DataManager({
-  //   url: `${baseURL}/upload/api/excel/records/${templateId}`,
-  //   adaptor: new CustomWebApiAdaptor(),
-  //   crossDomain: true,
-  //   headers: [
-  //     { Authorization: `${getJWT()}` },
-  //     { "Content-Type": "application/json" },
-  //     { "Access-Control-Allow-Origin": "*" },
-  //   ],
-  //   // Remove all default queries and manually control them
-  //   // Set up query parameters (optional if only reading data)
-  // });
-
-  // console.log(remoteData);
   const uploadFile = async (
     year: number,
     product: string,
@@ -129,24 +107,44 @@ export default function StepTwo({
       }
     }
   };
-  // const getExcelRecords = async (id: number) => {
-  //   setLoading(true);
-  //   try {
-  //     const res = await ADPServices.getExcelRecordsById(id);
-  //     if (res) {
-  //       setData(res);
-  //       setLoading(false);
-  //     }
-  //   } catch (error: any) {
-  //     console.log(error);
+  const uploadasDraft = async (
+    year: number,
+    product: string,
+    uploadedBy: string,
+    file: File
+  ) => {
+    setLoading(true);
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file as File);
+      formData.append("templateYear", year.toString());
+      formData.append("product", product);
+      formData.append("uploadedBy", uploadedBy);
 
-  //     setLoading(false);
-  //     const errorMessage = error?.response?.data?.message;
-
-  //     setApiErrorMessage(errorMessage, "error");
-  //     return;
-  //   }
-  // };
+      try {
+        const res = await ADPServices.UploadAdpasDraft(formData);
+        if (res.templateId !== undefined) {
+          setLoading(false);
+          handlesetPrevStep();
+          onClose();
+        }
+      } catch (error: any) {
+        console.log(error);
+        router.push(
+          {
+            pathname: router.pathname,
+            query: { year, product },
+          },
+          undefined,
+          { shallow: true }
+        );
+        setLoading(false);
+        const errors = error?.response?.data?.errors;
+        setErrors(errors);
+        return;
+      }
+    }
+  };
 
   const onCreated = () => {
     setIsInitialized(true);
@@ -186,11 +184,7 @@ export default function StepTwo({
     localStorage.setItem("step", `${prevStep}`);
     setStep(prevStep);
   };
-  // useEffect(() => {
-  //   if (templateId) {
-  //     getExcelRecords(parseInt(templateId));
-  //   }
-  // }, [templateId]);
+
   const beforeSave = (args: BeforeSaveEventArgs): void => {
     args.needBlobData = true; // To trigger the saveComplete event.
     args.isFullPost = false; // Get the spreadsheet data as blob data in the saveComplete event.
@@ -219,12 +213,21 @@ export default function StepTwo({
     const file = new File([args.blobData], "modified.xlsx", {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
-    uploadFile(
-      parseInt(year as string),
-      product as string,
-      user?.name as string,
-      file
-    );
+    if (draft) {
+      uploadasDraft(
+        parseInt(year as string),
+        product as string,
+        user?.name as string,
+        file
+      );
+    } else {
+      uploadFile(
+        parseInt(year as string),
+        product as string,
+        user?.name as string,
+        file
+      );
+    }
   };
   const onDataBound = () => {
     const spreadsheet = spreadsheetRef.current;
@@ -245,7 +248,7 @@ export default function StepTwo({
           } w-full bg-error-bg transition-all ease-in-out duration-700 flex items-center justify-between px-5 py-2 mb-3 rounded-lg`}
         >
           <p className="text-error">
-            Are you sure you want to close this ADP upload process?
+            Do you want to save this template as a draft
           </p>
           <div className="flex items-center gap-3">
             <button
@@ -253,9 +256,12 @@ export default function StepTwo({
                bg-[#D5D5D5]
                
               `}
-              onClick={() => setPreclose(false)}
+              onClick={() => {
+                setDraft(true);
+                triggerSave();
+              }}
             >
-              Cancel
+              Save as Draft
             </button>
             <button
               className={`w-fit h-fit flex px-3 py-1 bg-red-600 text-white items-center gap-2 rounded-full`}
@@ -266,6 +272,12 @@ export default function StepTwo({
             >
               Close
             </button>
+            <RxCross2
+              className="text-2xl cursor-pointer"
+              onClick={() => {
+                setPreclose(false);
+              }}
+            />
           </div>
         </div>
 
@@ -342,10 +354,10 @@ export default function StepTwo({
               ref={spreadsheetRef}
               created={onCreated}
               dataBound={onDataBound}
-              key={data.length}
               beforeSave={beforeSave}
               saveComplete={saveComplete}
               allowSave
+              showRibbon={false}
 
               //   style={{ height: "100%" }}
             >

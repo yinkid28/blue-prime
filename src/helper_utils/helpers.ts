@@ -1,3 +1,17 @@
+export const months = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 export function getFormattedDate(date: string) {
   // Array of weekday names
   const weekdays = [
@@ -10,20 +24,6 @@ export function getFormattedDate(date: string) {
     "Saturday",
   ];
   // Array of abbreviated month names
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
 
   //  Get the current date
   // const now = new Date();
@@ -59,3 +59,15 @@ export const handleLastModified = (file: File) => {
     return `${sec} second${sec > 1 ? "s" : ""} ago`;
   }
 };
+
+export function formatNumber(num: number): string {
+  if (num >= 1_000_000_000) {
+    return (num / 1_000_000_000).toFixed(1).replace(/\.0$/, "") + "B";
+  } else if (num >= 1_000_000) {
+    return (num / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
+  } else if (num >= 1_000) {
+    return (num / 1_000).toFixed(1).replace(/\.0$/, "") + "K";
+  } else {
+    return num.toString();
+  }
+}

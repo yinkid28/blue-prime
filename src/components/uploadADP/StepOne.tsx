@@ -24,7 +24,7 @@ export default function StepOne({
 }: steponeProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [disabled, setDisabled] = useState<boolean>(true);
-  const [year, setYear] = useState<number>(2024);
+  const [year, setYear] = useState<number>(0);
   const [product, setProduct] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const { setApiErrorMessage, user } = useOnboarding();
@@ -230,6 +230,7 @@ export default function StepOne({
             value={year}
             onChange={(e) => setYear(parseInt(e.target.value))}
           >
+            <option value={""}>Select Year</option>
             {generateYears(15).map((item, index) => (
               <option value={item} key={index}>
                 {item}
@@ -246,7 +247,7 @@ export default function StepOne({
             value={product}
             onChange={(e) => setProduct(e.target.value)}
           >
-            <option value={""}>Select option</option>
+            <option value={""}>Select Product</option>
             <option value={"ADP"}>ADP</option>
             <option value={"LNG"}>LNG</option>
           </select>
@@ -262,6 +263,15 @@ export default function StepOne({
               toast({
                 status: "error",
                 description: "Ensure you select a product",
+                position: "bottom-right",
+                duration: 3000,
+              });
+              return;
+            }
+            if (year === 0) {
+              toast({
+                status: "error",
+                description: "Ensure you select the year you ara uploading for",
                 position: "bottom-right",
                 duration: 3000,
               });

@@ -1,4 +1,3 @@
-"use client";
 import { useOnboarding } from "@/context/OnboardingContext";
 
 import MainSidebar from "./sidebars/mainsidebar";
@@ -11,6 +10,7 @@ import OnboardingLayout from "./onboardingLayout";
 type LayoutProps = {
   children: React.ReactNode | React.ReactNode[];
   page: string;
+  subPageText?: React.ReactNode | React.ReactNode[];
   secondaryElement?: React.ReactNode | React.ReactNode[];
 };
 const toastProps: UseToastOptions = {
@@ -23,6 +23,7 @@ const toastProps: UseToastOptions = {
 export default function Layout({
   children,
   page,
+  subPageText,
   secondaryElement,
 }: LayoutProps) {
   const toast = useToast();
@@ -58,7 +59,10 @@ export default function Layout({
 
         <div className="flex flex-col h-full overflow-scroll pt-5 sm:pt-8 gap-5 w-full">
           <div className="flex items-center px-3 justify-between w-full">
-            <p className="font-bold w-full text-[32px]">{page}</p>
+            <p className="font-bold w-full text-[32px]">
+              {page}
+              {subPageText ? subPageText : null}
+            </p>
             <div className="w-full flex justify-end gap-3">
               <SearchBar />
               {secondaryElement ? secondaryElement : null}

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useState, createContext, useContext, useEffect } from "react";
 import { FaChevronRight } from "react-icons/fa";
+import { FaArrowLeftLong } from "react-icons/fa6";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 import { MdSearch } from "react-icons/md";
 // import { createContext } from "vm";
@@ -299,7 +300,7 @@ function Header({ children }: TableTypes) {
 
 function Heading({ children, className }: TableTypes) {
   return (
-    <th className={`px-6 py-2 whitespace-nowrap ${className}`}>{children}</th>
+    <th className={`px-2 py-2 whitespace-nowrap ${className}`}>{children}</th>
   );
 }
 
@@ -430,4 +431,22 @@ export function dataURLtoFile(dataurl: any, filename: string) {
     u8arr[n] = bstr.charCodeAt(n);
   }
   return new File([u8arr], filename, { type: mime });
+}
+
+export function Goback() {
+  const router = useRouter();
+  return (
+    <button
+      className="flex w-fit text-secondary items-center gap-2 "
+      onClick={() => router.back()}
+    >
+      <FaArrowLeftLong />
+      Back
+    </button>
+  );
+}
+export function StepIconCustom() {
+  return (
+    <div className="w-[10px] absolute h-[10px] left-[6px] bg-white z-[40]  border border-[#959595] rounded-full"></div>
+  );
 }

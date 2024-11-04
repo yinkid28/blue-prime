@@ -92,7 +92,7 @@ export default function Login() {
         <div className="flex flex-col ">
           <p className="text-[24px] font-bold">Welcome Back</p>
           <p className="text-[16px] text-mid-grey">
-            Enter your email address continue
+            Enter your email address and password to continue
           </p>
         </div>
         <div className="w-full">
@@ -160,7 +160,7 @@ export default function Login() {
                   <Button
                     Type="submit"
                     className="font-semibold"
-                    text="CONTINUE"
+                    text="LOGIN"
                     loading={loading}
                     type="full"
                     onClick={() => {}}

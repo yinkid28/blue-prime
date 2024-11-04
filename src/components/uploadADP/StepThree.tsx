@@ -41,18 +41,18 @@ export default function StepThree({
           position: "bottom-right",
           status: "success",
         });
-        setLoading(false);
-        setStep(1);
-        onClose();
+
         setFile(null);
         router.push(
           {
-            pathname: router.pathname, // Keep the current path
-            query: {}, // Set an empty query object to remove all query parameters
+            pathname: `delivery_plans/${res.template.id}/details`, // Keep the current path
+            query: { name: res.template.templateDescription }, // Set an empty query object to remove all query parameters
           },
           undefined,
           { shallow: true }
         );
+        setLoading(false);
+        setStep(1);
       }
     } catch (error: any) {
       console.log(error);

@@ -256,3 +256,78 @@ export const MockADP = [
     status: "Paused Editing",
   },
 ];
+
+export const recdata = [
+  {
+    name: "Jan",
+    uv: 4000,
+    landing_zone_files: 2400,
+    amt: 2400,
+  },
+  {
+    name: "Feb",
+    uv: 3000,
+    landing_zone_files: 1398,
+    amt: 2210,
+  },
+  {
+    name: "Mar",
+    uv: 2000,
+    landing_zone_files: 9800,
+    amt: 2290,
+  },
+  {
+    name: "Apr",
+    uv: 2780,
+    landing_zone_files: 3908,
+    amt: 2000,
+  },
+  {
+    name: "May",
+    uv: 1890,
+    landing_zone_files: 4800,
+    amt: 2181,
+  },
+  {
+    name: "Jun",
+    uv: 2390,
+    landing_zone_files: 3800,
+    amt: 2500,
+  },
+  {
+    name: "Jul",
+    uv: 2390,
+    landing_zone_files: 3800,
+    amt: 2500,
+  },
+  {
+    name: "Aug",
+    uv: 2390,
+    landing_zone_files: 3800,
+    amt: 2500,
+  },
+  {
+    name: "Sep",
+    uv: 2390,
+    landing_zone_files: 3800,
+    amt: 2500,
+  },
+  {
+    name: "Oct",
+    uv: 2390,
+    landing_zone_files: 3800,
+    amt: 2500,
+  },
+  {
+    name: "Nov",
+    uv: 2390,
+    landing_zone_files: 3800,
+    amt: 2500,
+  },
+  {
+    name: "Dec",
+    uv: 2390,
+    landing_zone_files: 3800,
+    amt: 2500,
+  },
+];
