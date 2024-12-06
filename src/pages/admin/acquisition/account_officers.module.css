@@ -1,0 +1,216 @@
+.accOffiContainer {
+    width: 100%;
+    max-width: 100%; /* Ensure the parent doesn't restrict width */
+  }
+  
+  /* Slim box styling */
+  .slimBox {
+      width: 100%;
+      max-width: 1051px;
+      height: 48px;
+      border: 1px solid #EEEFF3;
+      border-radius: 8px;
+      background-color: #FFFFFF;
+      margin: 20px auto;
+      display: flex;
+      align-items: center; 
+      justify-content: center; 
+      gap: 10px; 
+  }
+  
+  
+  .accOffiHeader {
+      color: #252525;
+      margin-left: 10px;
+      font-size: 16px;
+      font-weight: 400;
+      display: inline-block; 
+  }
+  
+  .content {
+      color: #767676;
+      font-size: 12px;
+      margin-right: 10px;  
+      text-align: right;  
+      flex-grow: 1;  
+  }
+  
+  /* Action Section */
+  .action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 20px auto;
+      max-width: 1051px;
+      height: 32px;
+      border-radius: 8px;
+      padding: 0 10px;
+  }
+  
+  /* Date Container Styling */
+  .dateContainer {
+      display: flex; 
+      align-items: center; /* Vertically aligns both icon and text */
+      justify-content: flex-start; /* Ensures text follows the icon */
+      border: 1px solid #EEEFF3; 
+      border-radius: 10px; 
+      background-color: #F7F8FA;
+      padding: 5px 10px; 
+      height: 32px; 
+      width: auto; 
+      font-size: 14px;
+      color: #252525;
+      gap: 10px; 
+      position: relative; 
+      cursor: pointer;
+  }
+  
+  /* Date Text */
+  .date {
+      font-size: 12px; 
+      font-weight: 400;
+      color: #767676; 
+  }
+  
+  .date:hover {
+      color: #161616;
+  }
+  
+  .dateIcon {
+      font-size: 16px; 
+      color: #767676; 
+  }
+  
+  /* Calendar Styling */
+  .calendar {
+      position: absolute;
+      top: 40px; /* Distance between date container and calendar */
+      left: 0;
+      background-color: #FFFFFF;
+      border: 1px solid #EEEFF3;
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+  }
+  
+  /* Filters Styling */
+  .filters {
+      display: flex;
+      gap: 20px;
+      justify-content: flex-end;
+      flex: 2; /* Pushes filters to the right */
+  }
+  
+  /* Dropdown Styling */
+  .dropdown {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px; 
+      padding: 5px 10px; 
+      font-weight: 400;
+      border: 1px solid #EEEFF3;
+      border-radius: 10px; 
+      background-color: #F7F8FA;
+      color: #767676;
+      height: 32px;
+      cursor: pointer;
+  }
+  .dropdown:hover {
+      color: #252525;
+  }
+  
+  .dropdownIcon {
+      font-size: 16px;
+      color: #767676;
+  }
+  
+  /* Container for customer stats section */
+  .customerStatsSection {
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 0; 
+      justify-content: space-between;
+      margin-top: 20px; 
+  }
+  
+  /* Each individual stat box */
+  .customerStatCard {
+      background-color: #ffffff;
+      border: 1px solid #EEEFF3;
+      max-width: 800px;
+      border-radius: 8px;
+      padding: 16px;
+      gap: 0;
+      display: flex; 
+      flex-direction: column; 
+      justify-content: space-between; 
+      height: 100px; 
+  }
+  
+  
+  /* Header styling with linear gradient */
+  .statHeader {
+      background: linear-gradient(to bottom, #F7F8FA, #F2F3F5);
+      height: 32px;
+      width: 290px; 
+      border: 1px solid #EEEFF3;
+      border-radius: 8px 8px 0 0;
+      font-size: 12px;
+      font-weight: 500;
+      padding-left: 10px;
+      margin-left: 0px;
+      display: flex;
+      align-items: center;
+      justify-content: left;
+      color: #333;
+  }
+  
+  .userIcon {
+      margin-right: 5px;
+  }
+  
+  /* Main value displayed in the center of the card */
+  .statValue {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+      margin-top: 1px;
+  }
+  
+  /* Comparison text section */
+  .statComparison {
+      font-size: 14px;
+      font-weight: 400;
+      color: #888;
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  
+  /* Percentage style based on whether it is positive or negative */
+  .statComparison .percentage {
+      font-weight: 600;
+      color: green; 
+  }
+  
+  .statComparison .percentage.negative {
+      color: red; 
+  } 
+  
+  .progressBarWrapper {
+      background-color: #e0e0e0; /* Light gray background */
+      border-radius: 4px;
+      height: 5px;
+      margin-top: 3px;
+      overflow: hidden;
+    }
+    
+    .progressBar {
+      background-color: #00900E; 
+      height: 100%;
+      transition: width 0.4s ease; 
+    } 
+  

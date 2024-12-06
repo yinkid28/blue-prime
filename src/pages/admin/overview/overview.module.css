@@ -1,0 +1,627 @@
+.overviewContainer {
+  width: 100%;
+  max-width: 100%; /* Ensure the parent doesn't restrict width */
+}
+
+/* Slim box styling */
+.slimBox {
+    width: 100%;
+    max-width: 1051px;
+    height: 48px;
+    border: 1px solid #EEEFF3;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    margin: 20px auto;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    gap: 10px; 
+}
+
+
+.overviewHeader {
+    color: #252525;
+    margin-left: 10px;
+    font-size: 16px;
+    font-weight: 400;
+    display: inline-block; 
+}
+
+.content {
+    color: #767676;
+    font-size: 12px;
+    margin-right: 10px;  
+    text-align: right;  
+    flex-grow: 1;  
+}
+
+/* Action Section */
+.action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px auto;
+    max-width: 1051px;
+    height: 32px;
+    border-radius: 8px;
+    padding: 0 10px;
+}
+
+/* Date Container Styling */
+.dateContainer {
+    display: flex; 
+    align-items: center; /* Vertically aligns both icon and text */
+    justify-content: flex-start; /* Ensures text follows the icon */
+    border: 1px solid #EEEFF3; 
+    border-radius: 10px; 
+    background-color: #F7F8FA;
+    padding: 5px 10px; 
+    height: 32px; 
+    width: auto; 
+    font-size: 14px;
+    color: #252525;
+    gap: 10px; 
+    position: relative; 
+    cursor: pointer;
+}
+
+/* Date Text */
+.date {
+    font-size: 12px; 
+    font-weight: 400;
+    color: #767676; 
+}
+
+.date:hover {
+    color: #161616;
+}
+
+.dateIcon {
+    font-size: 16px; 
+    color: #767676; 
+}
+
+/* Calendar Styling */
+.calendar {
+    position: absolute;
+    top: 40px; /* Distance between date container and calendar */
+    left: 0;
+    background-color: #FFFFFF;
+    border: 1px solid #EEEFF3;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+/* Filters Styling */
+.filters {
+    display: flex;
+    gap: 20px;
+    justify-content: flex-end;
+    flex: 2; /* Pushes filters to the right */
+}
+
+/* Dropdown Styling */
+.dropdown {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px; 
+    padding: 5px 10px; 
+    font-weight: 400;
+    border: 1px solid #EEEFF3;
+    border-radius: 10px; 
+    background-color: #F7F8FA;
+    color: #767676;
+    height: 32px;
+    cursor: pointer;
+}
+.dropdown:hover {
+    color: #252525;
+}
+
+.dropdownIcon {
+    font-size: 16px;
+    color: #767676;
+}
+
+/* Container for customer stats section */
+.customerStatsSection {
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 16px; 
+    justify-content: space-between;
+    margin-top: 20px; 
+}
+
+/* Each individual stat box */
+.customerStatCard {
+    background-color: #ffffff;
+    border: 1px solid #EEEFF3;
+    max-width: 1051px;
+    border-radius: 8px;
+    padding: 16px;
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; 
+    height: 100px; 
+}
+
+
+/* Header styling with linear gradient */
+.statHeader {
+    background: linear-gradient(to bottom, #F7F8FA, #F2F3F5);
+    height: 32px;
+    width: 332px; 
+    border: 1px solid #EEEFF3;
+    border-radius: 8px 8px 0 0;
+    font-size: 12px;
+    font-weight: 500;
+    padding-left: 10px;
+    margin-left: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    color: #333;
+}
+
+.userIcon {
+    margin-right: 5px;
+}
+
+/* Main value displayed in the center of the card */
+.statValue {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-top: 1px;
+}
+
+/* Comparison text section */
+.statComparison {
+    font-size: 14px;
+    font-weight: 400;
+    color: #888;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Percentage style based on whether it is positive or negative */
+.statComparison .percentage {
+    font-weight: 600;
+    color: green; 
+}
+
+.statComparison .percentage.negative {
+    color: red; 
+} 
+
+.progressBarWrapper {
+    background-color: #e0e0e0; /* Light gray background */
+    border-radius: 4px;
+    height: 5px;
+    margin-top: 3px;
+    overflow: hidden;
+  }
+  
+  .progressBar {
+    background-color: #00900E; 
+    height: 100%;
+    transition: width 0.4s ease; 
+  } 
+
+
+   /* Total assets section */
+   .totalAssetsSection {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 1rem;
+    margin-left: -0.5rem;
+    display: flex; /* Changed to flex */
+    flex-direction: row; /* Align items in a row */
+    flex-wrap: wrap; /* Allow wrapping if necessary */
+    gap: 16px; /* Add spacing */
+    padding: 10px;
+  }
+  
+  
+  .totalAssetsWrapper {
+    width: 100%;
+    max-width: 1300px;
+    margin-top: -1rem;
+    display: flex;
+    background-color: #FFFFFF;
+    flex-direction: row;
+    gap: 5px;
+  }
+  
+  .totalAssetsHeader {
+    background: linear-gradient(to bottom, #F7F8FA, #F2F3F5);
+    height: 32px;
+    width: 100%;
+    border: 1px solid #EEEFF3;
+    border-radius: 8px 8px 0 0;
+    font-size: 14px;
+    font-weight: 500;
+    padding-left: 12px;
+    display: flex;
+    align-items: center;
+    color: #333;
+  }
+
+
+  .totalAssetsCard {
+    display: flex;
+    justify-content: flex-start; /* Align items without large gaps */
+    align-items: flex-start;
+    border-radius: 8px;
+    padding: 0px;
+    box-sizing: border-box;
+    width: 100%; 
+    max-width: 100%; 
+  }
+  
+  
+  
+  .pieChartWrapper {
+    display: flex;
+    margin-top: -100px;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    padding: 20px
+  }
+  
+  .pieChartValue {
+    margin-top: -10px;
+    padding-bottom: 30px;
+    font-size: 18px;
+    font-weight: 600;
+  } 
+
+  .circleIcon {
+    border: 1px solid #000;  
+    border-radius: 50%; 
+    color: transparent;     
+    width: 10px;             
+    height: 10px;       
+  } 
+  .chartValue {
+    display: flex;
+    justify-content: space-between; /* Spread left and right content */
+    align-items: center; /* Vertically align items */
+    margin-bottom: 8px; /* Add spacing between rows */
+  }
+  
+  .chartValueLeft {
+    display: flex; 
+    align-items: center; /* Vertically align icon and label */
+  }
+  
+  .circleIcon {
+    border-radius: 50%; /* Make it a circle */
+    width: 10px; /* Set width */
+    height: 10px; /* Set height */
+    border: 1px solid; /* Ensure the border is visible */
+    flex-shrink: 0; /* Prevent shrinking for consistent alignment */
+  }
+  
+  .chartValueLabel {
+    font-size: 14px; /* Adjust text size */
+    font-weight: 500; /* Optional: adjust the weight */
+    color: #333; /* Customize the color */
+  }
+  
+  .chartValuePercentage {
+    font-size: 12px; /* Adjust text size for percentage */
+    color: #666; /* Customize percentage color */
+    margin-left: 16px; /* Add spacing if needed */
+    white-space: nowrap; /* Prevent wrapping of the percentage text */
+  }
+
+
+/* Converted customers section */
+.ConCuSection {
+  margin: 10px 10px 0px 0;
+  height: 340px;
+  flex: 1;  
+  background: linear-gradient(to bottom, #F7F8FA, #F2F3F5); 
+  width: 100%;  
+  border-radius: 8px; 
+  padding: 20px; 
+}
+
+.ConCuHeader {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.ConCuSecValue {
+  margin-top: 10px;
+  padding-bottom: 30px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.progressBar2 {
+  display: flex;
+  height: 25px;
+  border: 1px solid #ddd;
+  border-radius: 7px;
+  overflow: hidden;
+  max-width: 100%; 
+  margin-bottom: 10px;
+}
+
+.progressSegment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Corporate customers section */
+.CorCuSection {
+  margin: 10px 10px 0px 0;
+  height: 340px;
+  flex: 1; /* Make the section take up equal space like in totalAssetsWrapper */
+  background: linear-gradient(to bottom, #F7F8FA, #F2F3F5); /* Gradient background */
+  width: 100%; 
+  border-radius: 8px; 
+  padding: 20px; 
+}
+
+.CorCuHeader {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.CorCuSecValue {
+  margin-top: 10px;
+  padding-bottom: 30px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+
+
+/* Parent Flex Container */
+.flexContainer {
+  display: flex;
+  justify-content: space-between; 
+  align-items: flex-start; 
+  gap: 5px; 
+  width: 100%;
+  margin-top: 1rem;
+  flex-wrap: nowrap; 
+}
+
+/* Account Officer Performance Section */
+.accOffiPerSection {
+  width: 100%; 
+  flex: 1;
+  margin: 0; /* Reset margin to work with flex container */
+  display: flex; 
+  flex-direction: column; 
+  gap: 16px; 
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.accOffiPerHeader {
+  background: linear-gradient(to bottom, #F7F8FA, #F2F3F5);
+  height: 32px;
+  width: 100%;
+  border: 1px solid #EEEFF3;
+  border-radius: 8px 8px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+  padding-left: 12px;
+  display: flex;
+  align-items: center;
+  color: #333;
+}
+
+.accOffiPerCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 17px;
+  border-radius: 8px;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 100%; 
+  background: #fff;
+  border: 1px solid #EEEFF3;
+}
+
+.accountOfficerWrapper {
+  display: flex;
+  align-items: center; /* Vertically align items */
+  justify-content: flex-start; /* Align items to the left */
+  gap: 10px;
+  margin-bottom: 15px;
+  width: 100%; /* Ensure wrapper fits container width */
+}
+
+/* Circle Image Styling */
+.circleImageWrapper {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+  margin-right: 4px; /* Add minimal spacing between image and name */
+}
+
+.circleImage {
+  width: 100%; /* Ensure image fills the wrapper */
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dataColumn {
+  display: flex;
+  align-items: center; /* Align items vertically */
+  justify-content: space-between;
+  gap: 16px; /* Add gap for better spacing */
+  width: 100%;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.accountOfficerName {
+  font-weight: 400;
+  color: #767676;
+  font-size: 12px;
+  flex: 0 0 auto; /* Prevent shrinking */
+  text-align: left;
+  padding-right: 0px;
+  margin: 0;
+}
+
+.accountOfficerLeads {
+  font-size: 12px;
+  color: #767676;
+  font-weight: 400;
+  text-align: center;
+  flex: 1 1 auto; /* Allow flexible growth */
+  display: flex;
+  justify-content: center;
+}
+
+.performancePercentage {
+  font-size: 14px;
+  font-weight: normal;
+  background-color: #f0f0f0; 
+  padding: 5px 10px;
+  border-radius: 4px;
+  flex: 0 0 auto; /* Prevent shrinking */
+  text-align: right;
+  display: flex;
+}
+
+.leadsLabel,
+.percentageLabel {
+  font-weight: 500;
+  color: #555;
+}
+
+.percentageValue {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #00900E;
+}
+
+
+
+/* Lead Conversion Rate Section */
+.leadConversionRateSection {
+  width: 100%;
+  flex: 1;
+  margin: 0; /* Reset margin to match flex container */
+  display: flex; 
+  flex-direction: column; 
+  gap: 16px; 
+  padding: 10px;
+}
+
+.leadConversionRateHeader {
+  background: linear-gradient(to bottom, #F7F8FA, #F2F3F5);
+  height: 32px;
+  width: 100%;
+  border: 1px solid #EEEFF3;
+  border-radius: 8px 8px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+  padding-left: 12px;
+  display: flex;
+  align-items: center;
+  color: #333;
+}
+
+.leadConversionRateCard {
+  width: 100%; 
+  height: 150px; /* Placeholder height for the empty card */
+  background: #fff; /* Placeholder background */
+  border-radius: 8px;
+  border: 1px solid #EEEFF3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+
+  
+  
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .slimBox {
+        width: 95%;
+        height: 40px;
+    }
+
+    .action {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        height: auto;
+        padding: 10px;
+    }
+
+    .filters {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .halfCard {
+        flex: 1 1 100%;
+        max-width: 100%;
+      }
+    
+      .straightCard {
+        flex: 1 1 100%; /* Adjust for mobile view */
+        max-width: 100%;
+      }
+
+      .dataColumn {
+        flex-direction: column; /* Stack items vertically */
+        gap: 12px;
+      }
+    
+      .accountOfficerWrapper {
+        flex-direction: column; /* Stack rows on smaller screens */
+        align-items: flex-start;
+      }
+    
+      .performancePercentage {
+        justify-content: flex-end;
+        width: 100%; /* Ensure full width */
+      }
+}
+
+@media (max-width: 480px) {
+    .slimBox,
+    .action {
+        width: 100%; /* Full width for smaller screens */
+    }
+}

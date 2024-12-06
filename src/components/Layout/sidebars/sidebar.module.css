@@ -1,0 +1,177 @@
+/* Sidebar styles */
+.sidebar {
+    background-color: #f7f7f7;
+    color: #fff;
+    width: 195px;
+    height: 680px;
+    padding: 10px;
+    gap: 27px;
+    margin-top: 5px;
+    margin-left: 5px;
+    border: 1px solid #edeff2;
+    border-radius: 4px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    position: fixed;
+  }
+  
+  /* Logo */
+  .logo {
+    width: 179px;
+    height: 24px;
+    margin-bottom: 20px;
+  }
+  
+  /* Menu Item */
+  .menuItem {
+    font-size: 12px;
+    font-weight: 400;
+    color: #666666;
+    background-color: transparent;
+    padding: 10px 15px;
+    width: 179px;
+    margin-bottom: 5px;
+    height: 32px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    display: flex;    
+    align-items: center;  
+  }
+  
+  .menuItem:hover {
+    background-color: #e5e5e6;
+    color: #161616;
+  }
+  
+  .menuItem.active {
+    background-color: #212879;
+    color: #ffffff;
+  }
+  
+  /* Icon */
+  .icon {
+    margin-right: 10px;  
+    font-size: 12px; 
+  }
+  
+  /* Header icon (Chevron) */
+  .headerIcon {
+    font-size: 10px;
+    margin-left: 50px; 
+  }
+
+  .stylesHeaderIcon {
+    font-size: 10px;
+    margin-left: 80px;
+  }
+  
+  /* Static Header */
+  .staticHeader {
+    font-size: 12px;
+    font-weight: 400;
+    color: #8F8F8F;
+    display: flex;
+    align-items: center;
+    margin-left: -5px;
+    gap: 10px;
+    padding: 10px 15px;
+  }
+  
+  .divider {
+    border: 0;
+    height: 1px;
+    background-color: #e6e7ea;
+    margin: 10px 0;
+  }
+  
+  .dropdownMenu {
+    margin-left: 0px;
+  }
+  
+  /* Sidebar Bottom Section (User Info) */
+  .userInfo {
+    background: linear-gradient(to bottom, #171C571A, #171C5700);
+    padding: 15px 20px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+    gap: 10px;
+    border-radius: 4px;
+    overflow-y: auto;
+  }
+  
+  .userDetails {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .userImage {
+    width: 32px; 
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+  }
+  
+  .userText {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .username {
+    font-size: 12px;
+    font-weight: 600;
+    color: #333333;
+  }
+  
+  .role {
+    font-size: 12px;
+    font-weight: 400;
+    color: #6C7480;
+  }
+  
+  /* Container for logout link */
+.logoutContainer {
+    display: flex;
+    align-items: center;  
+    gap: 10px;  
+    cursor: pointer;  
+  }
+
+  .logoutContainer .icon {
+    color: #666666;
+    margin-top: 10px;
+  }
+  
+  
+  .logout {
+    font-size: 12px;
+    font-weight: 400;
+    color: #666666;
+    text-align: left;
+    margin-top: 10px;  
+  }
+  
+
+  .logoutContainer:hover .logout {
+    color: #161616;  
+  }
+  
+  .logoutContainer:hover .icon {
+    color: #161616;  
+  }
+  
+
+  /* Main content styles */
+.mainContent {
+    margin-left: 200px; 
+    padding: 20px; 
+    background-color: #f9f9f9;
+    height: 100vh; 
+    overflow-y: auto; 
+    box-sizing: border-box;
+  }
+  
+  

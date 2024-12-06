@@ -24,7 +24,7 @@
     "**/*.tsx",
     "./typings",
     "src/pages/webber/library/application/[id]"
-  ],
+, "src/components/Layout/sidebars/sidebar.jsx", "src/components/Layout/layout.jsx"  ],
   "typeRoots": ["./typings", "./node_modules/@types/"],
   "exclude": ["node_modules"]
 }
