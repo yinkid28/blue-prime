@@ -1,7 +1,7 @@
 'use client'
 import { useRouter } from 'next/router';
 import SidebarLayout from '../../../components/Layout/sidebars/sidebar';
-import { customersStatData, pieData } from './data/customersStatData';
+import { accountStatsData, pieData, custRetRatData } from './data/account_stats';
 import { FaArrowLeft } from 'react-icons/fa'; // Importing the left arrow icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faArrowUp, faPhone, faTimes, faSearch, faCalendarAlt } from '@fortawesome/free-solid-svg-icons'; // Example icons for each section
@@ -17,7 +17,7 @@ import {
   ResponsiveContainer,
   PieChart, Pie, Cell, 
 } from "recharts";
-import {portfolioData} from './data/customersStatData';
+
 
 
 const COLORS = ["#2FDED4", "#4FE1DC", "#2FDED4", "#36D2D7"];
@@ -50,7 +50,7 @@ const CustomerDetails = () => {
   }
 
   // Finding the customer data using the `id`
-  const customer = customersStatData.find((customer) => customer.id === id);
+  const customer = accountStatsData.find((customer) => customer.id === id);
 
   if (!customer) {
     return <div>Customer not found! Ensure the ID is correct.</div>;
@@ -280,7 +280,7 @@ const CustomerDetails = () => {
           {/* Header title and back menu */}
           <div className="flex flex-col items-start gap-[10px]">
             {/* Header title */}
-            <div className="text-[#252525] text-[16px] font-normal">Customers</div>
+            <div className="text-[#252525] text-[16px] font-normal">Stakeholders</div>
 
             {/* Horizontal gray line */}
             <div className="w-full h-[1px] bg-gray-300 my-[10px]"></div>
@@ -288,10 +288,10 @@ const CustomerDetails = () => {
             {/* Back menu with the left arrow */}
             <div 
               className="flex items-center gap-[5px] text-[#252525] text-[12px] cursor-pointer" 
-              onClick={() => router.push('/admin/customers')}
+              onClick={() => router.push('/admin/acquisition/account_officers')}
             >
               <FaArrowLeft size={14} /> {/* Left arrow icon */}
-              <span>Customer</span>
+              <span>Account Officer</span>
             </div>
           </div>
         </div>
@@ -345,14 +345,14 @@ const CustomerDetails = () => {
 
           {/* Right Menus containing the 4 sections */}
           <div className="flex-[3] grid grid-cols-2 gap-4">
-           {/* Net Portfolio Value */}
+           {/* Net Customers Acquired */}
 <div className="bg-white border border-[#EEEFF3] rounded-md shadow-sm">
   <div className="bg-gray-100 p-2 rounded-t-md text-black text-xs font-medium flex items-center gap-2 w-full">
     <FontAwesomeIcon icon={faUser} className="text-gray-500" />
-    Net Portfolio Value
+    New Customers Acquired
   </div>
   <div className="p-4 flex flex-col gap-2">
-    <div className="text-lg font-semibold text-gray-800">${customer.portfolioSize}</div>
+    <div className="text-lg font-semibold text-gray-800">{customer.newCustomers}</div>
 
     {/* Calculate Percentage Change */}
     {(() => {
@@ -384,27 +384,41 @@ const CustomerDetails = () => {
 
 
 
-            {/* Revenue Generated */}
 <div className="bg-white border border-[#EEEFF3] rounded-md shadow-sm">
   <div className="bg-gray-100 p-2 rounded-t-md text-black text-xs font-medium flex items-center gap-2 w-full">
     <FontAwesomeIcon icon={faUser} className="text-gray-500" />
-    Revenue Generated
+    Customer Retention Rate
   </div>
-  <div className="p-4 flex flex-col gap-2">
-    <div className="text-lg font-medium text-gray-800">
-      ${customer?.currentRevenue?.toLocaleString() || '0'}
-    </div>
-
-    {/* Calculate Percentage Change */}
-    {(() => {
-      const previousRevenue = customer?.previousRevenue || 0;
-      const currentRevenue = customer?.currentRevenue || 0;
-      const percentageChange = previousRevenue === 0
-        ? 100
-        : ((currentRevenue - previousRevenue) / previousRevenue) * 100;
+  <div className="p-4 flex flex-col gap-4">
+    {custRetRatData.map((stat, index) => {
+      const previousRevenue = stat.previousRevenue || 0;
+      const currentRevenue = stat.currentRevenue || 0;
+      const percentageChange =
+        previousRevenue === 0
+          ? 100
+          : ((currentRevenue - previousRevenue) / previousRevenue) * 100;
+      const progressWidth = Math.min(Math.abs(percentageChange), 100);
 
       return (
-        <div className="text-sm font-normal text-gray-500 mt-2">
+        <div key={index} className="text-sm font-normal text-gray-500 mt-2">
+          {/* Revenue Display */}
+          <div className="text-lg font-medium text-gray-800">
+            ${currentRevenue.toLocaleString() || '0'}
+          </div>
+
+          {/* Progress Bar */}
+          {stat.showProgressBar && (
+            <div className="w-full bg-gray-200 rounded-full h-1 mt-2">
+              <div
+                className="h-1 rounded-full"
+                style={{
+                  width: `${progressWidth}%`,
+                  backgroundColor: percentageChange > 0 ? 'green' : 'red',
+                }}
+              ></div>
+            </div>
+          )}
+
           {/* Comparison Text */}
           <div className="flex justify-between text-xs font-normal text-[#8F8F8F] items-center mb-2">
             <span>Compared to ${previousRevenue.toLocaleString()} last month</span>
@@ -419,7 +433,7 @@ const CustomerDetails = () => {
           </div>
         </div>
       );
-    })()}
+    })}
   </div>
 </div>
 

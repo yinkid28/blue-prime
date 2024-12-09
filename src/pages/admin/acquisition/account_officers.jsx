@@ -6,12 +6,14 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { accOfficersData } from '../acquisition/data/account_officers';
 import { accountStatsData } from '../acquisition/data/account_stats';
+import { useRouter } from 'next/router';
 
 
 export default function AccountOfficersPage() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const router = useRouter();
 
   const toggleDatePicker = () => {
     setIsDatePickerOpen(!isDatePickerOpen);
@@ -24,6 +26,10 @@ export default function AccountOfficersPage() {
 
  
     const [searchQuery, setSearchQuery] = useState("");
+
+    const handleRouting = (id) => {
+      router.push(`/admin/acquisition/${id}`);
+    };   
 
   return (
     <SidebarLayout>
@@ -168,15 +174,15 @@ export default function AccountOfficersPage() {
                   officer.name.toLowerCase().includes(searchQuery.toLowerCase())
                 )
                 .map((officer, index) => (
-                  <tr key={index} className="border-b border-[#EEEFF3]">
+                  <tr  onClick={() => handleRouting(officer.id)}  key={index} className="border-b border-[#EEEFF3] hover:bg-gray-100 cursor-pointer">
                     <td className="px-4 py-2 text-gray-800 text-xs font-medium">{officer.id}</td>
                     <td className="px-4 py-2 text-gray-800 text-xs font-medium">{officer.name}</td>
                     <td className="px-4 py-2 text-gray-800 text-xs font-medium">{officer.department}</td>
                     <td className="px-4 py-2 text-gray-800 text-xs font-medium">{officer.region}</td>
                     <td className="px-4 py-2 text-gray-800 text-xs font-medium">
                       <div className="flex items-center gap-2">
-                        <div className={`w-3 h-3 rounded-full ${officer.active ? 'bg-green-500' : 'bg-red-500'}`} />
-                        <span>{officer.active ? 'Active' : 'Inactive'}</span>
+                        <div className={`w-3 h-3 rounded-full ${officer.activeStatus ? 'bg-green-500' : 'bg-red-500'}`} />
+                        <span>{officer.activeStatus ? 'Active' : 'Inactive'}</span>
                       </div>
                     </td>
                     <td className="px-4 py-2 text-gray-800 text-xs font-medium">{officer.portfolioSize}</td>

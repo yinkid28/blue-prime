@@ -39,7 +39,7 @@ export default function OverviewPage() {
 
   //accOffiPer
   const calculateMetrics = (data) => {
-    return data.map((officer) => {
+    return leadConvData.map((officer) => {
       const leadsChange = calculatePercentageChange(officer.leadsCurrent, officer.leadsPrevious);
       return {
         ...officer,
